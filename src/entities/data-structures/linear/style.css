@@ -1,0 +1,89 @@
+.linear-node {
+  border: 5px solid white;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  animation-timing-function: ease-out;
+  animation-duration: 0.5s;
+}
+
+@keyframes add-node-queue {
+  from {
+    top: var(--start);
+    opacity: 0.5;
+    background: rgb(74, 222, 128);
+  }
+
+  to {
+    top: var(--end);
+    opacity: 1;
+    background: none;
+  }
+}
+
+@keyframes remove-node-queue {
+  from {
+    top: var(--start);
+    opacity: 1;
+    background: none;
+  }
+
+  to {
+    top: var(--end);
+    opacity: 0.1;
+    background: rgb(220, 38, 38);
+  }
+}
+@keyframes move-node-queue {
+  from {
+    top: var(--start);
+  }
+
+  to {
+    top: var(--end);
+   
+  }
+}
+
+@keyframes add-node-stack {
+  from {
+    bottom: var(--start);
+    opacity: 0.5;
+    background: rgb(74, 222, 128);
+  }
+
+  to {
+    bottom: var(--end);
+    opacity: 1;
+    background: none;
+  }
+}
+
+@keyframes remove-node-stack {
+  from {
+    bottom: var(--start);
+    opacity: 1;
+    background: none;
+  }
+
+  to {
+    bottom: var(--end);
+    opacity: 0.1;
+    background: rgb(220, 38, 38);
+  }
+}
+
+@keyframes peek-node {
+  0% {
+    background: rgba(250, 204, 21, 0.5);
+  }
+
+  80% {
+    background: rgba(250, 204, 1);
+  }
+
+  100% {
+    background: rgba(250, 204, 21, 0);
+  }
+}
