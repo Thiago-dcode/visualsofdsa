@@ -1,4 +1,4 @@
-import { Primitive } from "../../../../types";
+import { Primitive } from "@/types";
 import { getSpeed, requestAnimation } from "@/lib/utils";
 import LinearDs from "../../_classes/LinearDs";
 const UseQueueAnimation = (linearDs: LinearDs<Primitive> | null) => {

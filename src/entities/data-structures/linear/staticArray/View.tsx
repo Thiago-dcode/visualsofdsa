@@ -1,66 +1,35 @@
 'use client'
-
-import { useCallback, useRef, useState } from "react"
-import Node from "../_classes/Node"
-import { Primitive } from "@/types"
+import { useEffect, useRef, useState } from "react"
 import Main from "@/components/container/Main"
 import OperationsContainer from "@/components/container/OperationsContainer"
 import ButtonAction from "../_components/ButtonAction"
-import ButtonWithInput from "../_components/ButtonWithInput"
 import { Input } from "@/components/ui/input"
 import InputWithButtonContainer from "@/components/container/InputWithButtonContainer"
 import { Button } from "@/components/ui/button"
 import { PopOverComponent } from "@/components/ui/PopOverComponent"
 import { Wrench } from "lucide-react"
-
-import LinearDsConfig from "../_components/LinearDsConfig"
 import { prefix0 } from "@/lib/utils"
-import Position from "@/lib/classes/Position"
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError"
 import { PopUp } from "@/components/ui/PopUp"
 import ArrayNodeComponent from "./components/ArrayNodeComponent"
+import useStaticArray from "./hooks/useStaticArray"
+import './style.css'
 
 
 export default function StaticArray() {
-    const [array, setArray] = useState<Node<Primitive>[] | null>(null)
+    const { array, create, write, error, flush } = useStaticArray();
     const [isAnimationRunning, setIsAnimationRunning] = useState(false)
     const maxSize = useRef(30);
     const [data, setData] = useState<string>('');
-    const [size, setSize] = useState(0)
-    const [index, setIndex] = useState(0);
-    const [error, setError] = useState('')
-    const create = useCallback(() => {
-        if (size > maxSize.current) {
-            throw new IndexOutOfBoundsError(`A Stack overflow error has ocurred. Array maximum size of ${maxSize.current} exceeded.`)
-            return;
-        }
-        const _array = new Array(size);
-        for (let i = 0; i < _array.length; i++) {
-            _array[i] = new Node(null, new Position(0, 0))
-        }
-        setArray(_array)
-    }, [size])
-
-    const write = () => {
-        if (!array) return;
-        if (index < 0 || index >= array.length) {
-            //index out of the bound exception
-        }
-        console.log(array[index].ref)
-
-    }
-    // const push = () => {
+    const [size, setSize] = useState<number | null>(null)
+    const [index, setIndex] = useState<number | null>(null);
 
 
-    // }
-    // const pop = () => {
 
+    useEffect(() => {
 
-    // }
-    // const shift = () => {
-
-
-    // }
+        console.log('IS ANIMATION RUNNG', isAnimationRunning)
+    }, [isAnimationRunning])
 
 
     return (
@@ -71,19 +40,15 @@ export default function StaticArray() {
                         <Input defaultValue={data} placeholder="data" className="text-black w-24" onChange={(e) => {
                             setData(e.target.value)
                         }} type="text" name="" id="" />
-                        <Input defaultValue={index} placeholder="index" className="text-black w-20" onChange={(e) => {
+                        <Input value={index === null ? '' : index} placeholder="index" className="text-black w-20" onChange={(e) => {
                             setIndex(Number.parseInt(e.target.value))
                         }} type="number" min={0} />
-                        <ButtonAction title="write" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={() => {
-                            try {
-                                write()
-                            } catch (error) {
-                                if (error instanceof IndexOutOfBoundsError) {
-                                    alert(error.message)
-                                    return;
-                                }
-                                alert('Something went wrong')
-                            }
+                        <ButtonAction title="write" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
+                            if (!index || isAnimationRunning) return;
+                            await write(data ? data : null, index)
+                            setData('')
+                            setIndex(null);
+
                         }} />
                     </InputWithButtonContainer>
                     <InputWithButtonContainer>
@@ -92,15 +57,15 @@ export default function StaticArray() {
                         }} type="text" name="" id="" />
 
                         <ButtonAction title="search" className='bg-blue-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={() => {
+                            if (isAnimationRunning) return;
 
-                            write()
 
                         }} />
                     </InputWithButtonContainer>
 
                 </div> : null}
                 {(!array || !array.length) && <div className="flex  items-center gap-2 justify-center">
-                    <Input defaultValue={size} placeholder="size" className="text-black w-20" onChange={(e) => {
+                    <Input value={size ? size : ''} placeholder="size" className="text-black w-20" onChange={(e) => {
                         const value = Number.parseInt(e.target.value);
                         if (isNaN(value)) {
                             e.target.value = 0 + '';
@@ -110,23 +75,20 @@ export default function StaticArray() {
                             e.target.value = 0 + '';
                         }
                         setSize(value)
+
+
                     }} type="number" min={0} />
-                    <ButtonAction title="create" className='bg-red-400 hover:bg-red-600' isLoading={isAnimationRunning} onClick={() => {
-                        try {
-                            create()
-                        } catch (error) {
-                            if (error instanceof IndexOutOfBoundsError) {
-                                setError(error.message);
-                                return;
-                            }
-                            setError('Something went wrong')
-                        }
+                    <ButtonAction title="create" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={() => {
+                        if (isAnimationRunning || !size) return;
+                        setIsAnimationRunning(true)
+                        create(size)
                     }} />
                 </div>}
 
 
                 {array && array.length ? <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600' isLoading={isAnimationRunning} onClick={() => {
-                    setArray(null)
+                    flush()
+                    setIsAnimationRunning(false)
                 }} /> : null}
                 {array && array.length ? <PopOverComponent content={
                     <div>
@@ -155,7 +117,7 @@ export default function StaticArray() {
                                         <p>{memoryAdress}</p>
                                     </div>
                                     <div className=" w-[50px] h-[50px]">
-                                        {array && array[i] ? <ArrayNodeComponent node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
+                                        {array && array[i] ? <ArrayNodeComponent setAnimationRunning={setIsAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
 
                                     </div>
                                     <div title={"index: " + i} style={{
@@ -172,10 +134,12 @@ export default function StaticArray() {
 
                 </div>
             </div>
-            <PopUp title="StackOverFlowError" buttonText="dismiss" handleOnPopUpButton={() => {
-                setError('')
-                setArray(null);
-            }} open={error ? true : false} showTrigger={false} description={error} />
+            {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
+                setIsAnimationRunning(false)
+                flush();
+                setSize(null)
+
+            }} open={error ? true : false} showTrigger={false} description={error.description} />}
         </Main >
     )
 }

@@ -1,17 +1,20 @@
 import { Primitive } from '@/types'
 import React, { useCallback } from 'react'
 import Node from '../../_classes/Node';
+import UseStaticArrayAnimation from '../hooks/UseStaticArrayAnimation';
 
 type props = {
     node: Node<Primitive>;
+    setAnimationRunning: (value: boolean) => void
 }
-export default function ArrayNodeComponent({ node }: props) {
-
-    const setRef = useCallback((ele: HTMLElement | null) => {
+export default function ArrayNodeComponent({ node, setAnimationRunning }: props) {
+    const { createAnimation } = UseStaticArrayAnimation();
+    const setRef = useCallback(async (ele: HTMLElement | null) => {
         if (!ele) return;
-
         node.ref = ele;
-        // handle some animation;
+        await createAnimation(ele, () => {
+            setAnimationRunning(false)
+        })
 
 
     }, [])
