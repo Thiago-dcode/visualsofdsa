@@ -65,4 +65,6 @@ export default abstract class List {
   }
   abstract get isEmpty(): boolean;
   abstract get isFull(): boolean;
+  abstract get size(): number;
+
 }

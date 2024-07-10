@@ -10,7 +10,7 @@ import { Wrench } from 'lucide-react';
 import Info from '@/components/ui/info';
 import ButtonAction from '../_components/ButtonAction';
 import LinearDsContainer from '../_components/LinearDsContainer';
-import PushData from '../_components/PushData';
+import PushData from '../_components/ButtonWithInput';
 import UseLinear from '../_hooks/UseLinear';
 import QueueNodeComponent from './components/QueueNodeComponent';
 import PropertiesLinearDs from '../_components/PropertiesLinearDs';

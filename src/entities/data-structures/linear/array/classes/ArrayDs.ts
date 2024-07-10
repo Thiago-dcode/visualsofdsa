@@ -3,25 +3,30 @@ import List from "../../_classes/List";
 import Node from "../../_classes/Node";
 import Position from "../../../../../lib/classes/Position";
 
-export default class ArrayDs<T extends Primitive> extends List {
+export default class FixedArray<T extends Primitive> {
   private array: Node<T>[];
-  private currentPosition = 0;
+  private positionsOcuppied = 0;
   constructor(size: number) {
-    super("array");
     this.array = new Array(size);
   }
 
-  get isEmpty() {
-    return this.array.length === 0;
+  async search(data: T, handleAnimation: () => Promise<unknown>) {
+    for (let i = 0; i < this.array.length; i++) {
+      const node = this.array[i];
+      if (node.data === data) {
+        //do something
+        break;
+      }
+      await handleAnimation();
+    }
   }
-  get isFull() {
-    return this.currentPosition === this.array.length;
+  get isEmpty() {
+    return this.positionsOcuppied === 0;
   }
   get length() {
     return this.array.length;
   }
-  push(data: T) {
-    this.array[this.currentPosition] = new Node(data, new Position(0, 0));
-    this.currentPosition++;
+  get self() {
+    return this.array;
   }
 }

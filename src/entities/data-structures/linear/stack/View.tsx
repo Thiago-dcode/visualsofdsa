@@ -10,7 +10,7 @@ import { Wrench } from "lucide-react";
 import { PopOverComponent } from "@/components/ui/PopOverComponent";
 import LinearDsConfig from "../_components/LinearDsConfig";
 import OperationsContainer from "@/components/container/OperationsContainer";
-import PushData from "../_components/PushData";
+import PushData from "../_components/ButtonWithInput";
 import ButtonAction from "../_components/ButtonAction";
 import LinearDsContainer from "../_components/LinearDsContainer";
 import UseLinear from "../_hooks/UseLinear";

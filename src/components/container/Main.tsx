@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function Main({ children,className = '' }: { children: React.ReactNode,className?:string }) {
   return (
-    <main className={cn('main-container', className)}>
+    <main className={cn('main-container ', className)}>
         {children}
     </main>
   )

@@ -1,9 +1,9 @@
 import React from 'react'
-import Array from '@/entities/data-structures/linear/array/View'
+import StaticArray from '@/entities/data-structures/linear/array/View'
 function ArrayPage() {
   return (
     <>
-    <Array/>
+    <StaticArray/>
     </>
   )
 }
