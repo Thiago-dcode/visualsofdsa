@@ -18,8 +18,8 @@ showBtn = false
     showBtn?: boolean
 }) {
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <Popover >
+      <PopoverTrigger  asChild>
         {trigger}
       </PopoverTrigger>
       <PopoverContent className="w-80">
@@ -28,7 +28,7 @@ showBtn = false
        }
        { showBtn && <Button onClick={(e)=>{
                 handleOnClick(e)
-        }} variant="default">submit</Button>}
+        }} variant="ghost" >submit</Button>}
       </PopoverContent>
     </Popover>
   )
