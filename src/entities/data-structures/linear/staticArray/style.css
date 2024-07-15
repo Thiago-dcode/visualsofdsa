@@ -48,6 +48,9 @@
     color: white;
   }
 
- 
+  100% {
+    background-color: rgba(96, 165, 250);
+    color: white;
+  }
   
 }
