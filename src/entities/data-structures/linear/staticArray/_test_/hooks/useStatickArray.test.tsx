@@ -58,10 +58,11 @@ describe("Testin custom hook useStaticArray", () => {
     if (result.current.array?.length) {
       for (let index = 0; index < result.current.array.length; index++) {
         const element = result.current.array[index];
-        expect(element.data).toBe("NULL");
+        expect(element.data).toBe(null);
       }
     }
   });
+  
 
   it("Should set error", async () => {
     const { result } = renderHook(useStaticArray);
@@ -88,6 +89,26 @@ describe("Testin custom hook useStaticArray", () => {
     await waitFor(() =>
       act(async () => {
         waitFor(() => result.current.write("hello", 5));
+      })
+    );
+    expect(result.current.error).toBeTruthy();
+    if (result.current.error) {
+      expect(result.current.error.name).toBe(`IndexOutOfTheBoundException`);
+      expect(result.current.error.description).toBe(
+        `Index ${5} out of bounds for length ${result.current?.array?.length}`
+      );
+    }
+    act(() => {
+      result.current.flush();
+    });
+    expect(result.current.array).toBe(null);
+    expect(result.current.error).toBe(null);
+    act(() => {
+      result.current.create(3);
+    });
+    await waitFor(() =>
+      act(async () => {
+        waitFor(() => result.current.access(5));
       })
     );
     expect(result.current.error).toBeTruthy();

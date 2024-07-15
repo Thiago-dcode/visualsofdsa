@@ -1,20 +1,17 @@
-.static-array-node {
-  color: rgb(226, 232, 240);
-}
-.static-array-node,.null {
-  color: rgb(59 130 246);
-}
 
-@keyframes peek-node {
+@keyframes access-node {
   0% {
+    scale: 1;
     background: rgba(250, 204, 21, 0.5);
   }
 
-  80% {
+  50% {
+    transform: scale(1.1);
     background: rgba(250, 204, 1);
   }
 
   100% {
+    transform: scale(1);
     background: rgba(250, 204, 21, 0);
   }
 }
@@ -43,4 +40,14 @@
   100% {
     background-color: rgba(250, 204, 21, 0);
   }
+  
+}
+@keyframes search-node {
+  0% {
+    background-color: rgba(96, 165, 250);
+    color: white;
+  }
+
+ 
+  
 }

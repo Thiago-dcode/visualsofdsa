@@ -1,0 +1,1 @@
+export type staticArrayAction = 'create' | 'write'| 'access'|'search';

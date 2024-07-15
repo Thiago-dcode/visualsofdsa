@@ -3,10 +3,11 @@ import React, { useCallback } from 'react'
 import Node from '../../_classes/Node';
 import UseStaticArrayAnimation from '../hooks/UseStaticArrayAnimation';
 import LinearNodeComponent from '../../_components/LinearNodeComponent';
+import { staticArrayAction } from '../type';
 
 type props = {
   node: Node<Primitive>;
-  action?: 'create' | 'write';
+  action?: staticArrayAction;
   setAnimationRunning: (value: boolean) => void
 }
 export default function StaticArrayNodeComponent({ node, action = 'create', setAnimationRunning }: props) {

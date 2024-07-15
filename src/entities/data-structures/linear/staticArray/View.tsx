@@ -13,19 +13,18 @@ import { PopUp } from "@/components/ui/PopUp"
 import StaticArrayNodeComponent from "./components/StaticArrayNodeComponent"
 import useStaticArray from "./hooks/useStaticArray"
 import './style.css'
+import { staticArrayAction } from "./type"
 
 
 export default function StaticArray() {
-    const { array, create, write, error, flush, maxSize } = useStaticArray();
+    const { array, create, write, access, search, error, flush, maxSize } = useStaticArray();
     const [isAnimationRunning, setIsAnimationRunning] = useState(false)
-    const [_render, setRender] = useState(false)
-    // const setIsAnimationRunning = (value: boolean) => {
-    //     isAnimationRunning = value;
-    // }
-    const [action, setAction] = useState<'create' | 'write'>('create')
+    const [action, setAction] = useState<staticArrayAction>('create')
     const [data, setData] = useState<string>('');
+    const [searchData, setSearchData] = useState<string>('');
     const [size, setSize] = useState<number>(0);
     const [index, setIndex] = useState<number>(0);
+    const [indexAccess, setIndexAccess] = useState<number>(0);
     return (
         <Main className="">
             {<OperationsContainer>
@@ -33,7 +32,7 @@ export default function StaticArray() {
 
                     {/* WRITE OPERATION */}
                     <InputWithButtonContainer>
-                        <Input defaultValue={data} placeholder="data" className="text-black w-24" onChange={(e) => {
+                        <Input value={data} placeholder="data" className="text-black w-24" onChange={(e) => {
                             setData(e.target.value)
                         }} type="text" name="" id="" />
                         <Input defaultValue={index} placeholder="index" className="text-black w-20" onChange={(e) => {
@@ -43,9 +42,10 @@ export default function StaticArray() {
                             if (isAnimationRunning || index === undefined) return;
 
                             setIsAnimationRunning(true)
-                            console.log(data)
-                            await write(data === ''?null:data, index, () => {
+                            setData('')
+                            await write(data === '' ? null : data, index, () => {
                                 setAction('write')
+                                setIndex(0)
                             })
                             setIsAnimationRunning(false)
 
@@ -53,24 +53,33 @@ export default function StaticArray() {
                     </InputWithButtonContainer>
                     {/* ACCESS OPERATION */}
                     <InputWithButtonContainer>
-                        <Input placeholder="data" className="text-black w-24" onChange={(e) => {
-
-                        }} type="text" name="" id="" />
-
-                        <ButtonAction title="access" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={() => {
+                        <Input defaultValue={indexAccess} placeholder="index" className="text-black w-20" onChange={(e) => {
+                            setIndexAccess(Number.parseInt(e.target.value))
+                        }} type="number" min={0} />
+                        <ButtonAction title="access" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning) return;
-
+                            setIsAnimationRunning(true);
+                            setAction('access')
+                            await access(indexAccess, () => {
+                                setIsAnimationRunning(false)
+                            })
 
                         }} />
                     </InputWithButtonContainer>
                     {/* SEARCH OPERATION */}
                     <InputWithButtonContainer>
-                        <Input placeholder="data" className="text-black w-24" onChange={(e) => {
-
+                        <Input value={searchData} placeholder="data" className="text-black w-24" onChange={(e) => {
+                            setSearchData(e.target.value)
                         }} type="text" name="" id="" />
 
-                        <ButtonAction title="search" className='bg-blue-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={() => {
+                        <ButtonAction title="search" className='bg-blue-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning) return;
+                            setIsAnimationRunning(true)
+                            setAction('search')
+                            await search(searchData === '' ? null : searchData, () => {
+                                setIsAnimationRunning(false)
+                                setSearchData('')
+                            })
 
 
                         }} />
