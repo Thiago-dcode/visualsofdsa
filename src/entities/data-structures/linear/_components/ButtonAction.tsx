@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 
 import { cn } from '@/lib/utils';
+import { useMemo } from 'react';
 
 function ButtonAction({ isLoading, onClick, title, className = '' }: {
     isLoading: boolean,
@@ -9,11 +10,14 @@ function ButtonAction({ isLoading, onClick, title, className = '' }: {
     className?: string
 
 }) {
-    return (
-        <Button style={{
+    const style = useMemo(() => {
+        return {
             opacity: isLoading ? '0.4' : '1',
             cursor: isLoading ? 'wait' : 'pointer'
-        }} onClick={() => {
+        }
+    }, [isLoading])
+    return (
+        <Button style={style} onClick={async () => {
             onClick();
         }} type="submit" className={cn("", className)} variant={"default"}>{title}</Button>
     )

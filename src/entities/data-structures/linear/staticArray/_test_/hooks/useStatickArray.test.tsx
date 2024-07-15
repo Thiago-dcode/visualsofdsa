@@ -1,9 +1,9 @@
-import { describe, expect, it } from "vitest";
-import { act, renderHook } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import useStaticArray from "../../hooks/useStaticArray";
 
+
 describe("Testin custom hook useStaticArray", () => {
-  it("Should create an array", () => {
+  it("Should create an array", async () => {
     const { result } = renderHook(useStaticArray);
     expect(result.current.array).toBe(null);
     expect(result.current.error).toBe(null);
@@ -18,23 +18,25 @@ describe("Testin custom hook useStaticArray", () => {
       }
     }
   });
-  it("Should write", () => {
+  it("Should write", async () => {
     const { result } = renderHook(useStaticArray);
     expect(result.current.error).toBe(null);
     act(() => {
       result.current.create(10);
     });
     expect(result.current.array?.length).toBe(10);
-    act(() => {
-      expect(result.current.array).toBeTruthy();
-      if (result.current.array?.length) {
-        for (let index = 0; index < result.current.array.length; index++) {
-          const element = result.current.array[index];
-          expect(element.data).toBeNull();
-          result.current.write(index, index);
+    await waitFor(() =>
+      act(() => {
+        expect(result.current.array).toBeTruthy();
+        if (result.current.array?.length) {
+          for (let index = 0; index < result.current.array.length; index++) {
+            const element = result.current.array[index];
+            expect(element.data).toBeNull();
+            waitFor(() => result.current.write(index, index));
+          }
         }
-      }
-    });
+      })
+    );
     expect(result.current.array).toBeTruthy();
     if (result.current.array?.length) {
       for (let index = 0; index < result.current.array.length; index++) {
@@ -42,15 +44,17 @@ describe("Testin custom hook useStaticArray", () => {
         expect(element.data).toBe(index);
       }
     }
-    act(() => {
-      expect(result.current.array).toBeTruthy();
-      if (result.current.array?.length) {
-        for (let index = 0; index < result.current.array.length; index++) {
-          const element = result.current.array[index];
-          result.current.write(null, index);
+    await waitFor(() =>
+      act(async () => {
+        expect(result.current.array).toBeTruthy();
+        if (result.current.array?.length) {
+          for (let index = 0; index < result.current.array.length; index++) {
+            const element = result.current.array[index];
+            waitFor(() => result.current.write(null, index));
+          }
         }
-      }
-    });
+      })
+    );
     if (result.current.array?.length) {
       for (let index = 0; index < result.current.array.length; index++) {
         const element = result.current.array[index];
@@ -58,16 +62,17 @@ describe("Testin custom hook useStaticArray", () => {
       }
     }
   });
-  it("Should set error", () => {
+
+  it("Should set error", async () => {
     const { result } = renderHook(useStaticArray);
     expect(result.current.error).toBe(null);
     act(() => {
-      result.current.create(result.current.maxSize.current + 1);
+      result.current.create(result.current.maxSize + 1);
     });
     if (result.current.error) {
       expect(result.current.error.name).toBe(`IndexOutOfTheBoundException`);
       expect(result.current.error.description).toBe(
-        `A Stack overflow error has ocurred. Array maximum size of ${result.current.maxSize.current} exceeded.`
+        `A Stack overflow error has ocurred. Array maximum size of ${result.current.maxSize} exceeded.`
       );
     }
     expect(result.current.array).toBe(null);
@@ -80,9 +85,11 @@ describe("Testin custom hook useStaticArray", () => {
       result.current.create(3);
     });
     expect(result.current.array?.length).toBe(3);
-    act(() => {
-      result.current.write("hello", 5);
-    });
+    await waitFor(() =>
+      act(async () => {
+        waitFor(() => result.current.write("hello", 5));
+      })
+    );
     expect(result.current.error).toBeTruthy();
     if (result.current.error) {
       expect(result.current.error.name).toBe(`IndexOutOfTheBoundException`);
@@ -92,3 +99,4 @@ describe("Testin custom hook useStaticArray", () => {
     }
   });
 });
+

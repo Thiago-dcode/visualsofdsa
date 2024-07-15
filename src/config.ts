@@ -1,6 +1,6 @@
 export const links = {
   "data-structures": {
-    linear: ["stack", "queue", "array"],
+    linear: ["stack", "queue", "static-array"],
     "non-linear": ["graph", "tree", "bts"],
   },
   algorithms: {

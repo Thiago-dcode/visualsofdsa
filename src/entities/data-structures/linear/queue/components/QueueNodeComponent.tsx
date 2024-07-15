@@ -28,17 +28,18 @@ const QueueNodeComponent = ({ node, height, id, queue, setIsAnimationRunning }: 
             enqueueAnimation(node.ref, () => {
                 setIsAnimationRunning(false)
             })
-
         }
-
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
 
     return (
-        <LinearNodeComponent node={node} height={height} dsType={'queue'} ref={handleRef} />
+        <LinearNodeComponent style={{
+            top: `${node.position.y}px`,
+            height: `${height}px`,
+
+        }} className="linear-node rounded-lg" node={node} dsType={'queue'} ref={handleRef} />
 
     )
 }

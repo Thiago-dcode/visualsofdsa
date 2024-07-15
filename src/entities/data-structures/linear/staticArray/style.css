@@ -1,3 +1,10 @@
+.static-array-node {
+  color: rgb(226, 232, 240);
+}
+.static-array-node,.null {
+  color: rgb(59 130 246);
+}
+
 @keyframes peek-node {
   0% {
     background: rgba(250, 204, 21, 0.5);
@@ -12,6 +19,19 @@
   }
 }
 @keyframes add-node {
+  0% {
+    background-color: rgba(74, 222, 128, 0.2);
+  }
+
+  50% {
+    background-color: rgba(74, 222, 128);
+  }
+
+  100% {
+    background-color: rgba(250, 204, 21, 0);
+  }
+}
+@keyframes write-node {
   0% {
     background-color: rgba(74, 222, 128, 0.2);
   }

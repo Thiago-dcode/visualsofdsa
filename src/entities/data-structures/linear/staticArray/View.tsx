@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import Main from "@/components/container/Main"
 import OperationsContainer from "@/components/container/OperationsContainer"
 import ButtonAction from "../_components/ButtonAction"
@@ -9,51 +9,64 @@ import { Button } from "@/components/ui/button"
 import { PopOverComponent } from "@/components/ui/PopOverComponent"
 import { Wrench } from "lucide-react"
 import { prefix0 } from "@/lib/utils"
-import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError"
 import { PopUp } from "@/components/ui/PopUp"
-import ArrayNodeComponent from "./components/ArrayNodeComponent"
+import StaticArrayNodeComponent from "./components/StaticArrayNodeComponent"
 import useStaticArray from "./hooks/useStaticArray"
 import './style.css'
 
 
 export default function StaticArray() {
-    const { array, create, write, error, flush } = useStaticArray();
+    const { array, create, write, error, flush, maxSize } = useStaticArray();
     const [isAnimationRunning, setIsAnimationRunning] = useState(false)
-    const maxSize = useRef(30);
+    const [_render, setRender] = useState(false)
+    // const setIsAnimationRunning = (value: boolean) => {
+    //     isAnimationRunning = value;
+    // }
+    const [action, setAction] = useState<'create' | 'write'>('create')
     const [data, setData] = useState<string>('');
-    const [size, setSize] = useState<number | null>(null)
-    const [index, setIndex] = useState<number | null>(null);
-
-
-
-    useEffect(() => {
-
-        console.log('IS ANIMATION RUNNG', isAnimationRunning)
-    }, [isAnimationRunning])
-
-
+    const [size, setSize] = useState<number>(0);
+    const [index, setIndex] = useState<number>(0);
     return (
         <Main className="">
             {<OperationsContainer>
                 {array && array.length ? < div className="flex  items-center gap-5 justify-center">
+
+                    {/* WRITE OPERATION */}
                     <InputWithButtonContainer>
                         <Input defaultValue={data} placeholder="data" className="text-black w-24" onChange={(e) => {
                             setData(e.target.value)
                         }} type="text" name="" id="" />
-                        <Input value={index === null ? '' : index} placeholder="index" className="text-black w-20" onChange={(e) => {
+                        <Input defaultValue={index} placeholder="index" className="text-black w-20" onChange={(e) => {
                             setIndex(Number.parseInt(e.target.value))
                         }} type="number" min={0} />
                         <ButtonAction title="write" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
-                            if (!index || isAnimationRunning) return;
-                            await write(data ? data : null, index)
-                            setData('')
-                            setIndex(null);
+                            if (isAnimationRunning || index === undefined) return;
+
+                            setIsAnimationRunning(true)
+                            console.log(data)
+                            await write(data === ''?null:data, index, () => {
+                                setAction('write')
+                            })
+                            setIsAnimationRunning(false)
 
                         }} />
                     </InputWithButtonContainer>
+                    {/* ACCESS OPERATION */}
                     <InputWithButtonContainer>
-                        <Input defaultValue={data} placeholder="data" className="text-black w-24" onChange={(e) => {
-                            setData(e.target.value)
+                        <Input placeholder="data" className="text-black w-24" onChange={(e) => {
+
+                        }} type="text" name="" id="" />
+
+                        <ButtonAction title="access" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={() => {
+                            if (isAnimationRunning) return;
+
+
+                        }} />
+                    </InputWithButtonContainer>
+                    {/* SEARCH OPERATION */}
+                    <InputWithButtonContainer>
+                        <Input placeholder="data" className="text-black w-24" onChange={(e) => {
+
                         }} type="text" name="" id="" />
 
                         <ButtonAction title="search" className='bg-blue-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={() => {
@@ -65,7 +78,7 @@ export default function StaticArray() {
 
                 </div> : null}
                 {(!array || !array.length) && <div className="flex  items-center gap-2 justify-center">
-                    <Input value={size ? size : ''} placeholder="size" className="text-black w-20" onChange={(e) => {
+                    <Input defaultValue={size} placeholder="size" className="text-black w-20" onChange={(e) => {
                         const value = Number.parseInt(e.target.value);
                         if (isNaN(value)) {
                             e.target.value = 0 + '';
@@ -82,6 +95,7 @@ export default function StaticArray() {
                         if (isAnimationRunning || !size) return;
                         setIsAnimationRunning(true)
                         create(size)
+                        setIsAnimationRunning(false)
                     }} />
                 </div>}
 
@@ -89,6 +103,7 @@ export default function StaticArray() {
                 {array && array.length ? <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600' isLoading={isAnimationRunning} onClick={() => {
                     flush()
                     setIsAnimationRunning(false)
+                    setAction('create')
                 }} /> : null}
                 {array && array.length ? <PopOverComponent content={
                     <div>
@@ -99,25 +114,23 @@ export default function StaticArray() {
             </OperationsContainer>}
 
 
-            <div className="w-full overflow-auto flex items-center justify-start   p-4 ">
+            <div className="md:w-full flex items-center justify-center">
 
 
 
-                <div className="  flex items-center justify-center">
-
+                <div className="w-full  flex-wrap gap-y-4 flex items-center justify-start">
 
 
                     {
-                        [...Array(maxSize.current)].map((d, i) => {
+                        [...Array(maxSize)].map((d, i) => {
                             const memoryAdress = '0x' + prefix0(i);
                             return (
                                 <div key={'static-array-empty-' + i}>
-
                                     <div title={"Memory address: " + memoryAdress} className="text-sm flex items-center justify-center py-2 border border-white w-[50px] h-[15px]">
                                         <p>{memoryAdress}</p>
                                     </div>
                                     <div className=" w-[50px] h-[50px]">
-                                        {array && array[i] ? <ArrayNodeComponent setAnimationRunning={setIsAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
+                                        {array && array[i] ? <StaticArrayNodeComponent action={action} setAnimationRunning={setIsAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
 
                                     </div>
                                     <div title={"index: " + i} style={{
@@ -137,7 +150,10 @@ export default function StaticArray() {
             {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
                 setIsAnimationRunning(false)
                 flush();
-                setSize(null)
+                setAction('create')
+                setSize(0)
+                setData('')
+                setIndex(0)
 
             }} open={error ? true : false} showTrigger={false} description={error.description} />}
         </Main >

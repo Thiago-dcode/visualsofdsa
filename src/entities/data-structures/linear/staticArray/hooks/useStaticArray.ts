@@ -8,12 +8,14 @@ import UseStaticArrayAnimation from "./UseStaticArrayAnimation";
 export default function useStaticArray() {
   const [array, setArray] = useState<Node<Primitive>[] | null>(null);
   const { writeAnimation } = UseStaticArrayAnimation();
-  const maxSize = useRef(30);
+  const maxSize = useRef(50);
   const [data, setData] = useState<string>("");
   const [error, setError] = useState<{
     name: string;
     description: string;
   } | null>(null);
+  
+  
   const create = (size: number) => {
     if (size < 0 || size > maxSize.current) {
       setError({
@@ -28,7 +30,7 @@ export default function useStaticArray() {
     }
     setArray(_array);
   };
-  const write = async (data: Primitive, index: number) => {
+  const write = async (data: Primitive, index: number, callback = () => {}) => {
     if (!array) return;
     if (index < 0 || index >= array.length) {
       setError({
@@ -38,13 +40,10 @@ export default function useStaticArray() {
       return;
     }
     const node = array[index];
-    node.data = data === null ? "NULL" : data;
-    if (node.ref) {
-      node.ref.textContent = data ? data.toString() : "";
-    }
-    console.log(node.ref);
-    await writeAnimation(node.ref);
-    console.log('SHOULD TERMINATE;')
+    node.data = data;
+   
+    await writeAnimation(node);
+    callback();
   };
   const flush = () => {
     setArray(null);
@@ -55,7 +54,8 @@ export default function useStaticArray() {
     flush,
     error,
     array,
-    maxSize,
+    
+    maxSize: maxSize.current,
     write,
   };
 }

@@ -11,10 +11,9 @@ type props = {
     height: number,
     setAnimationIsRunning: (value: boolean) => void;
     handlePushAnimation: (ele: HTMLElement | null, onAnimationEnds: (e: AnimationEvent) => void) => void;
-    dsType?: 'queue' | 'stack',
     action?: 'add' | 'delete'
 }
-const StackNodeComponent = ({ node, height, id, setAnimationIsRunning = () => { }, handlePushAnimation, dsType = 'stack' }: props) => {
+const StackNodeComponent = ({ node, height, id, setAnimationIsRunning = () => { }, handlePushAnimation }: props) => {
     const handleRef = useCallback((element: HTMLDivElement | null) => {
         if (element == null) return
         node.ref = element;
@@ -24,7 +23,11 @@ const StackNodeComponent = ({ node, height, id, setAnimationIsRunning = () => { 
     }, [])
 
     return (
-        <LinearNodeComponent node={node} height={height} dsType={dsType} key={id} ref={handleRef} />
+        <LinearNodeComponent style={{
+            bottom: `${node.position.y}px`,
+            height: `${height}px`,
+
+        }} className="linear-node rounded-lg" node={node} dsType={'stack'} key={id} ref={handleRef} />
 
     )
 }

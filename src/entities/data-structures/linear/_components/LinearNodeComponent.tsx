@@ -4,29 +4,29 @@ import {
 } from 'react'
 import { Primitive } from '@/types';
 import Node from '../_classes/Node';
+import { cn } from '../../../../lib/utils';
 
 type props = {
 
   node: Node<Primitive>,
-
-  height: number,
-  dsType?: 'queue' | 'stack',
+  style?: React.CSSProperties;
+  dsType?: 'queue' | 'stack' | 'staticArray',
+  className?: string
 
 }
-const LinearNodeComponent = forwardRef<HTMLDivElement, props>(({ node, height, dsType = 'stack' }: props, ref) => {
+const LinearNodeComponent = forwardRef<HTMLDivElement, props>(({ node, dsType, style = {}, className = '' }: props, ref) => {
 
 
   return (
     <>
-      {node && <div ref={ref} id={`${dsType}-node-${node.id}`} style={
-        {
-          top: dsType == 'queue' ? `${node.position.y}px` : '',
-          bottom: dsType == 'stack' ? `${node.position.y}px` : '',
-          height: `${height}px`,
-
-        }
-      } className="linear-node text-center flex items-center justify-center overflow-auto rounded-lg">
-        {node.data}
+      {node && <div ref={ref} id={`${dsType}-node-${node.id}`} style={style} className={cn('border border-white text-center flex items-center justify-center overflow-auto ', className)}>
+        <p style={
+          {
+            color: node.data === null ? 'rgba(59, 130, 246,0.8)' : 'rgb(226, 232, 240)'
+          }
+        }>
+          {node.data !== null ? node.data : 'NULL'}
+        </p>
       </div>}
 
     </>
