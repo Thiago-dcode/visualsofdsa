@@ -15,6 +15,7 @@ import useStaticArray from "./hooks/useStaticArray"
 import './style.css'
 import { staticArrayAction } from "./type"
 import Info from "@/components/ui/info"
+import Section from "@/components/container/Section"
 
 
 export default function StaticArray() {
@@ -26,12 +27,18 @@ export default function StaticArray() {
     const [size, setSize] = useState<number>(0);
     const [index, setIndex] = useState<number>(0);
     const [indexAccess, setIndexAccess] = useState<number>(0);
+    const [open, setOpen] = useState(false);
     return (
         <Main className="">
 
-            
-            {<OperationsContainer>
-                {array && array.length ? < div className="flex  items-center gap-5 justify-center">
+            {<OperationsContainer  setOpen={(value)=>{
+
+                    setOpen(value)
+                        
+
+
+            }} open={open}>
+                {array && array.length ? < Section>
 
                     {/* WRITE OPERATION */}
                     <InputWithButtonContainer>
@@ -46,8 +53,10 @@ export default function StaticArray() {
                             if (isAnimationRunning || index === undefined) return;
 
                             setIsAnimationRunning(true)
+                            setOpen(prev => !prev)
                             await write(data === '' ? null : data, index, () => {
                                 setAction('write')
+                              
                             })
                             setIsAnimationRunning(false)
 
@@ -62,6 +71,7 @@ export default function StaticArray() {
                             if (isAnimationRunning) return;
                             setIsAnimationRunning(true);
                             setAction('access')
+                            setOpen(false)
                             await access(indexAccess, () => {
                                 setIsAnimationRunning(false)
                             })
@@ -77,17 +87,20 @@ export default function StaticArray() {
                         <ButtonAction title="search" className='bg-blue-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning) return;
                             setIsAnimationRunning(true)
+                            setOpen(!open)
                             setAction('search')
                             await search(searchData === '' ? null : searchData, () => {
                                 setIsAnimationRunning(false)
                                 setSearchData('')
+
                             })
 
 
                         }} />
                     </InputWithButtonContainer>
 
-                </div> : null}
+                </Section> : null}
+
                 {(!array || !array.length) && <div className="flex  items-center gap-2 justify-center">
                     <Input defaultValue={size} placeholder="size" className="text-black w-20" onChange={(e) => {
                         const value = Number.parseInt(e.target.value);
@@ -102,16 +115,17 @@ export default function StaticArray() {
 
 
                     }} type="number" min={0} />
-                    <ButtonAction title="create" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={() => {
+                    <ButtonAction title="create" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async() => {
                         if (isAnimationRunning || !size) return;
+                        setOpen(!open)
                         setIsAnimationRunning(true)
-                        create(size)
+                     await   create(size)
                         setIsAnimationRunning(false)
                     }} />
                 </div>}
 
 
-                {array && array.length ? <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600' isLoading={isAnimationRunning} onClick={() => {
+                {array && array.length ? <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600 self-end mt-5' isLoading={isAnimationRunning} onClick={() => {
                     flush()
                     setIsAnimationRunning(false)
                     setAction('create')

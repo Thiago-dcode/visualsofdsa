@@ -4,25 +4,38 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { cn } from "@/lib/utils";
 import React from "react"
 
 export function PopOverComponent({
 trigger,
 content,
 handleOnClick= ()=>{},
-showBtn = false
+showBtn = false,
+className= '',
+open= false
 }:{
     trigger: React.ReactNode;
     content: React.ReactNode;
     handleOnClick?: (e:  React.MouseEvent<HTMLButtonElement, MouseEvent>)=>void,
-    showBtn?: boolean
+    showBtn?: boolean,
+    className?: string,
+    open?: boolean
 }) {
+
+
+  const setOpen = (value:boolean):boolean=>{
+
+    
+      return value;
+
+  }
   return (
-    <Popover >
+    <Popover defaultOpen ={false}  open={setOpen(open)}>
       <PopoverTrigger  asChild>
         {trigger}
       </PopoverTrigger>
-      <PopoverContent className="w-80">
+      <PopoverContent id="pop-over" className={cn('w-80',className)}>
        {
         content
        }

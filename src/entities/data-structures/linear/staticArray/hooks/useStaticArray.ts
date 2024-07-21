@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import Node from "../../_classes/Node";
 import "../style.css";
 import UseStaticArrayAnimation from "./UseStaticArrayAnimation";
+import { delay } from "@/lib/utils";
 
 export default function useStaticArray() {
   const [array, setArray] = useState<Node<Primitive>[] | null>(null);
@@ -15,7 +16,7 @@ export default function useStaticArray() {
     description: string;
   } | null>(null);
 
-  const create = (size: number) => {
+  const create = async (size: number) => {
     if (size < 0 || size > maxSize.current) {
       setError({
         name: "IndexOutOfTheBoundException",
@@ -27,12 +28,14 @@ export default function useStaticArray() {
     for (let i = 0; i < _array.length; i++) {
       _array[i] = new Node(null, new Position(0, 0));
     }
+    await delay(100);
     setArray(_array);
   };
   const write = async (data: Primitive, index: number, callback = () => {}) => {
     if (!array) return;
     throwIndexOutOfTheBound(index);
     const node = array[index];
+    if(!node) return;
     node.data = data;
 
     await writeAnimation(node);
