@@ -17,8 +17,8 @@ export default function OperationsContainer({ children, className = '', open = f
             {(device.isDesktop || device.isTv) ? < div className={cn("border border-white w-full flex items-center justify-between gap-1 p-4", className)} >
                 {children}
             </div > :
-            <div className='w-full flex items-center justify-end px-20'>
-  <PopOverComponent open={open} className='self-start bg-white/90' showBtn={false} trigger={<button onClick={()=>{
+            <div className='w-full flex items-center justify-end px-10'>
+  <PopOverComponent open={open} className='self-start mr-8 bg-white/90' showBtn={false} trigger={<button onClick={()=>{
     setOpen(!open)
   }}><Menu/></button>} content={<div className='flex flex-col items-center w-full'>
                     {children}

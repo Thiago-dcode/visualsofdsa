@@ -14,10 +14,16 @@ const config = {
       center: true,
       padding: "2rem",
       screens: {
+       
         "2xl": "1400px",
       },
     },
     extend: {
+      screens:{
+        phone: "480px",
+        tablet: "820px",
+        desktop: "1200px",
+      },
       colors: {
         app: {
           bg: "#13161B",

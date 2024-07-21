@@ -1,15 +1,14 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import useStaticArray from "../../hooks/useStaticArray";
 
-
-describe("Testin custom hook useStaticArray", () => {
+describe("Testin custom hook useStaticArray", async () => {
   it("Should create an array", async () => {
     const { result } = renderHook(useStaticArray);
     expect(result.current.array).toBe(null);
     expect(result.current.error).toBe(null);
-    act(() => {
-      result.current.create(10);
-    });
+    await waitFor(() => act(async () => {
+      await waitFor(() => result.current.create(10))
+    }))
     expect(result.current.array?.length).toBe(10);
     if (result.current.array) {
       for (let i = 0; i < result.current.array.length; i++) {
@@ -21,9 +20,9 @@ describe("Testin custom hook useStaticArray", () => {
   it("Should write", async () => {
     const { result } = renderHook(useStaticArray);
     expect(result.current.error).toBe(null);
-    act(() => {
-      result.current.create(10);
-    });
+    await waitFor(() => act(async () => {
+      await waitFor(() => result.current.create(10))
+    }))
     expect(result.current.array?.length).toBe(10);
     await waitFor(() =>
       act(() => {
@@ -62,7 +61,7 @@ describe("Testin custom hook useStaticArray", () => {
       }
     }
   });
-  
+
 
   it("Should set error", async () => {
     const { result } = renderHook(useStaticArray);
@@ -82,9 +81,9 @@ describe("Testin custom hook useStaticArray", () => {
     });
     expect(result.current.array).toBe(null);
     expect(result.current.error).toBe(null);
-    act(() => {
-      result.current.create(3);
-    });
+    await waitFor(() => act(async () => {
+      await waitFor(() => result.current.create(3))
+    }))
     expect(result.current.array?.length).toBe(3);
     await waitFor(() =>
       act(async () => {
@@ -103,9 +102,9 @@ describe("Testin custom hook useStaticArray", () => {
     });
     expect(result.current.array).toBe(null);
     expect(result.current.error).toBe(null);
-    act(() => {
-      result.current.create(3);
-    });
+    await waitFor(() => act(async () => {
+      await waitFor(() => result.current.create(3))
+    }))
     await waitFor(() =>
       act(async () => {
         waitFor(() => result.current.access(5));

@@ -30,7 +30,8 @@ const UseStaticArrayAnimation = () => {
 
   const writeAnimation = async (
     node: Node<Primitive> | null,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
+    onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
+    speed = 0.2
   ): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       if (!node || !node.ref) {
@@ -44,7 +45,7 @@ const UseStaticArrayAnimation = () => {
           resolve(true);
           ref.removeEventListener("animationend", animationEvent);
         };
-        requestAnimation(ref, `write-node ${"1s"}`, animationEvent);
+        requestAnimation(ref, `write-node ${speed}s`, animationEvent);
       }
     });
   };

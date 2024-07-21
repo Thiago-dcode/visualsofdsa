@@ -1,21 +1,19 @@
 'use client'
-import { useRef, useState } from "react"
+import { useState } from "react"
 import Main from "@/components/container/Main"
 import OperationsContainer from "@/components/container/OperationsContainer"
 import ButtonAction from "../_components/ButtonAction"
 import { Input } from "@/components/ui/input"
 import InputWithButtonContainer from "@/components/container/InputWithButtonContainer"
-import { Button } from "@/components/ui/button"
-import { PopOverComponent } from "@/components/ui/PopOverComponent"
-import { Wrench } from "lucide-react"
 import { prefix0 } from "@/lib/utils"
 import { PopUp } from "@/components/ui/PopUp"
 import StaticArrayNodeComponent from "./components/StaticArrayNodeComponent"
 import useStaticArray from "./hooks/useStaticArray"
 import './style.css'
-import { staticArrayAction } from "./type"
+import { searchResult, staticArrayAction } from "./type"
 import Info from "@/components/ui/info"
 import Section from "@/components/container/Section"
+import UseLinear from "../_hooks/UseLinear"
 
 
 export default function StaticArray() {
@@ -28,13 +26,15 @@ export default function StaticArray() {
     const [index, setIndex] = useState<number>(0);
     const [indexAccess, setIndexAccess] = useState<number>(0);
     const [open, setOpen] = useState(false);
+    const [searchResult, setSearchResult] = useState<searchResult | null>(null);
+    const [render, setRender] = useState(false)
     return (
         <Main className="">
 
-            {<OperationsContainer  setOpen={(value)=>{
+            {<OperationsContainer setOpen={(value) => {
 
-                    setOpen(value)
-                        
+                setOpen(value)
+
 
 
             }} open={open}>
@@ -56,7 +56,7 @@ export default function StaticArray() {
                             setOpen(prev => !prev)
                             await write(data === '' ? null : data, index, () => {
                                 setAction('write')
-                              
+
                             })
                             setIsAnimationRunning(false)
 
@@ -89,10 +89,10 @@ export default function StaticArray() {
                             setIsAnimationRunning(true)
                             setOpen(!open)
                             setAction('search')
-                            await search(searchData === '' ? null : searchData, () => {
+                            await search(searchData === '' ? null : searchData, (data) => {
                                 setIsAnimationRunning(false)
                                 setSearchData('')
-
+                                setSearchResult(data)
                             })
 
 
@@ -115,17 +115,40 @@ export default function StaticArray() {
 
 
                     }} type="number" min={0} />
-                    <ButtonAction title="create" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async() => {
+                    <ButtonAction title="create" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
                         if (isAnimationRunning || !size) return;
                         setOpen(!open)
                         setIsAnimationRunning(true)
-                     await   create(size)
+                        await create(size)
+                        setIsAnimationRunning(false)
+                    }} />
+                    <ButtonAction title="fill" className='bg-blue-400 hover:bg-blue-600' isLoading={isAnimationRunning} onClick={async () => {
+                        if (isAnimationRunning) return;
+                        setOpen(!open)
+                        setIsAnimationRunning(true)
+                        await create(maxSize)
                         setIsAnimationRunning(false)
                     }} />
                 </div>}
 
+                {array && array.length ? <ButtonAction title="fill" className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning} onClick={async () => {
+                    if (isAnimationRunning) return;
+                    setIsAnimationRunning(true)
+                    setAction('write')
+                    for (let i = 0; i < array.length; i++) {
+                        const element = array[i];
+                        if (element.data) continue;
+                        await write('data-' + i, i, () => {
+                            setRender(prev => !prev)
+                        }, true);
 
-                {array && array.length ? <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600 self-end mt-5' isLoading={isAnimationRunning} onClick={() => {
+                    }
+                    console.log('hello')
+                    setIsAnimationRunning(false);
+
+                }} /> : null}
+
+                {array && array.length ? <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
                     flush()
                     setIsAnimationRunning(false)
                     setAction('create')
@@ -172,16 +195,16 @@ export default function StaticArray() {
                             const memoryAdress = '0x' + prefix0(i);
                             return (
                                 <div key={'static-array-empty-' + i}>
-                                    <div title={"Memory address: " + memoryAdress} className="text-sm flex items-center justify-center py-2 border border-white w-[50px] h-[15px]">
+                                    <div title={"Memory address: " + memoryAdress} className="text-sm flex items-center justify-center py-2 border border-white w-[80px] h-[15px]">
                                         <p>{memoryAdress}</p>
                                     </div>
-                                    <div className=" w-[50px] h-[50px]">
+                                    <div className="w-[80px] h-[80px]">
                                         {array && array[i] ? <StaticArrayNodeComponent action={action} setAnimationRunning={setIsAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
 
                                     </div>
                                     <div title={"index: " + i} style={{
                                         visibility: array && array[i] ? 'visible' : 'hidden'
-                                    }} className={"text-sm flex items-center justify-center py-2 border border-white w-[50px] h-[15px]"}>
+                                    }} className={"text-sm flex items-center justify-center py-2 border border-white w-[80px] h-[15px]"}>
                                         <p>{i}</p>
                                     </div>
                                 </div>
@@ -193,6 +216,12 @@ export default function StaticArray() {
 
                 </div>
             </div>
+
+            {searchResult && <PopUp title={'Steps:'} buttonText="close" handleOnPopUpButton={() => {
+                setSearchResult(null)
+
+            }} open={searchResult ? true : false} showTrigger={false} description={`${!searchResult.found ? `Data ${searchResult.data} not found.` : `Data ${searchResult.data} found on index: ${searchResult.steps - 1}.`} Steps taken: ${searchResult.steps}.`} />}
+
             {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
                 setIsAnimationRunning(false)
                 flush();
@@ -200,6 +229,7 @@ export default function StaticArray() {
                 setSize(0)
                 setData('')
                 setIndex(0)
+                setSearchResult(null)
 
             }} open={error ? true : false} showTrigger={false} description={error.description} />}
         </Main >

@@ -22,11 +22,12 @@ const Stack = () => {
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const { fill, flush, isFilling, _render, render, empty, peek } = UseLinear(stack)
   const [nodeData, setNodeData] = useState('');
+  const [open, setOpen] = useState(false);
   return (
     <>
       {stack && <Main>
         {/* //ACTION BUTTONS: */}
-        {<OperationsContainer>
+        {<OperationsContainer open ={open} setOpen={setOpen}>
           <div className="flex  items-center gap-2 justify-center">
             <PushData data={nodeData} setData={setNodeData} onClick={async () => {
               if (isFilling || isStackOverFlow || isAnimationRunning) return;
@@ -51,10 +52,10 @@ const Stack = () => {
             }} />
             }
           </div>
-          <div className=" flex items-center gap-2">
-            <ButtonAction title="run" className='bg-blue-400 hover:bg-blue-600' isLoading={isAnimationRunning || isFilling} onClick={async () => {
+     
+            <ButtonAction title="run" className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning || isFilling} onClick={async () => {
               if (isFilling || isStackOverFlow) return;
-
+              setOpen(false)
               await fill(0, stack.maxSize - stack.size, (data) => {
 
                 setAnimationRunning(true)
@@ -69,7 +70,7 @@ const Stack = () => {
               });
 
             }} />
-          </div>
+        
         </OperationsContainer>
         } 
         {/* // STATIC PROPERTIES: */}

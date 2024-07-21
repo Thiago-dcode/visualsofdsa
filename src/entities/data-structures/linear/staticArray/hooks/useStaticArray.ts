@@ -5,10 +5,13 @@ import Node from "../../_classes/Node";
 import "../style.css";
 import UseStaticArrayAnimation from "./UseStaticArrayAnimation";
 import { delay } from "@/lib/utils";
+import { searchResult } from "../type";
 
 export default function useStaticArray() {
   const [array, setArray] = useState<Node<Primitive>[] | null>(null);
-  const { writeAnimation, accessAnimation,searchAnimation } = UseStaticArrayAnimation();
+
+  const { writeAnimation, accessAnimation, searchAnimation } =
+    UseStaticArrayAnimation();
   const maxSize = useRef(100);
   const [data, setData] = useState<string>("");
   const [error, setError] = useState<{
@@ -31,14 +34,19 @@ export default function useStaticArray() {
     await delay(100);
     setArray(_array);
   };
-  const write = async (data: Primitive, index: number, callback = () => {}) => {
+  const write = async (
+    data: Primitive,
+    index: number,
+    callback = () => {},
+    isFilling = false
+  ) => {
     if (!array) return;
     throwIndexOutOfTheBound(index);
     const node = array[index];
-    if(!node) return;
+    if (!node) return;
     node.data = data;
 
-    await writeAnimation(node);
+    await writeAnimation(node, () => {}, isFilling ? 0.2 : 1);
     callback();
   };
 
@@ -62,17 +70,28 @@ export default function useStaticArray() {
     await accessAnimation(array[index], () => {});
     callback();
   };
-  const search = async (data:Primitive, callback = () => {}) => {
+  const search = async (
+    data: Primitive,
+    callback = (result: searchResult) => {}
+  ) => {
     if (!array) return;
-     for (let i = 0; i < array.length; i++) {
+    let steps = 0;
+    let found = false;
+    for (let i = 0; i < array.length; i++) {
+      steps++;
       const node = array[i];
-      if(data === node.data){
-        await accessAnimation(node)
+      if (data === node.data) {
+        await accessAnimation(node);
+        found = true;
         break;
       }
       await searchAnimation(node);
-     }
-    callback();
+    }
+    callback({
+      steps,
+      found,
+      data,
+    });
   };
 
   const flush = () => {

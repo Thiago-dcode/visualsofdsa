@@ -18,7 +18,7 @@ import LinearDsConfig from '../_components/LinearDsConfig';
 export default function Queue() {
 
   const { enqueue, queue, dequeue, isStackOverFlow, setIsStackOverFlow } = UseQueue();
-
+  const [open, setOpen] = useState(false)
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const { isFilling, fill, empty, _render, render, flush, peek } = UseLinear(queue)
   const [nodeData, setNodeData] = useState('let x = 25')
@@ -26,8 +26,8 @@ export default function Queue() {
     <>
       {queue && <Main className="">
         {/* //ACTION BUTTONS: */}
-        {<OperationsContainer>
-          <div className="flex  items-center gap-2 justify-center">
+        {<OperationsContainer open={open} setOpen={setOpen}>
+          <div className="flex flex-wrap  items-end gap-2 justify-end">
             <PushData title='enqueue' data={nodeData} setData={setNodeData} onClick={async () => {
               if (isFilling || isAnimationRunning) return;
 
@@ -57,21 +57,22 @@ export default function Queue() {
             }} />
             }
           </div>
-          <div className=" flex items-center gap-2">
-            <ButtonAction title="run" className='bg-blue-400 hover:bg-blue-600' isLoading={isAnimationRunning || isFilling} onClick={async () => {
-              if (isFilling || isStackOverFlow) return;
-              await fill(0, queue.maxSize - queue.size, (data) => {
-                setAnimationRunning(true)
-                return enqueue(data)
-              });
-              await empty(() => {
-                return dequeue(() => {
-                })
-              });
-              setAnimationRunning(false)
 
-            }} />
-          </div>
+          <ButtonAction title="run" className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning || isFilling} onClick={async () => {
+            if (isFilling || isStackOverFlow) return;
+            setOpen(false)
+            await fill(0, queue.maxSize - queue.size, (data) => {
+              setAnimationRunning(true)
+              return enqueue(data)
+            });
+            await empty(() => {
+              return dequeue(() => {
+              })
+            });
+            setAnimationRunning(false)
+
+          }} />
+
         </OperationsContainer>
         }
         {/* // STATIC PROPERTIES: */}
