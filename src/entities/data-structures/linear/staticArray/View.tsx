@@ -14,10 +14,14 @@ import { searchResult, staticArrayAction } from "./type"
 import Info from "@/components/ui/info"
 import Section from "@/components/container/Section"
 import UseLinear from "../_hooks/UseLinear"
+import { PopOverComponent } from "@/components/ui/PopOverComponent"
+import { Button } from "@/components/ui/button"
+import { Wrench } from "lucide-react"
+import LinearDsConfig from "../_components/LinearDsConfig"
 
 
 export default function StaticArray() {
-    const { array, create, write, access, search, error, flush, maxSize } = useStaticArray();
+    const { array, create, write, access, search, error, flush, maxSize, setMaxSize } = useStaticArray();
     const [isAnimationRunning, setIsAnimationRunning] = useState(false)
     const [action, setAction] = useState<staticArrayAction>('create')
     const [data, setData] = useState<string>('');
@@ -28,6 +32,16 @@ export default function StaticArray() {
     const [open, setOpen] = useState(false);
     const [searchResult, setSearchResult] = useState<searchResult | null>(null);
     const [render, setRender] = useState(false)
+    const cleanUp = () => {
+        setIsAnimationRunning(false)
+        flush();
+        setAction('create')
+        setSize(0)
+        setData('')
+        setIndex(0)
+        setSearchResult(null)
+
+    }
     return (
         <Main className="">
 
@@ -53,9 +67,10 @@ export default function StaticArray() {
                             if (isAnimationRunning || index === undefined) return;
 
                             setIsAnimationRunning(true)
-                            setOpen(prev => !prev)
+                            setOpen(false)
+                            setAction('write')
                             await write(data === '' ? null : data, index, () => {
-                                setAction('write')
+                                
 
                             })
                             setIsAnimationRunning(false)
@@ -143,8 +158,7 @@ export default function StaticArray() {
                         }, true);
 
                     }
-                    console.log('hello')
-                    setIsAnimationRunning(false);
+                                        setIsAnimationRunning(false);
 
                 }} /> : null}
 
@@ -181,7 +195,24 @@ export default function StaticArray() {
                 </article>
                 } className="self-start" />
 
+                {!isAnimationRunning && <div>
+                    <PopOverComponent content={
+                        <div className='flex flex-col items-center justify-center gap-4'>
+                            <div>
+                                <label htmlFor="size">Memory size</label>
+                                <Input defaultValue={maxSize} onChange={(e) => {
+                                    setMaxSize(Number.parseInt(e.target.value))
+                                    setAction('create')
+                                    flush()
 
+                                }} name='size' type='range' min={1} max={200} />
+                            </div>
+                        </div>
+
+                    } trigger={<Button onClick={() => {
+
+                    }}><Wrench color="white" /></Button>} />
+                </div>}
             </div>
             <div className="md:w-full flex items-center justify-center">
 
@@ -223,13 +254,7 @@ export default function StaticArray() {
             }} open={searchResult ? true : false} showTrigger={false} description={`${!searchResult.found ? `Data ${searchResult.data} not found.` : `Data ${searchResult.data} found on index: ${searchResult.steps - 1}.`} Steps taken: ${searchResult.steps}.`} />}
 
             {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
-                setIsAnimationRunning(false)
-                flush();
-                setAction('create')
-                setSize(0)
-                setData('')
-                setIndex(0)
-                setSearchResult(null)
+                cleanUp()
 
             }} open={error ? true : false} showTrigger={false} description={error.description} />}
         </Main >

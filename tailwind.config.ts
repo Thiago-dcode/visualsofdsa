@@ -21,7 +21,7 @@ const config = {
     extend: {
       screens:{
         phone: "480px",
-        tablet: "820px",
+        tablet: "860px",
         desktop: "1200px",
       },
       colors: {

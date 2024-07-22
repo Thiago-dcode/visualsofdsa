@@ -11,8 +11,8 @@ function useResponsive(onResize = (e:UIEvent)=>{}) {
   const checkDevice = useCallback(
     (width: number, height: number) => ({
       isPhone: width <= 480,
-      isTablet: width > 480 && width <= 820,
-      isDesktop: width > 820 && width <= 1200,
+      isTablet: width > 480 && width <= 860,
+      isDesktop: width > 860 && width <= 1200,
       isTv: width > 1200,
       width,
       height,

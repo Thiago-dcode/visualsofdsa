@@ -12,18 +12,17 @@ export default function useStaticArray() {
 
   const { writeAnimation, accessAnimation, searchAnimation } =
     UseStaticArrayAnimation();
-  const maxSize = useRef(100);
-  const [data, setData] = useState<string>("");
+  const [maxSize, setMaxSize] = useState(50);
   const [error, setError] = useState<{
     name: string;
     description: string;
   } | null>(null);
 
   const create = async (size: number) => {
-    if (size < 0 || size > maxSize.current) {
+    if (size < 0 || size > maxSize) {
       setError({
         name: "IndexOutOfTheBoundException",
-        description: `A Stack overflow error has ocurred. Array maximum size of ${maxSize.current} exceeded.`,
+        description: `A Stack overflow error has ocurred. Array maximum size of ${maxSize} exceeded.`,
       });
       return;
     }
@@ -106,6 +105,7 @@ export default function useStaticArray() {
     write,
     access,
     search,
-    maxSize: maxSize.current,
+    maxSize,
+    setMaxSize,
   };
 }
