@@ -18,6 +18,9 @@ import { PopOverComponent } from "@/components/ui/PopOverComponent"
 import { Button } from "@/components/ui/button"
 import { Wrench } from "lucide-react"
 import LinearDsConfig from "../_components/LinearDsConfig"
+import RamConteiner from "@/components/container/RamConteiner"
+import MemoryAdressContainer from "../_components/MemoryAdressContainer"
+import { MemorySize } from "@/types"
 
 
 export default function StaticArray() {
@@ -70,7 +73,7 @@ export default function StaticArray() {
                             setOpen(false)
                             setAction('write')
                             await write(data === '' ? null : data, index, () => {
-                                
+
 
                             })
                             setIsAnimationRunning(false)
@@ -158,7 +161,7 @@ export default function StaticArray() {
                         }, true);
 
                     }
-                                        setIsAnimationRunning(false);
+                    setIsAnimationRunning(false);
 
                 }} /> : null}
 
@@ -214,39 +217,30 @@ export default function StaticArray() {
                     }}><Wrench color="white" /></Button>} />
                 </div>}
             </div>
-            <div className="md:w-full flex items-center justify-center">
+
+            <RamConteiner>
+
+                {
+                    [...Array(maxSize)].map((d, i) => {
+                        return (
+
+                            <MemoryAdressContainer size={MemorySize.M} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i}>
+
+                                {array && array[i] ? <StaticArrayNodeComponent action={action} setAnimationRunning={setIsAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
+                            </MemoryAdressContainer>
 
 
 
-                <div className="w-full  flex-wrap gap-y-4 flex items-center justify-start">
+                        )
+
+                    })
+
+                }
+
+            </RamConteiner>
 
 
-                    {
-                        [...Array(maxSize)].map((d, i) => {
-                            const memoryAdress = '0x' + prefix0(i);
-                            return (
-                                <div key={'static-array-empty-' + i}>
-                                    <div title={"Memory address: " + memoryAdress} className="text-sm flex items-center justify-center py-2 border border-white w-[80px] h-[15px]">
-                                        <p>{memoryAdress}</p>
-                                    </div>
-                                    <div className="w-[80px] h-[80px]">
-                                        {array && array[i] ? <StaticArrayNodeComponent action={action} setAnimationRunning={setIsAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
 
-                                    </div>
-                                    <div title={"index: " + i} style={{
-                                        visibility: array && array[i] ? 'visible' : 'hidden'
-                                    }} className={"text-sm flex items-center justify-center py-2 border border-white w-[80px] h-[15px]"}>
-                                        <p>{i}</p>
-                                    </div>
-                                </div>
-                            )
-
-                        })
-
-                    }
-
-                </div>
-            </div>
 
             {searchResult && <PopUp title={'Steps:'} buttonText="close" handleOnPopUpButton={() => {
                 setSearchResult(null)
