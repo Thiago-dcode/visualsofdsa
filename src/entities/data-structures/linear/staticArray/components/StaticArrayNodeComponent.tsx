@@ -13,11 +13,9 @@ type props = {
 export default function StaticArrayNodeComponent({ node, action = 'create', setAnimationRunning }: props) {
   const { createAnimation } = UseStaticArrayAnimation();
   const setRef = useCallback(async (ele: HTMLElement | null) => {
-  
-       if (!ele || action !== 'create') return;
+
+    if (!ele || action !== 'create') return;
     node.ref = ele;
-   
-  
     await createAnimation(node, () => {
       setAnimationRunning(false)
     })

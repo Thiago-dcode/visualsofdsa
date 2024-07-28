@@ -98,7 +98,7 @@ describe("UseDynamicArray HOOK", () => {
       }
     }
   });
-  it("Extend capacity", async () => {
+  it("Should extend capacity", async () => {
     const { result } = renderHook(useDynamicArray);
     for (let i = 0; i < 100; i++) {
       await act(async () => {
@@ -133,6 +133,43 @@ describe("UseDynamicArray HOOK", () => {
         }
       }
     }
+  });
+  it("Should reset array after cleanUp function", async () => {
+    const { result } = renderHook(useDynamicArray);
+    for (let i = 0; i < 100; i++) {
+      await act(async () => {
+        await result.current.write("hello-" + i, i);
+      });
+    }
+    expect(result.current.size).toBe(100);
+    expect(result.current.array?.length).toBe(result.current.capacity);
+    if (result.current.array) {
+      for (let i = 0; i < result.current.array.length; i++) {
+        const element = result.current.array[i];
+
+        if (i < result.current.size) {
+          expect(element).toBeInstanceOf(Node);
+          if (element) {
+            expect(element.data).toBe("hello-" + i);
+          }
+        } else {
+          expect(element).toBeNull();
+        }
+      }
+    }
+    act(()=>{
+      result.current.cleanUp()
+    })
+    expect(result.current.size).toBe(0);
+    expect(result.current.capacity).toBe(10);
+    expect(result.current.array?.length).toBe(result.current.capacity);
+    if (result.current.array) {
+      for (let i = 0; i < result.current.array.length; i++) {
+        const element = result.current.array[i];
+          expect(element).toBeNull();
+      }
+    }
+  
   });
   it("Should set error and not write when attempt to write an out of the bound position", async () => {
     const { result } = renderHook(useDynamicArray);

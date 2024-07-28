@@ -60,19 +60,21 @@ export default function StaticArray() {
                     {/* WRITE OPERATION */}
                     <InputWithButtonContainer>
                         <Input value={index} placeholder="index" className="text-black w-20" onChange={(e) => {
-                            setIndex(Number.parseInt(e.target.value))
+                            const n = Number.parseInt(e.target.value);
+                                                  setIndex(isNaN(n)?0:n)
                         }} type="number" min={0} />
                         <Input value={data} placeholder="data" className="text-black w-24" onChange={(e) => {
+
                             setData(e.target.value)
                         }} type="text" name="" id="" />
 
                         <ButtonAction title="write" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || index === undefined) return;
-
                             setIsAnimationRunning(true)
                             setOpen(false)
                             setAction('write')
-                            await write(data === '' ? null : data, index, () => {
+                            console.log(data,index)
+                            await write(data === ''|| data===undefined ? null : data, index, () => {
 
 
                             })

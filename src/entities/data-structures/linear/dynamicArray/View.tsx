@@ -9,6 +9,16 @@ import RamConteiner from "@/components/container/RamConteiner"
 import { prefix0 } from "@/lib/utils"
 import useDynamicArray from "./hooks/useDynamicArray"
 import MemoryAdressContainer from "../_components/MemoryAdressContainer"
+import { PopUp } from "@/components/ui/PopUp"
+import InputWithButtonContainer from "@/components/container/InputWithButtonContainer"
+import OperationsContainer from "@/components/container/OperationsContainer"
+
+import ButtonAction from "../_components/ButtonAction"
+import { useEffect, useState } from "react"
+import { Input } from "@/components/ui/input"
+import Section from "@/components/container/Section"
+import StaticArrayNodeComponent from "../staticArray/components/StaticArrayNodeComponent"
+import Properties from "@/components/app/Properties"
 // import { PopUp } from "@/components/ui/PopUp"
 // import StaticArrayNodeComponent from "./components/StaticArrayNodeComponent"
 // import useStaticArray from "./hooks/useStaticArray"
@@ -24,16 +34,73 @@ import MemoryAdressContainer from "../_components/MemoryAdressContainer"
 
 
 export default function DynamicArray() {
-    const { array } = useDynamicArray();
+    const { array, write, error, capacity, size, cleanUp, action,push } = useDynamicArray();
+    const [open, setOpen] = useState(false);
+    const [isAnimationRunning, setIsAnimationRunning] = useState(false)
+    const [data, setData] = useState<string>('');
+    const [searchData, setSearchData] = useState<string>('');
+    const [index, setIndex] = useState<number>(0);
+    useEffect(() => {
+        console.log(action)
+    }, [action])
     return (
         <Main className="">
 
+            {<OperationsContainer setOpen={(value) => {
+
+                setOpen(value)
+
+            }} open={open}>
+                {array && array.length ? < Section>
+
+                    {/* WRITE OPERATION */}
+                    <InputWithButtonContainer>
+                        <Input value={index} placeholder="index" className="text-black w-20" onChange={(e) => {
+                            const n = Number.parseInt(e.target.value);
+                            console.log(n)
+                            setIndex(isNaN(n) ? 0 : n)
+                        }} type="number" min={0} />
+                        <Input value={data} placeholder="data" className="text-black w-24" onChange={(e) => {
+                            setData(e.target.value)
+                        }} type="text" name="" id="" />
+
+                        <ButtonAction title="write" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
+                            if (isAnimationRunning || index === undefined) return;
+                            setIsAnimationRunning(true)
+                            setOpen(false)
+                            // setAction('write')
+                            await write(data === '' ? null : data, index)
+                            setIsAnimationRunning(false)
+
+                        }} />
+                    </InputWithButtonContainer>
+                    <InputWithButtonContainer>
+                        <Input value={data} placeholder="data" className="text-black w-24" onChange={(e) => {
+                            setData(e.target.value)
+                        }} type="text" name="" id="" />
+                        <ButtonAction title="push" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={async () => {
+                            if (isAnimationRunning || index === undefined) return;
+                            setIsAnimationRunning(true)
+                            setOpen(false)
+                            // setAction('write')
+                            await push(data === '' ? null : data)
+                            setIsAnimationRunning(false)
+
+                        }} />
+                    </InputWithButtonContainer>
+                </Section> : null}
+
+            </OperationsContainer>}
+            <Properties properties={{
+                size,
+                capacity
+            }} />
             <RamConteiner>
                 {array &&
                     array.map((node, i) => {
                         return (
                             <MemoryAdressContainer index={i} showIndex={node !== null} key={'memoryAdressContainer-' + i}>
-                                {node !== null ? <div>{node.data}</div>: <p className="border-2 flex items-center justify-center
+                                {node !== null ? <StaticArrayNodeComponent action={action} node={node} setAnimationRunning={setIsAnimationRunning} /> : <p className="border-2 flex items-center justify-center
                      border-white/50 w-full h-full">NULL</p>}
                             </MemoryAdressContainer>
 
@@ -41,6 +108,11 @@ export default function DynamicArray() {
                     })
                 }
 
+                {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
+                    cleanUp()
+                    setIndex(0)
+
+                }} open={error ? true : false} showTrigger={false} description={error.description} />}
             </RamConteiner>
 
         </Main >

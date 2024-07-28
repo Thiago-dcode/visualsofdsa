@@ -1,7 +1,8 @@
+import { Primitive } from "@/types"
 
 
 function Properties({ properties }: {
-    properties: { [id: string]: string }
+    properties: { [id: string]: Primitive }
 }) {
     return (
         <div className="flex items-start w-full flex-col pl-4 -mt-4 gap-3 ">
