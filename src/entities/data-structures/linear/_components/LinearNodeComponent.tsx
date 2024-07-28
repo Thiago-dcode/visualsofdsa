@@ -19,7 +19,7 @@ const LinearNodeComponent = forwardRef<HTMLDivElement, props>(({ node, dsType, s
 
   return (
     <>
-      {node && <div ref={ref} id={`${dsType}-node-${node.id}`} style={style} className={cn('border border-white text-center flex items-center justify-center overflow-auto ', className)}>
+      {node && <div ref={ref} id={`${dsType}-node-${node.id}`} style={style} className={cn('border-4 border-white text-center flex items-center justify-center overflow-auto ', className)}>
         <p style={
           {
             color: node.data === null ? 'rgba(59, 130, 246,0.8)' : 'rgb(226, 232, 240)'

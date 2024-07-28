@@ -27,6 +27,7 @@ const config = {
       colors: {
         app: {
           bg: "#13161B",
+          green: '#00FF41'
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

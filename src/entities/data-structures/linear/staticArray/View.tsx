@@ -155,7 +155,7 @@ export default function StaticArray() {
                     setAction('write')
                     for (let i = 0; i < array.length; i++) {
                         const element = array[i];
-                        if (element.data) continue;
+                        if (!element  || element.data) continue;
                         await write('data-' + i, i, () => {
                             setRender(prev => !prev)
                         }, true);
@@ -224,7 +224,7 @@ export default function StaticArray() {
                     [...Array(maxSize)].map((d, i) => {
                         return (
 
-                            <MemoryAdressContainer size={MemorySize.M} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i}>
+                            <MemoryAdressContainer size={MemorySize.L} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i}>
 
                                 {array && array[i] ? <StaticArrayNodeComponent action={action} setAnimationRunning={setIsAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
                             </MemoryAdressContainer>

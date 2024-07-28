@@ -93,7 +93,7 @@ const UseStaticArrayAnimation = () => {
     createAnimation,
     writeAnimation,
     accessAnimation,
-    searchAnimation,
+    searchAnimation
   };
 };
 

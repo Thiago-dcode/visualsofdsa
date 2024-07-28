@@ -8,8 +8,7 @@ import { delay } from "@/lib/utils";
 import { searchResult } from "../type";
 
 export default function useStaticArray() {
-  const [array, setArray] = useState<Node<Primitive>[] | null>(null);
-
+  const [array, setArray] = useState<(Node<Primitive> | null)[] | null>(null);
   const { writeAnimation, accessAnimation, searchAnimation } =
     UseStaticArrayAnimation();
   const [maxSize, setMaxSize] = useState(50);
@@ -17,8 +16,7 @@ export default function useStaticArray() {
     name: string;
     description: string;
   } | null>(null);
-
-  const create = async (size: number) => {
+  const create = async (size: number, fillArrayWithNode = true) => {
     if (size < 0 || size > maxSize) {
       setError({
         name: "IndexOutOfTheBoundException",
@@ -27,12 +25,14 @@ export default function useStaticArray() {
       return;
     }
     const _array = new Array(size);
+
     for (let i = 0; i < _array.length; i++) {
-      _array[i] = new Node(null, new Position(0, 0));
+      _array[i] = fillArrayWithNode ? new Node(null, new Position(0, 0)) : null;
     }
     await delay(100);
     setArray(_array);
   };
+
   const write = async (
     data: Primitive,
     index: number,
@@ -40,32 +40,41 @@ export default function useStaticArray() {
     isFilling = false
   ) => {
     if (!array) return;
-    throwIndexOutOfTheBound(index);
-    const node = array[index];
-    if (!node) return;
+    if (throwIndexOutOfTheBound(index)) return;
+    let node = array[index];
+    if (node === null) {
+      array[index] = new Node(data, new Position(0, 0));
+      node = array[index];
+    }
     node.data = data;
 
-    await writeAnimation(node, () => {}, isFilling ? 0.2 : 1);
+    try {
+      await writeAnimation(node, () => {}, isFilling ? 0.2 : 1);
+    } catch (error) {
+      //handle rejected animation
+
+    }
     callback();
   };
 
   const throwIndexOutOfTheBound = useCallback(
-    (index: number) => {
-      if (!array) return;
+    (index: number): boolean => {
+      if (!array) return false;
       if (index < 0 || index >= array.length) {
         setError({
           name: "IndexOutOfTheBoundException",
           description: `Index ${index} out of bounds for length ${array.length}`,
         });
-        return;
+        return true;
       }
+      return false;
     },
     [array]
   );
 
   const access = async (index: number, callback = () => {}) => {
     if (!array) return;
-    throwIndexOutOfTheBound(index);
+    if (throwIndexOutOfTheBound(index)) return;
     await accessAnimation(array[index], () => {});
     callback();
   };
@@ -79,12 +88,14 @@ export default function useStaticArray() {
     for (let i = 0; i < array.length; i++) {
       steps++;
       const node = array[i];
-      if (data === node.data) {
+      if (node && data === node.data) {
         await accessAnimation(node);
         found = true;
         break;
       }
-      await searchAnimation(node);
+      try {
+        await searchAnimation(node);
+      } catch (error) {}
     }
     callback({
       steps,
@@ -107,5 +118,7 @@ export default function useStaticArray() {
     search,
     maxSize,
     setMaxSize,
+    setArray,
+    setError,
   };
 }
