@@ -5,6 +5,7 @@ import {
   AlertDialogFooter,
   AlertDialogTitle,
   AlertDialogTrigger,
+  AlertDialogDescription
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { ReactNode } from "react";
@@ -29,11 +30,12 @@ export function PopUp({
       {showTrigger && <AlertDialogTrigger asChild>
         <Button variant="outline">Show Dialog</Button>
       </AlertDialogTrigger>}
-      <AlertDialogContent className=" text-black flex flex-col justify-between ">
+      <AlertDialogContent  className=" text-black flex flex-col justify-between ">
       <AlertDialogTitle>{title}</AlertDialogTitle>
+      
 {/* 
         <h1 className="text-2xl font-bold border-b-2 border-b-black pb-2" >{title}</h1> */}
-        <p className="text-xl">{description}</p>
+        <AlertDialogDescription className="text-xl">{description}</AlertDialogDescription>
         <AlertDialogFooter>
           <Button variant={'destructive'} className="border-2 border-white text-lg" onClick={(e) => {
             handleOnPopUpButton(e)

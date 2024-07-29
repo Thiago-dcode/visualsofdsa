@@ -1,7 +1,7 @@
 import { Primitive } from "@/types";
 import { requestAnimation } from "../../../../../lib/utils";
 import Node from "../../_classes/Node";
-const UseStaticArrayAnimation = () => {
+const useDynamicArrayAnimation = () => {
   const createAnimation = async (
     node: Node<Primitive> | null,
     onAnimationEnds: ((e: AnimationEvent) => void) | null = null
@@ -97,4 +97,4 @@ const UseStaticArrayAnimation = () => {
   };
 };
 
-export default UseStaticArrayAnimation;
+export default useDynamicArrayAnimation;

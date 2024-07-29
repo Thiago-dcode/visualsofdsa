@@ -14,11 +14,12 @@ import InputWithButtonContainer from "@/components/container/InputWithButtonCont
 import OperationsContainer from "@/components/container/OperationsContainer"
 
 import ButtonAction from "../_components/ButtonAction"
-import { useEffect, useState } from "react"
+import { act, useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import Section from "@/components/container/Section"
 import StaticArrayNodeComponent from "../staticArray/components/StaticArrayNodeComponent"
 import Properties from "@/components/app/Properties"
+import { searchResult } from "../staticArray/type"
 // import { PopUp } from "@/components/ui/PopUp"
 // import StaticArrayNodeComponent from "./components/StaticArrayNodeComponent"
 // import useStaticArray from "./hooks/useStaticArray"
@@ -34,14 +35,19 @@ import Properties from "@/components/app/Properties"
 
 
 export default function DynamicArray() {
-    const { array, write, error, capacity, size, cleanUp, action,push } = useDynamicArray();
+    const { array, write, error, capacity, size, cleanUp, action, push, search } = useDynamicArray();
     const [open, setOpen] = useState(false);
     const [isAnimationRunning, setIsAnimationRunning] = useState(false)
     const [data, setData] = useState<string>('');
+    const [pushData, setPushData] = useState<string>('');
     const [searchData, setSearchData] = useState<string>('');
+    const [searchResult, setSearchResult] = useState<searchResult | null>(null);
     const [index, setIndex] = useState<number>(0);
+
     useEffect(() => {
+
         console.log(action)
+
     }, [action])
     return (
         <Main className="">
@@ -75,16 +81,35 @@ export default function DynamicArray() {
                         }} />
                     </InputWithButtonContainer>
                     <InputWithButtonContainer>
-                        <Input value={data} placeholder="data" className="text-black w-24" onChange={(e) => {
-                            setData(e.target.value)
+                        <Input value={pushData} placeholder="data" className="text-black w-24" onChange={(e) => {
+                            setPushData(e.target.value)
                         }} type="text" name="" id="" />
                         <ButtonAction title="push" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || index === undefined) return;
                             setIsAnimationRunning(true)
                             setOpen(false)
                             // setAction('write')
-                            await push(data === '' ? null : data)
-                            setIsAnimationRunning(false)
+                            await push(pushData === '' ? null : pushData)
+
+
+                        }} />
+                    </InputWithButtonContainer>
+                    <InputWithButtonContainer>
+                        <Input value={searchData} placeholder="data" className="text-black w-24" onChange={(e) => {
+                            setSearchData(e.target.value)
+                        }} type="text" name="" id="" />
+
+                        <ButtonAction title="search" className='bg-blue-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
+                            if (isAnimationRunning) return;
+                            setIsAnimationRunning(true)
+                            setOpen(!open)
+
+                            await search(searchData === '' ? null : searchData, (data) => {
+                                setIsAnimationRunning(false)
+                                setSearchData('')
+                                setSearchResult(data)
+                            })
+
 
                         }} />
                     </InputWithButtonContainer>
@@ -100,7 +125,7 @@ export default function DynamicArray() {
                     array.map((node, i) => {
                         return (
                             <MemoryAdressContainer index={i} showIndex={node !== null} key={'memoryAdressContainer-' + i}>
-                                {node !== null ? <StaticArrayNodeComponent action={action} node={node} setAnimationRunning={setIsAnimationRunning} /> : <p className="border-2 flex items-center justify-center
+                                {node !== null ? <StaticArrayNodeComponent isLastNode={i === size} action={action} node={node} setAnimationRunning={setIsAnimationRunning} /> : <p className="border-2 flex items-center justify-center
                      border-white/50 w-full h-full">NULL</p>}
                             </MemoryAdressContainer>
 
@@ -108,6 +133,19 @@ export default function DynamicArray() {
                     })
                 }
 
+                {searchResult && <PopUp title={'Steps:'} buttonText="close" handleOnPopUpButton={() => {
+                    setSearchResult(null)
+
+                }} open={searchResult ? true : false} showTrigger={false} description={<>
+
+
+                    {!searchResult.found
+
+                        ? <p>Data <b> {searchResult.data} </b>  not found. </p> :
+                        <p> Data <b> {searchResult.data} </b> found on index: <b>{searchResult.steps - 1} </b>. Steps taken:  <b> {searchResult.steps} </b>.</p>
+                    }
+
+                </>} />}
                 {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
                     cleanUp()
                     setIndex(0)

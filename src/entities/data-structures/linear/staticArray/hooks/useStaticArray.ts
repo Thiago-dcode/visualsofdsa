@@ -49,7 +49,7 @@ export default function useStaticArray() {
     node.data = data;
 
     try {
-      await writeAnimation(node, () => {}, isFilling ? 0.2 : 1);
+      await writeAnimation(node, () => {}, isFilling ? 0.2 : 0.6);
     } catch (error) {
       //handle rejected animation
 

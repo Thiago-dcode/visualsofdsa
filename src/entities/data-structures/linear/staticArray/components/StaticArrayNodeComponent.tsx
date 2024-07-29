@@ -8,17 +8,29 @@ import { staticArrayAction } from '../type';
 type props = {
   node: Node<Primitive>;
   action?: staticArrayAction;
-  setAnimationRunning: (value: boolean) => void
+  setAnimationRunning: (value: boolean) => void;
+  isLastNode: boolean;
 }
-export default function StaticArrayNodeComponent({ node, action = 'create', setAnimationRunning }: props) {
+export default function StaticArrayNodeComponent({ node, action = 'create', setAnimationRunning, isLastNode }: props) {
   const { createAnimation } = UseStaticArrayAnimation();
   const setRef = useCallback(async (ele: HTMLElement | null) => {
 
-    if (!ele || action !== 'create') return;
+    if (!ele) return;
     node.ref = ele;
-    await createAnimation(node, () => {
-      setAnimationRunning(false)
-    })
+    if (action === 'create') {
+
+      await createAnimation(node, () => {
+        setAnimationRunning(false)
+      })
+    }
+    else if (action === 'push') {
+      console.log(action, isLastNode, node.data)
+      if (isLastNode) {
+        await createAnimation(node, () => {
+          setAnimationRunning(false)
+        })
+      }
+    }
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
