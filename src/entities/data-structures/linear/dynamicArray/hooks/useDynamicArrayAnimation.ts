@@ -5,6 +5,7 @@ import { DynamicArrayNode } from "../class/DynamicArrayNode";
 const useDynamicArrayAnimation = () => {
   const insertAnimation = async (
     node: DynamicArrayNode<Primitive> | null,
+    index:number,
     onAnimationEnds: ((e: AnimationEvent) => void) | null = null
   ): Promise<boolean> => {
     return new Promise((resolve, reject) => {
@@ -12,28 +13,36 @@ const useDynamicArrayAnimation = () => {
         reject(false);
       } else {
         const ref = node.ref;
+        const indexRef =node.ref.parentElement?.parentElement?.children[2] as HTMLElement
         const animationEvent = (e: AnimationEvent) => {
           if (onAnimationEnds) {
             onAnimationEnds(e);
           }
-                resolve(true);
+          resolve(true);
+          ref.style.left = DynamicArrayNode.nodeSize + 'px'
+          if(indexRef){
+              indexRef.style.left = DynamicArrayNode.nodeSize + 'px'
+          }
           ref.removeEventListener("animationend", animationEvent);
         };
-        console.log("RIGHT:",ref.offsetLeft,node.data)
+
         // ref.style.setProperty("--start", `${ref.offsetLeft}px`);
-        // ref.style.setProperty(
-        //   "--end",
-        //   `${100}px`
-        // );
-        requestAnimation(ref, `access-node ${"0.5s"}`, animationEvent);
+        // console.log("getBoundingClientRect()",ref.getBoundingClientRect())
+        console.log("parent-"+index,ref.parentElement?.parentElement?.parentElement?.children[index+1])
+        if(indexRef){
+      
+          indexRef.style.setProperty("--end", `${DynamicArrayNode.nodeSize}px`);
+          requestAnimation(indexRef, `insert-node ${"0.8s"}`, animationEvent);
+        }
+        ref.style.setProperty("--end", `${DynamicArrayNode.nodeSize}px`);
+        
+        requestAnimation(ref, `insert-node ${"0.8s"}`, animationEvent);
       }
     });
   };
 
- 
   return {
     insertAnimation,
-
   };
 };
 

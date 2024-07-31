@@ -77,8 +77,7 @@ export default function DynamicArray() {
                     <InputWithButtonContainer>
                         <Input value={index} placeholder="index" className="text-black w-20" onChange={(e) => {
                             const n = Number.parseInt(e.target.value);
-                            console.log(n)
-                            setIndex(isNaN(n) ? 0 : n)
+                                                      setIndex(isNaN(n) ? 0 : n)
                         }} type="number" min={0} />
                         <Input value={data} placeholder="data" className="text-black w-24" onChange={(e) => {
                             setData(e.target.value)
@@ -86,10 +85,11 @@ export default function DynamicArray() {
 
                         <ButtonAction title="insert" className='bg-orange-400 hover:bg-orange-600' isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || index === undefined) return;
-                            // setIsAnimationRunning(true)
+                             setIsAnimationRunning(true)
                             setOpen(false)
                             await insert(data === '' ? null : data, index)
                             // setIsAnimationRunning(false)
+                        
 
                         }} />
                     </InputWithButtonContainer>
@@ -123,7 +123,7 @@ export default function DynamicArray() {
                 {array &&
                     array.map((node, i) => {
                         return (
-                            <MemoryAdressContainer index={i} showIndex={node !== null} key={'memoryAdressContainer-' + i}>
+                            <MemoryAdressContainer index={i} showIndex={node !== null}  key={'memoryAdressContainer-' + `${node? node.id: 'null-' +i}`}>
                                 {node !== null ? <StaticArrayNodeComponent isLastNode={i === size} action={action} node={node} setAnimationRunning={setIsAnimationRunning} /> : <p className="border-2 flex items-center justify-center
                      border-white/50 w-full h-full">NULL</p>}
                             </MemoryAdressContainer>

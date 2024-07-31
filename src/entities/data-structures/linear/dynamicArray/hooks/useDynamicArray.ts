@@ -23,7 +23,7 @@ export default function useDynamicArray() {
   const [capacity, setCapacity] = useState(10);
   const [action, setAction] = useState<ArrayActions>("create");
   const [size, setSize] = useState(0);
-  const [render, setRender] = useState(false)
+  const [render, setRender] = useState(false);
   const expand = useCallback(
     async (reset = false) => {
       const newCapacity = reset ? 10 : capacity * 2;
@@ -92,38 +92,38 @@ export default function useDynamicArray() {
     if (!array) {
       throw new Error("Array missing");
     }
-     setAction("insert");
+    setAction("insert");
+
     for (let i = size - 1; i >= 0; i--) {
       const element = array[i];
       if (element instanceof DynamicArrayNode) {
         element.isLastInserted = false;
         try {
           if(element.ref){
-            
+
           }else{
-        
+
           }
-          await insertAnimation(element, () => {});
-        } catch (error) {}
+          await insertAnimation(element,i, () => {});
+        } catch (error) {
+          console.log('THIS SHOULD NEVER BE PRINTED')
+        }
+
       }else{
         console.error('Node is not instance of dynamic array node', element)
       }
       array[i + 1] = element;
       if (i === index) {
         array[i] = new DynamicArrayNode(data, new Position(0, 0), true);
+        setSize(size + 1);
         break;
       }
     }
-    for (let i = 0; i < array.length; i++) {
-      const element = array[i]
-      if(element){
-        console.log(element)
-      }
-      
-    }
-    setRender(prev => !prev)
-    setSize(size + 1);
- 
+    // for (let i = 0; i < array.length; i++) {
+    //   const element = array[i];
+
+    //   console.log(element);
+    // }
   };
   const search = async (
     data: Primitive,

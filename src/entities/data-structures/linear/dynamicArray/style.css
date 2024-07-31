@@ -1,13 +1,13 @@
 @keyframes insert-node {
     from {
-        right: var(--start);
-        opacity: 0.5;
-        background:rgba(250, 204, 1);
+      transform: translateX(0px);
+        opacity: 1;
+        background:rgb(234, 88, 12);
       }
     
       to {
-        right: var(--end);
+        transform: translateX( var(--end));
         opacity: 1;
-        background: none;
+       
       }
   }

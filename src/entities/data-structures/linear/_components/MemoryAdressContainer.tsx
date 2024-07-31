@@ -29,7 +29,7 @@ function MemoryAdressContainer({ index, showIndex, size = MemorySize.M, children
             <div title={"index: " + index} style={{
                 visibility: showIndex ? 'visible' : 'hidden',
                 width: size + 'px',
-            }} className={` ${MemorySize.S === size ? 'text-xs' : MemorySize.M === size ? 'text-sm' : 'text-lg'} flex items-center justify-center py-2 border border-white  h-[15px]`}>
+            }} className={` ${MemorySize.S === size ? 'text-xs' : MemorySize.M === size ? 'text-sm' : 'text-lg'} flex items-center justify-center py-2 border border-white  h-[15px] relative`}>
                 <p>{index}</p>
             </div>
         </div>
