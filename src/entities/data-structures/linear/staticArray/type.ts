@@ -1,6 +1,6 @@
 import { Primitive } from "@/types";
 
-export type staticArrayAction = "create" | "write" | "access" | "search" | "push";
+export type ArrayActions = "create" | "write" | "access" | "search" | "push" |'insert';
 export type searchResult = {
   steps: number;
   found: boolean;

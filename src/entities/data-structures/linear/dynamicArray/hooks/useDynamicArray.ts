@@ -3,11 +3,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Node from "../../_classes/Node";
 import useStaticArray from "../../staticArray/hooks/useStaticArray";
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
-import { searchResult, staticArrayAction } from "../../staticArray/type";
+import { searchResult, ArrayActions } from "../../staticArray/type";
 import UseStaticArrayAnimation from "../../staticArray/hooks/UseStaticArrayAnimation";
+import Position from "@/lib/classes/Position";
+import { DynamicArrayNode } from "../class/DynamicArrayNode";
+import useDynamicArrayAnimation from "./useDynamicArrayAnimation";
 
 export default function useDynamicArray() {
   const { writeAnimation } = UseStaticArrayAnimation();
+  const { insertAnimation } = useDynamicArrayAnimation();
   const {
     array,
     setArray,
@@ -17,8 +21,9 @@ export default function useDynamicArray() {
     setError,
   } = useStaticArray();
   const [capacity, setCapacity] = useState(10);
-  const [action, setAction] = useState<staticArrayAction>("create");
+  const [action, setAction] = useState<ArrayActions>("create");
   const [size, setSize] = useState(0);
+  const [render, setRender] = useState(false)
   const expand = useCallback(
     async (reset = false) => {
       const newCapacity = reset ? 10 : capacity * 2;
@@ -46,27 +51,79 @@ export default function useDynamicArray() {
     },
     [capacity, array, size]
   );
-
-  const write = async (data: Primitive, index: number) => {
+  const isOutOfTheOfTheBound = (index: number) => {
     if (index > size || index < 0) {
       setError({
         name: "IndexOutOfTheBoundException",
         description: `Index ${index} out of bounds for length ${size}`,
       });
-      return;
+      return true;
     }
+    return false;
+  };
+
+  const write = async (data: Primitive, index: number) => {
+    if (isOutOfTheOfTheBound(index)) return;
     if (index < size) setAction("write");
     else {
       setAction("push");
     }
-    await _write(data, index, () => {
-      if (index === size) {
-        setSize((prev) => prev + 1);
-      }
-    });
+    await _write(
+      data,
+      index,
+      () => {
+        if (index === size) {
+          setSize((prev) => prev + 1);
+        }
+      },
+      false,
+      new DynamicArrayNode(data, new Position(0, 0))
+    );
   };
   const push = async (data: Primitive) => {
     await write(data, size);
+  };
+  const insert = async (data: Primitive, index: number) => {
+    if (index >= size || index < 0) {
+      await write(data, index);
+      return;
+    }
+    //handle insert
+    if (!array) {
+      throw new Error("Array missing");
+    }
+     setAction("insert");
+    for (let i = size - 1; i >= 0; i--) {
+      const element = array[i];
+      if (element instanceof DynamicArrayNode) {
+        element.isLastInserted = false;
+        try {
+          if(element.ref){
+            
+          }else{
+        
+          }
+          await insertAnimation(element, () => {});
+        } catch (error) {}
+      }else{
+        console.error('Node is not instance of dynamic array node', element)
+      }
+      array[i + 1] = element;
+      if (i === index) {
+        array[i] = new DynamicArrayNode(data, new Position(0, 0), true);
+        break;
+      }
+    }
+    for (let i = 0; i < array.length; i++) {
+      const element = array[i]
+      if(element){
+        console.log(element)
+      }
+      
+    }
+    setRender(prev => !prev)
+    setSize(size + 1);
+ 
   };
   const search = async (
     data: Primitive,
@@ -95,6 +152,7 @@ export default function useDynamicArray() {
     size,
     write,
     push,
+    insert,
     error,
     cleanUp,
     expand,

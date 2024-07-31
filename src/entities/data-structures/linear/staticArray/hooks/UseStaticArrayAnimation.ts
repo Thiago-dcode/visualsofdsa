@@ -17,11 +17,11 @@ const UseStaticArrayAnimation = () => {
           }
         
           resolve(true);
-          console.log('HELLO FROM CREATE ANIMATION', node.data)
+        
           ref.removeEventListener("animationend", animationEvent);
         };
 
-        console.log(node.data)
+     
         ref.style.animation = `add-node ${"1s"}`;
 
         ref.addEventListener("animationend", animationEvent);
@@ -45,7 +45,7 @@ const UseStaticArrayAnimation = () => {
             onAnimationEnds(e);
           }
           resolve(true);
-          console.log('HELLO FROM WRITE ANIMATION', node.data)
+        
           ref.removeEventListener("animationend", animationEvent);
         };
 

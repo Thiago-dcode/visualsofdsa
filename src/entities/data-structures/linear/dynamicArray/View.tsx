@@ -1,41 +1,21 @@
 'use client'
-// import { useState } from "react"
 import Main from "@/components/container/Main"
 import RamConteiner from "@/components/container/RamConteiner"
-// import OperationsContainer from "@/components/container/OperationsContainer"
-// import ButtonAction from "../_components/ButtonAction"
-// import { Input } from "@/components/ui/input"
-// import InputWithButtonContainer from "@/components/container/InputWithButtonContainer"
-import { prefix0 } from "@/lib/utils"
 import useDynamicArray from "./hooks/useDynamicArray"
 import MemoryAdressContainer from "../_components/MemoryAdressContainer"
 import { PopUp } from "@/components/ui/PopUp"
 import InputWithButtonContainer from "@/components/container/InputWithButtonContainer"
 import OperationsContainer from "@/components/container/OperationsContainer"
-
 import ButtonAction from "../_components/ButtonAction"
-import { act, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import Section from "@/components/container/Section"
 import StaticArrayNodeComponent from "../staticArray/components/StaticArrayNodeComponent"
 import Properties from "@/components/app/Properties"
 import { searchResult } from "../staticArray/type"
-// import { PopUp } from "@/components/ui/PopUp"
-// import StaticArrayNodeComponent from "./components/StaticArrayNodeComponent"
-// import useStaticArray from "./hooks/useStaticArray"
-// import './style.css'
-// import { searchResult, staticArrayAction } from "./type"
-// import Info from "@/components/ui/info"
-// import Section from "@/components/container/Section"
-// import UseLinear from "../_hooks/UseLinear"
-// import { PopOverComponent } from "@/components/ui/PopOverComponent"
-// import { Button } from "@/components/ui/button"
-// import { Wrench } from "lucide-react"
-// import LinearDsConfig from "../_components/LinearDsConfig"
-
-
+import './style.css'
 export default function DynamicArray() {
-    const { array, write, error, capacity, size, cleanUp, action, push, search } = useDynamicArray();
+    const { array, write, insert, error, capacity, size, cleanUp, action, push, search } = useDynamicArray();
     const [open, setOpen] = useState(false);
     const [isAnimationRunning, setIsAnimationRunning] = useState(false)
     const [data, setData] = useState<string>('');
@@ -91,6 +71,25 @@ export default function DynamicArray() {
                             // setAction('write')
                             await push(pushData === '' ? null : pushData)
 
+
+                        }} />
+                    </InputWithButtonContainer>
+                    <InputWithButtonContainer>
+                        <Input value={index} placeholder="index" className="text-black w-20" onChange={(e) => {
+                            const n = Number.parseInt(e.target.value);
+                            console.log(n)
+                            setIndex(isNaN(n) ? 0 : n)
+                        }} type="number" min={0} />
+                        <Input value={data} placeholder="data" className="text-black w-24" onChange={(e) => {
+                            setData(e.target.value)
+                        }} type="text" name="" id="" />
+
+                        <ButtonAction title="insert" className='bg-orange-400 hover:bg-orange-600' isLoading={isAnimationRunning} onClick={async () => {
+                            if (isAnimationRunning || index === undefined) return;
+                            // setIsAnimationRunning(true)
+                            setOpen(false)
+                            await insert(data === '' ? null : data, index)
+                            // setIsAnimationRunning(false)
 
                         }} />
                     </InputWithButtonContainer>

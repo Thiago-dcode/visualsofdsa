@@ -37,13 +37,14 @@ export default function useStaticArray() {
     data: Primitive,
     index: number,
     callback = () => {},
-    isFilling = false
+    isFilling = false,
+    customNode:Node<Primitive> = new Node(data, new Position(0, 0))
   ) => {
     if (!array) return;
     if (throwIndexOutOfTheBound(index)) return;
     let node = array[index];
     if (node === null) {
-      array[index] = new Node(data, new Position(0, 0));
+      array[index] = customNode;
       node = array[index];
     }
     node.data = data;

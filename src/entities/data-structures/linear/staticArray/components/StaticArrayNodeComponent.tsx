@@ -3,11 +3,12 @@ import React, { useCallback } from 'react'
 import Node from '../../_classes/Node';
 import UseStaticArrayAnimation from '../hooks/UseStaticArrayAnimation';
 import LinearNodeComponent from '../../_components/LinearNodeComponent';
-import { staticArrayAction } from '../type';
+import { ArrayActions } from '../type';
+import { DynamicArrayNode } from '../../dynamicArray/class/DynamicArrayNode';
 
 type props = {
   node: Node<Primitive>;
-  action?: staticArrayAction;
+  action?: ArrayActions;
   setAnimationRunning: (value: boolean) => void;
   isLastNode: boolean;
 }
@@ -16,6 +17,7 @@ export default function StaticArrayNodeComponent({ node, action = 'create', setA
   const setRef = useCallback(async (ele: HTMLElement | null) => {
 
     if (!ele) return;
+
     node.ref = ele;
     if (action === 'create') {
 
@@ -24,12 +26,16 @@ export default function StaticArrayNodeComponent({ node, action = 'create', setA
       })
     }
     else if (action === 'push') {
-      console.log(action, isLastNode, node.data)
       if (isLastNode) {
         await createAnimation(node, () => {
           setAnimationRunning(false)
         })
       }
+    }
+    else if (action === 'insert' && node instanceof DynamicArrayNode && node.isLastInserted) {
+
+
+      console.log('INSERT ACTION: ', node)
     }
 
 

@@ -1,17 +1,22 @@
-import { Primitive } from "@/types";
+import { MemorySize, Primitive } from "@/types";
 import Node from "../../_classes/Node";
 import Position from "@/lib/classes/Position";
 
-class DynamicArrayNode<T extends Primitive> extends Node<T> {
-  private _isCapacity: boolean;
-  constructor(data: T, positon: Position, isCapacity = false) {
+export class DynamicArrayNode<T extends Primitive> extends Node<T> {
+
+  static nodeSize:MemorySize;
+  private _isLastInserted:boolean;
+  constructor(data: T, positon: Position, isLastInserted=false) {
     super(data, positon);
-    this._isCapacity = isCapacity;
+    DynamicArrayNode.nodeSize = MemorySize.M; 
+    this._isLastInserted = isLastInserted;
   }
-  get isCapacity() {
-    return this._isCapacity;
+  get isLastInserted(){
+    return this._isLastInserted
   }
-  set isCapacity(value: boolean) {
-    this._isCapacity = value;
+  set isLastInserted(value:boolean){
+     this._isLastInserted = value;
   }
+
+
 }

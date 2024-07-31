@@ -1,9 +1,10 @@
 import { Primitive } from "@/types";
 import { requestAnimation } from "../../../../../lib/utils";
 import Node from "../../_classes/Node";
+import { DynamicArrayNode } from "../class/DynamicArrayNode";
 const useDynamicArrayAnimation = () => {
-  const createAnimation = async (
-    node: Node<Primitive> | null,
+  const insertAnimation = async (
+    node: DynamicArrayNode<Primitive> | null,
     onAnimationEnds: ((e: AnimationEvent) => void) | null = null
   ): Promise<boolean> => {
     return new Promise((resolve, reject) => {
@@ -15,85 +16,24 @@ const useDynamicArrayAnimation = () => {
           if (onAnimationEnds) {
             onAnimationEnds(e);
           }
-          console.log("HELLO FROM CREATE ANIMATION");
-          resolve(true);
+                resolve(true);
           ref.removeEventListener("animationend", animationEvent);
         };
-
-        ref.style.animation = `add-node ${"1s"}`;
-
-        ref.addEventListener("animationend", animationEvent);
-        // requestAnimation(ref, `add-node ${"1s"}`, animationEvent);
+        console.log("RIGHT:",ref.offsetLeft,node.data)
+        // ref.style.setProperty("--start", `${ref.offsetLeft}px`);
+        // ref.style.setProperty(
+        //   "--end",
+        //   `${100}px`
+        // );
+        requestAnimation(ref, `access-node ${"0.5s"}`, animationEvent);
       }
     });
   };
 
-  const writeAnimation = async (
-    node: Node<Primitive> | null,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
-    speed = 0.2
-  ): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      if (!node || !node.ref) {
-        reject(false);
-      } else {
-        const ref = node.ref;
-        const animationEvent = (e: AnimationEvent) => {
-          if (onAnimationEnds) {
-            onAnimationEnds(e);
-          }
-          resolve(true);
-          ref.removeEventListener("animationend", animationEvent);
-        };
-        requestAnimation(ref, `write-node ${speed}s`, animationEvent);
-      }
-    });
-  };
-  const accessAnimation = async (
-    node: Node<Primitive> | null,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
-  ): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      if (!node || !node.ref) {
-        reject(false);
-      } else {
-        const ref = node.ref;
-        const animationEvent = (e: AnimationEvent) => {
-          if (onAnimationEnds) {
-            onAnimationEnds(e);
-          }
-          resolve(true);
-          ref.removeEventListener("animationend", animationEvent);
-        };
-        requestAnimation(ref, `access-node ${"1s"}`, animationEvent);
-      }
-    });
-  };
-  const searchAnimation = async (
-    node: Node<Primitive> | null,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
-  ): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      if (!node || !node.ref) {
-        reject(false);
-      } else {
-        const ref = node.ref;
-        const animationEvent = (e: AnimationEvent) => {
-          if (onAnimationEnds) {
-            onAnimationEnds(e);
-          }
-          resolve(true);
-          ref.removeEventListener("animationend", animationEvent);
-        };
-        requestAnimation(ref, `search-node ${"0.2s"}`, animationEvent);
-      }
-    });
-  };
+ 
   return {
-    createAnimation,
-    writeAnimation,
-    accessAnimation,
-    searchAnimation
+    insertAnimation,
+
   };
 };
 
