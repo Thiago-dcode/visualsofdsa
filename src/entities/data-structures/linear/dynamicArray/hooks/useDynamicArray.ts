@@ -94,36 +94,30 @@ export default function useDynamicArray() {
     }
     setAction("insert");
 
-    for (let i = size - 1; i >= 0; i--) {
-      const element = array[i];
-      if (element instanceof DynamicArrayNode) {
-        element.isLastInserted = false;
+    let found = false;
+    for (let i = capacity - 1; i >= 0; i--) {
+      const node = array[i];
+      if (node instanceof DynamicArrayNode && i < size && !found) {
         try {
-          if(element.ref){
-
-          }else{
-
-          }
-          await insertAnimation(element,i, () => {});
+          await insertAnimation(node, i, () => {});
         } catch (error) {
-          console.log('THIS SHOULD NEVER BE PRINTED')
+          console.log("Insert animation rejected");
         }
-
-      }else{
-        console.error('Node is not instance of dynamic array node', element)
+        array[i + 1] =
+          node !== null
+            ? new DynamicArrayNode(node?.data, new Position(0, 0), false)
+            : null;
+        if (i === index) {
+          array[i] = new DynamicArrayNode(data, new Position(0, 0), true);
+          setSize(size + 1);
+          found = true;
+        }
+        continue;
       }
-      array[i + 1] = element;
-      if (i === index) {
-        array[i] = new DynamicArrayNode(data, new Position(0, 0), true);
-        setSize(size + 1);
-        break;
-      }
+      array[i] = node
+        ? new DynamicArrayNode(node?.data, new Position(0, 0), false)
+        : null;
     }
-    // for (let i = 0; i < array.length; i++) {
-    //   const element = array[i];
-
-    //   console.log(element);
-    // }
   };
   const search = async (
     data: Primitive,

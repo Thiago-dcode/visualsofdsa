@@ -34,7 +34,7 @@ export default function StaticArrayNodeComponent({ node, action = 'create', setA
     }
     else if (action === 'insert' && node instanceof DynamicArrayNode && node.isLastInserted) {
       await createAnimation(node, () => {
-        setAnimationRunning(false)
+      setAnimationRunning(false)
         node.isLastInserted = false;
       })
     }

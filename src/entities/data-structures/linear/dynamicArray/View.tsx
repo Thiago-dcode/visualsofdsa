@@ -21,8 +21,10 @@ export default function DynamicArray() {
     const [data, setData] = useState<string>('');
     const [pushData, setPushData] = useState<string>('');
     const [searchData, setSearchData] = useState<string>('');
+    const [insertData, setInsertData] = useState<string>('');
     const [searchResult, setSearchResult] = useState<searchResult | null>(null);
     const [index, setIndex] = useState<number>(0);
+    const [indexInsert, setIndexInsert] = useState<number>(0);
 
     useEffect(() => {
 
@@ -42,11 +44,13 @@ export default function DynamicArray() {
                     {/* WRITE OPERATION */}
                     <InputWithButtonContainer>
                         <Input value={index} placeholder="index" className="text-black w-20" onChange={(e) => {
+                            if (isAnimationRunning) return;
                             const n = Number.parseInt(e.target.value);
-                            console.log(n)
+
                             setIndex(isNaN(n) ? 0 : n)
                         }} type="number" min={0} />
                         <Input value={data} placeholder="data" className="text-black w-24" onChange={(e) => {
+                            if (isAnimationRunning) return;
                             setData(e.target.value)
                         }} type="text" name="" id="" />
 
@@ -62,6 +66,7 @@ export default function DynamicArray() {
                     </InputWithButtonContainer>
                     <InputWithButtonContainer>
                         <Input value={pushData} placeholder="data" className="text-black w-24" onChange={(e) => {
+                            if (isAnimationRunning) return;
                             setPushData(e.target.value)
                         }} type="text" name="" id="" />
                         <ButtonAction title="push" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={async () => {
@@ -76,25 +81,28 @@ export default function DynamicArray() {
                     </InputWithButtonContainer>
                     <InputWithButtonContainer>
                         <Input value={index} placeholder="index" className="text-black w-20" onChange={(e) => {
+                            if (isAnimationRunning) return;
                             const n = Number.parseInt(e.target.value);
-                                                      setIndex(isNaN(n) ? 0 : n)
+                            setIndex(isNaN(n) ? 0 : n)
                         }} type="number" min={0} />
-                        <Input value={data} placeholder="data" className="text-black w-24" onChange={(e) => {
-                            setData(e.target.value)
+                        <Input value={insertData} placeholder="insertData" className="text-black w-24" onChange={(e) => {
+                            if (isAnimationRunning) return;
+                            setInsertData(e.target.value)
                         }} type="text" name="" id="" />
 
                         <ButtonAction title="insert" className='bg-orange-400 hover:bg-orange-600' isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || index === undefined) return;
-                             setIsAnimationRunning(true)
+                            setIsAnimationRunning(true)
                             setOpen(false)
-                            await insert(data === '' ? null : data, index)
-                            // setIsAnimationRunning(false)
-                        
+                            await insert(insertData === '' ? null : insertData, index)
+
+
 
                         }} />
                     </InputWithButtonContainer>
                     <InputWithButtonContainer>
                         <Input value={searchData} placeholder="data" className="text-black w-24" onChange={(e) => {
+                            if (isAnimationRunning) return;
                             setSearchData(e.target.value)
                         }} type="text" name="" id="" />
 
@@ -123,7 +131,7 @@ export default function DynamicArray() {
                 {array &&
                     array.map((node, i) => {
                         return (
-                            <MemoryAdressContainer index={i} showIndex={node !== null}  key={'memoryAdressContainer-' + `${node? node.id: 'null-' +i}`}>
+                            <MemoryAdressContainer index={i} showIndex={node !== null} key={'memoryAdressContainer-' + `${node ? node.id : 'null-' + i}`}>
                                 {node !== null ? <StaticArrayNodeComponent isLastNode={i === size} action={action} node={node} setAnimationRunning={setIsAnimationRunning} /> : <p className="border-2 flex items-center justify-center
                      border-white/50 w-full h-full">NULL</p>}
                             </MemoryAdressContainer>
@@ -140,14 +148,15 @@ export default function DynamicArray() {
 
                     {!searchResult.found
 
-                        ? <p>Data <b> {searchResult.data} </b>  not found. </p> :
-                        <p> Data <b> {searchResult.data} </b> found on index: <b>{searchResult.steps - 1} </b>. Steps taken:  <b> {searchResult.steps} </b>.</p>
+                        ? <>Data <b> {searchResult.data} </b>  not found. </> :
+                        <> Data <b> {searchResult.data} </b> found on index: <b>{searchResult.steps - 1} </b>. Steps taken:  <b> {searchResult.steps} </b>.</>
                     }
 
                 </>} />}
                 {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
                     cleanUp()
                     setIndex(0)
+                    setIsAnimationRunning(false)
 
                 }} open={error ? true : false} showTrigger={false} description={error.description} />}
             </RamConteiner>

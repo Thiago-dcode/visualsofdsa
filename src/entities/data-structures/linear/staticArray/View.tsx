@@ -10,7 +10,7 @@ import { PopUp } from "@/components/ui/PopUp"
 import StaticArrayNodeComponent from "./components/StaticArrayNodeComponent"
 import useStaticArray from "./hooks/useStaticArray"
 import './style.css'
-import { searchResult, staticArrayAction } from "./type"
+import { searchResult, ArrayActions } from "./type"
 import Info from "@/components/ui/info"
 import Section from "@/components/container/Section"
 import UseLinear from "../_hooks/UseLinear"
@@ -26,7 +26,7 @@ import { MemorySize } from "@/types"
 export default function StaticArray() {
     const { array, create, write, access, search, error, flush, maxSize, setMaxSize } = useStaticArray();
     const [isAnimationRunning, setIsAnimationRunning] = useState(false)
-    const [action, setAction] = useState<staticArrayAction>('create')
+    const [action, setAction] = useState<ArrayActions>('create')
     const [data, setData] = useState<string>('');
     const [searchData, setSearchData] = useState<string>('');
     const [size, setSize] = useState<number>(0);

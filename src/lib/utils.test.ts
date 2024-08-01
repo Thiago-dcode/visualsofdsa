@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { getSpeed, prefix0 } from "./utils";
+import { generateKey, getSpeed, prefix0 } from "./utils";
+
 
 describe("testing getSpeed", () => {
   it("should return the proper number", () => {
@@ -17,5 +18,14 @@ describe("testing prefix0", () => {
       }
       expect(prefix0(i)).toBe("" + i);
     }
+  });
+});
+
+describe("testing generateKey", () => {
+  it("It should generate key passing null number or string", () => {
+
+    expect(generateKey(null)).toBeTypeOf('string')
+    expect(generateKey(1)).toBeTypeOf('string')
+    expect(generateKey('asdasd')).toBeTypeOf('string')
   });
 });

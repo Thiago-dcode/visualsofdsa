@@ -1,4 +1,4 @@
-import { prefix0 } from '@/lib/utils'
+import { generateKey, prefix0 } from '@/lib/utils'
 import { MemorySize } from '@/types'
 import React, { ReactNode, useMemo } from 'react'
 
@@ -13,7 +13,7 @@ function MemoryAdressContainer({ index, showIndex, size = MemorySize.M, children
     const memoryAdress = useMemo(() => '0x' + prefix0(index), [index])
     const fontSize = useMemo(() => '0x' + prefix0(index), [size])
     return (
-        <div key={' static-array-empty-' + index}>
+        <div>
             <div style={{
                 width: size + 'px',
             }} title={"Memory address: " + memoryAdress} className={`${MemorySize.S === size ? 'text-xs' : MemorySize.M === size ? 'text-sm' : 'text-lg'} flex items-center justify-center py-2 border border-white h-[15px]`}>

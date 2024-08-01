@@ -18,7 +18,7 @@ export default function useStaticArray() {
   } | null>(null);
   const create = async (size: number, fillArrayWithNode = true) => {
     if (size < 0 || size > maxSize) {
-      setError({
+      setError({                       
         name: "IndexOutOfTheBoundException",
         description: `A Stack overflow error has ocurred. Array maximum size of ${maxSize} exceeded.`,
       });

@@ -14,6 +14,7 @@ const useDynamicArrayAnimation = () => {
       } else {
         const ref = node.ref;
         const indexRef =node.ref.parentElement?.parentElement?.children[2] as HTMLElement
+        const nextNode = ref.parentElement?.parentElement?.parentElement?.children[index+1].children[1] as HTMLElement;
         const animationEvent = (e: AnimationEvent) => {
           if (onAnimationEnds) {
             onAnimationEnds(e);
@@ -27,8 +28,25 @@ const useDynamicArrayAnimation = () => {
         };
 
         // ref.style.setProperty("--start", `${ref.offsetLeft}px`);
-        // console.log("getBoundingClientRect()",ref.getBoundingClientRect())
-        console.log("parent-"+index,ref.parentElement?.parentElement?.parentElement?.children[index+1])
+       let isBreakLine = false;
+        if(nextNode){
+              console.log("parent-"+index+1,nextNode)
+          isBreakLine = ref.getBoundingClientRect().top !== nextNode.getBoundingClientRect().top
+        }
+        if(isBreakLine){
+          ref.style.background = 'red'
+          if(indexRef){
+            // console.log('CURRENT NODE:', ref.getBoundingClientRect())
+            // console.log('NEXT NODE:', nextNode.getBoundingClientRect())
+            // indexRef.style.top = nextNode.getBoundingClientRect().top + 'px';
+            console.log('CURRENT NODE TOP:', ref.getBoundingClientRect().top)
+            console.log('NEXT NODE TOP:', nextNode.getBoundingClientRect().top)
+            ref.style.bottom = nextNode.getBoundingClientRect().bottom + 'px';
+            // indexRef.style.left = (nextNode.getBoundingClientRect().left - DynamicArrayNode.nodeSize) + 'px';
+            // ref.style.left = (nextNode.getBoundingClientRect().left - DynamicArrayNode.nodeSize) + 'px';
+          }
+        }
+      
         if(indexRef){
       
           indexRef.style.setProperty("--end", `${DynamicArrayNode.nodeSize}px`);

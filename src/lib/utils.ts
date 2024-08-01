@@ -1,7 +1,7 @@
-import { speed } from "@/types";
+import { Primitive, speed } from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-
+import { v4 as uuid4 } from "uuid";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -40,4 +40,8 @@ export const prefix0 = (n: number): string => {
     return "0" + n;
   }
   return n + "";
+};
+
+export const generateKey = (pre: Primitive = '') => {
+  return `${pre}_${uuid4()}`;
 };
