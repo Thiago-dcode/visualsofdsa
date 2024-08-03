@@ -15,7 +15,7 @@ import Properties from "@/components/app/Properties"
 import { searchResult } from "../staticArray/type"
 import './style.css'
 export default function DynamicArray() {
-    const { array, write, insert, error, capacity, size, cleanUp, action, push, search } = useDynamicArray();
+    const { array, write, insert, error, capacity, size, cleanUp, action, push,pop, search } = useDynamicArray();
     const [open, setOpen] = useState(false);
     const [isAnimationRunning, setIsAnimationRunning] = useState(false)
     const [data, setData] = useState<string>('');
@@ -106,7 +106,7 @@ export default function DynamicArray() {
                             setSearchData(e.target.value)
                         }} type="text" name="" id="" />
 
-                        <ButtonAction title="search" className='bg-blue-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
+                        <ButtonAction title="search" className='bg-blue-400 hover:bg-blue-600' isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning) return;
                             setIsAnimationRunning(true)
                             setOpen(!open)
@@ -120,6 +120,14 @@ export default function DynamicArray() {
 
                         }} />
                     </InputWithButtonContainer>
+                    <ButtonAction title="pop" className='bg-red-400 hover:bg-red-600' isLoading={isAnimationRunning} onClick={async () => {
+                            if (isAnimationRunning) return;
+                            setIsAnimationRunning(true)
+                            setOpen(!open)
+
+                            await pop()
+                            setIsAnimationRunning(false)
+                        }} />
                 </Section> : null}
 
             </OperationsContainer>}

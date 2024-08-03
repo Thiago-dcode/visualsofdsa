@@ -11,7 +11,7 @@ import useDynamicArrayAnimation from "./useDynamicArrayAnimation";
 
 export default function useDynamicArray() {
   const { writeAnimation } = UseStaticArrayAnimation();
-  const { insertAnimation } = useDynamicArrayAnimation();
+  const { insertAnimation,popAnimation } = useDynamicArrayAnimation();
   const {
     array,
     setArray,
@@ -23,7 +23,6 @@ export default function useDynamicArray() {
   const [capacity, setCapacity] = useState(10);
   const [action, setAction] = useState<ArrayActions>("create");
   const [size, setSize] = useState(0);
-  const [render, setRender] = useState(false);
   const expand = useCallback(
     async (reset = false) => {
       const newCapacity = reset ? 10 : capacity * 2;
@@ -83,6 +82,28 @@ export default function useDynamicArray() {
   const push = async (data: Primitive) => {
     await write(data, size);
   };
+  const pop = useCallback(async () => {
+    if(size === 0) return;
+    setAction("pop");
+    const handlePop = async () => {
+      if (array) {
+        setSize((array) => array - 1);
+        try {
+          await popAnimation(array[size-1])
+        } catch (error) {
+          console.error('Pop animation rejected')
+        }
+        return array.map((d, i) => {
+          if (i === size - 1) {
+            return null;
+          }
+          return d;
+        });
+      }
+      return null;
+    }
+    setArray(await handlePop());
+  },[array,size])
   const insert = async (data: Primitive, index: number) => {
     if (index >= size || index < 0) {
       await write(data, index);
@@ -152,5 +173,6 @@ export default function useDynamicArray() {
     expand,
     action,
     search,
+    pop,
   };
 }

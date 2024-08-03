@@ -11,3 +11,15 @@
        
       }
   }
+
+  @keyframes pop-node {
+    from {
+        opacity: 1;
+        background: rgb(220, 38, 38);
+      }
+    
+      to {
+        opacity: 0;
+       
+      }
+  }

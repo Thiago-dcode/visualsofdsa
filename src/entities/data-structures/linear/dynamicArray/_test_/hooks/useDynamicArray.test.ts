@@ -301,7 +301,7 @@ describe("UseDynamicArray HOOK", () => {
   });
 
   it("should insert in the first position", async () => {
-    for (let i = 0; i < 10; i++) {
+   
       const { result } = renderHook(useDynamicArray);
       expect(result.current.array).toBeInstanceOf(Array);
       expect(result.current.array?.length).toBe(result.current.capacity);
@@ -344,6 +344,57 @@ describe("UseDynamicArray HOOK", () => {
           }
         } 
       }
-    }
+    
   });
+  it("should pop",async()=>{
+
+      
+    const { result } = renderHook(useDynamicArray);
+    expect(result.current.array).toBeInstanceOf(Array);
+    expect(result.current.array?.length).toBe(result.current.capacity);
+    expect(result.current.size).toBe(0);
+    for (let i = 0; i < 100; i++) {
+      await act(async () => {
+        await result.current.pop();
+      });
+    }
+    expect(10).toBe(result.current.capacity);
+    expect(result.current.array?.length).toBe(result.current.capacity);
+    expect(result.current.size).toBe(0);
+    for (let i = 0; i < 100; i++) {
+      await act(async () => {
+        await result.current.push("hello-" + i);
+      });
+    }
+    expect(result.current.size).toBe(100);
+   if(result.current.array){
+    expect(result.current.array[result.current.size-1]).toBeInstanceOf(DynamicArrayNode);
+   }
+    await act(async () => {
+      await result.current.pop();
+    });
+    if(result.current.array){
+      expect(result.current.array[99]).toBeNull();
+     }
+    expect(result.current.size).toBe(99);
+    if(result.current.array){
+      expect(result.current.array[result.current.size-1]).toBeInstanceOf(DynamicArrayNode);
+     }
+     let size = result.current.size;
+     for (let i = 0; i < size; i++) {
+     
+      await act(async () => {
+        await result.current.pop();
+      });
+    
+     }
+     expect(result.current.size).toBe(0);
+     if(result.current.array){
+      for (let i = 0; i < result.current.array.length; i++) {
+        const element = result.current.array[i];
+        expect(element).toBeNull()
+        
+      }
+     }
+  })
 });
