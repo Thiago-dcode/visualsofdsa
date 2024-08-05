@@ -1,12 +1,13 @@
 import { Primitive } from "@/types";
-import { delay, requestAnimation } from "../../../../../lib/utils";
+import { delay, removePx, requestAnimation } from "../../../../../lib/utils";
 import Node from "../../_classes/Node";
 import { DynamicArrayNode } from "../class/DynamicArrayNode";
 const useDynamicArrayAnimation = () => {
   const insertAnimation = async (
     node: DynamicArrayNode<Primitive> | null,
     index: number,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
+    onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
+    normalBehavior = false
   ): Promise<boolean> => {
     return new Promise(async (resolve, reject) => {
       if (!node || !node.ref) {
@@ -19,29 +20,25 @@ const useDynamicArrayAnimation = () => {
           ?.children[index + 1].children[1] as HTMLElement;
         let isBreakLine = false;
         const animationEvent = async (e: AnimationEvent) => {
-          if (onAnimationEnds) {
+          if (onAnimationEnds && !normalBehavior) {
             onAnimationEnds(e);
           }
-          if (isBreakLine) {
-            const left = `-${2 * DynamicArrayNode.nodeSize}px`;
-            console.log(
-              "REF",
-              node.data,
-              ref.style.left,
-              ref.getBoundingClientRect()
-            );
+          if (isBreakLine && indexRef) {
+            const left = `-${
+              Math.abs(removePx(ref.style.left)) - DynamicArrayNode.nodeSize
+            }px`;
+
             ref.style.left = left;
             indexRef.style.left = left;
-           
-          
-          } else {
+          } else if (true) {
             ref.style.left = DynamicArrayNode.nodeSize + "px";
             if (indexRef) {
               indexRef.style.left = DynamicArrayNode.nodeSize + "px";
+              indexRef.removeEventListener("animationend", animationEvent);
             }
-
-            ref.removeEventListener("animationend", animationEvent);
           }
+
+          ref.removeEventListener("animationend", animationEvent);
           resolve(true);
         };
 
@@ -50,33 +47,73 @@ const useDynamicArrayAnimation = () => {
             ref.getBoundingClientRect().top !==
             nextNode.getBoundingClientRect().top;
         }
-        if (isBreakLine) {
-          if (indexRef) {
-            // indexRef.style.top = nextNode.getBoundingClientRect().top + 'px';
-            const top = Math.abs(
+        if (isBreakLine && indexRef) {
+          // make this async!
+          const top =
+            Math.abs(
               ref.getBoundingClientRect().top -
                 nextNode.getBoundingClientRect().top
-            );
-            const left = `-${
-              ref.getBoundingClientRect().x -
-              nextNode.getBoundingClientRect().x +
-              DynamicArrayNode.nodeSize
-            }px`;
+            ) + "px";
+          const left = `-${
+            ref.getBoundingClientRect().x -
+            nextNode.getBoundingClientRect().x +
+            DynamicArrayNode.nodeSize
+          }px`;
 
-            ref.style.top = top + "px";
-            indexRef.style.top = top + "px";
+          try {
+            await new Promise((resolve) => {
+              let refDone = false;
+              const _animationEventRef = () => {
+                ref.style.top = top;
 
-            ref.style.left = left;
-            indexRef.style.left = left;
+                ref.style.left = left;
+                ref.removeEventListener("animationend", _animationEventRef);
 
-            // indexRef.style.left = (nextNode.getBoundingClientRect().left - DynamicArrayNode.nodeSize) + 'px';
-            // ref.style.left = (nextNode.getBoundingClientRect().left - DynamicArrayNode.nodeSize) + 'px';
-          }
+                refDone = true;
+                if (refDone && indexRefDone) resolve(true);
+              };
+              let indexRefDone = false;
+              const _animationEventIndexRef = () => {
+                indexRef.style.top = top;
+
+                indexRef.style.left = left;
+                indexRef.removeEventListener(
+                  "animationend",
+                  _animationEventIndexRef
+                );
+
+                indexRefDone = true;
+                if (refDone && indexRefDone) resolve(true);
+              };
+              indexRef.style.setProperty(
+                "--end",
+                `${DynamicArrayNode.nodeSize / 2}px`
+              );
+              requestAnimation(
+                indexRef,
+                `insert-node ${"0.4s"}`,
+                _animationEventIndexRef
+              );
+              ref.style.setProperty(
+                "--end",
+                `${DynamicArrayNode.nodeSize / 2}px`
+              );
+              requestAnimation(
+                ref,
+                `insert-node ${"0.4s"}`,
+                _animationEventRef
+              );
+            });
+          } catch (error) {}
         }
 
         if (indexRef) {
           indexRef.style.setProperty("--end", `${DynamicArrayNode.nodeSize}px`);
-          requestAnimation(indexRef, `insert-node ${"0.4s"}`, animationEvent);
+          const fn = () => {
+            indexRef.removeEventListener("animationend", animationEvent);
+          };
+
+          requestAnimation(indexRef, `insert-node ${"0.4s"}`, fn);
         }
         ref.style.setProperty("--end", `${DynamicArrayNode.nodeSize}px`);
 

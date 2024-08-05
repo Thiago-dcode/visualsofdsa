@@ -42,6 +42,11 @@ export const prefix0 = (n: number): string => {
   return n + "";
 };
 
-export const generateKey = (pre: Primitive = '') => {
+export const generateKey = (pre: Primitive = "") => {
   return `${pre}_${uuid4()}`;
 };
+export function removePx(value: string): number {
+  if (!value) return 0;
+  const result = parseFloat(value.replace(/px$/, ""));
+  return isNaN(result) ? 0 : result;
+}
