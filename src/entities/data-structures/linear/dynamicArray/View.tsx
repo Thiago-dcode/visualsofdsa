@@ -14,8 +14,9 @@ import StaticArrayNodeComponent from "../staticArray/components/StaticArrayNodeC
 import Properties from "@/components/app/Properties"
 import { searchResult } from "../staticArray/type"
 import './style.css'
+import useResponsive from "@/hooks/useResponsive"
 export default function DynamicArray() {
-    const { array, write, insert, error, capacity, size, cleanUp, action, push,pop, search } = useDynamicArray();
+    const { array, write, insert, error, capacity, size, cleanUp, delete: del, action, push, pop, search } = useDynamicArray();
     const [open, setOpen] = useState(false);
     const [isAnimationRunning, setIsAnimationRunning] = useState(false)
     const [data, setData] = useState<string>('');
@@ -39,7 +40,7 @@ export default function DynamicArray() {
                 setOpen(value)
 
             }} open={open}>
-                {array && array.length ? < Section>
+                {array && array.length ? < Section >
 
                     {/* WRITE OPERATION */}
                     <InputWithButtonContainer>
@@ -121,13 +122,57 @@ export default function DynamicArray() {
                         }} />
                     </InputWithButtonContainer>
                     <ButtonAction title="pop" className='bg-red-400 hover:bg-red-600' isLoading={isAnimationRunning} onClick={async () => {
-                            if (isAnimationRunning) return;
-                            setIsAnimationRunning(true)
-                            setOpen(!open)
+                        if (isAnimationRunning) return;
+                        setIsAnimationRunning(true)
+                        setOpen(!open)
 
-                            await pop()
+                        await pop()
+                        setIsAnimationRunning(false)
+                    }} />
+                    <InputWithButtonContainer>
+                        <Input value={index} placeholder="index" className="text-black w-20" onChange={(e) => {
+                            if (isAnimationRunning) return;
+                            const n = Number.parseInt(e.target.value);
+                            setIndex(isNaN(n) ? 0 : n)
+                        }} type="number" min={0} />
+
+                        <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600' isLoading={isAnimationRunning} onClick={async () => {
+                            if (isAnimationRunning || index === undefined) return;
+                            setIsAnimationRunning(true)
+                            setOpen(false)
+                            await del(index)
                             setIsAnimationRunning(false)
+
+
+
                         }} />
+                    </InputWithButtonContainer>
+                    <InputWithButtonContainer>
+                        <Input value={index} placeholder="index" className="text-black w-20" onChange={(e) => {
+                            if (isAnimationRunning) return;
+                            const n = Number.parseInt(e.target.value);
+                            setIndex(isNaN(n) ? 0 : n)
+                        }} type="number" min={0} />
+
+                        <ButtonAction title="fill" className='bg-lime-400 hover:bg-lime-600' isLoading={isAnimationRunning} onClick={async () => {
+                            if (isAnimationRunning || index === undefined) return;
+                         
+                            setOpen(false)
+                            for (let i =size; i < index; i++) {
+                                setIsAnimationRunning(true)
+                                await new Promise(async(resolve)=>{
+                                    await push("data-")
+                                    if(!isAnimationRunning){
+                                        resolve(true)
+                                    }
+                                })
+                            }
+                           
+
+
+
+                        }} />
+                    </InputWithButtonContainer>
                 </Section> : null}
 
             </OperationsContainer>}

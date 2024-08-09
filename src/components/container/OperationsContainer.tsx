@@ -5,9 +5,8 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { PopOverComponent } from '../ui/PopOverComponent'
 import { Menu } from 'lucide-react'
 
-export default function OperationsContainer({ children, className = '', open = false, setOpen = () => { } }: { children: React.ReactNode, className?: string, open?: boolean, setOpen?: (value: SetStateAction<boolean>) => void }) {
+export default function OperationsContainer({ children, makeResponsive = false, className = '', open = false, setOpen = () => { } }: { children: React.ReactNode, makeResponsive?: boolean, className?: string, open?: boolean, setOpen?: (value: SetStateAction<boolean>) => void }) {
     const device = useResponsive(() => {
-        console.log('HELLO')
         setOpen(() => false);
     })
 
@@ -15,11 +14,11 @@ export default function OperationsContainer({ children, className = '', open = f
     return (
         <>
 
-            {(device.isDesktop || device.isTv) ? < div className={cn("border border-white w-full flex items-center justify-between gap-1 p-4", className)} >
+            {((device.isDesktop || device.isTv) && !makeResponsive) ? < div className={cn("border-2 border-white w-full wrap flex items-center justify-between gap-1 p-4", className)} >
                 {children}
             </div > :
                 <div className='w-full flex items-center justify-end px-10'>
-                    <PopOverComponent  setOpen={setOpen} open={open} className='self-start mr-8 bg-white/90' showBtn={false} trigger={<button onClick={() => {
+                    <PopOverComponent setOpen={setOpen} open={open} className='self-start mr-8 bg-white/90' showBtn={false} trigger={<button onClick={() => {
 
                     }}><Menu /></button>} content={<div className='flex flex-col items-center w-full'>
                         {children}

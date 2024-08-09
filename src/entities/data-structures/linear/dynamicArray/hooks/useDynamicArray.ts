@@ -11,7 +11,7 @@ import useDynamicArrayAnimation from "./useDynamicArrayAnimation";
 
 export default function useDynamicArray() {
   const { writeAnimation } = UseStaticArrayAnimation();
-  const { insertAnimation,popAnimation } = useDynamicArrayAnimation();
+  const { insertAnimation, popAnimation,deleteAnimation } = useDynamicArrayAnimation();
   const {
     array,
     setArray,
@@ -82,16 +82,25 @@ export default function useDynamicArray() {
   const push = async (data: Primitive) => {
     await write(data, size);
   };
+  const fill = async (n:number) =>{
+
+    for (let i = size; i < n; i++) {
+      
+
+      
+    }
+
+  }
   const pop = useCallback(async () => {
-    if(size === 0) return;
+    if (size === 0 || !array) return;
     setAction("pop");
     const handlePop = async () => {
       if (array) {
         setSize((array) => array - 1);
         try {
-          await popAnimation(array[size-1])
+          await popAnimation(array[size - 1]);
         } catch (error) {
-          console.error('Pop animation rejected')
+          console.error("Pop animation rejected");
         }
         return array.map((d, i) => {
           if (i === size - 1) {
@@ -101,15 +110,15 @@ export default function useDynamicArray() {
         });
       }
       return null;
-    }
+    };
     setArray(await handlePop());
-  },[array,size])
+  }, [array, size]);
   const insert = async (data: Primitive, index: number) => {
     if (index >= size || index < 0) {
       await write(data, index);
       return;
     }
-    //handle insert
+
     if (!array) {
       throw new Error("Array missing");
     }
@@ -139,6 +148,57 @@ export default function useDynamicArray() {
         ? new DynamicArrayNode(node?.data, new Position(0, 0), false)
         : null;
     }
+  };
+  const del = async (index: number) => {
+
+    if (size === 0 || !array) return;
+    if (index > size - 1 || index < 0) {
+      setError({
+        name: "IndexOutOfTheBoundException",
+        description: `Index ${index} out of bounds for length ${size}`,
+      });
+      return;
+    }
+    if (index == size - 1) {
+      await pop();
+      return;
+    }
+    setAction("delete");
+  
+    for (let i = 0; i < capacity; i++) {
+      const node = array[i];
+      if (i === index) {
+        try {
+          await popAnimation(node, ()=>{},0.8);
+        } catch (error) {}
+        array[i] = null;
+
+       
+        continue;
+      }
+      if(node instanceof DynamicArrayNode && i<size){
+        if(i >index){
+          try {
+            await deleteAnimation(node,i,()=>{
+              array[i - 1] = new DynamicArrayNode(node.data, node.position, false);
+              const nextNode = array[i + 1];
+               array[i] = nextNode?new DynamicArrayNode(nextNode.data, nextNode.position, false):null;
+           })
+           } catch (error) {
+              console.error('DELETE ANIMATION REJECTED')
+           }
+        }else{
+
+          array[i] = new DynamicArrayNode(node.data, node.position, false) 
+          
+        }
+      }else{
+        array[i] = null;
+      }
+     
+     
+    }
+    setSize(size - 1);
   };
   const search = async (
     data: Primitive,
@@ -174,5 +234,6 @@ export default function useDynamicArray() {
     action,
     search,
     pop,
+    delete: del,
   };
 }

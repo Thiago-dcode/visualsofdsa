@@ -397,4 +397,50 @@ describe("UseDynamicArray HOOK", () => {
       }
      }
   })
+  it('should delete',async()=>{
+    const { result } = renderHook(useDynamicArray);
+    expect(result.current.array).toBeInstanceOf(Array);
+    expect(result.current.array?.length).toBe(result.current.capacity);
+    expect(result.current.size).toBe(0);
+
+    for (let i = 0; i < 100; i++) {
+      await act(async () => {
+        await result.current.push("hello-" + i);
+      });
+    }
+    expect(result.current.size).toBe(100);
+    if(result.current.array){
+      expect(result.current.array[99]).toBeInstanceOf(DynamicArrayNode);
+     }
+     const size = result.current.size
+     for (let i = size-1; i >= 0; i--) {
+      await act(async () => {
+        //should pop
+        await result.current.delete(result.current.size-1);
+      });
+      expect(result.current.size).toBe(i);
+      if(result.current.array){
+        expect(result.current.array[i]).toBe(null);
+       }
+    }
+    for (let i = 0; i < 100; i++) {
+      await act(async () => {
+        await result.current.push("hello-" + i);
+      });
+    }
+    expect(result.current.size).toBe(100);
+    if(result.current.array && result.current.array[0]){
+      expect(result.current.array[0].data).toBe('hello-0');
+      expect(result.current.array[0]).toBeInstanceOf(DynamicArrayNode)
+     }
+    await act(async()=>{
+      await result.current.delete(0);
+    })
+     expect(result.current.size).toBe(99);
+     if(result.current.array && result.current.array[0]){
+      expect(result.current.array[0].data).toBe('hello-1');
+      expect(result.current.array[99]).toBeNull()
+     }
+   
+  })
 });
