@@ -1,7 +1,7 @@
 import { Primitive } from "@/types";
 import Node from "../_classes/Node";
 
-export type ArrayActions = "create" | "write" | "access" | "search" | "push" |'insert' |'pop'|'delete';
+export type ArrayActions = "create" | "write" | "access" | "search" | "push" |'insert' |'pop'|'delete'| "fill" ;
 export type searchResult = {
   steps: number;
   found: boolean;

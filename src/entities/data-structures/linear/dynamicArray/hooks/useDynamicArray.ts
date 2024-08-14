@@ -8,14 +8,14 @@ import UseStaticArrayAnimation from "../../staticArray/hooks/UseStaticArrayAnima
 import Position from "@/lib/classes/Position";
 import { DynamicArrayNode } from "../class/DynamicArrayNode";
 import useDynamicArrayAnimation from "./useDynamicArrayAnimation";
-
+const maxSize = 500;
 export default function useDynamicArray() {
   const { writeAnimation } = UseStaticArrayAnimation();
-  const { insertAnimation, popAnimation,deleteAnimation } = useDynamicArrayAnimation();
+  const { insertAnimation, popAnimation, deleteAnimation } =
+    useDynamicArrayAnimation();
   const {
     array,
     setArray,
-    write: _write,
     search: _search,
     error,
     setError,
@@ -23,6 +23,7 @@ export default function useDynamicArray() {
   const [capacity, setCapacity] = useState(10);
   const [action, setAction] = useState<ArrayActions>("create");
   const [size, setSize] = useState(0);
+  const [fillAmount, setFillAmount] = useState(0);
   const expand = useCallback(
     async (reset = false) => {
       const newCapacity = reset ? 10 : capacity * 2;
@@ -61,57 +62,44 @@ export default function useDynamicArray() {
     return false;
   };
 
+  const handleFillAmount = useCallback(async () => {
+    if (fillAmount === 0) return;
+    push("data-" + size);
+    // await delay(200);
+    setFillAmount((prev) => prev - 1);
+  }, [fillAmount]);
   const write = async (data: Primitive, index: number) => {
-    if (isOutOfTheOfTheBound(index)) return;
-    if (index < size) setAction("write");
-    else {
-      setAction("push");
+    if (isOutOfTheOfTheBound(index) || !array) return;
+    if (index === size) {
+      push(data);
+      return;
     }
-    await _write(
-      data,
-      index,
-      () => {
-        if (index === size) {
-          setSize((prev) => prev + 1);
-        }
-      },
-      false,
-      new DynamicArrayNode(data, new Position(0, 0))
-    );
-  };
-  const push = async (data: Primitive) => {
-    await write(data, size);
-  };
-  const fill = async (n:number) =>{
-
-    for (let i = size; i < n; i++) {
-      
-
-      
+    setAction("write");
+    const node = array[index];
+    if (!node) {
+      array[index] = new DynamicArrayNode(data, new Position(0, 0));
+    } else {
+      node.data = data;
     }
-
-  }
+    try {
+      await writeAnimation(array[index], () => {}, 0.5);
+    } catch (error) {}
+  };
+  const push = (data: Primitive) => {
+    if (!array) return;
+    setAction("push");
+    setSize((prev) => prev + 1);
+    array[size] = new DynamicArrayNode(data, new Position(0, 0));
+  };
+  const fill = async (n: number) => {
+    setFillAmount(n);
+  };
   const pop = useCallback(async () => {
     if (size === 0 || !array) return;
     setAction("pop");
-    const handlePop = async () => {
-      if (array) {
-        setSize((array) => array - 1);
-        try {
-          await popAnimation(array[size - 1]);
-        } catch (error) {
-          console.error("Pop animation rejected");
-        }
-        return array.map((d, i) => {
-          if (i === size - 1) {
-            return null;
-          }
-          return d;
-        });
-      }
-      return null;
-    };
-    setArray(await handlePop());
+    await popAnimation(array[size - 1]).catch(() => {});
+    setSize((prev) => prev - 1);
+    array[size - 1] = null;
   }, [array, size]);
   const insert = async (data: Primitive, index: number) => {
     if (index >= size || index < 0) {
@@ -149,8 +137,8 @@ export default function useDynamicArray() {
         : null;
     }
   };
-  const del = async (index: number) => {
 
+  const del = async (index: number) => {
     if (size === 0 || !array) return;
     if (index > size - 1 || index < 0) {
       setError({
@@ -164,39 +152,40 @@ export default function useDynamicArray() {
       return;
     }
     setAction("delete");
-  
+
     for (let i = 0; i < capacity; i++) {
       const node = array[i];
       if (i === index) {
         try {
-          await popAnimation(node, ()=>{},0.8);
+          await popAnimation(node, () => {}, 0.8);
         } catch (error) {}
         array[i] = null;
 
-       
         continue;
       }
-      if(node instanceof DynamicArrayNode && i<size){
-        if(i >index){
+      if (node instanceof DynamicArrayNode && i < size) {
+        if (i > index) {
           try {
-            await deleteAnimation(node,i,()=>{
-              array[i - 1] = new DynamicArrayNode(node.data, node.position, false);
+            await deleteAnimation(node, i, () => {
+              array[i - 1] = new DynamicArrayNode(
+                node.data,
+                node.position,
+                false
+              );
               const nextNode = array[i + 1];
-               array[i] = nextNode?new DynamicArrayNode(nextNode.data, nextNode.position, false):null;
-           })
-           } catch (error) {
-              console.error('DELETE ANIMATION REJECTED')
-           }
-        }else{
-
-          array[i] = new DynamicArrayNode(node.data, node.position, false) 
-          
+              array[i] = nextNode
+                ? new DynamicArrayNode(nextNode.data, nextNode.position, false)
+                : null;
+            });
+          } catch (error) {
+            console.error("DELETE ANIMATION REJECTED");
+          }
+        } else {
+          array[i] = new DynamicArrayNode(node.data, node.position, false);
         }
-      }else{
+      } else {
         array[i] = null;
       }
-     
-     
     }
     setSize(size - 1);
   };
@@ -207,20 +196,31 @@ export default function useDynamicArray() {
     setAction("search");
     await _search(data, callback);
   };
-  const cleanUp = useCallback(() => {
+  const cleanUp = () => {
     setError(null);
     expand(true);
-  }, []);
+    setFillAmount(0);
+  };
 
   useEffect(() => {
     expand(true);
   }, []);
 
   useEffect(() => {
+    if (size >= maxSize) {
+      setError({
+        name: "MaxSizeException",
+        description: `The array cannot acceed ${maxSize} length`,
+      });
+      return;
+    }
+    if (fillAmount > 0) handleFillAmount();
+
     if (size === capacity) {
       expand();
     }
-  }, [size]);
+  }, [size, fillAmount]);
+
   return {
     array,
     capacity,
@@ -234,6 +234,8 @@ export default function useDynamicArray() {
     action,
     search,
     pop,
+    fill,
+    maxSize,
     delete: del,
   };
 }

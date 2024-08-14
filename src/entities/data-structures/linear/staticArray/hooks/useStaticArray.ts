@@ -41,7 +41,9 @@ export default function useStaticArray() {
     customNode:Node<Primitive> = new Node(data, new Position(0, 0))
   ) => {
     if (!array) return;
-    if (throwIndexOutOfTheBound(index)) return;
+    if (throwIndexOutOfTheBound(index)) {
+      console.log('ERROR: ',index, array.length)
+      return};
     let node = array[index];
     if (node === null) {
       array[index] = customNode;

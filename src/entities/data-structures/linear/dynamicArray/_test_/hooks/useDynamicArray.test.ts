@@ -301,54 +301,52 @@ describe("UseDynamicArray HOOK", () => {
   });
 
   it("should insert in the first position", async () => {
-   
-      const { result } = renderHook(useDynamicArray);
-      expect(result.current.array).toBeInstanceOf(Array);
-      expect(result.current.array?.length).toBe(result.current.capacity);
-      expect(result.current.size).toBe(0);
+    const { result } = renderHook(useDynamicArray);
+    expect(result.current.array).toBeInstanceOf(Array);
+    expect(result.current.array?.length).toBe(result.current.capacity);
+    expect(result.current.size).toBe(0);
 
-      for (let i = 0; i < 10; i++) {
-        await act(async () => {
-          await result.current.insert("hello-" + i, i);
-        });
-      }
+    for (let i = 0; i < 10; i++) {
+      await act(async () => {
+        await result.current.insert("hello-" + i, i);
+      });
+    }
 
-      for (let i = 0; i < 10; i++) {
-        await act(async () => {
-          await result.current.insert("hello-insert-" + i, 0);
-        });
-      }
-      expect(result.current.size).toBe(20);
-      expect(result.current.capacity).toBe(40);
-      let j = 9;
-      if (result.current.array) {
-        for (let i = 0; i < result.current.capacity; i++) {
-          const element = result.current.array[i];
+    for (let i = 0; i < 10; i++) {
+      await act(async () => {
+        await result.current.insert("hello-insert-" + i, 0);
+      });
+    }
+    expect(result.current.size).toBe(20);
+    expect(result.current.capacity).toBe(40);
+    let j = 9;
+    if (result.current.array) {
+      for (let i = 0; i < result.current.capacity; i++) {
+        const element = result.current.array[i];
 
-          if(i <result.current.size && element && element instanceof DynamicArrayNode){
-            expect(element).toBeInstanceOf(DynamicArrayNode)
-            if(i <10){
-              if(j===9){
-                expect(element.isLastInserted).toBe(true)
-              }
-              else{
-                expect(element.isLastInserted).toBe(false)
-              }
-              expect(element.data).toBe("hello-insert-" + j)
-              j--;
-            }else{
-              expect(element.data).toBe("hello-" + (i-10))
-              expect(element.isLastInserted).toBe(false)
+        if (
+          i < result.current.size &&
+          element &&
+          element instanceof DynamicArrayNode
+        ) {
+          expect(element).toBeInstanceOf(DynamicArrayNode);
+          if (i < 10) {
+            if (j === 9) {
+              expect(element.isLastInserted).toBe(true);
+            } else {
+              expect(element.isLastInserted).toBe(false);
             }
-
+            expect(element.data).toBe("hello-insert-" + j);
+            j--;
+          } else {
+            expect(element.data).toBe("hello-" + (i - 10));
+            expect(element.isLastInserted).toBe(false);
           }
-        } 
+        }
       }
-    
+    }
   });
-  it("should pop",async()=>{
-
-      
+  it("should pop", async () => {
     const { result } = renderHook(useDynamicArray);
     expect(result.current.array).toBeInstanceOf(Array);
     expect(result.current.array?.length).toBe(result.current.capacity);
@@ -367,80 +365,128 @@ describe("UseDynamicArray HOOK", () => {
       });
     }
     expect(result.current.size).toBe(100);
-   if(result.current.array){
-    expect(result.current.array[result.current.size-1]).toBeInstanceOf(DynamicArrayNode);
-   }
+    if (result.current.array) {
+      expect(result.current.array[result.current.size - 1]).toBeInstanceOf(
+        DynamicArrayNode
+      );
+    }
     await act(async () => {
       await result.current.pop();
     });
-    if(result.current.array){
+    if (result.current.array) {
       expect(result.current.array[99]).toBeNull();
-     }
+    }
     expect(result.current.size).toBe(99);
-    if(result.current.array){
-      expect(result.current.array[result.current.size-1]).toBeInstanceOf(DynamicArrayNode);
-     }
-     let size = result.current.size;
-     for (let i = 0; i < size; i++) {
-     
+    if (result.current.array) {
+      expect(result.current.array[result.current.size - 1]).toBeInstanceOf(
+        DynamicArrayNode
+      );
+    }
+    let size = result.current.size;
+    for (let i = 0; i < size; i++) {
       await act(async () => {
         await result.current.pop();
       });
-    
-     }
-     expect(result.current.size).toBe(0);
-     if(result.current.array){
+    }
+    expect(result.current.size).toBe(0);
+    if (result.current.array) {
       for (let i = 0; i < result.current.array.length; i++) {
         const element = result.current.array[i];
-        expect(element).toBeNull()
+        expect(element).toBeNull();
+      }
+    }
+  });
+
+  it('Should push',async ()=>{
+    const { result } = renderHook(useDynamicArray);
+    expect(result.current.array).toBeInstanceOf(Array);
+    expect(result.current.array?.length).toBe(result.current.capacity);
+    expect(result.current.size).toBe(0); 
+    for (let i = 0; i < 10; i++) {
+      act( () => {
+        result.current.push("hello-" + i);
+      });
+    }
+    expect(result.current.size).toBe(10);
+
+    if(result.current.array){
+
+      for (let i = 0; i < result.current.array.length; i++) {
+        const element = result.current.array[i];
+
+        if(i <result.current.size){
+
+          expect(element).toBeInstanceOf(DynamicArrayNode);
+        }
         
       }
-     }
+    }
   })
-  it('should delete',async()=>{
+  it("should delete", async () => {
     const { result } = renderHook(useDynamicArray);
     expect(result.current.array).toBeInstanceOf(Array);
     expect(result.current.array?.length).toBe(result.current.capacity);
     expect(result.current.size).toBe(0);
 
     for (let i = 0; i < 100; i++) {
-      await act(async () => {
-        await result.current.push("hello-" + i);
+      act( () => {
+        result.current.push("hello-" + i);
       });
     }
     expect(result.current.size).toBe(100);
-    if(result.current.array){
+    if (result.current.array) {
       expect(result.current.array[99]).toBeInstanceOf(DynamicArrayNode);
-     }
-     const size = result.current.size
-     for (let i = size-1; i >= 0; i--) {
+    }
+    const size = result.current.size;
+    for (let i = size - 1; i >= 0; i--) {
       await act(async () => {
         //should pop
-        await result.current.delete(result.current.size-1);
+        await result.current.delete(result.current.size - 1);
       });
       expect(result.current.size).toBe(i);
-      if(result.current.array){
+      if (result.current.array) {
         expect(result.current.array[i]).toBe(null);
-       }
+      }
     }
     for (let i = 0; i < 100; i++) {
-      await act(async () => {
-        await result.current.push("hello-" + i);
+      act( () => {
+        result.current.push("hello-" + i);
       });
     }
     expect(result.current.size).toBe(100);
-    if(result.current.array && result.current.array[0]){
-      expect(result.current.array[0].data).toBe('hello-0');
-      expect(result.current.array[0]).toBeInstanceOf(DynamicArrayNode)
-     }
-    await act(async()=>{
+    if (result.current.array && result.current.array[0]) {
+      expect(result.current.array[0].data).toBe("hello-0");
+      expect(result.current.array[0]).toBeInstanceOf(DynamicArrayNode);
+    }
+    await act(async () => {
       await result.current.delete(0);
-    })
-     expect(result.current.size).toBe(99);
-     if(result.current.array && result.current.array[0]){
-      expect(result.current.array[0].data).toBe('hello-1');
-      expect(result.current.array[99]).toBeNull()
-     }
-   
-  })
+    });
+    expect(result.current.size).toBe(99);
+    if (result.current.array && result.current.array[0]) {
+      expect(result.current.array[0].data).toBe("hello-1");
+      expect(result.current.array[99]).toBeNull();
+    }
+  });
+  it("Should fill", async () => {
+    const { result } = renderHook(useDynamicArray);
+    expect(result.current.array).toBeInstanceOf(Array);
+    expect(result.current.array?.length).toBe(result.current.capacity);
+    expect(result.current.size).toBe(0);
+
+    await act(async () => {
+      result.current.fill(25);
+    });
+    expect(result.current.error).toBe(null);
+    expect(result.current.size).toBe(25);
+    expect(result.current.error).toBe(null);
+    expect(result.current.array).toBeInstanceOf(Array);
+    if (result.current.array) {
+      for (let i = 0; i < result.current.array.length; i++) {
+        const element = result.current.array[i];
+        if (i < result.current.size) {
+          expect(element).toBeInstanceOf(DynamicArrayNode);
+        }
+      }
+    }
+  });
 });
