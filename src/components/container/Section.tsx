@@ -10,7 +10,7 @@ export default function Section({ children,makeResponsive=false }: props) {
     return (
         <>
             {((device.isDesktop || device.isTv)&&!makeResponsive) ? < div className="flex  items-start justify-start  flex-wrap w-full gap-5 ">{children}</div> :
-                <div className="flex flex-wrap items-end justify-end  w-full gap-5 ">
+                <div className="flex flex-wrap items-end justify-end flex-col w-full gap-5 ">
                     {children}
                 </div>
 

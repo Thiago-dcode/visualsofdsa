@@ -18,6 +18,7 @@ export default function useDynamicArray() {
     setArray,
     search: _search,
     error,
+    access:_access,
     setError,
   } = useStaticArray();
   const [capacity, setCapacity] = useState(10);
@@ -85,6 +86,12 @@ export default function useDynamicArray() {
       await writeAnimation(array[index], () => {}, 0.5);
     } catch (error) {}
   };
+
+  const access = async (index:number)=>{
+    if (isOutOfTheOfTheBound(index) || !array) return;
+    setAction('write');
+    await _access(index);
+  }
   const push = (data: Primitive) => {
     if (!array) return;
     setAction("push");
@@ -226,6 +233,7 @@ export default function useDynamicArray() {
     capacity,
     size,
     write,
+    access,
     push,
     insert,
     error,
