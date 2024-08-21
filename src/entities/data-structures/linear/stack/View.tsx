@@ -14,7 +14,7 @@ import PushData from "../_components/ButtonWithInput";
 import ButtonAction from "../_components/ButtonAction";
 import LinearDsContainer from "../_components/LinearDsContainer";
 import UseLinear from "../_hooks/UseLinear";
-import PropertiesLinearDs from "../_components/PropertiesLinearDs";
+import PropertiesList from "../_components/PropertiesList";
 import StackNodeComponent from "./components/StackNodeComponent";
 
 const Stack = () => {
@@ -74,7 +74,7 @@ const Stack = () => {
         </OperationsContainer>
         } 
         {/* // STATIC PROPERTIES: */}
-        <PropertiesLinearDs trigger={[isAnimationRunning, _render]} linearDs={stack} />
+        <PropertiesList trigger={[isAnimationRunning, _render]} list={stack} />
 
         {/* //EXTRA INFO AND CONFIG: */}
         <div className="flex  justify-between w-full px-4">

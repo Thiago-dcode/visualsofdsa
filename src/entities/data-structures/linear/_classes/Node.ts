@@ -13,7 +13,6 @@ export default class Node<T extends Primitive> {
     Node._id++;
     this._position = position;
     this._data = data;
-    // (StackNode.height + StackNode.spacing) * this._index + StackNode.spacing;
   }
 
   get id() {

@@ -14,7 +14,7 @@ export default class Stack<T extends Primitive> extends LinearDs<T> {
       element,
       new Position(
         0,
-        (this.nodeHeight + this.nodeSpacing) * this.size + this.nodeSpacing
+        (this.nodeHeight + this.nodeHeightSpacing) * this.size + this.nodeHeightSpacing
       )
     );
   }

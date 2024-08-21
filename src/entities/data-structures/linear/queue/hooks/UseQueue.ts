@@ -41,8 +41,8 @@ function UseQueue() {
 
           moveAnimation(node.ref, i, () => {
             node.position.y =
-              (queue.nodeHeight + queue.nodeSpacing) * (i - 1) +
-              queue.nodeSpacing;
+              (queue.nodeHeight + queue.nodeHeightSpacing) * (i - 1) +
+              queue.nodeHeightSpacing;
           });
         }
         resolve(true);

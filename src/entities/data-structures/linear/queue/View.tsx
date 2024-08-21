@@ -13,7 +13,7 @@ import LinearDsContainer from '../_components/LinearDsContainer';
 import PushData from '../_components/ButtonWithInput';
 import UseLinear from '../_hooks/UseLinear';
 import QueueNodeComponent from './components/QueueNodeComponent';
-import PropertiesLinearDs from '../_components/PropertiesLinearDs';
+import PropertiesList from '../_components/PropertiesList';
 import LinearDsConfig from '../_components/LinearDsConfig';
 export default function Queue() {
 
@@ -76,7 +76,7 @@ export default function Queue() {
         </OperationsContainer>
         }
         {/* // STATIC PROPERTIES: */}
-        <PropertiesLinearDs trigger={[isAnimationRunning, _render]} linearDs={queue} />
+        <PropertiesList trigger={[isAnimationRunning, _render]} list={queue} />
 
         {/* //EXTRA INFO AND CONFIG: */}
         <div className="flex  justify-between w-full px-4">
