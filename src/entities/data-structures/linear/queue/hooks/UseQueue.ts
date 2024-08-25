@@ -52,49 +52,9 @@ function UseQueue() {
     });
   };
 
-  // const enqueue = async (data: Primitive) => {
-  //   return new Promise((resolve, reject) => {
-  //     if (queue && queue.size >= queue.maxSize) {
-  //       setIsStackOverFlow(true);
-  //       reject(false);
-  //     }
-  //     if (isAnimationRunning || !queue) {
-  //       reject(false);
-  //     } else {
-  //
-  //       queue?.enqueue(data);
-
-  //       resolve(true);
-  //     }
-  //   });
-  // };
-  // const dequeue = async (): Promise<boolean> => {
-  //   return new Promise(async (resolve, reject) => {
-  //     if (
-  //       queue == null ||
-  //       queue.size <= 0 ||
-  //       isAnimationRunning ||
-  //       !queue.peekNode()
-  //     ) {
-  //       reject(false);
-  //     } else {
-  //       const ref = queue?.peekNode()?.ref?.current;
-  //       console.log("DEQUEUE", queue?.toNodeArray);
-  //       if (!ref) reject(false);
-  //       else {
-  //
-  //         handlePopAnimation(ref, () => {
-  //           ref.style.display = "none";
-  //           queue.dequeue();
-  //           setAnimationRunning(false);
-  //           resolve(true);
-  //         });
-  //       }
-  //     }
-  //   });
-
   useEffect(() => {
     setQueue(new Queue());
+   
   }, []);
 
   return {

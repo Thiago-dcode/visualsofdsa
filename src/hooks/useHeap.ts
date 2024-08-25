@@ -31,7 +31,7 @@ export default function useHeap({
         )
       );
       currentCol++;
-      if (col === currentCol + 1) {
+      if (col === currentCol) {
         currentCol = 0;
         currentRow++;
       }
@@ -46,15 +46,10 @@ export default function useHeap({
     if (freePositions.current.isFull) return;
     return freePositions.current.enqueue(node);
   };
-  const width = useMemo(() => {
-    return (
-      col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -
-      (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing)
-    );
-  }, [col, nodeShape]);
-  const height = useMemo(() => {
-    return row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing);
-  }, [row, nodeShape]);
+   const width = (
+    col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -nodeShape.nodeWidthSpacing
+  );
+  const height = (row) * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)-nodeShape.nodeHeightSpacing;
   useEffect(() => {
     setInitialFreePositions();
   }, []);

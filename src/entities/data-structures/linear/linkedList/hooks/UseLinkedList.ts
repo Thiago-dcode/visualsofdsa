@@ -38,7 +38,7 @@ export default function UseLinkedList() {
   useEffect(() => {
     linkedList.nodeWidth = 70;
     linkedList.nodeHeightSpacing = 20;
-    linkedList.nodeWidthSpacing = 40;
+    linkedList.nodeWidthSpacing = 70;
     linkedList.nodeHeight = 50;
     console.log(linkedList.nodeHeight)
     

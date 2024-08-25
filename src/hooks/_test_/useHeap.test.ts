@@ -51,7 +51,7 @@ describe("Testing useHeap", () => {
         );
       }
       currentCol++;
-      if (col === currentCol + 1 && currentCol !== 0) {
+      if (col === currentCol) {
         currentCol = 0;
         currentRow++;
       }
