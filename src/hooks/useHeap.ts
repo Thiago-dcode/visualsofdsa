@@ -21,6 +21,7 @@ export default function useHeap({
     let currentCol = 0;
     let currentRow = 0;
     for (let i = 0; i < heapSize; i++) {
+      let firstColAdjustment = 0;
       freePositions.current.enqueue(
         new LinkedListNode(
           `${currentCol},${currentRow}`,
@@ -46,10 +47,11 @@ export default function useHeap({
     if (freePositions.current.isFull) return;
     return freePositions.current.enqueue(node);
   };
-   const width = (
-    col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -nodeShape.nodeWidthSpacing
-  );
-  const height = (row) * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)-nodeShape.nodeHeightSpacing;
+
+   const width = 
+    col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -nodeShape.nodeWidthSpacing +7;
+  const height = (row) * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)-nodeShape.nodeHeightSpacing +7;
+
   useEffect(() => {
     setInitialFreePositions();
   }, []);

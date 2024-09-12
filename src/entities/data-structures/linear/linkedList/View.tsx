@@ -9,8 +9,8 @@ import Position from '@/lib/classes/Position';
 export default function View() {
     const { linkedList, arrayLs, add, traverse, del } = UseLinkedList();
     const [table, setTable] = useState({
-        col: 2,
-        row: 8
+        col:7,
+        row: 5
     })
     const heap = useHeap({
         nodeShape: linkedList,
