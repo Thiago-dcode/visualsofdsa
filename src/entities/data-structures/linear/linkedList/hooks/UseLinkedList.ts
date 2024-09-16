@@ -36,10 +36,10 @@ export default function UseLinkedList() {
     });
   };
   useEffect(() => {
-    linkedList.nodeWidth = 70;
+    linkedList.nodeWidth = 110;
     linkedList.nodeHeightSpacing = 20;
     linkedList.nodeWidthSpacing = 70;
-    linkedList.nodeHeight = 50;
+    linkedList.nodeHeight = 60;
     console.log(linkedList.nodeHeight)
     
   }, []);

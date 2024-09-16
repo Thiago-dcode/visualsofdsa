@@ -5,11 +5,11 @@ import React, { ReactNode, useMemo } from 'react'
 
 type props = {
     index: number,
-    showIndex: boolean,
+    showIndex?: boolean,
     size?: MemorySize,
     children: ReactNode
 }
-function MemoryAdressContainer({ index, showIndex, size = MemorySize.M, children }: props) {
+function MemoryAdressContainer({ index, showIndex = false, size = MemorySize.M, children }: props) {
     const memoryAdress = useMemo(() => '0x' + prefix0(index), [index])
     const fontSize = useMemo(() => '0x' + prefix0(index), [size])
     return (

@@ -21,7 +21,6 @@ export default function useHeap({
     let currentCol = 0;
     let currentRow = 0;
     for (let i = 0; i < heapSize; i++) {
-      let firstColAdjustment = 0;
       freePositions.current.enqueue(
         new LinkedListNode(
           `${currentCol},${currentRow}`,

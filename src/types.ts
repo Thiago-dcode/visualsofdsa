@@ -8,3 +8,7 @@ export enum MemorySize  {
     L = 120,
 
 }
+export type Position ={
+    x:number,
+    y:number
+}

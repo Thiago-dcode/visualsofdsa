@@ -5,27 +5,39 @@ import UseLinkedList from './hooks/UseLinkedList'
 import useHeap from '@/hooks/useHeap';
 import Main from '@/components/container/Main';
 import Position from '@/lib/classes/Position';
+import LinkedListNodeComponent from './components/linkedListNode';
 
 export default function View() {
     const { linkedList, arrayLs, add, traverse, del } = UseLinkedList();
     const [table, setTable] = useState({
-        col:7,
-        row: 5
+        col:4,
+        row: 3
     })
     const heap = useHeap({
         nodeShape: linkedList,
         col: table.col,
         row: table.row
-    }); 
+    });
     const test = async () => {
 
-
-        for (let i = 0; i < table.col *table.row; i++) {
+        const size = table.col * table.row
+        for (let i = 0; i < size; i++) {
             const position = heap.getNextFreePosition();
-            if (position) await add('hello-1', 0, position)
+            if (position) await add(`data-${i}`, linkedList.size, position)
 
         }
+     
+        const node = linkedList.findNode(1);
+      
 
+        if(node){
+              linkedList.delete(1);
+            console.log('SETTING NEXT FREE')
+            heap.setNextFreePosition(node)
+        }
+        const position = heap.getNextFreePosition();
+       if(position) await add('new-data!',linkedList.size,position)
+        linkedList.delete(4);
 
     }
     useEffect(() => {
@@ -36,24 +48,20 @@ export default function View() {
 
     return (
         <Main>
-            <div className='border-4 border-red-800 relative' style={{
+            <div className=' relative' style={{
                 width: heap.width + 'px',
                 height: heap.height + 'px'
             }}>
                 {
-                    linkedList.toNodeArray().map(node => {
+                    linkedList.toNodeArray().map((node, i) => {
 
-                        // console.log(node.position)
+                        
                         return (
-                            <div style={{
-                                width: linkedList.nodeWidth + 'px',
-                                height: linkedList.nodeHeight + 'px',
-                                right: node.position.x + 'px',
-                                top: node.position.y + 'px',
-
-                            }} key={node.id} className='absolute border-2 border-white'>
-                                {node.data}
-                            </div>
+                            <>
+                          
+                                <LinkedListNodeComponent isHead={i === 0} isTail={i === linkedList.size - 1} key={`linkedListNodeComponent-${node.data}-${node.id}-(${node.position.x},${node.position.y})`} index={i} node={node} nodeShape={linkedList} />
+                           
+                            </>
                         )
                     })
                 }
