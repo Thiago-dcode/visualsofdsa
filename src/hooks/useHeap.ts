@@ -2,6 +2,7 @@ import LinkedListNode from "@/entities/data-structures/linear/linkedList/classes
 import Queue from "@/entities/data-structures/linear/queue/classes/Queue";
 import NodeShape from "@/lib/classes/NodeShape";
 import Position from "@/lib/classes/Position";
+import { getMemoryAddress } from "@/lib/utils";
 import { Primitive } from "@/types";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
@@ -21,15 +22,15 @@ export default function useHeap({
     let currentCol = 0;
     let currentRow = 0;
     for (let i = 0; i < heapSize; i++) {
-      freePositions.current.enqueue(
-        new LinkedListNode(
-          `${currentCol},${currentRow}`,
-          new Position(
-            currentCol * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing),
-            currentRow * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)
-          )
+      const node = new LinkedListNode(
+        `${currentRow + 1},${currentCol + 1}`,
+        new Position(
+          currentCol * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing),
+          currentRow * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)
         )
       );
+      node.memoryAddress = getMemoryAddress(i)
+      freePositions.current.enqueue(node);
       currentCol++;
       if (col === currentCol) {
         currentCol = 0;
@@ -40,16 +41,19 @@ export default function useHeap({
   const getNextFreePosition = () => {
     const node = freePositions.current.dequeueNode();
 
-    return node ? node.position : null;
+    return node ? {
+      position: node.position,
+      memoryAddress: node.memoryAddress
+    } : null;
   };
   const setNextFreePosition = (node: LinkedListNode<Primitive>) => {
     if (freePositions.current.isFull) return;
     return freePositions.current.enqueue(node);
   };
 
-   const width = 
-    col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -nodeShape.nodeWidthSpacing +7;
-  const height = (row) * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)-nodeShape.nodeHeightSpacing +7;
+  const width =
+    col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) - nodeShape.nodeWidthSpacing;
+  const height = (row) * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) - nodeShape.nodeHeightSpacing;
 
   useEffect(() => {
     setInitialFreePositions();

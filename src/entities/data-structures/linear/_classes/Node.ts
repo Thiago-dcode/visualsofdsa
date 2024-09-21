@@ -1,13 +1,15 @@
 import { Primitive, Ref } from "@/types";
 import Position from "@/lib/classes/Position";
+import Memory from "@/lib/classes/Memory";
 
-export default class Node<T extends Primitive> {
+export default class Node<T extends Primitive> extends Memory {
   private _data: T;
   private _ref: Ref;
   private static _id: number = 0;
   private __id: number;
   private _position: Position;
   constructor(data: T, position: Position, ref: Ref = null) {
+    super();
     this._ref = ref;
     this.__id = Node._id;
     Node._id++;

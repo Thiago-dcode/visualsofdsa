@@ -20,7 +20,6 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    console.log(isHead,node)
     const getArrowShape = () => {
         if (!node.next) return {
             x: 0,
@@ -60,27 +59,37 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
             {/* MEMORY-ADRESS */}
 
             <header style={{
-          
-            }} className={`${isHead?"bg-green-600":isTail?'bg-yellow-600':''} w-full border-x-2 border-t-2 h-1/5 flex items-center justify-center rounded-t-sm`}><p className='text-center text-xs'>Memory: {getMemoryAddress(index)}</p></header>
+
+            }} className={`${isHead ? "bg-green-600" : isTail ? 'bg-yellow-600' : ''} w-full border-x-2 border-t-2 h-1/5 flex items-center justify-center rounded-t-sm`}><p className='text-center text-xs'>Memory: {node.memoryAddress}</p></header>
 
             <main className={`flex flex-row items-center justify-between w-full h-3/5  border-2 border-white`}>
 
                 {/* NODE-DATA */}
                 <div className='w-3/5 bg-app-ivory text-black h-full flex items-center justify-center text-center text-xs'>
-                    <p>{node.data}</p>
+                    <p style={{
+                        zIndex: 99,
+                    }}>{node.data}</p>
                 </div>
                 {/* NODE-NEXT */}
                 <div className='w-2/5 h-full flex flex-col items-center justify-between relative text-xs  text-center '>
-              
-                <div className='flex items-center justify-center  w-full h-full overflow-auto'>
-                {node.next ? <p>{node.next.data}</p>
-               : <p>null</p>}
-                </div>
-                  
+
+                    <div className='flex items-center justify-center  w-full h-full overflow-auto'>
+                        {node.next ? <p style={{
+                            zIndex: 99,
+                        }} >{node.next.data}</p>
+                            : <p style={{
+                                zIndex: 99,
+                            }}>null</p>}
+                    </div>
+
                 </div>
                 {node.next && <Arrow arrowShape={getArrowShape()} />}
             </main>
-            <footer  className={`${isHead?"bg-green-600":isTail?'bg-yellow-600':''} h-1/5 border-b-2 border-white w-full text-center border-x-2    rounded-b-sm text-xs flex flex-row items-center`}><p className='border-r border-white w-3/5 flex items-center justify-center'>data</p><p className='flex items-center justify-center w-2/5'>next</p></footer>
+            <footer className={`${isHead ? "bg-green-600" : isTail ? 'bg-yellow-600' : ''} h-1/5 border-b-2 border-white w-full text-center border-x-2    rounded-b-sm text-xs flex flex-row items-center`}><p style={{
+                zIndex: 99,
+            }} className='border-r border-white w-3/5 flex items-center justify-center'>data</p><p style={{
+                zIndex: 99,
+            }} className='flex items-center justify-center w-2/5'>next</p></footer>
 
 
         </div>

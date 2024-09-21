@@ -100,6 +100,7 @@ export default class LinkedList<T extends Primitive> extends List {
       }
     }
     this._size++;
+    return newNode;
   }
 
   addFirst(data: T, position = new Position(0, 0)) {

@@ -6,13 +6,20 @@ import Position from "@/lib/classes/Position";
 
 export default function UseLinkedList() {
   const [linkedList, setLinkedList] = useState(new LinkedList());
+  
   const [arrayLs, setArrayLs] = useState(linkedList.toNodeArray());
+  const [isStackOverFlow, setIsStackOverFlow] = useState(false);
   const add = async (
     data: Primitive,
     index: number,
-    position = new Position(0, 0)
+    position = new Position(0, 0),
+    memoryAddress: string
   ) => {
-    await linkedList.add(data, index, position);
+    if(index < 0 || index> linkedList.size) {
+      setIsStackOverFlow(true);
+    }
+     const node = await linkedList.add(data, index, position);
+     node.memoryAddress =memoryAddress;
     setArrayLs(linkedList.toNodeArray());
   };
 
@@ -46,5 +53,6 @@ export default function UseLinkedList() {
     add,
     del,
     traverse,
+    isStackOverFlow
   };
 }

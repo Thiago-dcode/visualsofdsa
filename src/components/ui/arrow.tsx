@@ -21,7 +21,7 @@ export default function Arrow({ arrowShape }: ArrowProps) {
             height: '3px',
             transform: `rotate(${angle}deg)`,
             transformOrigin: `top left`,
-            zIndex: 99
+            zIndex: 90
         }}>
             <div style={{
                 transform: `rotate(${45}deg)`,
