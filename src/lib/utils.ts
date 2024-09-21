@@ -42,7 +42,7 @@ export const prefix0 = (n: number): string => {
   }
   return n + "";
 };
-export const getMemoryAdress = (index:number) =>{
+export const getMemoryAddress = (index: number) => {
   return '0x' + prefix0(index);
 }
 export const generateKey = (pre: Primitive = "") => {
@@ -53,12 +53,12 @@ export function removePx(value: string): number {
   const result = parseFloat(value.replace(/px$/, ""));
   return isNaN(result) ? 0 : result;
 }
-export function getEuclideanDistance(position1:Position,position2:Position){
+export function getEuclideanDistance(position1: Position, position2: Position) {
 
-  return Math.sqrt(Math.pow(position1.x - position2.x,2)+Math.pow(position1.y - position2.y,2))
+  return Math.sqrt(Math.pow(position1.x - position2.x, 2) + Math.pow(position1.y - position2.y, 2))
 
 }
-export function getAngle(position1:Position,position2:Position){
+export function getAngle(position1: Position, position2: Position) {
   // Calculate the differences in the x and y coordinates
   const deltaX = position2.x - position1.x;
   const deltaY = position2.y - position1.y;

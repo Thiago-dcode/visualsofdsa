@@ -2,8 +2,7 @@ import React, { useCallback } from 'react'
 import LinkedListNode from '../classes/LinkedListNode'
 import { Primitive } from '@/types'
 import NodeShape from '@/lib/classes/NodeShape'
-import { getAngle, getEuclideanDistance, getMemoryAdress } from '@/lib/utils'
-import { X } from 'lucide-react'
+import { getAngle, getEuclideanDistance, getMemoryAddress } from '@/lib/utils'
 import Arrow from '@/components/ui/arrow'
 
 type LinkedListNodeProps = {
@@ -18,10 +17,10 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
     const handleRef = useCallback((element: HTMLElement | HTMLDivElement | null) => {
         if (!element) return
         node.ref = element;
-    
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
+    console.log(isHead,node)
     const getArrowShape = () => {
         if (!node.next) return {
             x: 0,
@@ -37,11 +36,11 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
             x: node.next.position.x,
             y: node.next.position.y + nodeShape.nodeHeight / 2
         }
-    
-        const width =  getEuclideanDistance(nodeStartPosition, nodeNextPosition);
-     
+
+        const width = getEuclideanDistance(nodeStartPosition, nodeNextPosition);
+
         const angle = getAngle(nodeStartPosition, nodeNextPosition);
-     
+
         return {
             x: nodeShape.nodeWidth,
             y: nodeShape.nodeHeight / 2,
@@ -57,27 +56,33 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
             left: node.position.x + 'px',
             top: node.position.y + 'px',
 
-        }} key={node.id} className='absolute border-2 border-white flex flex-col justify-between text-center'>
+        }} key={node.id} className='absolute flex flex-col  text-center'>
             {/* MEMORY-ADRESS */}
 
-            <div style={{
-                backgroundColor: isHead ? 'rgb(96 165 250)' : isTail ? 'rgb(248 113 113)' : 'transparent'
-            }} className='w-full border-2 h-1/4 flex items-center justify-center'><p className='text-center text-xs'>{getMemoryAdress(index)}</p></div>
+            <header style={{
+          
+            }} className={`${isHead?"bg-green-600":isTail?'bg-yellow-600':''} w-full border-x-2 border-t-2 h-1/5 flex items-center justify-center rounded-t-sm`}><p className='text-center text-xs'>Memory: {getMemoryAddress(index)}</p></header>
 
-            <div className='flex flex-row items-center justify-between w-full h-3/4'>
+            <main className={`flex flex-row items-center justify-between w-full h-3/5  border-2 border-white`}>
+
                 {/* NODE-DATA */}
-                <div className='w-2/3 bg-green-600 h-full flex items-center justify-center'>
+                <div className='w-3/5 bg-app-ivory text-black h-full flex items-center justify-center text-center text-xs'>
                     <p>{node.data}</p>
                 </div>
                 {/* NODE-NEXT */}
-                <div className='w-1/3 relative'>
-                    {node.next ? <div style={{
-
-                    }}><p>{node.next.data}</p>
-                    </div> : <div><p>null</p></div>}
+                <div className='w-2/5 h-full flex flex-col items-center justify-between relative text-xs  text-center '>
+              
+                <div className='flex items-center justify-center  w-full h-full overflow-auto'>
+                {node.next ? <p>{node.next.data}</p>
+               : <p>null</p>}
                 </div>
-            </div>
-            {node.next && <Arrow arrowShape={getArrowShape()} />}
+                  
+                </div>
+                {node.next && <Arrow arrowShape={getArrowShape()} />}
+            </main>
+            <footer  className={`${isHead?"bg-green-600":isTail?'bg-yellow-600':''} h-1/5 border-b-2 border-white w-full text-center border-x-2    rounded-b-sm text-xs flex flex-row items-center`}><p className='border-r border-white w-3/5 flex items-center justify-center'>data</p><p className='flex items-center justify-center w-2/5'>next</p></footer>
+
+
         </div>
 
     )

@@ -1,17 +1,15 @@
 'use client'
-
 import React, { useEffect, useState } from 'react'
 import UseLinkedList from './hooks/UseLinkedList'
 import useHeap from '@/hooks/useHeap';
 import Main from '@/components/container/Main';
-import Position from '@/lib/classes/Position';
 import LinkedListNodeComponent from './components/linkedListNode';
 
 export default function View() {
     const { linkedList, arrayLs, add, traverse, del } = UseLinkedList();
     const [table, setTable] = useState({
-        col:4,
-        row: 3
+        col:5,
+        row:4
     })
     const heap = useHeap({
         nodeShape: linkedList,
@@ -27,17 +25,17 @@ export default function View() {
 
         }
      
-        const node = linkedList.findNode(1);
+    //     const node = linkedList.findNode(1);
       
 
-        if(node){
-              linkedList.delete(1);
-            console.log('SETTING NEXT FREE')
-            heap.setNextFreePosition(node)
-        }
-        const position = heap.getNextFreePosition();
-       if(position) await add('new-data!',linkedList.size,position)
-        linkedList.delete(4);
+    //     if(node){
+    //           linkedList.delete(1);
+    //         console.log('SETTING NEXT FREE')
+    //         heap.setNextFreePosition(node)
+    //     }
+    //     const position = heap.getNextFreePosition();
+    //    if(position) await add('new-data!',linkedList.size,position)
+    //     linkedList.delete(4);
 
     }
     useEffect(() => {
@@ -55,11 +53,12 @@ export default function View() {
                 {
                     linkedList.toNodeArray().map((node, i) => {
 
+                        console.log('ISHEAD',linkedList.head && linkedList.head.id === node.id)
                         
                         return (
                             <>
-                          
-                                <LinkedListNodeComponent isHead={i === 0} isTail={i === linkedList.size - 1} key={`linkedListNodeComponent-${node.data}-${node.id}-(${node.position.x},${node.position.y})`} index={i} node={node} nodeShape={linkedList} />
+                     
+                                <LinkedListNodeComponent      isHead={linkedList.head && linkedList.head.id === node.id? true:false} isTail={linkedList.tail && linkedList.tail.id === node.id? true:false}  key={`linkedListNodeComponent-${node.data}-${node.id}-(${node.position.x},${node.position.y})`} index={i} node={node} nodeShape={linkedList} />
                            
                             </>
                         )

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import LinkedList from "../classes/LinkedList";
 import { Primitive } from "@/types";
 import Position from "@/lib/classes/Position";
-import LinkedListNode from "../classes/LinkedListNode";
-import { chownSync } from "fs";
+
 
 export default function UseLinkedList() {
   const [linkedList, setLinkedList] = useState(new LinkedList());
@@ -13,9 +12,7 @@ export default function UseLinkedList() {
     index: number,
     position = new Position(0, 0)
   ) => {
-    await linkedList.add(data, index, position, async (node, next, prev) => {
-      //handle animation on add
-    });
+    await linkedList.add(data, index, position);
     setArrayLs(linkedList.toNodeArray());
   };
 
@@ -36,10 +33,10 @@ export default function UseLinkedList() {
     });
   };
   useEffect(() => {
-    linkedList.nodeWidth = 110;
-    linkedList.nodeHeightSpacing = 20;
+    linkedList.nodeWidth = 120;
+    linkedList.nodeHeightSpacing = 40;
     linkedList.nodeWidthSpacing = 70;
-    linkedList.nodeHeight = 60;
+    linkedList.nodeHeight = 80;
     console.log(linkedList.nodeHeight)
     
   }, []);

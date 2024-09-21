@@ -1,0 +1,8 @@
+Linkedlist:
+
+-Implement animation.
+-Change ui.
+-Create interativity for users.
+-Responsiviness
+-Handle heap growth
+-Stackoverflow?
