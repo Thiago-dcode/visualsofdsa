@@ -18,6 +18,7 @@ export default function useHeap({
   const heapSize = col * row;
   const freePositions = useRef(new Queue());
   const setInitialFreePositions = useCallback(() => {
+    freePositions.current.flush()
     freePositions.current.maxSize = heapSize;
     let currentCol = 0;
     let currentRow = 0;
@@ -65,5 +66,6 @@ export default function useHeap({
     getNextFreePosition,
     setNextFreePosition,
     freePositions: freePositions.current,
+    setInitialFreePositions
   };
 }

@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import LinkedList from "../classes/LinkedList";
 import { Primitive } from "@/types";
 import Position from "@/lib/classes/Position";
+import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
 
 
 export default function UseLinkedList() {
   const [linkedList, setLinkedList] = useState(new LinkedList());
-  
+  const [error, setError] = useState<{
+    name: string;
+    description: string;
+  } | null>(null);
   const [arrayLs, setArrayLs] = useState(linkedList.toNodeArray());
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
   const add = async (
@@ -15,12 +19,21 @@ export default function UseLinkedList() {
     position = new Position(0, 0),
     memoryAddress: string
   ) => {
-    if(index < 0 || index> linkedList.size) {
-      setIsStackOverFlow(true);
+
+    try {
+      const node = await linkedList.add(data, index, position);
+      node.memoryAddress = memoryAddress;
+      setArrayLs(linkedList.toNodeArray());
+    } catch (error) {
+
+      if (error instanceof IndexOutOfBoundsError) {
+        setError({
+          name: "IndexOutOfTheBoundException",
+          description: `Index ${index} out of bounds for length ${linkedList.size}`,
+        });
+      }
+
     }
-     const node = await linkedList.add(data, index, position);
-     node.memoryAddress =memoryAddress;
-    setArrayLs(linkedList.toNodeArray());
   };
 
   const del = async (index: number) => {
@@ -39,13 +52,23 @@ export default function UseLinkedList() {
       //handle animation
     });
   };
-  useEffect(() => {
+  const clear = () => {
+    setIsStackOverFlow(false);
+    linkedList.clean();
+    setArrayLs([]);
+    setError(null)
+  }
+  const setUpLinkedList = () => {
+  
     linkedList.nodeWidth = 120;
     linkedList.nodeHeightSpacing = 40;
     linkedList.nodeWidthSpacing = 70;
     linkedList.nodeHeight = 80;
-    console.log(linkedList.nodeHeight)
-    
+  
+  }
+  useEffect(() => {
+    setUpLinkedList()
+
   }, []);
   return {
     arrayLs,
@@ -53,6 +76,8 @@ export default function UseLinkedList() {
     add,
     del,
     traverse,
-    isStackOverFlow
+    isStackOverFlow,
+    clear,
+    error,
   };
 }

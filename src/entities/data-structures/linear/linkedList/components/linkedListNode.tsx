@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import LinkedListNode from '../classes/LinkedListNode'
 import { Primitive } from '@/types'
 import NodeShape from '@/lib/classes/NodeShape'
@@ -14,6 +14,7 @@ type LinkedListNodeProps = {
 }
 
 export default function LinkedListNodeComponent({ node, nodeShape, index, isHead = false, isTail = false }: LinkedListNodeProps) {
+    const [isOver, setIsOver] = useState(false);
     const handleRef = useCallback((element: HTMLElement | HTMLDivElement | null) => {
         if (!element) return
         node.ref = element;
@@ -49,7 +50,16 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
     }
 
     return (
-        <div ref={handleRef} style={{
+        <div onMouseLeave={(e) => {
+
+            e.stopPropagation();
+            setIsOver(false)
+        }} onMouseEnter={(e) => {
+            const element = e.target as HTMLElement;
+            if (element.classList.contains('node-arrow')) return;
+            e.stopPropagation()
+            setIsOver(true);
+        }} ref={handleRef} style={{
             width: nodeShape.nodeWidth + 'px',
             height: nodeShape.nodeHeight + 'px',
             left: node.position.x + 'px',
@@ -65,16 +75,16 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
             <main className={`flex flex-row items-center justify-between w-full h-3/5  border-2 border-white`}>
 
                 {/* NODE-DATA */}
-                <div className='w-3/5 bg-app-ivory text-black h-full flex items-center justify-center text-center text-xs'>
-                    <p style={{
+                <div className='w-3/5 bg-app-ivory text-black h-full flex items-center justify-center text-center text-xs overflow-auto'>
+                    <p className='h-full w-full text-center flex items-center justify-center break-all' style={{
                         zIndex: 99,
                     }}>{node.data}</p>
                 </div>
                 {/* NODE-NEXT */}
                 <div className='w-2/5 h-full flex flex-col items-center justify-between relative text-xs  text-center '>
 
-                    <div className='flex items-center justify-center  w-full h-full overflow-auto'>
-                        {node.next ? <p style={{
+                    <div className='flex items-center justify-center  w-full h-full'>
+                        {node.next ? <p className='w-full h-full break-all flex items-center justify-center overflow-auto' style={{
                             zIndex: 99,
                         }} >{node.next.data}</p>
                             : <p style={{
@@ -83,7 +93,7 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
                     </div>
 
                 </div>
-                {node.next && <Arrow arrowShape={getArrowShape()} />}
+                {node.next && <Arrow isActive={isOver} arrowShape={getArrowShape()} />}
             </main>
             <footer className={`${isHead ? "bg-green-600" : isTail ? 'bg-yellow-600' : ''} h-1/5 border-b-2 border-white w-full text-center border-x-2    rounded-b-sm text-xs flex flex-row items-center`}><p style={{
                 zIndex: 99,

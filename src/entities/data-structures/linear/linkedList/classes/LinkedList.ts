@@ -61,6 +61,7 @@ export default class LinkedList<T extends Primitive> extends List {
     position = new Position(0, 0),
     beforeAddCallback: callback = null
   ) {
+    this.throwIfOutOfTheBounds(index)
     const newNode = new LinkedListNode(data, position);
     if (!this._head) {
       if (beforeAddCallback) await beforeAddCallback(newNode, null, null);

@@ -8,9 +8,10 @@ import OperationsContainer from '@/components/container/OperationsContainer';
 import ButtonAction from '../_components/ButtonAction';
 import InputWithButtonContainer from '@/components/container/InputWithButtonContainer';
 import { Input } from '@/components/ui/input';
+import { PopUp } from '@/components/ui/PopUp';
 
 export default function View() {
-    const { linkedList, arrayLs, add, traverse, del, isStackOverFlow } = UseLinkedList();
+    const { linkedList, arrayLs, add, traverse, del, isStackOverFlow, clear, error } = UseLinkedList();
     const [table, setTable] = useState({
         col: 5,
         row: 4
@@ -24,27 +25,6 @@ export default function View() {
     const [addIndex, setAddIndex] = useState(0);
     const [addData, setAddData] = useState('');
 
-    const test = async () => {
-
-        const size = table.col * table.row
-        for (let i = 0; i < size; i++) {
-            const position = heap.getNextFreePosition();
-            if (position) await add(`data-${i}`, linkedList.size, position.position, position.memoryAddress)
-
-        }
-
-        const node = linkedList.findNode(1);
-
-
-        if (node) {
-            linkedList.delete(1);
-            heap.setNextFreePosition(node)
-        }
-        const position = heap.getNextFreePosition();
-        if (position) await add('new-data!', linkedList.size, position.position, position.memoryAddress)
-        linkedList.delete(4);
-
-    }
     const isBlocked = isStackOverFlow || isAnimationRunning;
     useEffect(() => {
 
@@ -103,6 +83,12 @@ export default function View() {
                     })
                 }
             </section>
+            {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
+                clear();
+                setAddData('')
+                setAddIndex(0);
+                heap.setInitialFreePositions()
+            }} open={!!error} showTrigger={false} description={error.description} />}
         </Main>
     )
 }
