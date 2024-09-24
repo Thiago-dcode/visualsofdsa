@@ -76,8 +76,8 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
 
                 {/* NODE-DATA */}
                 <div className='w-3/5 bg-app-ivory text-black h-full flex items-center justify-center text-center text-xs overflow-auto'>
-                    <p className='h-full w-full text-center flex items-center justify-center break-all' style={{
-                        zIndex: 99,
+                    <p className='h-full w-full text-center flex items-center justify-center break-all font-semibold text-sm' style={{
+                        zIndex: 49,
                     }}>{node.data}</p>
                 </div>
                 {/* NODE-NEXT */}
@@ -85,10 +85,10 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
 
                     <div className='flex items-center justify-center  w-full h-full'>
                         {node.next ? <p className='w-full h-full break-all flex items-center justify-center overflow-auto' style={{
-                            zIndex: 99,
+                            zIndex: 49,
                         }} >{node.next.data}</p>
-                            : <p style={{
-                                zIndex: 99,
+                            : <p className='text-blue-500 italic' style={{
+                                zIndex: 49,
                             }}>null</p>}
                     </div>
 
@@ -96,9 +96,9 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
                 {node.next && <Arrow isActive={isOver} arrowShape={getArrowShape()} />}
             </main>
             <footer className={`${isHead ? "bg-green-600" : isTail ? 'bg-yellow-600' : ''} h-1/5 border-b-2 border-white w-full text-center border-x-2    rounded-b-sm text-xs flex flex-row items-center`}><p style={{
-                zIndex: 99,
+                zIndex: 49,
             }} className='border-r border-white w-3/5 flex items-center justify-center'>data</p><p style={{
-                zIndex: 99,
+                zIndex: 49,
             }} className='flex items-center justify-center w-2/5'>next</p></footer>
 
 

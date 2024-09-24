@@ -9,12 +9,15 @@ import ButtonAction from '../_components/ButtonAction';
 import InputWithButtonContainer from '@/components/container/InputWithButtonContainer';
 import { Input } from '@/components/ui/input';
 import { PopUp } from '@/components/ui/PopUp';
+import HeapContainer from '@/components/container/HeapContainer';
+import Properties from '@/components/app/Properties';
+import Section from '@/components/container/Section';
 
 export default function View() {
     const { linkedList, arrayLs, add, traverse, del, isStackOverFlow, clear, error } = UseLinkedList();
     const [table, setTable] = useState({
         col: 5,
-        row: 4
+        row: 10
     })
     const heap = useHeap({
         nodeShape: linkedList,
@@ -32,44 +35,62 @@ export default function View() {
         // test();
     }, [])
 
-    return (
-        <Main>
+    return (<Main>
             {/* BUTTONS ACTION SECTION */}
 
-            <OperationsContainer>
-                <InputWithButtonContainer>
-                    <Input value={addIndex} placeholder="index" className="text-black w-20" onChange={(e) => {
-                        if (isBlocked) return;
-                        const n = Number.parseInt(e.target.value);
-                        setAddIndex(n)
+            <OperationsContainer >
+                <Section className='gap-2'key={'section-1-linkedList-view'} >
+                    <InputWithButtonContainer key={'linkedList-add-action'}>
+                        <Input value={addIndex} placeholder="index" className="text-black w-20" onChange={(e) => {
+                            if (isBlocked) return;
+                            const n = Number.parseInt(e.target.value);
+                            setAddIndex(n)
 
-                    }} type="number" min={0} />
-                    <Input value={addData} placeholder="data" className="text-black w-20" onChange={(e) => {
-                        if (isBlocked) return;
+                        }} type="number" min={0} />
+                        <Input value={addData} placeholder="data" className="text-black w-20" onChange={(e) => {
+                            if (isBlocked) return;
 
-                        setAddData(e.target.value)
+                            setAddData(e.target.value)
 
-                    }} />
-                    <ButtonAction title="add" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isBlocked} onClick={async () => {
+                        }} />
+                        <ButtonAction title="add" className='bg-green-400 hover:bg-green-600' isLoading={isBlocked} onClick={async () => {
+
+                            if (isBlocked) return;
+                            const position = heap.getNextFreePosition();
+                            if (position) await add(addData, addIndex, position.position, position.memoryAddress);
+
+
+
+
+                        }} />
+
+                    </InputWithButtonContainer>
+                    <ButtonAction  key={'linkedList-addFirst-action'} title="addFirst" className='bg-green-600 hover:bg-green-800' isLoading={isBlocked} onClick={async () => {
 
                         if (isBlocked) return;
                         const position = heap.getNextFreePosition();
-                        if (position) await add(addData, addIndex, position.position, position.memoryAddress);
+                        if (position) await add(addData, 0, position.position, position.memoryAddress);
 
 
 
 
                     }} />
+                    <ButtonAction key={'linkedList-addLast-action'} title="addLast" className='bg-yellow-600 hover:bg-yellow-800' isLoading={isBlocked} onClick={async () => {
 
-                </InputWithButtonContainer>
+                        if (isBlocked) return;
+                        const position = heap.getNextFreePosition();
+                        if (position) await add(addData, linkedList.size, position.position, position.memoryAddress);
 
+                    }} /></Section>
             </OperationsContainer>
+            <Properties className='w-full' properties={{
+                'heapSize': heap.size,
+                'heapFreeSpace': heap.freeSpace,
+                'linkedlistSize': linkedList.size
+            }} />
             {/* HEAP SECTION */}
 
-            <section className='relative' style={{
-                width: heap.width + 'px',
-                height: heap.height + 'px'
-            }}>
+            <HeapContainer width={heap.width} height={heap.height}>
                 {
                     linkedList.toNodeArray().map((node, i) => {
 
@@ -82,13 +103,13 @@ export default function View() {
                         )
                     })
                 }
-            </section>
-            {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
+            </HeapContainer>
+            {(error || heap.error) && <PopUp title={error?.name || heap.error?.name || ''} buttonText="dismiss" handleOnPopUpButton={() => {
                 clear();
                 setAddData('')
                 setAddIndex(0);
-                heap.setInitialFreePositions()
-            }} open={!!error} showTrigger={false} description={error.description} />}
+                heap.reset()
+            }} open={!!error || !!heap.error} showTrigger={false} description={error?.description || heap.error?.description || ''} />}
         </Main>
     )
 }
