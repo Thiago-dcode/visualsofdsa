@@ -30,11 +30,35 @@ export default function View() {
     const [addData, setAddData] = useState('');
 
     const isBlocked = isStackOverFlow || isAnimationRunning;
-    useEffect(() => {
+    const handleAdd = async (index: number) => {
 
 
-        // test();
-    }, [])
+        if (isBlocked) return;
+        const position = heap.getNextFreePosition();
+        if (position) await add(addData, index, position.position, position.memoryAddress);
+
+
+
+
+
+    }
+    const handleDelete = async (index: number) => {
+
+
+        if (isBlocked) return;
+
+        const node = await del(index);
+        console.log('NODE DELETED', node)
+        if (node) {
+
+            heap.setNextFreePosition(node)
+        }
+
+
+
+
+
+    }
 
     return (<Main>
         {/* BUTTONS ACTION SECTION */}
@@ -55,33 +79,15 @@ export default function View() {
 
                     }} />
                     <ButtonAction title="add" className='bg-green-400 hover:bg-green-600' isLoading={isBlocked} onClick={async () => {
-
-                        if (isBlocked) return;
-                        const position = heap.getNextFreePosition();
-                        if (position) await add(addData, addIndex, position.position, position.memoryAddress);
-
-
-
-
+                        await handleAdd(addIndex)
                     }} />
 
                 </InputWithButtonContainer>
                 <ButtonAction key={'linkedList-addFirst-action'} title="addFirst" className='bg-green-600 hover:bg-green-800' isLoading={isBlocked} onClick={async () => {
-
-                    if (isBlocked) return;
-                    const position = heap.getNextFreePosition();
-                    if (position) await add(addData, 0, position.position, position.memoryAddress);
-
-
-
-
+                    await handleAdd(0)
                 }} />
                 <ButtonAction key={'linkedList-addLast-action'} title="addLast" className='bg-yellow-600 hover:bg-yellow-800' isLoading={isBlocked} onClick={async () => {
-
-                    if (isBlocked) return;
-                    const position = heap.getNextFreePosition();
-                    if (position) await add(addData, linkedList.size, position.position, position.memoryAddress);
-
+                    await handleAdd(linkedList.size)
                 }} /></Section>
             {/* DELETE SECTION */}
             {linkedList.size > 0 && <Section>
@@ -94,21 +100,17 @@ export default function View() {
                     }} type="number" min={0} />
 
                     <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600' isLoading={isBlocked} onClick={async () => {
-
-                        if (isBlocked || deleteIndex === undefined) return;
-
-                        const node = await del(deleteIndex);
-                        console.log('NODE DELETED', node)
-                        if (node) {
-
-                            heap.setNextFreePosition(node)
-                        }
-
-
-
+                        if (deleteIndex === undefined) return;
+                        await handleDelete(deleteIndex)
                     }} />
 
                 </InputWithButtonContainer>
+                <ButtonAction title="deleteHead" className='bg-red-400 hover:bg-red-600' isLoading={isBlocked} onClick={async () => {
+                    await handleDelete(0)
+                }} />
+                <ButtonAction title="deleteTail" className='bg-red-400 hover:bg-red-600' isLoading={isBlocked} onClick={async () => {
+                    await handleDelete(linkedList.size - 1)
+                }} />
             </Section>}
         </OperationsContainer>
         <Properties className='w-full' properties={{
