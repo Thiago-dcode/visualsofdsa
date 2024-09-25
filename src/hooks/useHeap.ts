@@ -21,9 +21,9 @@ export default function useHeap({
 
   } | null>(null)
 
-  
+
   const freePositions = useRef(new Queue());
-  const [freeSpace,setFreeSpace] = useState(0)
+  const [freeSpace, setFreeSpace] = useState(0)
   const _heapSize = useRef(col * row);
   const setInitialFreePositions = useCallback(() => {
     freePositions.current.flush()
@@ -56,7 +56,7 @@ export default function useHeap({
 
   }
   const getNextFreePosition = () => {
-    
+
     if (freePositions.current.isEmpty) {
       setError({
         name: 'HeapOverFlowException',
@@ -75,7 +75,12 @@ export default function useHeap({
   const setNextFreePosition = (node: LinkedListNode<Primitive>) => {
     if (freePositions.current.isFull) return;
     setFreeSpace(freePositions.current.size)
-    return freePositions.current.enqueue(node);
+    const newNode = new LinkedListNode(
+      ``,
+      node.position
+    );
+    newNode.memoryAddress = node.memoryAddress;
+    return freePositions.current.enqueue(newNode);
   };
 
   const width =
@@ -96,6 +101,6 @@ export default function useHeap({
     reset,
     size: _heapSize.current,
     freeSpace
-  
+
   };
 }

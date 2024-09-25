@@ -3,7 +3,7 @@ import LinkedList from "../classes/LinkedList";
 import { Primitive } from "@/types";
 import Position from "@/lib/classes/Position";
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
-
+import { toast } from 'sonner';
 
 export default function UseLinkedList() {
   const [linkedList, setLinkedList] = useState(new LinkedList());
@@ -37,10 +37,25 @@ export default function UseLinkedList() {
   };
 
   const del = async (index: number) => {
-    await linkedList.delete(index, async (node, next, prev) => {
-      //handle animation on delete
-    });
-    setArrayLs(linkedList.toNodeArray());
+    try {
+      const node = linkedList.findNode(index);
+      if (!node) throw IndexOutOfBoundsError
+      await linkedList.delete(index, async (node, next, prev) => {
+        //handle animation on delete
+      });
+      setArrayLs(linkedList.toNodeArray())
+      return node;
+    } catch (error) {
+     
+      if (error instanceof IndexOutOfBoundsError) {
+        toast.error(`No element found on the index ${index}`,{
+          position:'top-center'
+        })
+      }
+
+    }
+    return null;
+
   };
   const get = async (index: number) => {
     const node = linkedList.getNode(index);
@@ -59,19 +74,18 @@ export default function UseLinkedList() {
     setError(null)
   }
   const setUpLinkedList = () => {
-  
+
     linkedList.nodeWidth = 120;
     linkedList.nodeHeightSpacing = 40;
     linkedList.nodeWidthSpacing = 70;
     linkedList.nodeHeight = 80;
-  
+
   }
   useEffect(() => {
     setUpLinkedList()
 
   }, []);
   return {
-    arrayLs,
     linkedList,
     add,
     del,
@@ -79,5 +93,6 @@ export default function UseLinkedList() {
     isStackOverFlow,
     clear,
     error,
+    arrayLs
   };
 }

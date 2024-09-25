@@ -65,7 +65,7 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
             left: node.position.x + 'px',
             top: node.position.y + 'px',
 
-        }} key={node.id} className='absolute flex flex-col  text-center'>
+        }}  className='absolute flex flex-col  text-center'>
             {/* MEMORY-ADRESS */}
 
             <header style={{
@@ -97,7 +97,7 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
             </main>
             <footer className={`${isHead ? "bg-green-600" : isTail ? 'bg-yellow-600' : ''} h-1/5 border-b-2 border-white w-full text-center border-x-2    rounded-b-sm text-xs flex flex-row items-center`}><p style={{
                 zIndex: 49,
-            }} className='border-r border-white w-3/5 flex items-center justify-center'>data</p><p style={{
+            }} className='border-r border-white w-3/5 flex items-center justify-center'>node <span className='text-xs'>({isHead? 'head':isTail?'tail':index})</span></p><p style={{
                 zIndex: 49,
             }} className='flex items-center justify-center w-2/5'>next</p></footer>
 
