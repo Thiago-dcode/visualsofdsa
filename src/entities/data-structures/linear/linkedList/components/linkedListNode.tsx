@@ -93,7 +93,7 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
                     </div>
 
                 </div>
-                {node.next && <Arrow isActive={isOver} arrowShape={getArrowShape()} />}
+                {node.next && <Arrow isActive={isOver||node.isActive} arrowShape={getArrowShape()} />}
             </main>
             <footer className={`${isHead ? "bg-green-600" : isTail ? 'bg-yellow-600' : ''} h-1/5 border-b-2 border-white w-full text-center border-x-2    rounded-b-sm text-xs flex flex-row items-center`}><p style={{
                 zIndex: 49,

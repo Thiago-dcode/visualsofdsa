@@ -1,6 +1,6 @@
 export default abstract class Memory {
 
-    constructor(private _memoryAdress = '') {
+    constructor(private _memoryAdress = '', private _isActive = false) {
 
     }
 
@@ -10,5 +10,10 @@ export default abstract class Memory {
     set memoryAddress(memoryAddress: string) {
         this._memoryAdress = memoryAddress;
     }
-
+    get isActive(): boolean {
+        return this._isActive;
+    }
+    set isActive(isActive: boolean) {
+        this._isActive = isActive;
+    }
 }

@@ -4,9 +4,13 @@ import { Primitive } from "@/types";
 import Position from "@/lib/classes/Position";
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
 import { toast } from 'sonner';
+import "../style.css";
+import UseLinkedListAnimation from "./UseLinkedListAnimation";
+import LinkedListNode from "../classes/LinkedListNode";
+export default function UseLinkedList(isDoublyLinkedList = false) {
 
-export default function UseLinkedList() {
   const [linkedList, setLinkedList] = useState(new LinkedList());
+  const { getAnimation } = UseLinkedListAnimation(linkedList)
   const [error, setError] = useState<{
     name: string;
     description: string;
@@ -38,6 +42,7 @@ export default function UseLinkedList() {
 
   const del = async (index: number) => {
     try {
+
       const node = linkedList.findNode(index);
       if (!node) throw IndexOutOfBoundsError
       await linkedList.delete(index, async (node, next, prev) => {
@@ -46,10 +51,10 @@ export default function UseLinkedList() {
       setArrayLs(linkedList.toNodeArray())
       return node;
     } catch (error) {
-     
+
       if (error instanceof IndexOutOfBoundsError) {
-        toast.error(`No element found on the index ${index}`,{
-          position:'top-center'
+        toast.error(`No element found on the index ${index}`, {
+          position: 'top-center'
         })
       }
 
@@ -57,9 +62,39 @@ export default function UseLinkedList() {
     return null;
 
   };
+  const setIndexOutOfTheBound = (index: number) => {
+    if (index >= linkedList.size || index < 0) {
+      setError({
+        name: "IndexOutOfTheBoundException",
+        description: `Index ${index} out of bounds for length ${linkedList.size}`,
+      })
+      return true
+    }
+    return false;
+  }
   const get = async (index: number) => {
-    const node = linkedList.getNode(index);
-    //handle get animation
+    if(setIndexOutOfTheBound(index))return;
+    
+    let node: LinkedListNode<Primitive> | null = null;
+    if (!isDoublyLinkedList) {
+      let j = 0;
+      node = linkedList.head;
+      while (node) {
+        node.isActive = true;
+        if (index === j) {
+          node.isActive = false;
+          return node;
+        }
+        await getAnimation(node.ref).catch(() => {
+          console.error('ERROR ON GET ANIMATION')
+        });
+        node.isActive = false;
+        j++;
+        node = node.next
+
+      }
+    }
+    return node;
   };
 
   const traverse = async (direction: "forward" | "backward" = "forward") => {
@@ -93,6 +128,7 @@ export default function UseLinkedList() {
     isStackOverFlow,
     clear,
     error,
+    get,
     arrayLs
   };
 }

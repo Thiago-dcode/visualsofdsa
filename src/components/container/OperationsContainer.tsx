@@ -14,13 +14,13 @@ export default function OperationsContainer({ children, makeResponsive = false, 
     return (
         <>
 
-            {((device.isDesktop || device.isTv) && !makeResponsive) ? < div className={cn("border-2 border-white w-full wrap flex items-center justify-between gap-1 p-4", className)} >
+            {((device.isDesktop || device.isTv) && !makeResponsive) ? < div className={cn("border-2 border-white w-full wrap flex items-start justify-between gap-1 p-2", className)} >
                 {children}
             </div > :
                 <div className='w-full flex items-center justify-end px-10'>
                     <PopOverComponent setOpen={setOpen} open={open} className='self-start mr-8 bg-white/90' showBtn={false} trigger={<button onClick={() => {
 
-                    }}><Menu /></button>} content={<div className='flex flex-col items-center w-full'>
+                    }}><Menu /></button>} content={<div className='flex flex-col items-center gap-4 w-full'>
                         {children}
 
                     </div>} />
