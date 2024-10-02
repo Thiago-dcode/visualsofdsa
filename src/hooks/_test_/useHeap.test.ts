@@ -20,10 +20,10 @@ describe("Testing useHeap", () => {
     });
     expect(result.current.freePositions.size).toBe(row * col);
     expect(result.current.width).toBe(
-      col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing)
+      col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) - nodeShape.nodeWidthSpacing
     );
     expect(result.current.height).toBe(
-      row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)
+      row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) - nodeShape.nodeHeightSpacing
     );
   });
   it("Should get the next free position", () => {
@@ -35,18 +35,19 @@ describe("Testing useHeap", () => {
 
     for (let i = 0; i < col * row; i++) {
       const nextPosition = result.current.getNextFreePosition();
-      expect(nextPosition).toBeInstanceOf(Position);
+
       if (nextPosition) {
+        expect(nextPosition.position).toBeInstanceOf(Position);
         if (currentRow === 0) {
-          expect(nextPosition.y).toBe(0);
+          expect(nextPosition.position.y).toBe(0);
         }
         if (i < 5) {
-          expect(nextPosition.y).toBe(0);
+          expect(nextPosition.position.y).toBe(0);
         }
-        expect(nextPosition.x).toBe(
+        expect(nextPosition.position.x).toBe(
           currentCol * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing)
         );
-        expect(nextPosition.y).toBe(
+        expect(nextPosition.position.y).toBe(
           currentRow * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)
         );
       }
@@ -65,7 +66,7 @@ describe("Testing useHeap", () => {
     const arrOfNodes: LinkedListNode<Primitive>[] = [];
     for (let i = 0; i < col * row; i++) {
       const nextPosition = result.current.getNextFreePosition();
-      if (nextPosition) arrOfNodes.push(new LinkedListNode(i, nextPosition));
+      if (nextPosition) arrOfNodes.push(new LinkedListNode(i, nextPosition.position));
     }
     expect(arrOfNodes.length).toBe(col * row);
 
@@ -75,11 +76,13 @@ describe("Testing useHeap", () => {
     expect(result.current.freePositions.isFull).toBeTruthy();
     for (let i = 0; i < arrOfNodes.length; i++) {
       const nextPosition = result.current.getNextFreePosition();
+
       const node = arrOfNodes[i];
-      expect(nextPosition).toBeInstanceOf(Position);
+      expect(nextPosition).toBeTruthy();
       if (nextPosition) {
-        expect(nextPosition.x).toBe(node.position.x);
-        expect(nextPosition.y).toBe(node.position.y);
+        const { position, memoryAddress } = nextPosition;
+        expect(position.x).toBe(node.position.x);
+        expect(position.y).toBe(node.position.y);
       }
     }
     expect(result.current.freePositions.isEmpty).toBeTruthy();

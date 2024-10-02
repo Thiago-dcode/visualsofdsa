@@ -27,7 +27,8 @@ const config = {
       colors: {
         app: {
           bg: "#13161B",
-          green: '#00FF41'
+          green: '#00FF41',
+          ivory:'#FFFFE1'
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

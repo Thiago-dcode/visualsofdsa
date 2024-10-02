@@ -1,6 +1,6 @@
 'use client'
 import Main from "@/components/container/Main"
-import RamConteiner from "@/components/container/RamConteiner"
+import RamContainer from "@/components/container/RamContainer"
 import useDynamicArray from "./hooks/useDynamicArray"
 import MemoryAdressContainer from "../_components/MemoryAdressContainer"
 import { PopUp } from "@/components/ui/PopUp"
@@ -247,7 +247,7 @@ export default function DynamicArray() {
                 capacity,
                 maxSize
             }} />
-            <RamConteiner>
+            <RamContainer>
                 {array &&
                     array.map((node, i) => {
                         return (
@@ -279,7 +279,7 @@ export default function DynamicArray() {
                     setIsAnimationRunning(false)
 
                 }} open={error ? true : false} showTrigger={false} description={error.description} />}
-            </RamConteiner>
+            </RamContainer>
 
         </Main >
     )

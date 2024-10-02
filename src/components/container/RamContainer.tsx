@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 
-function RamConteiner({ children }: {
+function RamContainer({ children }: {
     children: ReactNode
 }) {
     return (
@@ -11,4 +11,4 @@ function RamConteiner({ children }: {
     )
 }
 
-export default RamConteiner
+export default RamContainer

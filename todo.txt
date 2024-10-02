@@ -1,0 +1,16 @@
+Linkedlist:
+
+-Implement animation.
+-Improve ui.
+-
+-implement add,delete,get,traverse button actions.
+-implement display properties.
+-Responsiviness
+-Handle heap growth
+-Stackoverflow Heapoverflow
+
+
+
+
+FIXME - queue does not work as expected
+FIXME - dynamic array fill action with 0 is not working.

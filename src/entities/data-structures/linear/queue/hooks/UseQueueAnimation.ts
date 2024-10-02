@@ -75,8 +75,8 @@ const UseQueueAnimation = (linearDs: LinearDs<Primitive> | null) => {
           }
 
           ref.style.top = `${
-            (linearDs.nodeHeight + linearDs.nodeSpacing) * (i - 1) +
-            linearDs.nodeSpacing
+            (linearDs.nodeHeight + linearDs.nodeHeightSpacing) * (i - 1) +
+            linearDs.nodeHeightSpacing
           }px`;
 
           ref.removeEventListener("animationend", animationEvent);
@@ -86,8 +86,8 @@ const UseQueueAnimation = (linearDs: LinearDs<Primitive> | null) => {
         ref.style.setProperty(
           "--end",
           `${
-            (linearDs.nodeHeight + linearDs.nodeSpacing) * (i - 1) +
-            linearDs.nodeSpacing
+            (linearDs.nodeHeight + linearDs.nodeHeightSpacing) * (i - 1) +
+            linearDs.nodeHeightSpacing
           }px`
         );
 

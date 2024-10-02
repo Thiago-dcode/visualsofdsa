@@ -18,7 +18,7 @@ import { PopOverComponent } from "@/components/ui/PopOverComponent"
 import { Button } from "@/components/ui/button"
 import { Wrench } from "lucide-react"
 import LinearDsConfig from "../_components/LinearDsConfig"
-import RamConteiner from "@/components/container/RamConteiner"
+import RamConteiner from "@/components/container/RamContainer"
 import MemoryAdressContainer from "../_components/MemoryAdressContainer"
 import { MemorySize } from "@/types"
 

@@ -30,7 +30,9 @@ export function PopUp({
       {showTrigger && <AlertDialogTrigger asChild>
         <Button variant="outline">Show Dialog</Button>
       </AlertDialogTrigger>}
-      <AlertDialogContent  className=" text-black flex flex-col justify-between ">
+      <AlertDialogContent style={{
+        zIndex:99
+      }}  className=" text-black flex flex-col justify-between">
       <AlertDialogTitle>{title}</AlertDialogTitle>
       
 {/* 
