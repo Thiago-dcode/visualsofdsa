@@ -17,7 +17,7 @@ export default function View() {
     const { linkedList, add,get, traverse, del, isStackOverFlow, clear, error, arrayLs } = UseLinkedList();
     const [table, setTable] = useState({
         col: 5,
-        row: 1
+        row: 5
     })
     const heap = useHeap({
         nodeShape: linkedList,

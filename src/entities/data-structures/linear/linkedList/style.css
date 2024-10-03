@@ -1,13 +1,45 @@
-@keyframes peek-node {
-    0% {
-      background: rgba(250, 204, 21, 0.5);
-    }
-  
-    80% {
-      background: rgba(250, 204, 1);
-    }
-  
-    100% {
-      background: rgba(250, 204, 21, 0);
-    }
+@keyframes find-node {
+  0% {
+    transform: scale(1);
+    
   }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes get-node {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lit-node-edge {
+  0% {
+    opacity: 0.5;
+    z-index: 99;
+   
+  }
+
+  80% {
+    opacity: 1;
+   
+  }
+
+  100% {
+   
+    opacity: 0.5;
+  }
+}

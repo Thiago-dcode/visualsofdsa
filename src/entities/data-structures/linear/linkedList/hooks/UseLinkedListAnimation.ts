@@ -1,12 +1,11 @@
 import { Primitive } from "@/types";
-import { getSpeed, requestAnimation } from "@/lib/utils";
-import LinearDs from "../../_classes/LinearDs";
+import { requestAnimation } from "@/lib/utils";
 import LinkedList from "../classes/LinkedList";
 const UseLinkedListAnimation = (linkedList: LinkedList<Primitive> | null) => {
 
   const getAnimation = async (
     ref: HTMLElement | null,
-
+    found:boolean,
     onAnimationEnds: ((e: AnimationEvent) => void) | null = null
   ): Promise<boolean> => {
     return new Promise((resolve, reject) => {
@@ -24,7 +23,7 @@ const UseLinkedListAnimation = (linkedList: LinkedList<Primitive> | null) => {
 
         requestAnimation(
           ref,
-          `peek-node ${1 + "s"}`,
+          !found?`find-node ${1 + "s"}`:`get-node ${1 + "s"}`,
           animationEvent
         );
       }
