@@ -14,7 +14,7 @@ import Properties from '@/components/app/Properties';
 import Section from '@/components/container/Section';
 
 export default function View() {
-    const { linkedList, add,get, traverse, del, isStackOverFlow, clear, error, arrayLs } = UseLinkedList();
+    const { linkedList, add, get, traverse, del, isStackOverFlow, clear, error, arrayLs } = UseLinkedList();
     const [table, setTable] = useState({
         col: 5,
         row: 5
@@ -42,6 +42,14 @@ export default function View() {
 
 
 
+
+    }
+    const handleAction = async (action: Promise<void>) => {
+        if (isBlocked) return;
+        setOpen(false)
+        setIsAnimationRunning(true);
+        await action
+        setIsAnimationRunning(false);
 
     }
     const handleDelete = async (index: number) => {
@@ -82,22 +90,20 @@ export default function View() {
 
                     }} />
                     <ButtonAction title="add" className='bg-green-400 hover:bg-green-600' isLoading={isBlocked} onClick={async () => {
-                        setOpen(false)
-                        await handleAdd(addIndex)
+                        await handleAction(handleAdd(addIndex))
                     }} />
 
                 </InputWithButtonContainer>
                 <ButtonAction key={'linkedList-addFirst-action'} title="addFirst" className='bg-green-600 hover:bg-green-800' isLoading={isBlocked} onClick={async () => {
-                    setOpen(false)
-                    await handleAdd(0)
+                    await handleAction(handleAdd(0))
                 }} />
                 <ButtonAction key={'linkedList-addLast-action'} title="addLast" className='bg-yellow-600 hover:bg-yellow-800' isLoading={isBlocked} onClick={async () => {
-                    setOpen(false)
-                    await handleAdd(linkedList.size)
+                    await handleAction(handleAdd(linkedList.size))
+
                 }} /></Section>
 
             {/* GET SECTION */}
-            <Section>
+            {linkedList.size > 0 && <Section className='gap-2 items-end'>
 
                 <InputWithButtonContainer key={'linkedList-delete-action'}>
                     <Input value={getIndex} placeholder="index" className="text-black w-20" onChange={(e) => {
@@ -108,16 +114,23 @@ export default function View() {
                     }} type="number" min={0} />
 
                     <ButtonAction title="get" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isBlocked} onClick={async () => {
-                        if (getIndex === undefined) return;
-                        setOpen(false)
-                        setIsAnimationRunning(true);
-                        await get(getIndex)
-                        setIsAnimationRunning(false);
+                        if (getIndex === undefined || isBlocked) return;
+                        await handleAction(get(getIndex))
+
+
                     }} />
 
                 </InputWithButtonContainer>
+                <ButtonAction title="getFirst" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isBlocked} onClick={async () => {
+                    if (isBlocked) return;
+                    await handleAction(get(0))
+                }} />
+                <ButtonAction title="getLast" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isBlocked} onClick={async () => {
+                    if (isBlocked) return;
+                    await handleAction(get(linkedList.size - 1))
+                }} />
 
-            </Section>
+            </Section>}
 
             {/* DELETE SECTION */}
             {linkedList.size > 0 && <Section className='gap-2'>
@@ -131,18 +144,16 @@ export default function View() {
 
                     <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600' isLoading={isBlocked} onClick={async () => {
                         if (deleteIndex === undefined) return;
-                        setOpen(false)
-                        await handleDelete(deleteIndex)
+                        await handleAction(handleDelete(deleteIndex))
+
                     }} />
 
                 </InputWithButtonContainer>
                 <ButtonAction title="deleteHead" className='bg-red-400 hover:bg-red-600' isLoading={isBlocked} onClick={async () => {
-                    setOpen(false)
-                    await handleDelete(0)
+                    await handleAction(handleDelete(0))
                 }} />
                 <ButtonAction title="deleteTail" className='bg-red-400 hover:bg-red-600' isLoading={isBlocked} onClick={async () => {
-                    setOpen(false)
-                    await handleDelete(linkedList.size - 1)
+                    await handleAction(handleDelete(linkedList.size - 1))
                 }} />
             </Section>}
 

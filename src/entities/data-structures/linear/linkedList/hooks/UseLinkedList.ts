@@ -16,6 +16,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     name: string;
     description: string;
   } | null>(null);
+
   const [arrayLs, setArrayLs] = useState(linkedList.toNodeArray());
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
   const forceRerender = () => {
@@ -43,8 +44,15 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
 
   const del = async (index: number) => {
     try {
-      const node = linkedList.findNode(index);
-      if (!node) throw IndexOutOfBoundsError;
+      let node: LinkedListNode<Primitive> | null = null;
+      if (!isDoublyLinkedList) {
+        node = await findNode(index);
+        if(node){
+          toast.info(` Took ${index + 1} steps to delete`, {
+            position: "top-center",
+          });
+        }
+      }
       await linkedList.delete(index, async (node, next, prev) => {
         //handle animation on delete
       });
@@ -70,25 +78,29 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     return false;
   };
   const get = async (index: number) => {
-    if (setIndexOutOfTheBound(index)) return;
     let node: LinkedListNode<Primitive> | null = null;
     if (!isDoublyLinkedList) {
-      let j = 0;
-      node = linkedList.head;
-      while (node) {
-        forceRerender();
-        await Promise.allSettled([
-          getAnimation(node.ref, index === j),
-          animateEdge(node.nextEdge, "lit-node-edge 1s"),
-        ]);
-
-        if (index === j) {
-          return node;
-        }
-
-        j++;
-        node = node.next;
+      node = await findNode(index);
+      if (node) {
+        toast.info(`Node data: "${node.data}", took ${index + 1} steps`, {
+          position: "top-center",
+        });
       }
+    }
+  };
+  const findNode = async (index: number) => {
+    if (setIndexOutOfTheBound(index)) return null;
+    let j = 0;
+    let node = linkedList.head;
+    while (node) {
+      await getAnimation(node.ref, index === j);
+      if (index === j) {
+        break;
+      }
+      await animateEdge(node.nextEdge, "lit-node-edge 0.5s");
+
+      j++;
+      node = node.next;
     }
     return node;
   };

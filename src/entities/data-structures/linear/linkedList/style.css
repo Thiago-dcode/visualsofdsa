@@ -1,29 +1,30 @@
 @keyframes find-node {
   0% {
-    transform: scale(1);
+   
+
     
   }
 
   50% {
-    transform: scale(1.05);
+    box-shadow: rgb(255, 255, 255) 0px 0px 0px 5px;
   }
 
   100% {
-    transform: scale(1);
+ 
   }
 }
 
 @keyframes get-node {
   0% {
-    transform: scale(1);
+  
   }
 
   50% {
-    transform: scale(1.2);
+    box-shadow: rgb(255, 85, 85) 0px 0px 0px 15px,rgba(255, 85, 85,0.3) 0px 0px 0px 10px ;
   }
 
   100% {
-    transform: scale(1);
+    
   }
 }
 @keyframes lit-node-edge {
