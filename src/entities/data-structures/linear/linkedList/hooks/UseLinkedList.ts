@@ -26,7 +26,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     data: Primitive,
     index: number,
     position = new Position(0, 0),
-    memoryAddress: string
+    memoryAddress: string = ""
   ) => {
     try {
       const node = await linkedList.add(data, index, position);
@@ -47,12 +47,13 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       let node: LinkedListNode<Primitive> | null = null;
       if (!isDoublyLinkedList) {
         node = await findNode(index);
-        if(node){
+        if (node) {
           toast.info(` Took ${index + 1} steps to delete`, {
             position: "top-center",
           });
         }
       }
+
       await linkedList.delete(index, async (node, next, prev) => {
         //handle animation on delete
       });
@@ -93,11 +94,13 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     let j = 0;
     let node = linkedList.head;
     while (node) {
-      await getAnimation(node.ref, index === j);
+      if (node.ref) await getAnimation(node.ref, index === j);
       if (index === j) {
         break;
       }
-      await animateEdge(node.nextEdge, "lit-node-edge 0.5s");
+
+      if (node.ref && node.nextEdge)
+        await animateEdge(node.nextEdge, "lit-node-edge 0.5s");
 
       j++;
       node = node.next;

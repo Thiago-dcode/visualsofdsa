@@ -15,15 +15,10 @@ import Section from '@/components/container/Section';
 
 export default function View() {
     const { linkedList, add, get, traverse, del, isStackOverFlow, clear, error, arrayLs } = UseLinkedList();
-    const [table, setTable] = useState({
-        col: 5,
-        row: 5
-    })
     const heap = useHeap({
         nodeShape: linkedList,
-        col: table.col,
-        row: table.row
     });
+    const [size, setSize] = useState(0);
     const [open, setOpen] = useState(false)
     const [isAnimationRunning, setIsAnimationRunning] = useState(false);
     const [addIndex, setAddIndex] = useState(0);
@@ -53,8 +48,6 @@ export default function View() {
 
     }
     const handleDelete = async (index: number) => {
-
-
         if (isBlocked) return;
 
         const node = await del(index);
@@ -63,19 +56,16 @@ export default function View() {
 
             heap.setNextFreePosition(node)
         }
-
-
-
-
-
     }
-
+    useEffect(() => {
+        // heap.malloc(50)
+    }, [])
     return (<Main>
         {/* BUTTONS ACTION SECTION */}
 
         <OperationsContainer open={open} setOpen={setOpen} >
             {/*ADD SECTION */}
-            <Section className='gap-2 items-end' key={'section-1-linkedList-view'} >
+            {heap.size > 0 ? <Section className='gap-2 items-end' key={'section-1-linkedList-view'} >
                 <InputWithButtonContainer key={'linkedList-add-action'}>
                     <Input value={addIndex} placeholder="index" className="text-black w-20" onChange={(e) => {
                         if (isBlocked) return;
@@ -100,7 +90,19 @@ export default function View() {
                 <ButtonAction key={'linkedList-addLast-action'} title="addLast" className='bg-yellow-600 hover:bg-yellow-800' isLoading={isBlocked} onClick={async () => {
                     await handleAction(handleAdd(linkedList.size))
 
-                }} /></Section>
+                }} /></Section> : <InputWithButtonContainer key={'linkedList-add-action'}>
+                <Input value={size} placeholder="index" className="text-black w-20" onChange={(e) => {
+                    if (isBlocked) return;
+                    const n = Number.parseInt(e.target.value);
+                    setSize(n)
+
+                }} type="number" min={0} max={100} />
+
+                <ButtonAction title="malloc" className='bg-green-400 hover:bg-green-600' isLoading={isBlocked} onClick={() => {
+                    heap.malloc(size)
+                }} />
+
+            </InputWithButtonContainer>}
 
             {/* GET SECTION */}
             {linkedList.size > 0 && <Section className='gap-2 items-end'>
@@ -163,9 +165,11 @@ export default function View() {
             'heapFreeSpace': heap.freeSpace,
             'linkedlistSize': linkedList.size
         }} />
+
+
         {/* HEAP SECTION */}
 
-        <HeapContainer width={heap.width} height={heap.height}>
+        <HeapContainer heap={heap}>
             {
                 arrayLs.map((node, i) => {
 

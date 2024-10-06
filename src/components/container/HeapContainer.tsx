@@ -1,26 +1,27 @@
 import React, { ReactNode } from 'react'
-import Properties from '../app/Properties'
+import { Heap } from '@/hooks/useHeap'
 
-function HeapContainer({ width, height, children }: {
-    width: number,
-    height: number,
+function HeapContainer({ heap, children }: {
+    heap: Heap,
     children: ReactNode
 }) {
-
+    const { width, height, size } = heap;
     return (
         <section className=''>
-            <div className='mb-2'>
-            <h4 className='text-4xl'>Heap</h4>
-           
-            </div>
-            <div className='p-4 border-white border-2 rounded-sm'>
-                <div className='relative' style={{
-                    width: width + 'px',
-                    height: height + 'px'
-                }}>
-                    {children}
+            {size > 0 ? <>
+                <div className='mb-2'>
+                    <h4 className='text-4xl'>Heap</h4>
+
                 </div>
-            </div>
+                <div className='p-4 border-white border-2 rounded-sm'>
+                    <div className='relative' style={{
+                        width: width + 'px',
+                        height: height + 'px'
+                    }}>
+                        {children}
+                    </div>
+                </div>
+                </> : null}
         </section>
     )
 }

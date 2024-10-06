@@ -6,24 +6,29 @@ import { act } from "react";
 import Position from "@/lib/classes/Position";
 import LinkedListNode from "@/entities/data-structures/linear/linkedList/classes/LinkedListNode";
 import { Primitive } from "@/types";
+import { ACTION } from "next/dist/client/components/app-router-headers";
 
 describe("Testing useHeap", () => {
   const initialProps = {
     nodeShape: new LinkedList(),
-    col: 6,
-    row: 5,
   };
-  const { nodeShape, col, row } = initialProps;
+  const { nodeShape } = initialProps;
   it("Should set the inital positions", () => {
     const { result } = renderHook(useHeap, {
       initialProps,
     });
+    act(() => {
+      result.current.malloc(50);
+    });
+    const { row, col } = result.current.table;
     expect(result.current.freePositions.size).toBe(row * col);
     expect(result.current.width).toBe(
-      col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) - nodeShape.nodeWidthSpacing
+      col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -
+        nodeShape.nodeWidthSpacing
     );
     expect(result.current.height).toBe(
-      row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) - nodeShape.nodeHeightSpacing
+      row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) -
+        nodeShape.nodeHeightSpacing
     );
   });
   it("Should get the next free position", () => {
@@ -32,7 +37,10 @@ describe("Testing useHeap", () => {
     });
     let currentCol = 0;
     let currentRow = 0;
-
+    act(() => {
+      result.current.malloc(100);
+    });
+    const { row, col } = result.current.table;
     for (let i = 0; i < col * row; i++) {
       const nextPosition = result.current.getNextFreePosition();
 
@@ -63,10 +71,15 @@ describe("Testing useHeap", () => {
     const { result } = renderHook(useHeap, {
       initialProps,
     });
+    act(() => {
+      result.current.malloc(100);
+    });
+    const { row, col } = result.current.table;
     const arrOfNodes: LinkedListNode<Primitive>[] = [];
     for (let i = 0; i < col * row; i++) {
       const nextPosition = result.current.getNextFreePosition();
-      if (nextPosition) arrOfNodes.push(new LinkedListNode(i, nextPosition.position));
+      if (nextPosition)
+        arrOfNodes.push(new LinkedListNode(i, nextPosition.position));
     }
     expect(arrOfNodes.length).toBe(col * row);
 
@@ -86,5 +99,26 @@ describe("Testing useHeap", () => {
       }
     }
     expect(result.current.freePositions.isEmpty).toBeTruthy();
+  });
+  it("Should MALLOC", () => {
+    const { result } = renderHook(useHeap, {
+      initialProps,
+    });
+    act(() => {
+      result.current.malloc(50);
+    });
+    expect(result.current.size).toBe(50);
+    expect(result.current.freePositions.size).toBe(50);
+  });
+  it("Should NOT MALLOC WITH WRONG SIZE", () => {
+    const { result } = renderHook(useHeap, {
+      initialProps,
+    });
+    act(() => {
+      result.current.malloc(34234);
+    });
+    expect(result.current.error).toBeTruthy();
+    expect(result.current.size).toBe(0);
+    expect(result.current.freePositions.size).toBe(0);
   });
 });
