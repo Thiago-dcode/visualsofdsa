@@ -74,6 +74,7 @@ describe("Testing useHeap", () => {
     act(() => {
       result.current.malloc(100);
     });
+    
     const { row, col } = result.current.table;
     const arrOfNodes: LinkedListNode<Primitive>[] = [];
     for (let i = 0; i < col * row; i++) {
@@ -120,5 +121,20 @@ describe("Testing useHeap", () => {
     expect(result.current.error).toBeTruthy();
     expect(result.current.size).toBe(0);
     expect(result.current.freePositions.size).toBe(0);
+  });
+
+  it("SHOULD REALLOC", () => {
+    const { result } = renderHook(useHeap, {
+      initialProps,
+    });
+    act(() => {
+      result.current.malloc(20);
+    });
+
+    act(() => {
+      result.current.relloc(20);
+    });
+    expect(result.current.size).toBe(40);
+    expect(result.current.freePositions.size).toBe(40);
   });
 });

@@ -26,10 +26,11 @@ export type Heap = {
   setNextFreePosition: (node: LinkedListNode<Primitive>) => void;
   freePositions: Queue<Primitive>;
   error: Error | null;
-  reset: (heapSize?: number | null) => void;
+  free: () => void;
   size: number;
   freeSpace: number;
   malloc: (heapSize: number) => void;
+  relloc: (size: number) => void;
   table: Table;
 };
 
@@ -39,53 +40,50 @@ export default function useHeap({ nodeShape }: { nodeShape: NodeShape }): Heap {
     description: string;
   } | null>(null);
   const freePositions = useRef(new Queue());
-  const [table, setTable] = useState({
+  freePositions.current.maxSize = MAX_SIZE;
+  const table = useRef({
     row: 0,
     col: 0,
   });
-  const { row, col } = table;
+  const [heapSize, setHeapSize] = useState(0);
   const [freeSpace, setFreeSpace] = useState(0);
-  const _heapSize = col * row;
-  const setInitialFreePositions = useCallback(() => {
-    freePositions.current.flush();
-    try {
-      freePositions.current.maxSize = _heapSize;
-    } catch (error) {
-      if (error instanceof NotAllowedSizeError) {
-        return;
-      }
-    }
-    let currentCol = 0;
-    let currentRow = 0;
-    for (let i = 0; i < _heapSize; i++) {
+  const currentRow = useRef(0);
+  const currentCol = useRef(0);
+  const allocateMemory = (size: number) => {
+    for (let i = 0; i < size; i++) {
       const node = new LinkedListNode(
-        `${currentRow + 1},${currentCol + 1}`,
+        `${currentRow.current + 1},${currentCol.current + 1}`,
         new Position(
-          currentCol * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing),
-          currentRow * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)
+          currentCol.current *
+            (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing),
+          currentRow.current *
+            (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)
         )
       );
       node.memoryAddress = getMemoryAddress(i);
       freePositions.current.enqueue(node);
-      currentCol++;
-      if (col === currentCol) {
-        currentCol = 0;
-        currentRow++;
+      currentCol.current++;
+      if (table.current.col === currentCol.current) {
+        currentCol.current = 0;
+        currentRow.current++;
       }
     }
-    setFreeSpace(freePositions.current.size);
-  }, [table]);
 
-  const reset = (heapSize: number | null = null) => {
-    if (heapSize !== null) handleSetTable(heapSize);
-    setInitialFreePositions();
+    setFreeSpace(freePositions.current.size);
+  };
+
+  const free = () => {
+    freePositions.current.flush();
+    currentRow.current = 0;
+    currentCol.current = 0;
     setError(null);
+   setHeapSize(0);
   };
   const getNextFreePosition = () => {
     if (freePositions.current.isEmpty) {
       setError({
         name: "HeapOverFlowException",
-        description: `A Heap overflow error has ocurred. Heap maximum size of ${_heapSize} nodes exceeded.`,
+        description: `A Heap overflow error has ocurred. Heap maximum size of ${heapSize} nodes exceeded.`,
       });
       return null;
     }
@@ -100,59 +98,63 @@ export default function useHeap({ nodeShape }: { nodeShape: NodeShape }): Heap {
       : null;
   };
   const setNextFreePosition = (node: LinkedListNode<Primitive>) => {
-    if (freePositions.current.isFull) return;
+    if (freePositions.current.size === heapSize) return;
     setFreeSpace(freePositions.current.size);
     const newNode = new LinkedListNode(``, node.position);
     newNode.memoryAddress = node.memoryAddress;
-    return freePositions.current.enqueue(newNode);
+    const _node = freePositions.current.enqueue(newNode);
+     setFreeSpace(freePositions.current.size);
+     return _node;
   };
 
-  const width =
-    col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -
-    nodeShape.nodeWidthSpacing;
-  const height =
-    row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) -
-    nodeShape.nodeHeightSpacing;
   const handleSetTable = (heapSize: number) => {
     if (heapSize <= 0 || heapSize > MAX_SIZE) {
       setError({
         description: `Invalid heap size, max size allowed: ${MAX_SIZE} `,
         name: "HeapSizeError",
       });
-      setTable({
+      table.current = {
         row: 0,
         col: 0,
-      });
-      return;
+      };
+      setHeapSize(0);
+ 
+      return false;
     }
     let col = Math.min(heapSize, MAX_COL);
     let row = Math.ceil(heapSize / col);
-    setTable({
+    setHeapSize(heapSize);
+    table.current = {
       row,
       col,
-    });
+    };
+    return true;
   };
   const malloc = (heapSize: number) => {
-    handleSetTable(heapSize);
+    if (handleSetTable(heapSize)) allocateMemory(heapSize);
   };
-  useEffect(() => {
-    if (!row || !col) {
-      return;
-    }
-    setInitialFreePositions();
-  }, [table]);
+  const relloc = (size: number) => {
+    if (handleSetTable(table.current.col * table.current.row + size))
+      allocateMemory(size);
+  };
+
   useEffect(() => {}, []);
   return {
-    width,
-    height,
+    width:
+      table.current.col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -
+      nodeShape.nodeWidthSpacing,
+    height:
+      table.current.row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) -
+      nodeShape.nodeHeightSpacing,
     getNextFreePosition,
     setNextFreePosition,
     freePositions: freePositions.current,
     error,
-    reset,
-    size: _heapSize,
+    free,
+    size: heapSize,
     freeSpace,
     malloc,
-    table,
+    relloc,
+    table: table.current,
   };
 }

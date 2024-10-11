@@ -187,7 +187,7 @@ export default function View() {
             clear();
             setAddData('')
             setAddIndex(0);
-            heap.reset()
+            heap.free()
         }} open={!!error || !!heap.error} showTrigger={false} description={error?.description || heap.error?.description || ''} />}
     </Main>
     )
