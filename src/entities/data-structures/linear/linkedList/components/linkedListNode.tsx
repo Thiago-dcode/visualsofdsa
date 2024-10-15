@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import LinkedListNode from '../classes/LinkedListNode'
 import { Primitive } from '@/types'
 import NodeShape from '@/lib/classes/NodeShape'
@@ -15,40 +15,39 @@ type LinkedListNodeProps = {
 
 export default function LinkedListNodeComponent({ node, nodeShape, index, isHead = false, isTail = false }: LinkedListNodeProps) {
     const [isOver, setIsOver] = useState(false);
+    // const getArrowShape = (nodeStart: LinkedListNode<Primitive>|null, nodeEnd: LinkedListNode<Primitive>|null) => {
+    //     if (!nodeStart || !nodeEnd) return {
+    //         x: 0,
+    //         y: 0,
+    //         length: 0,
+    //         angle: 0
+    //     }
+    //     const nodeStartPosition = {
+    //         x: nodeStart.position.x + nodeShape.nodeWidth,
+    //         y: nodeStart.position.y + nodeShape.nodeHeight / 2
+    //     }
+    //     const nodeNextPosition = {
+    //         x: nodeEnd.position.x,
+    //         y: nodeEnd.position.y + nodeShape.nodeHeight / 2
+    //     }
+
+    //     const length = getEuclideanDistance(nodeStartPosition, nodeNextPosition);
+
+    //     const angle = getAngle(nodeStartPosition, nodeNextPosition);
+
+    //     return {
+    //         x: nodeShape.nodeWidth,
+    //         y: nodeShape.nodeHeight / 2,
+    //         length,
+    //         angle
+    //     }
+    // }
     const handleRef = useCallback((element: HTMLElement | HTMLDivElement | null) => {
+      
         if (!element) return
         node.ref = element;
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    const getArrowShape = () => {
-        if (!node.next) return {
-            x: 0,
-            y: 0,
-            width: 0,
-            angle: 0
-        }
-        const nodeStartPosition = {
-            x: node.position.x + nodeShape.nodeWidth,
-            y: node.position.y + nodeShape.nodeHeight / 2
-        }
-        const nodeNextPosition = {
-            x: node.next.position.x,
-            y: node.next.position.y + nodeShape.nodeHeight / 2
-        }
-
-        const width = getEuclideanDistance(nodeStartPosition, nodeNextPosition);
-
-        const angle = getAngle(nodeStartPosition, nodeNextPosition);
-
-        return {
-            x: nodeShape.nodeWidth,
-            y: nodeShape.nodeHeight / 2,
-            width,
-            angle
-        }
-    }
-
     return (
         <div onMouseLeave={(e) => {
 
@@ -93,7 +92,8 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
                     </div>
 
                 </div>
-                {node.next && <Arrow isActive={isOver||node.isActive} arrowShape={getArrowShape()} />}
+                {node.next && <Arrow isActive={isOver}  edge={node.nextEdge} />}
+                
             </main>
             <footer className={`${isHead ? "bg-green-600" : isTail ? 'bg-yellow-600' : ''} h-1/5 border-b-2 border-white w-full text-center border-x-2    rounded-b-sm text-xs flex flex-row items-center`}><p style={{
                 zIndex: 49,

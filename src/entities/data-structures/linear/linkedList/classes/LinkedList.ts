@@ -56,13 +56,16 @@ export default class LinkedList<T extends Primitive> extends List {
   }
 
   async add(
-    data: T,
+    data: T | LinkedListNode<T>,
     index: number = this._size,
     position = new Position(0, 0),
     beforeAddCallback: callback = null
   ) {
-    this.throwIfOutOfTheBounds(index)
-    const newNode = new LinkedListNode(data, position);
+    this.throwIfOutOfTheBounds(index);
+    const newNode =
+      data instanceof LinkedListNode
+        ? data
+        : new LinkedListNode(data, position);
     if (!this._head) {
       if (beforeAddCallback) await beforeAddCallback(newNode, null, null);
 
@@ -101,18 +104,15 @@ export default class LinkedList<T extends Primitive> extends List {
       }
     }
     this._size++;
+    this.setEdgesShape(newNode);
     return newNode;
   }
 
   addFirst(data: T, position = new Position(0, 0)) {
-    this._addFirst(new LinkedListNode(data, position));
-    this._size++;
+    this.add(data, 0, position);
   }
   addLast(data: T | LinkedListNode<T>, position = new Position(0, 0)) {
-    this.addLastNode(
-      data instanceof LinkedListNode ? data : new LinkedListNode(data, position)
-    );
-    this._size++;
+    this.add(data, this.size, position);
   }
 
   private _addFirst(node: LinkedListNode<T>) {
@@ -126,6 +126,18 @@ export default class LinkedList<T extends Primitive> extends List {
       this._head.prev = node;
     }
     this._head = node;
+  }
+  private setEdgesShape(node: LinkedListNode<T>) {
+    if (node.prev) {
+      node.prev.nextEdge.setShape(node.prev, node.prev.next, this);
+      node.prev.prevEdge.setShape(node.prev, node.prev.prev, this);
+    }
+    if (node.next) {
+      node.next.nextEdge.setShape(node.next, node.next.next, this);
+      node.next.prevEdge.setShape(node.next, node.next.prev, this);
+    }
+    node.prevEdge.setShape(node, node.prev, this);
+    node.nextEdge.setShape(node, node.next, this);
   }
   private addLastNode(node: LinkedListNode<T>) {
     node.prev = this.tail;
@@ -160,12 +172,15 @@ export default class LinkedList<T extends Primitive> extends List {
     } else {
       const node = this.findNode(index);
       if (node?.prev && node.next) {
+        node.prev.nextEdge.resetShape()
+        node.next.prevEdge.resetShape()
         if (beforeDeleteCallback)
           await beforeDeleteCallback(node, node.next, node.prev);
         node.prev.next = node.next;
         node.next.prev = node.prev;
       }
       this._size--;
+      if (node)this.setEdgesShape(node)
       return node ? node.data : null;
     }
   }
@@ -176,6 +191,7 @@ export default class LinkedList<T extends Primitive> extends List {
   deleteFirstAndGetNode() {
     const node = this.head;
     if (node) {
+     
       if (this.head?.next) {
         this._head = this.head.next;
         this._head.prev = null;

@@ -1,13 +1,46 @@
-@keyframes peek-node {
-    0% {
-      background: rgba(250, 204, 21, 0.5);
-    }
-  
-    80% {
-      background: rgba(250, 204, 1);
-    }
-  
-    100% {
-      background: rgba(250, 204, 21, 0);
-    }
+@keyframes find-node {
+  0% {
+   
+
+    
   }
+
+  50% {
+    box-shadow: rgb(255, 255, 255) 0px 0px 0px 5px;
+  }
+
+  100% {
+ 
+  }
+}
+
+@keyframes get-node {
+  0% {
+  
+  }
+
+  50% {
+    box-shadow: rgb(255, 85, 85) 0px 0px 0px 15px,rgba(255, 85, 85,0.3) 0px 0px 0px 10px ;
+  }
+
+  100% {
+    
+  }
+}
+@keyframes lit-node-edge {
+  0% {
+    opacity: 0.5;
+    z-index: 99;
+   
+  }
+
+  80% {
+    opacity: 1;
+   
+  }
+
+  100% {
+   
+    opacity: 0.5;
+  }
+}
