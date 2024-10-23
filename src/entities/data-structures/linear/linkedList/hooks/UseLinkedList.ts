@@ -52,7 +52,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     try {
       let node: LinkedListNode<Primitive> | null = null;
       if (!isDoublyLinkedList) {
-        node = await findNode(index,true,true);
+        node = await findNode(index, true, true);
         if (node) {
           toast.info(` Took ${index + 1} steps to delete`, {
             position: "top-center",
@@ -91,23 +91,29 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       if (node) {
         toast.info(`Node data: "${node.data}", took ${index + 1} steps`, {
           position: "top-center",
-          
         });
       }
     }
   };
-  const findNode = async (index: number, animateLast = true,isDel=false) => {
+  const findNode = async (index: number, animateLast = true, isDel = false) => {
     if (setIndexOutOfTheBound(index)) return null;
     let j = 0;
     let node = linkedList.head;
     while (node) {
-      if (node.ref) await getAnimation(node.ref, index === j && animateLast,isDel);
+      if (node.ref)
+        await animate(
+          node.ref,
+          !(index === j && animateLast)
+            ? `find-node ${0.5 + "s"}`
+            : `${isDel ? "del" : "get"}-node ${1 + "s"}`
+        );
+
       if (index === j) {
         break;
       }
 
       if (node.ref && node.nextEdge)
-        await animate(node.nextEdge.ref, "lit-node-edge 0.5s");
+        await animate(node.nextEdge.ref, "lit-node-edge 0.4s");
 
       j++;
       node = node.next;

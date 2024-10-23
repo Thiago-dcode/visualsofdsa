@@ -24,7 +24,7 @@ const UseLinkedListAnimation = (linkedList: LinkedList<Primitive> | null) => {
 
         requestAnimation(
           ref,
-          !found?`find-node ${0.7 + "s"}`:`${isDel?'del':'get'}-node ${1 + "s"}`,
+          !found?`find-node ${0.5 + "s"}`:`${isDel?'del':'get'}-node ${1 + "s"}`,
           animationEvent
         );
       }
