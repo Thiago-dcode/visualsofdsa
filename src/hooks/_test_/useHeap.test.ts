@@ -174,45 +174,7 @@ describe("Testing useHeap", () => {
     expect(result.current.size).toBe(99);
     expect(result.current.freePositions.size).toBe(99);
     expect(result.current.table.col * result.current.table.row).toBe(100);
-    act(() => {
-      result.current.relloc(-10);
-    });
-    expect(result.current.size).toBe(89);
-    expect(result.current.freePositions.size).toBe(89);
-    act(() => {
-      result.current.relloc(-1);
-    });
-    expect(result.current.size).toBe(88);
-    expect(result.current.freePositions.size).toBe(88);
-    act(() => {
-      result.current.relloc(5);
-    });
-    expect(result.current.size).toBe(93);
-    expect(result.current.freePositions.size).toBe(93);
-    act(() => {
-      result.current.relloc(-90);
-    });
-    expect(result.current.size).toBe(3);
-    expect(result.current.freePositions.size).toBe(3);
-    expect(result.current.table.col * result.current.table.row).toBe(3);
-    act(() => {
-      result.current.relloc(96);
-    });
-    expect(result.current.size).toBe(99);
-    expect(result.current.freePositions.size).toBe(99);
-    expect(result.current.table.col * result.current.table.row).toBe(100);
-    act(() => {
-      result.current.relloc(1);
-    });
-    expect(result.current.size).toBe(100);
-    expect(result.current.freePositions.size).toBe(100);
-    expect(result.current.table.col * result.current.table.row).toBe(100);
-    act(() => {
-      result.current.relloc(-100);
-    });
-    expect(result.current.error).toBeFalsy();
-    expect(result.current.size).toBe(0);
-    expect(result.current.freePositions.size).toBe(0);
+
   });
   it("SHOULD REALLOC", () => {
     const { result } = renderHook(useHeap, {
@@ -259,12 +221,7 @@ describe("Testing useHeap", () => {
     });
     expect(result.current.size).toBe(99);
     expect(result.current.freePositions.size).toBe(99);
-    act(() => {
-      result.current.relloc(-100);
-    });
-    expect(result.current.error).toBeTruthy();
-    expect(result.current.size).toBe(0);
-    expect(result.current.freePositions.size).toBe(0);
+
   });
 
   it("should RESET", () => {

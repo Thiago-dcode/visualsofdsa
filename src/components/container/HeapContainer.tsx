@@ -1,17 +1,32 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { Heap } from '@/hooks/useHeap'
 import Info from '../ui/info';
 import { Dot } from 'lucide-react';
+import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAction';
+import { Input } from '../ui/input';
+import InputWithButtonContainer from './InputWithButtonContainer';
+import Section from './Section';
 
-function HeapContainer({ heap, children }: {
+function HeapContainer({ heap, children, loading }: {
     heap: Heap,
-    children: ReactNode
+    children: ReactNode,
+    loading: boolean
+
 }) {
-    const { width, height, size } = heap;
+    const [mallocSize, setMallocSize] = useState(0);
+    const [rellocSize, setRellocSize] = useState(0);
+    const { width, height, size: heapSize, malloc, relloc ,free} = heap;
+    useEffect(() => {
+        setRellocSize(0)
+        setMallocSize(heapSize)
+    }, [heapSize])
     return (
         <section className=''>
-            {size > 0 ? <>
-                <div className='flex items-center justify-self-start gap-2'>
+
+            <Section style={{
+                width: !heapSize?'100%': width + 'px',
+            }} className='self-start flex-row flex items-start justify-between gap-5   mb-2'>
+                <div className=' flex items-center gap-2'>
                     <h4 className='text-4xl'>Heap</h4>
                     <Info size={30} title='Heap' text={
                         <div className='flex flex-col items-start justify-start gap-3'>
@@ -67,15 +82,50 @@ function HeapContainer({ heap, children }: {
                         </div>
                     } />
                 </div>
-                <div className='p-4 border-white border-2 rounded-sm'>
-                    <div className='relative' style={{
-                        width: width + 'px',
-                        height: height + 'px'
-                    }}>
-                        {children}
-                    </div>
+                <div className='self-end flex items-center gap-2 relative'>
+                    {heapSize <= 0 ? <InputWithButtonContainer key={'linkedList-add-action'}>
+                        <Input value={mallocSize} placeholder="index" className="text-black w-20" onChange={(e) => {
+                            const n = Number.parseInt(e.target.value);
+                            setMallocSize(n)
+
+                        }} type="number" min={0} max={100} />
+
+                        <ButtonAction title="malloc" className='bg-green-400 hover:bg-green-600' isLoading={loading} onClick={() => {
+                            malloc(mallocSize)
+                        }} />
+
+                    </InputWithButtonContainer> : <Section className='relative  self-end'><InputWithButtonContainer key={'linkedList-add-action'}>
+                        <Input value={rellocSize} placeholder="index" className="text-black w-20" onChange={(e) => {
+                            if (loading) return;
+                            const n = Number.parseInt(e.target.value);
+                            setRellocSize(n)
+
+                        }} type="number" min={0} max={100} />
+
+                        <ButtonAction title="Relloc" className='bg-blue-400 hover:bg-blue-600' isLoading={loading} onClick={() => {
+                            if (loading) return;
+                            relloc(rellocSize)
+                        }} />
+
+                    </InputWithButtonContainer>
+                    <ButtonAction title="Free" className='bg-red-400 hover:bg-red-600' isLoading={loading} onClick={() => {
+                            if (loading) return;
+                           free()
+                        }} />
+                    
+                    </Section>}
                 </div>
-            </> : null}
+            </Section>
+
+            {heapSize > 0 ? <div className='p-4 border-white border-2 rounded-sm'>
+                <div className='relative' style={{
+                    width: width + 'px',
+                    height: height + 'px'
+                }}>
+                    {children}
+                </div>
+            </div> : null}
+
         </section>
     )
 }

@@ -1,0 +1,15 @@
+@keyframes animate-property {
+  0% {
+    
+  }
+
+  50% {
+    background: rgba(255, 120, 120);
+    color:white;
+   
+  }
+
+  100% {
+    background: rgba(255,255, 255);
+  }
+}

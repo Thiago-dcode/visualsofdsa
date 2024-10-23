@@ -25,11 +25,14 @@ export const getSpeed = (speed: speed) => {
 export const requestAnimation = function (
   ref: HTMLElement,
   animation: string,
-  animationEvent: (e: AnimationEvent) => void
+  animationEvent: (e: AnimationEvent) => void,
+  onlyOnce= false
 ) {
+ if(!onlyOnce){
   ref.style.animation = "none";
   ref.offsetHeight;
 
+ }
   window.requestAnimationFrame(function () {
     ref.style.animation = animation;
   });

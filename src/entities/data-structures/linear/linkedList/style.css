@@ -14,7 +14,7 @@
   }
 }
 
-@keyframes get-node {
+@keyframes del-node {
   0% {
   
   }
@@ -26,6 +26,34 @@
   100% {
     
   }
+}
+@keyframes get-node {
+  0% {
+  
+  }
+
+  50% {
+    box-shadow: rgba(202, 138,4 ) 0px 0px 0px 15px;
+  }
+
+  100% {
+  
+  }
+  
+}
+@keyframes add-node {
+  0% {
+  
+  }
+
+  50% {
+    box-shadow: rgba(74, 222, 128) 0px 0px 0px 15px;
+  }
+
+  100% {
+  
+  }
+  
 }
 @keyframes lit-node-edge {
   0% {
