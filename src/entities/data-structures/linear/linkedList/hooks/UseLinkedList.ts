@@ -7,11 +7,11 @@ import { toast } from "sonner";
 import "../style.css";
 import UseLinkedListAnimation from "./UseLinkedListAnimation";
 import LinkedListNode from "../classes/LinkedListNode";
-import animateEdge from "@/lib/classes/Edge";
+import { animate } from "@/lib/animations";
 export default function UseLinkedList(isDoublyLinkedList = false) {
   const [linkedList, setLinkedList] = useState(new LinkedList());
   const { getAnimation } = UseLinkedListAnimation(linkedList);
-  const [, setRender] = useState(false);
+
   const [error, setError] = useState<{
     name: string;
     description: string;
@@ -19,9 +19,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
 
   const [arrayLs, setArrayLs] = useState(linkedList.toNodeArray());
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
-  const forceRerender = () => {
-    setRender((prev) => !prev);
-  };
+
   const add = async (
     data: Primitive,
     index: number,
@@ -29,9 +27,17 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     memoryAddress: string = ""
   ) => {
     try {
+      if (!isDoublyLinkedList && index > 0) await findNode(index - 1, false);
+
       const node = await linkedList.add(data, index, position);
       node.memoryAddress = memoryAddress;
+      node.isLastAdd = true;
+
       setArrayLs(linkedList.toNodeArray());
+      toast.info(` Took ${index + 1} steps to add a new node`, {
+        position: "top-center",
+      });
+      return node;
     } catch (error) {
       if (error instanceof IndexOutOfBoundsError) {
         setError({
@@ -46,7 +52,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     try {
       let node: LinkedListNode<Primitive> | null = null;
       if (!isDoublyLinkedList) {
-        node = await findNode(index);
+        node = await findNode(index,true,true);
         if (node) {
           toast.info(` Took ${index + 1} steps to delete`, {
             position: "top-center",
@@ -61,7 +67,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       return node;
     } catch (error) {
       if (error instanceof IndexOutOfBoundsError) {
-        toast.error(`No element found on the index ${index}`, {
+        toast.error(`No element found on  index ${index}`, {
           position: "top-center",
         });
       }
@@ -85,22 +91,23 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       if (node) {
         toast.info(`Node data: "${node.data}", took ${index + 1} steps`, {
           position: "top-center",
+          
         });
       }
     }
   };
-  const findNode = async (index: number) => {
+  const findNode = async (index: number, animateLast = true,isDel=false) => {
     if (setIndexOutOfTheBound(index)) return null;
     let j = 0;
     let node = linkedList.head;
     while (node) {
-      if (node.ref) await getAnimation(node.ref, index === j);
+      if (node.ref) await getAnimation(node.ref, index === j && animateLast,isDel);
       if (index === j) {
         break;
       }
 
       if (node.ref && node.nextEdge)
-        await animateEdge(node.nextEdge, "lit-node-edge 0.5s");
+        await animate(node.nextEdge.ref, "lit-node-edge 0.5s");
 
       j++;
       node = node.next;

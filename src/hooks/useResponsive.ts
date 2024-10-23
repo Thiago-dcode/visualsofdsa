@@ -12,8 +12,8 @@ function useResponsive(onResize = (e:UIEvent)=>{}) {
     (width: number, height: number) => ({
       isPhone: width <= 480,
       isTablet: width > 480 && width <= 860,
-      isDesktop: width > 860 && width <= 1200,
-      isTv: width > 1200,
+      isDesktop: width > 860 && width <= 1300,
+      isTv: width > 1300,
       width,
       height,
     }),

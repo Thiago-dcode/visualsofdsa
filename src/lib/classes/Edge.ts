@@ -54,28 +54,5 @@ export class Edge {
   }
 }
 
-export const animateEdge = async (
-  edge: Edge | null,
-  animation = `animate-edge ${1 + "s"}`,
-  onAnimationEnds: ((e: AnimationEvent) => void) | null = null
-): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    if (edge === null || edge.ref === null) {
-      reject(false);
-    } else {
-      const animationEvent = (e: AnimationEvent) => {
-        if (onAnimationEnds) {
-          onAnimationEnds(e);
-        }
 
-        if (edge.ref)
-          edge.ref.removeEventListener("animationend", animationEvent);
 
-        resolve(true);
-      };
-      requestAnimation(edge.ref, animation, animationEvent);
-    }
-  });
-};
-
-export default animateEdge;

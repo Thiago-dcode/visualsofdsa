@@ -6,6 +6,7 @@ const UseLinkedListAnimation = (linkedList: LinkedList<Primitive> | null) => {
   const getAnimation = async (
     ref: HTMLElement | null,
     found:boolean,
+    isDel = false,
     onAnimationEnds: ((e: AnimationEvent) => void) | null = null
   ): Promise<boolean> => {
     return new Promise((resolve, reject) => {
@@ -23,7 +24,7 @@ const UseLinkedListAnimation = (linkedList: LinkedList<Primitive> | null) => {
 
         requestAnimation(
           ref,
-          !found?`find-node ${0.7 + "s"}`:`get-node ${1 + "s"}`,
+          !found?`find-node ${0.7 + "s"}`:`${isDel?'del':'get'}-node ${1 + "s"}`,
           animationEvent
         );
       }

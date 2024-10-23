@@ -6,6 +6,7 @@ import NotAllowedSizeError from "@/lib/errors/MaxSizeExceededError";
 import { getMemoryAddress } from "@/lib/utils";
 import { Primitive } from "@/types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import useResponsive from "./useResponsive";
 const MAX_COL = 5;
 const MAX_SIZE = 100;
 type Error = {
@@ -34,12 +35,21 @@ export type Heap = {
   table: Table;
 };
 
-export default function useHeap({ nodeShape }: { nodeShape: NodeShape }): Heap {
+export default function useHeap({
+  nodeShape,
+  onFree,
+}: {
+  nodeShape: NodeShape;
+  onFree?: () => void;
+}): Heap {
   const [error, setError] = useState<{
     name: string;
     description: string;
   } | null>(null);
   const freePositions = useRef(new Queue());
+  const device = useResponsive(() => {
+    free();
+  });
   freePositions.current.maxSize = MAX_SIZE;
   const table = useRef({
     row: 0,
@@ -49,34 +59,25 @@ export default function useHeap({ nodeShape }: { nodeShape: NodeShape }): Heap {
   const [freeSpace, setFreeSpace] = useState(0);
   const currentRow = useRef(0);
   const currentCol = useRef(0);
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
   const allocateMemory = (size: number) => {
-    if (size >= 0) {
-      for (let i = 0; i < size; i++) {
-        const node = new LinkedListNode(
-          `${currentRow.current + 1},${currentCol.current + 1}`,
-          new Position(
-            currentCol.current *
-              (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing),
-            currentRow.current *
-              (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)
-          )
-        );
-        node.memoryAddress = getMemoryAddress(i);
-        freePositions.current.enqueue(node);
-        currentCol.current++;
-        if (table.current.col === currentCol.current) {
-          currentCol.current = 0;
-          currentRow.current++;
-        }
-      }
-    } else {
-      for (let i = 0; i > size; i--) {
-        if (currentCol.current === 0) {
-          currentCol.current = table.current.col;
-          currentRow.current--;
-        }
-        freePositions.current.dequeue();
-        currentCol.current--;
+    for (let i = 0; i < size; i++) {
+      const node = new LinkedListNode(
+        `${currentRow.current + 1},${currentCol.current + 1}`,
+        new Position(
+          currentCol.current *
+            (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing),
+          currentRow.current *
+            (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)
+        )
+      );
+      node.memoryAddress = getMemoryAddress(i);
+      freePositions.current.enqueue(node);
+      currentCol.current++;
+      if (table.current.col === currentCol.current) {
+        currentCol.current = 0;
+        currentRow.current++;
       }
     }
 
@@ -85,6 +86,7 @@ export default function useHeap({ nodeShape }: { nodeShape: NodeShape }): Heap {
 
   const reset = () => {
     freePositions.current.flush();
+    setFreeSpace(0);
     currentRow.current = 0;
     currentCol.current = 0;
     table.current = {
@@ -94,7 +96,11 @@ export default function useHeap({ nodeShape }: { nodeShape: NodeShape }): Heap {
   };
   const free = () => {
     setError(null);
-    handleSetTable(0);
+    setHeapSize(0);
+    setWidth(0);
+    setHeight(0);
+    reset();
+    if (onFree) onFree();
   };
   const getNextFreePosition = () => {
     if (freePositions.current.isEmpty) {
@@ -125,7 +131,7 @@ export default function useHeap({ nodeShape }: { nodeShape: NodeShape }): Heap {
   };
 
   const handleSetTable = (heapSize: number) => {
-    if (error) return false;
+    if (error) return;
     if (heapSize <= 0 || heapSize > MAX_SIZE) {
       if (heapSize !== 0) {
         setError({
@@ -138,14 +144,28 @@ export default function useHeap({ nodeShape }: { nodeShape: NodeShape }): Heap {
 
       return false;
     }
-    let col = Math.min(heapSize, MAX_COL);
+    const {max_col} = setDimensionsBasingOnScreenWidth();
+    let col = Math.min(heapSize, Math.min(10,max_col));
     let row = Math.ceil(heapSize / col);
     setHeapSize(heapSize);
+    setWidth(
+      col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -
+        nodeShape.nodeWidthSpacing
+    );
+    setHeight(
+      row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) -
+        nodeShape.nodeHeightSpacing
+    );
     table.current = {
       row,
       col,
     };
     return true;
+  };
+  const setDimensionsBasingOnScreenWidth = () => {
+  return  {max_col: Math.floor(
+      device.width / (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing)
+    )}
   };
   const malloc = (heapSize: number) => {
     reset();
@@ -156,12 +176,8 @@ export default function useHeap({ nodeShape }: { nodeShape: NodeShape }): Heap {
   };
 
   return {
-    width:
-      table.current.col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -
-      nodeShape.nodeWidthSpacing,
-    height:
-      table.current.row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) -
-      nodeShape.nodeHeightSpacing,
+    width,
+    height,
     getNextFreePosition,
     setNextFreePosition,
     freePositions: freePositions.current,

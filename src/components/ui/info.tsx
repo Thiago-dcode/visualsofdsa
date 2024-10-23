@@ -19,11 +19,11 @@ export default function Info({ className = '', size = 30, text, color = 'white',
                     {trigger}
                 </Button>
             </HoverCardTrigger>
-            <HoverCardContent className="w-screen  px-5 overflow-scroll ">
+            <HoverCardContent className="w-screen  px-5 overflow-scroll max-w-[700px] ">
                 <article className="flex flex-col w-full gap-2 items-center  overflow-auto">
 
                     <header><h3 className="text-xl text-center font-semibold">{title}</h3></header>
-                    <main className='text-lg font-mono text-justify p-2 max-h-[500px]'>{text}</main>
+                    <main className='text-lg font-mono text-justify p-2 max-h-[500px] '>{text}</main>
 
                 </article>
             </HoverCardContent>
