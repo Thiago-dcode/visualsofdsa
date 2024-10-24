@@ -17,7 +17,8 @@ export default function LinkList({ link, isFirstLvl }: {
     const { children } = link
     const [isOpen, setIsOpen] = useState(false)
     const pathName = usePathname();
-   const pathMatch = pathName.includes(link.link);
+    const arrOfPaths = pathName.split('/')
+   const pathMatch = arrOfPaths.includes(link.link);
     const getIcon = () => {
 
         if (isOpen && isFirstLvl) return 'up';
@@ -43,11 +44,12 @@ export default function LinkList({ link, isFirstLvl }: {
                                 {children.map((child, i) => {
                                     const arr = child.link.split('/');
                                    const lastLink   = arr[arr.length-1];
+                                        
                                     return (
 
 
                                         <div key={`${child.link}-${i}`} className={cn({
-                                            'bg-white/80 text-black':pathName.includes(lastLink)
+                                            'bg-white/80 text-black':arrOfPaths.includes(lastLink)
                                         })} >
 
                                             <LinkList link={child} isFirstLvl={false} />

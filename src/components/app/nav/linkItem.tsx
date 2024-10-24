@@ -39,9 +39,13 @@ export default function LinkItemComponent({ link, icon,isFirstLvl,pathMatch }: {
  
     // console.log(arrOfPaths);
     return (<div className={cn(' flex items-center justify-between  w-full', {
-        'border-b border-b-white rounded-none':isFirstLvl && pathMatch
+        'border-b border-b-white rounded-none':isFirstLvl && pathMatch,
+        
 
-    })}><Button className="px-1 py-2 h-auto w-full" variant={'no-style'} onClick={() => {
+    })}><Button className={cn("px-1 py-2 h-auto w-full" ,{
+        'cursor-not-allowed text-white/50':!link.enable
+    })} variant={'no-style'} onClick={() => {
+        if(!link.enable)return;
         router.push(link.link)
     }} >
             <span className={cn('flex items-center justify-between w-full gap-1',{

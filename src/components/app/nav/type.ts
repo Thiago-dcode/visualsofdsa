@@ -1,5 +1,6 @@
 export type LinkItem = {
     name: string,
     link: `/${string}`,
-    children: LinkItem[] | null
+    children: LinkItem[] | null,
+    enable: boolean
 }
