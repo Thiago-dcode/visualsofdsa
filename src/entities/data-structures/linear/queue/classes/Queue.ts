@@ -16,7 +16,7 @@ export default class Queue<T extends Primitive> extends LinearDs<T> {
       data,
       new Position(
         0,
-        (this.nodeHeight + this.nodeHeight) * this.size + this.nodeHeight
+        (this.nodeHeight + this.nodeHeightSpacing) * this.size 
       )
     );
   }
