@@ -13,9 +13,14 @@ import HeapContainer from '@/components/container/HeapContainer';
 import Properties from '@/components/app/Properties';
 import Section from '@/components/container/Section';
 import Info from '@/components/ui/info';
+import Title from '@/components/ui/Title';
+import Arrow from '@/components/ui/arrow';
+import { ArrowRight } from 'lucide-react';
 
-export default function View() {
-    const { linkedList, add, get, traverse, del, isStackOverFlow, clear, error, arrayLs } = UseLinkedList();
+export default function View({ isDoubly = false }: {
+    isDoubly?: boolean
+}) {
+    const { linkedList, add, get, traverse, del, isStackOverFlow, clear, error, arrayLs } = UseLinkedList(isDoubly);
     const heap = useHeap({
         nodeShape: linkedList,
         onFree: clear
@@ -63,7 +68,41 @@ export default function View() {
     }, [])
     return (<Main>
         {/* BUTTONS ACTION SECTION */}
+        <div className='flex items-center justify-center gap-2'>
+            <Title title={isDoubly ? 'Doubly Linked List' : 'Linked List'} />
+            <Info
+                title="DOUBLY LINKED LIST"
+                text={
+                    <article>
+                        <p>A <b>Doubly Linked List</b> is a <b>linear data structure</b> consisting of nodes, where each node contains a value and two pointers (or references): one pointing to the <b>next</b> node and another pointing to the <b>previous</b> node in the sequence. This bidirectional navigation allows more efficient operations, especially for traversal in both directions. Doubly linked lists are particularly useful when frequent insertions and deletions are required at both ends of the list.</p>
 
+                        <h4 className="font-semibold py-2">Key Operations of a Doubly Linked List:</h4>
+
+                        <ul>
+                            <li>
+                                <b className="font-semibold text-green-400"> Add/Insert: </b>
+                                This operation <b>adds a new node to the doubly linked list</b>. The new node can be inserted at the head, tail, or in a specific position. The previous and next pointers need to be updated to maintain the structure. <br />
+                                <b>Time complexity:</b> O(1) for insertion at the head or tail, O(n) for insertion at a specific position.
+                            </li>
+                            <br />
+                            <li>
+                                <b className="font-semibold text-red-400"> Delete: </b>
+                                This operation <b>removes a node from the doubly linked list</b>. The node to be deleted could be anywhere in the list, and both the previous and next pointers of neighboring nodes need to be adjusted. <br />
+                                <b>Time complexity:</b> O(1) for deletion at the head or tail, O(n) for deletion at a specific position.
+                            </li>
+                            <br />
+                            <li>
+                                <b className="font-semibold text-yellow-400"> Get/Find/Search: </b>
+                                This operation <b>finds and returns the first node that contains the desired value</b>. Since a doubly linked list can be traversed from both the head and the tail, searching can be done in either direction. <br />
+                                <b>Time complexity:</b> O(n), as each node still needs to be checked sequentially.
+                            </li>
+                        </ul>
+                    </article>
+                }
+                className="self-start"
+            />
+
+        </div>
         <OperationsContainer open={open} setOpen={setOpen} >
             {/*ADD SECTION */}
             {heap.size > 0 ? <Section className='self-start gap-2 items-end' key={'section-1-linkedList-view'} >
@@ -157,45 +196,27 @@ export default function View() {
                 })())
             }} /> : null}
         </OperationsContainer>
-        <Info
-            title="LINKED LIST"
-            text={
-                <article>
-                    <p>A <b>Linked List</b> is a <b>linear data structure</b> consisting of nodes, where each node contains a value and a pointer (or reference) to the next node in the sequence. Unlike arrays, linked lists do not require contiguous memory locations, which allows for more efficient dynamic memory management. Linked lists are commonly used in scenarios where dynamic memory allocation, insertion, and deletion of elements are <b>frequent.</b></p>
 
-                    <h4 className="font-semibold py-2">Key Operations of a Linked List:</h4>
 
-                    <ul>
-                        <li>
-                            <b className="font-semibold text-green-400"> Add/Insert: </b>
-                            This operation <b>adds a new node to the linked list</b>. The new node can be inserted at the beginning, middle, or end of the list, depending on the specific requirements. <br />
-                            <b>Time complexity:</b> O(1) for insertion at the head, O(n) for insertion at a specific position.
-                        </li>
-                        <br />
-                        <li>
-                            <b className="font-semibold text-red-400"> Delete: </b>
-                            This operation <b>removes a node from the linked list</b>. The node to be deleted can be located at the head, tail, or any specific position. Removing a node involves adjusting the pointers of adjacent nodes to bypass the deleted node. <br />
-                            <b>Time complexity:</b> O(1) for deletion at the head, O(n) for deletion at a specific position.
-                        </li>
-                        <br />
-                        <li>
-                            <b className="font-semibold text-yellow-400"> Get/Find/Search: </b>
-                            This operation <b>finds and returns the first node that contains the desired value</b>. It involves traversing the list from the head until the value is found or the end of the list is reached. <br />
-                            <b>Time complexity:</b> O(n), as each node needs to be checked sequentially.
-                        </li>
-                    </ul>
-                </article>
-            }
-            className="self-start"
-        />
+        <div className='flex items-center justify-between w-full'>
+            <Properties className='w-full' properties={{
+                'heapSize': heap.size,
+                'heapFreeSpace': heap.freeSpace,
+                'linkedlistSize': linkedList.size,
 
-        <Properties className='w-full' properties={{
-            'heapSize': heap.size,
-            'heapFreeSpace': heap.freeSpace,
-            'linkedlistSize': linkedList.size,
+            }} />
+            {linkedList.size > 1 ? <div className='flex items-center '>
+                <div className='flex items-start justify-start gap-1'>
+                    <ArrowRight size={30} color='green' />
+                    <p className='text-md'>:Pointer to the <strong>next</strong> node.</p>
+                </div>
+                {isDoubly && <div className='flex items-start justify-start gap-1'>
+                    <ArrowRight size={30} color='red' />
+                    <p className='text-md'>:Pointer to the <strong>prev</strong> node.</p>
+                </div>}
 
-        }} />
-
+            </div> :null}
+        </div>
 
         {/* HEAP SECTION */}
 
@@ -206,7 +227,7 @@ export default function View() {
                     return (
                         <>
 
-                            <LinkedListNodeComponent setIsAnimationRunning={setIsAnimationRunning} isHead={linkedList.head && linkedList.head.id === node.id ? true : false} isTail={linkedList.tail && linkedList.tail.id === node.id ? true : false} key={`linkedListNodeComponent-${node.data}-${node.id}-(${node.position.x},${node.position.y})`} index={i} node={node} nodeShape={linkedList} />
+                            <LinkedListNodeComponent isDoubly={isDoubly} setIsAnimationRunning={setIsAnimationRunning} isHead={linkedList.head && linkedList.head.id === node.id ? true : false} isTail={linkedList.tail && linkedList.tail.id === node.id ? true : false} key={`linkedListNodeComponent-${node.data}-${node.id}-(${node.position.x},${node.position.y})`} index={i} node={node} nodeShape={linkedList} />
 
                         </>
                     )

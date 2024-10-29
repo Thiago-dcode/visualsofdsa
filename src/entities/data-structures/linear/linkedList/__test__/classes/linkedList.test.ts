@@ -8,12 +8,9 @@ import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
 import { Primitive } from "@/types";
 const callback = async (
   node: LinkedListNode<Primitive> | null,
-  next: LinkedListNode<Primitive> | null,
-  prev: LinkedListNode<Primitive> | null
+  index: number
 ) => {
   expect(node).toBeInstanceOf(Node);
-  expect(next).toBeInstanceOf(Node);
-  expect(prev).toBeInstanceOf(Node);
 };
 describe("Testing LinkedList add method", () => {
   it("should initilize with a 0 size", () => {
@@ -28,10 +25,9 @@ describe("Testing LinkedList add method", () => {
       "hello",
       linkedList.size,
       new Position(0, 0),
-      async (node, next, prev) => {
+      async (node, index) => {
         expect(node).toBeInstanceOf(Node);
-        expect(next).toBeNull();
-        expect(prev).toBeNull();
+        expect(index).toBe(0);
       }
     );
     expect(linkedList.head).toBeInstanceOf(Node);
@@ -42,12 +38,9 @@ describe("Testing LinkedList add method", () => {
   it("Should add a element in the end", async () => {
     const callback = async (
       node: LinkedListNode<Primitive> | null,
-      next: LinkedListNode<Primitive> | null,
-      prev: LinkedListNode<Primitive> | null
+      index: number
     ) => {
       expect(node).toBeInstanceOf(Node);
-      expect(next).toBeNull();
-      expect(prev).toBeInstanceOf(Node);
     };
     const linkedList = new LinkedList();
     linkedList.add("hello"); //head and tail
@@ -77,12 +70,9 @@ describe("Testing LinkedList add method", () => {
   it("Should add a element at the beginner when a index == 0 is given", async () => {
     const callback = async (
       node: LinkedListNode<Primitive> | null,
-      next: LinkedListNode<Primitive> | null,
-      prev: LinkedListNode<Primitive> | null
+      index: number
     ) => {
       expect(node).toBeInstanceOf(Node);
-      expect(next).toBeInstanceOf(Node);
-      expect(prev).toBeNull();
     };
     const linkedList = new LinkedList();
     linkedList.add("hello"); //head and tail
@@ -144,12 +134,14 @@ describe("Testing LinkedList add method", () => {
   it("Should add by a given index", async () => {
     const linkedList = new LinkedList<number>();
     for (let i = 0; i < 10; i++) {
-      linkedList.add(i);
+      await linkedList.add(i);
       expect(linkedList.tail?.data).toBe(i);
     }
     expect(linkedList.tail?.data).toBe(9);
     expect(linkedList.tail?.prev?.data).toBe(8);
-    await linkedList.add(100, 9, new Position(0, 0), callback);
+    await linkedList.add(100, 9, new Position(0, 0), async(node,index)=>{
+      expect(node).toBeInstanceOf(LinkedListNode)
+    });
     expect(linkedList.tail?.prev?.data).toBe(100);
     linkedList.add(101, 11);
     expect(linkedList.tail?.data).toBe(101);
@@ -161,10 +153,13 @@ describe("Testing LinkedList add method", () => {
     await linkedList.add(103, 1, new Position(0, 0), callback);
     linkedList.add(103, 1);
     expect(linkedList.head?.next?.data).toBe(103);
-    await linkedList.add(104, 2, new Position(0, 0), callback);
+    await linkedList.add(104, 2, new Position(0, 0), async(node,index)=>{
+      expect(node).toBeInstanceOf(LinkedListNode)
+     
+    });
     expect(linkedList.head?.next?.next?.data).toBe(104);
     expect(linkedList.size).toBe(16);
-    linkedList.add(999, 8);
+    await linkedList.add(999, 8);
     let node = linkedList.head;
     for (let i = 0; i < linkedList.size; i++) {
       if (i === 8) {
@@ -200,12 +195,12 @@ describe("Testing LinkedList add method", () => {
     expect(linkedList["isTail"](2)).toBeFalsy();
     expect(linkedList["isTail"](3)).toBeFalsy();
     expect(linkedList["isTail"](4)).toBeFalsy();
-    expect(linkedList["isTail"](5)).toBeFalsy();
+    expect(linkedList["isTail"](5)).toBeTruthy();
     expect(linkedList["isTail"](6)).toBeTruthy();
     expect(linkedList["isTail"](7)).toBeTruthy();
     expect(linkedList["isTail"](8)).toBeTruthy();
     expect(linkedList["isTail"](9)).toBeTruthy();
-    expect(linkedList["isTail"](10)).toBeTruthy();
+  
   });
 });
 
@@ -278,14 +273,8 @@ describe("Testing delete method in linkedList", () => {
     expect(linkedList.size).toBe(10);
     await linkedList.delete(
       0,
-      async (
-        node: LinkedListNode<Primitive> | null,
-        next: LinkedListNode<Primitive> | null,
-        prev: LinkedListNode<Primitive> | null
-      ) => {
+      async (node: LinkedListNode<Primitive> | null, index: number) => {
         expect(node).toBeInstanceOf(Node);
-        expect(next).toBeInstanceOf(Node);
-        expect(prev).toBeNull();
       }
     );
     expect(linkedList.getFirst()).toBe(1);
@@ -296,14 +285,8 @@ describe("Testing delete method in linkedList", () => {
     expect(linkedList.getLast()).toBe(9);
     await linkedList.delete(
       linkedList.size - 1,
-      async (
-        node: LinkedListNode<Primitive> | null,
-        next: LinkedListNode<Primitive> | null,
-        prev: LinkedListNode<Primitive> | null
-      ) => {
+      async (node: LinkedListNode<Primitive> | null, index: number) => {
         expect(node).toBeInstanceOf(Node);
-        expect(next).toBeNull();
-        expect(prev).toBeInstanceOf(Node);
       }
     );
     expect(linkedList.getLast()).toBe(8);
@@ -316,20 +299,21 @@ describe("Testing delete method in linkedList", () => {
   it("Should delete any position", async () => {
     const linkedList = new LinkedList();
     for (let i = 0; i < 10; i++) {
-      linkedList.add(i);
+      await linkedList.add(i);
     }
     expect(linkedList.head?.next?.data).toBe(1);
-    await linkedList.delete(1, callback);
+    expect(linkedList.head?.data).toBe(0);
+    await linkedList.delete(1);
     expect(linkedList.head?.next?.data).toBe(2);
     expect(linkedList.size).toBe(9);
     expect(linkedList.head?.next?.next?.data).toBe(3);
     await linkedList.delete(2, callback);
     expect(linkedList.head?.next?.next?.data).toBe(4);
     expect(linkedList.tail?.prev?.data).toBe(8);
-    linkedList.delete(linkedList.size - 2);
+   await  linkedList.delete(linkedList.size - 2);
     expect(linkedList.tail?.prev?.data).toBe(7);
     expect(linkedList.tail?.prev?.prev?.data).toBe(6);
-    linkedList.delete(linkedList.size - 3);
+    await linkedList.delete(linkedList.size - 3);
     expect(linkedList.tail?.prev?.prev?.data).toBe(5);
     expect(linkedList.size).toBe(6);
   });
@@ -356,9 +340,8 @@ describe("Testing traverse method", () => {
       linkedList.add(i);
     }
     let j = 0;
-  
+
     await linkedList.traverse("forward", async (node, i) => {
-      
       expect(node).toBeInstanceOf(LinkedListNode);
       expect(node.data).toBe(i);
       expect(i).toBe(j);
@@ -372,8 +355,8 @@ describe("Testing traverse method", () => {
     }
     let j = 0;
     await linkedList.traverse("backward", async (node, i) => {
-     expect(node).toBeInstanceOf(LinkedListNode);
-      expect(node.data).toBe(linkedList.size-i-1);
+      expect(node).toBeInstanceOf(LinkedListNode);
+      expect(node.data).toBe(linkedList.size - i - 1);
       expect(i).toBe(j);
       j++;
     });

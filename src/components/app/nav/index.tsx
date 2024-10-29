@@ -47,7 +47,7 @@ const LINKS: LinkItem[] = [{
                     name: 'Doubly linked list',
                     link: '/data-structures/linear/doubly-linked-list',
                     children: null,
-                    enable: false,
+                    enable: true,
                 },
 
             ]

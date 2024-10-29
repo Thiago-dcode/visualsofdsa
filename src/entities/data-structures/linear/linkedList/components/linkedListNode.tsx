@@ -12,38 +12,13 @@ type LinkedListNodeProps = {
     index: number,
     isHead?: boolean,
     isTail?: boolean,
+    isDoubly: boolean
     setIsAnimationRunning: (e: boolean) => void
 }
 
-export default function LinkedListNodeComponent({ node, nodeShape, index, isHead = false, isTail = false, setIsAnimationRunning }: LinkedListNodeProps) {
+export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, index, isHead = false, isTail = false, setIsAnimationRunning }: LinkedListNodeProps) {
     const [isOver, setIsOver] = useState(false);
-    // const getArrowShape = (nodeStart: LinkedListNode<Primitive>|null, nodeEnd: LinkedListNode<Primitive>|null) => {
-    //     if (!nodeStart || !nodeEnd) return {
-    //         x: 0,
-    //         y: 0,
-    //         length: 0,
-    //         angle: 0
-    //     }
-    //     const nodeStartPosition = {
-    //         x: nodeStart.position.x + nodeShape.nodeWidth,
-    //         y: nodeStart.position.y + nodeShape.nodeHeight / 2
-    //     }
-    //     const nodeNextPosition = {
-    //         x: nodeEnd.position.x,
-    //         y: nodeEnd.position.y + nodeShape.nodeHeight / 2
-    //     }
 
-    //     const length = getEuclideanDistance(nodeStartPosition, nodeNextPosition);
-
-    //     const angle = getAngle(nodeStartPosition, nodeNextPosition);
-
-    //     return {
-    //         x: nodeShape.nodeWidth,
-    //         y: nodeShape.nodeHeight / 2,
-    //         length,
-    //         angle
-    //     }
-    // }
     const handleRef = useCallback(async (element: HTMLElement | HTMLDivElement | null) => {
 
         if (!element) return
@@ -63,6 +38,20 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
 
         node.isLastAdd = false;
     }, [])
+
+    useEffect(() => {
+      
+        if (node.next && node.next.ref) {
+            node.next.ref.style.outline = isOver?'rgb(22,163,74,0.8) solid 5px':'none'
+            node.next.ref.style.borderRadius = isOver?'5px':'none'
+        }
+        if (node.prev && node.prev.ref && isDoubly) {
+            node.prev.ref.style.outline =isOver?'rgb(220,38,38,0.8) solid 5px':'none'
+             node.prev.ref.style.borderRadius = isOver?'5px':'none'
+        }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOver])
     return (
         <div onMouseLeave={(e) => {
 
@@ -91,12 +80,24 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
             }} className={`${isHead ? "bg-green-600" : isTail ? 'bg-yellow-600' : ''} w-full border-x-2 border-t-2 h-1/5 flex items-center justify-center rounded-t-sm`}><p className='text-center text-xs'>Memory: {node.memoryAddress}</p></header>
 
             <main className={`flex flex-row items-center justify-between w-full h-3/5  border-2 border-white`}>
+                {/* NODE-prev */}
+                {isDoubly ? <div className='w-2/5 h-full flex flex-col items-center justify-between relative text-xs  text-center '>
 
+                    <div className='flex items-center justify-center  w-full h-full'>
+                        {node.prev ? <p className='w-full h-full break-all flex items-center justify-center overflow-auto' style={{
+                            zIndex: 49,
+                        }} >&quot;{node.prev.data}&quot;</p>
+                            : <p className='text-blue-500 italic' style={{
+                                zIndex: 49,
+                            }}>null</p>}
+                    </div>
+
+                </div> : null}
                 {/* NODE-DATA */}
                 <div className='w-3/5 bg-app-ivory text-black h-full flex items-center justify-center text-center text-xs overflow-auto'>
                     <p className='h-full w-full text-center flex items-center justify-center break-all font-semibold text-sm' style={{
                         zIndex: 49,
-                    }}>&quot;{node.data }&quot;</p>
+                    }}>&quot;{node.data}&quot;</p>
                 </div>
                 {/* NODE-NEXT */}
                 <div className='w-2/5 h-full flex flex-col items-center justify-between relative text-xs  text-center '>
@@ -104,21 +105,26 @@ export default function LinkedListNodeComponent({ node, nodeShape, index, isHead
                     <div className='flex items-center justify-center  w-full h-full'>
                         {node.next ? <p className='w-full h-full break-all flex items-center justify-center overflow-auto' style={{
                             zIndex: 49,
-                        }} >{node.next.data}</p>
+                        }} >&quot;{node.next.data}&quot;</p>
                             : <p className='text-blue-500 italic' style={{
                                 zIndex: 49,
                             }}>null</p>}
                     </div>
 
                 </div>
-                {node.next && <Arrow isActive={isOver} edge={node.nextEdge} />}
+                {node.next && <Arrow color='green' isActive={isOver} edge={node.nextEdge} extraY={+10} extraX={nodeShape.nodeWidth} />}
+                {node.prev && isDoubly && <Arrow isActive={isOver} edge={node.prevEdge} extraY={-10} extraX={0} />}
 
             </main>
-            <footer className={`${isHead ? "bg-green-600" : isTail ? 'bg-yellow-600' : ''} h-1/5 border-b-2 border-white w-full text-center border-x-2    rounded-b-sm text-xs flex flex-row items-center`}><p style={{
-                zIndex: 49,
-            }} className='border-r border-white w-3/5 flex items-center justify-center'>node <span className='text-xs'>({isHead ? 'head' : isTail ? 'tail' : index})</span></p><p style={{
-                zIndex: 49,
-            }} className='flex items-center justify-center w-2/5'>next</p></footer>
+            <footer className={`${isHead ? "bg-green-600" : isTail ? 'bg-yellow-600' : ''} h-1/5 border-b-2 border-white w-full text-center border-x-2    rounded-b-sm text-xs flex flex-row items-center`}>
+                {isDoubly ? <p style={{
+                    zIndex: 49,
+                }} className='flex items-center justify-center w-2/5 border-r border-white'>prev</p> : null}
+                <p style={{
+                    zIndex: 49,
+                }} className='border-r border-white w-3/5 flex items-center justify-center'>node <span className='text-xs'>({isHead ? 'head' : isTail ? 'tail' : index})</span></p><p style={{
+                    zIndex: 49,
+                }} className='flex items-center justify-center w-2/5'>next</p></footer>
 
 
         </div>

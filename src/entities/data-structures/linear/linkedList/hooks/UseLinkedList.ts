@@ -8,6 +8,7 @@ import "../style.css";
 import UseLinkedListAnimation from "./UseLinkedListAnimation";
 import LinkedListNode from "../classes/LinkedListNode";
 import { animate } from "@/lib/animations";
+const ANIMATION_SPEED = 1;
 export default function UseLinkedList(isDoublyLinkedList = false) {
   const [linkedList, setLinkedList] = useState(new LinkedList());
   const { getAnimation } = UseLinkedListAnimation(linkedList);
@@ -20,6 +21,8 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
   const [arrayLs, setArrayLs] = useState(linkedList.toNodeArray());
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
 
+  const animateEdge = (ref: HTMLElement | null) =>
+    animate(ref, `lit-node-edge ${ANIMATION_SPEED * 0.5}s`);
   const add = async (
     data: Primitive,
     index: number,
@@ -27,14 +30,38 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     memoryAddress: string = ""
   ) => {
     try {
+      let steps = index + 1;
       if (!isDoublyLinkedList && index > 0) await findNode(index - 1, false);
 
-      const node = await linkedList.add(data, index, position);
+      const node = await linkedList.add(
+        data,
+        index,
+        position,
+        async (_node, _index, direction, _steps) => {
+          if (!_node || !isDoublyLinkedList) return;
+
+          steps = _steps || 1;
+          try {
+            if (_node && _node.ref) {
+              await animate(
+                _node.ref,
+                `find-node ${ANIMATION_SPEED * 0.8 + "s"}`
+              );
+
+              if (direction === "forward")
+                await animateEdge(_node.nextEdge.ref);
+              else if (direction === "backward")
+                await animateEdge(_node.prevEdge.ref);
+            }
+          } catch (error) {}
+        }
+      );
+
       node.memoryAddress = memoryAddress;
       node.isLastAdd = true;
 
       setArrayLs(linkedList.toNodeArray());
-      toast.info(` Took ${index + 1} steps to add a new node`, {
+      toast.info(` Took ${steps} steps to add a new node`, {
         position: "top-center",
       });
       return node;
@@ -51,23 +78,41 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
   const del = async (index: number) => {
     try {
       let node: LinkedListNode<Primitive> | null = null;
-      if (!isDoublyLinkedList) {
-        node = await findNode(index, true, true);
-        if (node) {
-          toast.info(` Took ${index + 1} steps to delete`, {
-            position: "top-center",
-          });
-        }
-      }
+      let steps = index + 1;
+      if (!isDoublyLinkedList) await findNode(index, true, true);
 
-      await linkedList.delete(index, async (node, next, prev) => {
-        //handle animation on delete
-      });
+      node = await linkedList.deleteAndGetNode(
+        index,
+        async (_node, _index, direction, _steps) => {
+          if (!_node || !isDoublyLinkedList) return;
+
+          steps = _steps || 1;
+          try {
+            if (_node && _node.ref) {
+              await animate(
+                _node.ref,
+                `${index !== _index?"find":'del'}-node ${ANIMATION_SPEED * 0.8 + "s"}`
+              );
+
+              if (index !== _index) {
+                if (direction === "forward")
+                  await animateEdge(_node.nextEdge.ref);
+                else if (direction === "backward")
+                  await animateEdge(_node.prevEdge.ref);
+              }
+            }
+          } catch (error) {}
+        }
+      );
+
       setArrayLs(linkedList.toNodeArray());
+      toast.info(` Took ${steps} steps to delete a node`, {
+        position: "top-center",
+      });
       return node;
     } catch (error) {
       if (error instanceof IndexOutOfBoundsError) {
-        toast.error(`No element found on  index ${index}`, {
+        toast.error(`No element found at index ${index}`, {
           position: "top-center",
         });
       }
@@ -86,14 +131,39 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
   };
   const get = async (index: number) => {
     let node: LinkedListNode<Primitive> | null = null;
+    let steps = index + 1;
     if (!isDoublyLinkedList) {
       node = await findNode(index);
-      if (node) {
-        toast.info(`Node data: "${node.data}", took ${index + 1} steps`, {
-          position: "top-center",
-        });
-      }
+    } else {
+      node = await linkedList.getNode(
+        index,
+        async (_node, _index, direction, _steps) => {
+          steps = _steps || 1;
+          if (_node && _node.ref) {
+            try {
+              await animate(
+                _node.ref,
+                index !== _index
+                  ? `find-node ${ANIMATION_SPEED * 0.8 + "s"}`
+                  : `get-node ${ANIMATION_SPEED + "s"}`
+              );
+              if (index !== _index) {
+                if (direction === "forward")
+                  await animateEdge(_node.nextEdge.ref);
+                else if (direction === "backward")
+                  await animateEdge(_node.prevEdge.ref);
+              }
+            } catch (error) {}
+          }
+        }
+      );
     }
+    if (node) {
+      toast.info(`Node data: "${node.data}", took ${steps} steps`, {
+        position: "top-center",
+      });
+    }
+    return node;
   };
   const findNode = async (index: number, animateLast = true, isDel = false) => {
     if (setIndexOutOfTheBound(index)) return null;
@@ -104,16 +174,15 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
         await animate(
           node.ref,
           !(index === j && animateLast)
-            ? `find-node ${0.5 + "s"}`
-            : `${isDel ? "del" : "get"}-node ${1 + "s"}`
+            ? `find-node ${ANIMATION_SPEED * 0.8 + "s"}`
+            : `${isDel ? "del" : "get"}-node ${ANIMATION_SPEED + "s"}`
         );
 
       if (index === j) {
         break;
       }
 
-      if (node.ref && node.nextEdge)
-        await animate(node.nextEdge.ref, "lit-node-edge 0.4s");
+      if (node.ref && node.nextEdge) await animateEdge(node.nextEdge.ref);
 
       j++;
       node = node.next;
@@ -133,7 +202,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     setError(null);
   };
   const setUpLinkedList = () => {
-    linkedList.nodeWidth = 120;
+    linkedList.nodeWidth = isDoublyLinkedList ? 180 : 120;
     linkedList.nodeHeightSpacing = 40;
     linkedList.nodeWidthSpacing = 70;
     linkedList.nodeHeight = 80;
