@@ -12,7 +12,7 @@ export class Edge {
     public angle: number = 0
   ) {}
 
-  public resetShape () {
+  public resetShape() {
     this.x = 0;
     this.y = 0;
     this.length = 0;
@@ -21,17 +21,19 @@ export class Edge {
   public setShape(
     nodeStart: LinkedListNode<Primitive> | null,
     nodeEnd: LinkedListNode<Primitive> | null,
-    nodeShape: NodeShape
+    nodeShape: NodeShape,
+    extraHeight = 0,
+    extraWidth = 0
   ) {
     if (!nodeStart || !nodeEnd) {
       return;
     }
     const nodeStartPosition = {
-      x: nodeStart.position.x + nodeShape.nodeWidth,
+      x: nodeStart.position.x ,
       y: nodeStart.position.y + nodeShape.nodeHeight / 2,
     };
     const nodeNextPosition = {
-      x: nodeEnd.position.x,
+      x: nodeEnd.position.x ,
       y: nodeEnd.position.y + nodeShape.nodeHeight / 2,
     };
 
@@ -39,10 +41,10 @@ export class Edge {
 
     const angle = getAngle(nodeStartPosition, nodeNextPosition);
 
-    (this.x = nodeShape.nodeWidth),
-      (this.y = nodeShape.nodeHeight / 2),
-      (this.length = length),
-      (this.angle = angle);
+    this.x = 0;
+      this.y = nodeShape.nodeHeight / 2 ;
+      this.length = length;
+      this.angle = angle;
   }
   get shape() {
     return {
@@ -53,6 +55,3 @@ export class Edge {
     };
   }
 }
-
-
-

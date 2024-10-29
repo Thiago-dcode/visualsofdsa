@@ -16,6 +16,7 @@ import { searchResult } from "../staticArray/type"
 import './style.css'
 import Info from "@/components/ui/info"
 import Link from "next/link"
+import Title from "@/components/ui/Title"
 export default function DynamicArray() {
     const { array, write, insert, fill, access, error, maxSize, capacity, size, cleanUp, delete: del, action, push, pop, search } = useDynamicArray();
     const [open, setOpen] = useState(false);
@@ -37,7 +38,42 @@ export default function DynamicArray() {
     }, [action])
     return (
         <Main className="">
+            <div className='flex items-center justify-center gap-2'>
+                <Title title={'Dynamic Array'} />
 
+                <Info title="DYNAMIC ARRAY" text={<article>
+                    <p>
+                        A dynamic array is <b>a linear data structure</b> similar to <Link target="_blank" className="italic text-blue-500" href={'/data-structures/linear/static-array'}>static arrays</Link>, but it can grow in size dynamically; in other words, the array size isn&apos;t static. To accomplish this dynamic growth, the array first sets an initial capacity (not the actual size), and when the size grows and there isn&apos;t enough space, the array is copied to a new array with double the capacity.
+                    </p>
+                    <br />
+                    <p>
+                        Besides the <Link target="_blank" className="italic text-blue-500" href={'/data-structures/linear/static-array'}>static arrays</Link> operations, dynamic arrays have their own operations:
+                    </p>
+
+                    <h4 className="font-semibold py-2">Key Operations of a Dynamic Array:</h4>
+                    <br />
+                    <ul>
+                        <li>
+                            <b className="font-semibold text-yellow-400">Push:</b> This operation <b>adds a new element after the last position</b>, increasing the array&apos;s size by one. Sometimes the array must be copied to a new array due to lack of space, so in this situation, the push operation will take O(n). <br /><b>Overall time complexity: O(1).</b>
+                        </li>
+                        <br />
+                        <li>
+                            <b className="font-semibold text-red-400">Pop:</b> This operation <b>deletes the element at the last position</b>. <br /><b>Time complexity: O(1).</b>
+                        </li>
+                        <br />
+                        <li>
+                            <b className="font-semibold text-orange-400">Insert:</b> This operation <b>adds an element at a specific position by a given index</b>. To accomplish this operation, all elements on the right side of the desired position must be shifted towards the right before the new element is inserted, and then the new element is written in the released position.<br /><b>Time complexity: O(n).</b>
+                        </li>
+                        <br />
+                        <li>
+                            <b className="font-semibold text-red-400">Delete:</b> This operation <b>removes an element from a specific position by a given index</b>. To accomplish this operation, the program first deletes the desired element, and then all elements on the right side must be shifted to the left, taking the place of the deleted element. <br /><b>Time complexity: O(n).</b>
+                        </li>
+                        <br />
+                    </ul>
+                </article>
+
+                } className="self-start" />
+            </div>
             {<OperationsContainer setOpen={(value) => {
 
                 setOpen(value)
@@ -187,7 +223,7 @@ export default function DynamicArray() {
                         }} type="number" min={0} />
 
                         <ButtonAction title="fill" className='bg-lime-400 hover:bg-lime-600' isLoading={isAnimationRunning} onClick={async () => {
-                            if (isAnimationRunning || fillAmount === undefined) return;
+                            if (isAnimationRunning || !fillAmount) return;
 
                             setOpen(false)
                             setIsAnimationRunning(true);
@@ -201,40 +237,13 @@ export default function DynamicArray() {
                 </Section> : null}
 
             </OperationsContainer>}
-            {/* //EXTRA INFO AND CONFIG: */}
+            {/* //PROPERTIES AND CONFIG: */}
             <div className="flex  justify-between w-full px-4">
-                <Info title="DYNAMIC ARRAY" text={<article>
-                    <p>
-                        A dynamic array is <b>a linear data structure</b> similar to <Link target="_blank" className="italic text-blue-500" href={'/data-structures/linear/static-array'}>static arrays</Link>, but it can grow in size dynamically; in other words, the array size isn&apos;t static. To accomplish this dynamic growth, the array first sets an initial capacity (not the actual size), and when the size grows and there isn&apos;t enough space, the array is copied to a new array with double the capacity.
-                    </p>
-                    <br />
-                    <p>
-                        Besides the <Link target="_blank" className="italic text-blue-500" href={'/data-structures/linear/static-array'}>static arrays</Link> operations, dynamic arrays have their own operations:
-                    </p>
-
-                    <h4 className="font-semibold py-2">Key Operations of a Dynamic Array:</h4>
-                    <br />
-                    <ul>
-                        <li>
-                            <b className="font-semibold text-yellow-400">Push:</b> This operation <b>adds a new element after the last position</b>, increasing the array&apos;s size by one. Sometimes the array must be copied to a new array due to lack of space, so in this situation, the push operation will take O(n). <br /><b>Overall time complexity: O(1).</b>
-                        </li>
-                        <br />
-                        <li>
-                            <b className="font-semibold text-red-400">Pop:</b> This operation <b>deletes the element at the last position</b>. <br /><b>Time complexity: O(1).</b>
-                        </li>
-                        <br />
-                        <li>
-                            <b className="font-semibold text-orange-400">Insert:</b> This operation <b>adds an element at a specific position by a given index</b>. To accomplish this operation, all elements on the right side of the desired position must be shifted towards the right before the new element is inserted, and then the new element is written in the released position.<br /><b>Time complexity: O(n).</b>
-                        </li>
-                        <br />
-                        <li>
-                            <b className="font-semibold text-red-400">Delete:</b> This operation <b>removes an element from a specific position by a given index</b>. To accomplish this operation, the program first deletes the desired element, and then all elements on the right side must be shifted to the left, taking the place of the deleted element. <br /><b>Time complexity: O(n).</b>
-                        </li>
-                        <br />
-                    </ul>
-                </article>
-
-                } className="self-start" />
+                <Properties properties={{
+                    size,
+                    capacity,
+                    maxSize
+                }} />
                 {/* {!isStackOverFlow && !isFilling && !isAnimationRunning && <div>
             <PopOverComponent content={
               <LinearDsConfig render={render} stack={queue} />
@@ -242,11 +251,7 @@ export default function DynamicArray() {
           </div>} */}
 
             </div>
-            <Properties properties={{
-                size,
-                capacity,
-                maxSize
-            }} />
+
             <RamContainer>
                 {array &&
                     array.map((node, i) => {

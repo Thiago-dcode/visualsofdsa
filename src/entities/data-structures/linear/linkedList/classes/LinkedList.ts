@@ -6,8 +6,9 @@ import List from "../../_classes/List";
 type callback =
   | ((
       node: LinkedListNode<Primitive> | null,
-      next: LinkedListNode<Primitive> | null,
-      prev: LinkedListNode<Primitive> | null
+      index: number,
+      direction?: "backward" | "forward",
+      steps?: number
     ) => Promise<void>)
   | null;
 export default class LinkedList<T extends Primitive> extends List {
@@ -36,14 +37,24 @@ export default class LinkedList<T extends Primitive> extends List {
     const node = this.findNode(index);
     return node ? node.data : node;
   }
-  getNode(index: number): LinkedListNode<T> | null {
+  async getNode(
+    index: number,
+    callback: callback = null
+  ): Promise<LinkedListNode<T> | null> {
     if (index === 0) {
+      if (callback) await callback(this._head, 0).catch();
       return this.head;
     }
     if (index === this.size - 1) {
+      if (callback) await callback(this.tail, this.size - 1).catch();
       return this.tail;
     }
-    const node = this.findNode(index);
+    const node = await this.findNodeAsync(
+      index,
+      async (node, position, direction,steps) => {
+        if (callback) await callback(node, position, direction,steps).catch();
+      }
+    );
     return node;
   }
   getFirst(): T | null {
@@ -59,7 +70,7 @@ export default class LinkedList<T extends Primitive> extends List {
     data: T | LinkedListNode<T>,
     index: number = this._size,
     position = new Position(0, 0),
-    beforeAddCallback: callback = null
+    callback: callback = null
   ) {
     this.throwIfOutOfTheBounds(index);
     const newNode =
@@ -67,34 +78,27 @@ export default class LinkedList<T extends Primitive> extends List {
         ? data
         : new LinkedListNode(data, position);
     if (!this._head) {
-      if (beforeAddCallback) await beforeAddCallback(newNode, null, null);
+      if (callback) await callback(newNode, index).catch();
 
       this._head = newNode;
       this._tail = newNode;
     } else {
       if (index === this._size) {
-        if (beforeAddCallback) {
-          const prev =
-            this.size === 1 ? this.head : this.tail ? this.tail.prev : null;
-          await beforeAddCallback(newNode, null, prev);
+        if (callback) {
+          await callback(newNode, index).catch();
         }
         this.addLastNode(newNode);
       } else if (index === 0) {
-        if (beforeAddCallback)
-          await beforeAddCallback(
-            newNode,
-            this.head ? this.head.next : null,
-            null
-          );
+        if (callback) await callback(newNode, 0);
         this._addFirst(newNode);
       } else {
-        const node = this.findNode(index);
-        if (beforeAddCallback)
-          await beforeAddCallback(newNode, node, node ? node.prev : null).catch(
-            (e) => {
-              console.log("Error beforeAddCallback", e);
-            }
-          );
+        const node = await this.findNodeAsync(
+          index,
+          async (node, position, direction, steps) => {
+            if (callback)
+              await callback(node, position, direction, steps).catch();
+          }
+        );
         newNode.next = node;
         if (node?.prev) {
           newNode.prev = node.prev;
@@ -152,36 +156,57 @@ export default class LinkedList<T extends Primitive> extends List {
     this._tail = node;
   }
 
-  async delete(index: number, beforeDeleteCallback: callback = null) {
+  async delete(index: number, callback: callback = null) {
     if (index === 0) {
-      if (beforeDeleteCallback)
-        await beforeDeleteCallback(
-          this.head,
-          this.head ? this.head.next : null,
-          null
-        );
+      if (callback) await callback(this.head, 0).catch();
       return this.deleteFirst();
     } else if (index === this.size - 1) {
-      if (beforeDeleteCallback)
-        await beforeDeleteCallback(
-          this.tail,
-          null,
-          this.tail ? this.tail.prev : null
-        );
+      if (callback) await callback(this.tail, index).catch();
       return this.deleteLast();
     } else {
-      const node = this.findNode(index);
+      const node = await this.findNodeAsync(
+        index,
+        async (node, position, direction, steps) => {
+          if (callback)
+            await callback(node, position, direction, steps).catch();
+        }
+      );
       if (node?.prev && node.next) {
-        node.prev.nextEdge.resetShape()
-        node.next.prevEdge.resetShape()
-        if (beforeDeleteCallback)
-          await beforeDeleteCallback(node, node.next, node.prev);
+        node.prev.nextEdge.resetShape();
+        node.next.prevEdge.resetShape();
+
         node.prev.next = node.next;
         node.next.prev = node.prev;
       }
       this._size--;
-      if (node)this.setEdgesShape(node)
+      if (node) this.setEdgesShape(node);
       return node ? node.data : null;
+    }
+  }
+  async deleteAndGetNode(index: number, callback: callback = null) {
+    if (index === 0) {
+      if (callback) await callback(this.head, 0).catch();
+      return this.deleteFirstAndGetNode();
+    } else if (index === this.size - 1) {
+      if (callback) await callback(this.tail, index).catch();
+      return this.deleteLastAnGetNode();
+    } else {
+      const node = await this.findNodeAsync(
+        index,
+        async (node, position, steps) => {
+          if (callback) await callback(node, position, steps).catch();
+        }
+      );
+      if (node?.prev && node.next) {
+        node.prev.nextEdge.resetShape();
+        node.next.prevEdge.resetShape();
+
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+      }
+      this._size--;
+      if (node) this.setEdgesShape(node);
+      return node;
     }
   }
   deleteFirst() {
@@ -191,7 +216,6 @@ export default class LinkedList<T extends Primitive> extends List {
   deleteFirstAndGetNode() {
     const node = this.head;
     if (node) {
-     
       if (this.head?.next) {
         this._head = this.head.next;
         this._head.prev = null;
@@ -217,6 +241,20 @@ export default class LinkedList<T extends Primitive> extends List {
     }
     this._size--;
     return data;
+  }
+  deleteLastAnGetNode() {
+    const node = this._tail;
+    if (!this._tail) return null;
+
+    if (this._tail.prev) {
+      this._tail.prev.next = null;
+      this._tail = this._tail.prev;
+    } else {
+      this._head = null;
+      this._tail = null;
+    }
+    this._size--;
+    return node;
   }
   private throwIfOutOfTheBounds(index: number, includesSize = true) {
     if (index < 0 || index > (includesSize ? this.size : this.size - 1)) {
@@ -252,6 +290,42 @@ export default class LinkedList<T extends Primitive> extends List {
           node = node.next;
         }
         position++;
+      } while (position < this.size || node);
+    }
+    return node;
+  }
+  async findNodeAsync(index: number, callback: callback = null) {
+    this.throwIfOutOfTheBounds(index, false);
+    let node: LinkedListNode<T> | null = null;
+    if (this.isTail(index)) {
+      let steps = 1;
+      let position = this._size - 1;
+      node = this._tail;
+      do {
+        if (callback) await callback(node, position, "backward", steps);
+        if (position == index) {
+          break;
+        }
+        if (node) {
+          node = node.prev;
+        }
+        position--;
+        steps++;
+      } while (position >= 0 || node);
+    } else if (!this.isTail(index)) {
+      let position = 0;
+      let steps = 1;
+      node = this._head;
+      do {
+        if (callback) await callback(node, position, "forward", steps);
+        if (position === index) {
+          break;
+        }
+        if (node) {
+          node = node.next;
+        }
+        position++;
+        steps++;
       } while (position < this.size || node);
     }
     return node;
@@ -302,9 +376,8 @@ export default class LinkedList<T extends Primitive> extends List {
     }
     return array;
   }
-  private isTail(index: number): boolean {
-    if (index >= this._size) return true;
-    return this._size - index < index;
+  private isTail(index: number) {
+    return index >= Math.round((this._size-1)/2);
   }
   get head() {
     return this._head;

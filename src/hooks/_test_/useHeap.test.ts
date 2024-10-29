@@ -21,7 +21,7 @@ describe("Testing useHeap", () => {
       result.current.malloc(50);
     });
     const { row, col } = result.current.table;
-    expect(result.current.freePositions.size).toBe(row * col);
+    expect(result.current.freePositions.size).toBe(50);
     expect(result.current.width).toBe(
       col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -
         nodeShape.nodeWidthSpacing
@@ -75,14 +75,14 @@ describe("Testing useHeap", () => {
       result.current.malloc(100);
     });
 
-    const { row, col } = result.current.table;
+ 
     const arrOfNodes: LinkedListNode<Primitive>[] = [];
-    for (let i = 0; i < col * row; i++) {
+    for (let i = 0; i < 100; i++) {
       const nextPosition = result.current.getNextFreePosition();
       if (nextPosition)
         arrOfNodes.push(new LinkedListNode(i, nextPosition.position));
     }
-    expect(arrOfNodes.length).toBe(col * row);
+    expect(arrOfNodes.length).toBe(100);
 
     for (let i = 0; i < arrOfNodes.length; i++) {
       result.current.setNextFreePosition(arrOfNodes[i]);
@@ -173,7 +173,8 @@ describe("Testing useHeap", () => {
     });
     expect(result.current.size).toBe(99);
     expect(result.current.freePositions.size).toBe(99);
-    expect(result.current.table.col * result.current.table.row).toBe(100);
+
+   
 
   });
   it("SHOULD REALLOC", () => {

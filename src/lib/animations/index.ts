@@ -18,7 +18,7 @@ import './style.css'
           if (onAnimationEnds) {
             onAnimationEnds(e);
           }
-          console.log(ref)
+  
           if (ref)
            ref.removeEventListener("animationend", animationEvent);
   

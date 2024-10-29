@@ -18,7 +18,7 @@ export default function LinkList({ link, isFirstLvl }: {
     const [isOpen, setIsOpen] = useState(false)
     const pathName = usePathname();
     const arrOfPaths = pathName.split('/')
-   const pathMatch = arrOfPaths.includes(link.link);
+   const pathMatch = arrOfPaths.includes(link.link.substring(1));
     const getIcon = () => {
 
         if (isOpen && isFirstLvl) return 'up';
