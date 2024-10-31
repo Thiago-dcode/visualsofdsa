@@ -67,10 +67,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       return node;
     } catch (error) {
       if (error instanceof IndexOutOfBoundsError) {
-        setError({
-          name: "IndexOutOfTheBoundException",
-          description: `Index ${index} out of bounds for length ${linkedList.size}`,
-        });
+        setIndexOutOfTheBound(index);
       }
     }
   };
@@ -91,7 +88,9 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
             if (_node && _node.ref) {
               await animate(
                 _node.ref,
-                `${index !== _index?"find":'del'}-node ${ANIMATION_SPEED * 0.8 + "s"}`
+                `${index !== _index ? "find" : "del"}-node ${
+                  ANIMATION_SPEED * 0.8 + "s"
+                }`
               );
 
               if (index !== _index) {
@@ -101,7 +100,9 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
                   await animateEdge(_node.prevEdge.ref);
               }
             }
-          } catch (error) {}
+          } catch (error) {
+           
+          }
         }
       );
 
@@ -112,9 +113,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       return node;
     } catch (error) {
       if (error instanceof IndexOutOfBoundsError) {
-        toast.error(`No element found at index ${index}`, {
-          position: "top-center",
-        });
+        setIndexOutOfTheBound(index);
       }
     }
     return null;
@@ -130,40 +129,47 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     return false;
   };
   const get = async (index: number) => {
-    let node: LinkedListNode<Primitive> | null = null;
-    let steps = index + 1;
-    if (!isDoublyLinkedList) {
-      node = await findNode(index);
-    } else {
-      node = await linkedList.getNode(
-        index,
-        async (_node, _index, direction, _steps) => {
-          steps = _steps || 1;
-          if (_node && _node.ref) {
-            try {
-              await animate(
-                _node.ref,
-                index !== _index
-                  ? `find-node ${ANIMATION_SPEED * 0.8 + "s"}`
-                  : `get-node ${ANIMATION_SPEED + "s"}`
-              );
-              if (index !== _index) {
-                if (direction === "forward")
-                  await animateEdge(_node.nextEdge.ref);
-                else if (direction === "backward")
-                  await animateEdge(_node.prevEdge.ref);
-              }
-            } catch (error) {}
+    try {
+      let node: LinkedListNode<Primitive> | null = null;
+      let steps = index + 1;
+      if (!isDoublyLinkedList) {
+        node = await findNode(index);
+      } else {
+        node = await linkedList.getNode(
+          index,
+          async (_node, _index, direction, _steps) => {
+            steps = _steps || 1;
+            if (_node && _node.ref) {
+              try {
+                await animate(
+                  _node.ref,
+                  index !== _index
+                    ? `find-node ${ANIMATION_SPEED * 0.8 + "s"}`
+                    : `get-node ${ANIMATION_SPEED + "s"}`
+                );
+                if (index !== _index) {
+                  if (direction === "forward")
+                    await animateEdge(_node.nextEdge.ref);
+                  else if (direction === "backward")
+                    await animateEdge(_node.prevEdge.ref);
+                }
+              } catch (error) {}
+            }
           }
-        }
-      );
+        );
+      }
+      if (node) {
+        toast.info(`Node data: "${node.data}", took ${steps} steps`, {
+          position: "top-center",
+        });
+      }
+      return node;
+    } catch (error) {
+      if (error instanceof IndexOutOfBoundsError) {
+        setIndexOutOfTheBound(index);
+      }
     }
-    if (node) {
-      toast.info(`Node data: "${node.data}", took ${steps} steps`, {
-        position: "top-center",
-      });
-    }
-    return node;
+    return null;
   };
   const findNode = async (index: number, animateLast = true, isDel = false) => {
     if (setIndexOutOfTheBound(index)) return null;
