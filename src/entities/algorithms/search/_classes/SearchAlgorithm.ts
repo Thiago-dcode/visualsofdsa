@@ -12,18 +12,34 @@ export default class SearchAlgorithm {
     isSorted = false,
     direction: "forward" | "reverse" = "forward"
   ): Promise<Node<T> | null> {
+    if (!array.length || search === null) return null;
+    const last = array[array.length - 1];
+    if (last.data === search) return last;
+    if (
+      isSorted &&
+      last.data !== null &&
+      ((direction === "forward" && search > last.data) ||
+        (direction === "reverse" && search < last.data))
+    )
+      return null;
+
     for (let i = 0; i < array.length; i++) {
       const node = array[i];
       if (callback) await callback(node, i);
       if (node.data === search) return node;
-      const next = array[i + 1];
-      if (isSorted && next && search && next.data) {
-        if ((direction === "forward" && next.data > search)|| (direction === "reverse" && next.data < search)) return null;
+      if (isSorted) {
+        const next = array[i + 1];
+        if (next && next.data) {
+          const nextData = next.data;
+          if (
+            (direction === "forward" && nextData > search) ||
+            (direction === "reverse" && nextData < search)
+          )
+            return null;
+        }
       }
-
     }
 
     return null;
   }
 }
-
