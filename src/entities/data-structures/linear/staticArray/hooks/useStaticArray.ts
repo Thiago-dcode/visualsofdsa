@@ -12,10 +12,18 @@ export default function useStaticArray() {
   const { writeAnimation, accessAnimation, searchAnimation } =
     UseStaticArrayAnimation();
   const [maxSize, setMaxSize] = useState(50);
+  const [sorted, setSorted] = useState(false);
+  const [direction, setDirection] = useState<'forward'|'reverse'>('forward')
   const [error, setError] = useState<{
     name: string;
     description: string;
   } | null>(null);
+  const toggleSorted = ()=>{
+    setSorted(prev=>!prev)
+  }
+  const toggleDirection = ()=>{
+    setDirection(prev=>prev==='forward'?'reverse':'forward')
+  }
   const create = async (size: number, fillArrayWithNode = true) => {
     if (size < 0 || size > maxSize) {
       setError({                       
@@ -123,5 +131,9 @@ export default function useStaticArray() {
     setMaxSize,
     setArray,
     setError,
+    sorted,
+    toggleSorted,
+    direction,
+    toggleDirection,
   };
 }

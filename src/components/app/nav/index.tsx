@@ -82,13 +82,21 @@ const LINKS: LinkItem[] = [{
 {
     name: 'Algorithms',
     link: '/algorithms',
-    enable: false,
+    enable: true,
     children: [
         {
             name: 'Search',
             link: '/algorithms/search',
-            children: null,
-            enable: false,
+            enable: true,
+            children: [
+            {
+                name:'Linear',
+                enable:true,
+                children:null,
+                link:'/algorithms/search/linear'
+            }
+            ],
+          
         },
         {
             name: 'Sort',

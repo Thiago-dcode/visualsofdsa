@@ -43,13 +43,14 @@ export default function LinkList({ link, isFirstLvl }: {
 
                                 {children.map((child, i) => {
                                     const arr = child.link.split('/');
+                                
                                    const lastLink   = arr[arr.length-1];
-                                        
+                                   const firtsLink = arr[1];
                                     return (
 
 
                                         <div key={`${child.link}-${i}`} className={cn({
-                                            'bg-white/80 text-black':arrOfPaths.includes(lastLink)
+                                            'bg-white/80 text-black':arrOfPaths.includes(lastLink) && firtsLink === arrOfPaths[1]
                                         })} >
 
                                             <LinkList link={child} isFirstLvl={false} />
