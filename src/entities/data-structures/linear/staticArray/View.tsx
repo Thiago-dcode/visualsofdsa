@@ -206,8 +206,12 @@ export default function StaticArray() {
             <div className="flex  justify-between w-full px-4">
 
             <Properties properties={{
-                        'ArraySize':array?.length||null,
-                        'memorySize':maxSize
+                        'ArraySize':{
+                            value:array?.length||null
+                        },
+                        'memorySize':{
+                            value:maxSize
+                        }
                     }}/>
                 {!isAnimationRunning && <div>
                    

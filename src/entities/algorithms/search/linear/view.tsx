@@ -81,8 +81,13 @@ export default function LinearView() {
 
       </OperationsContainer>
       <Properties properties={{
-        'Sorted': sorted ? 'True' : 'False',
-        'Direction': direction
+        'Sorted': {
+          value:sorted ? 'True' : 'False'
+        },
+        'Direction': {
+          value:direction,
+          show:sorted
+        }
 
       }} />
       <RamContainer>

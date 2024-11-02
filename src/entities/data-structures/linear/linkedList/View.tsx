@@ -206,9 +206,15 @@ export default function View({ isDoubly = false }: {
 
         <div className='flex items-center justify-between w-full'>
             <Properties className='w-full' properties={{
-                'heapSize': heap.size,
-                'heapFreeSpace': heap.freeSpace,
-                'linkedlistSize': linkedList.size,
+                'heapSize': {
+                    value: heap.size
+                },
+                'heapFreeSpace': {
+                    value: heap.freeSpace
+                },
+                'linkedlistSize': {
+                    value: linkedList.size
+                },
 
             }} />
             {linkedList.size > 1 ? <div className='flex items-center '>
