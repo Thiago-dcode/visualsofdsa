@@ -85,8 +85,6 @@ describe("Testin custom hook useStaticArray", async () => {
       }
     }
   });
-
-
   it("Should set error", async () => {
     const { result } = renderHook(useStaticArray);
     expect(result.current.error).toBe(null);
@@ -141,6 +139,126 @@ describe("Testin custom hook useStaticArray", async () => {
         `Index ${5} out of bounds for length ${result.current?.array?.length}`
       );
     }
+  });
+  it("Should create an unsorted unique array of nodes", async () => {
+    const { result } = renderHook(useStaticArray);
+    expect(result.current.array).toBe(null);
+    expect(result.current.error).toBe(null);
+    await act(async () => {
+      await result.current.createUnsorted(50)
+    })
+    const array = result.current.array;
+    expect(array?.length).toBe(50);
+    const memo:{[value:number]:true} = {};
+    let isSorted = true;
+    if(array){
+      for (let index = 0; index < array.length; index++) {
+        const element = array[index];
+        expect(element).toBeInstanceOf(Node)
+      if(element){
+        const value = element.data;
+        expect(value).toBeTypeOf('number')
+        if(typeof value === 'number'){
+          const next = array[index+1];
+          if(next){
+            const nextValue =  next.data;
+            if(typeof nextValue === 'number'){
+              if(value > nextValue){
+                isSorted = false;
+              }
+              
+            }
+          }
+        
+          expect(memo[value]).toBeUndefined()
+        
+          memo[value] = true;
+        }
+      }
+        
+      }
+
+    }
+    expect(isSorted).toBeFalsy()
+  });
+
+  it("Should create a sorted unique FORWARD array of nodes", async () => {
+    const { result } = renderHook(useStaticArray);
+    expect(result.current.array).toBe(null);
+    expect(result.current.error).toBe(null);
+    await act(async () => {
+      await result.current.createSorted(50)
+    })
+    const array = result.current.array;
+    expect(array?.length).toBe(50);
+    const memo:{[value:number]:true} = {};
+    let isSorted = true;
+    if(array){
+      for (let index = 0; index < array.length; index++) {
+        const element = array[index];
+        expect(element).toBeInstanceOf(Node)
+      if(element){
+        const value = element.data;
+        expect(value).toBeTypeOf('number')
+        if(typeof value === 'number'){
+          const next = array[index+1];
+          if(next){
+            const nextValue =  next.data;
+            if(typeof nextValue === 'number'){
+              if(value > nextValue){
+                isSorted = false;
+              }
+              
+            }
+          }  
+          expect(memo[value]).toBeUndefined()
+          memo[value] = true;
+        }
+      }
+        
+      }
+
+    }
+    expect(isSorted).toBeTruthy()
+  });
+  it("Should create a sorted unique REVERSE array of nodes", async () => {
+    const { result } = renderHook(useStaticArray);
+    expect(result.current.array).toBe(null);
+    expect(result.current.error).toBe(null);
+    await act(async () => {
+      await result.current.createSorted(50,'reverse')
+    })
+    const array = result.current.array;
+    expect(array?.length).toBe(50);
+    const memo:{[value:number]:true} = {};
+    let isSorted = true;
+    if(array){
+      for (let index = 0; index < array.length; index++) {
+        const element = array[index];
+        expect(element).toBeInstanceOf(Node)
+      if(element){
+        const value = element.data;
+        expect(value).toBeTypeOf('number')
+        if(typeof value === 'number'){
+          const next = array[index+1];
+          if(next){
+            const nextValue =  next.data;
+            if(typeof nextValue === 'number'){
+              if(value < nextValue){
+                isSorted = false;
+              }
+              
+            }
+          }  
+          expect(memo[value]).toBeUndefined()
+          memo[value] = true;
+        }
+      }
+        
+      }
+
+    }
+    expect(isSorted).toBeTruthy()
   });
 });
 

@@ -2,15 +2,7 @@ import Node from "@/entities/data-structures/linear/_classes/Node";
 import Position from "@/lib/classes/Position";
 import { random } from "@/lib/utils";
 import SearchAlgorithm from "./SearchAlgorithm";
-// const getAUniqueRandomNumber = (memo: { [key: number]: true }) => {
-//   const n = random(0, 60000);
 
-//   if (memo[n]) {
-//     return getAUniqueRandomNumber(memo);
-//   }
-//   memo[n] = true;
-//   return n;
-// };
 // const createUniqueSortedArrayOfNodes = (size: number) => {
 //   const array: Node<number>[] = [];
 //   const memo: {
@@ -107,7 +99,7 @@ describe("Test searchAlgorithm.linear", () => {
       true,
       "forward"
     );
-    expect(j).toBe(0);
+    expect(j).toBe(1);
     expect(node?.data).toBe(199);
   });
   it("Should take one step when element is the last of the array", async () => {
@@ -123,7 +115,7 @@ describe("Test searchAlgorithm.linear", () => {
       true,
       "reverse"
     );
-    expect(j).toBe(0);
+    expect(j).toBe(1);
     expect(node?.data).toBe(0);
   });
   it("Should not traverse a forward sorted array when element not found", async () => {

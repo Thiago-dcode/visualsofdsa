@@ -1,8 +1,9 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import { Primitive } from "@/types";
+import { Direction, Primitive } from "@/types";
 type callback<T extends Primitive> = (
   node: Node<T>,
-  index: number
+  index: number,
+  found?: boolean
 ) => Promise<void>;
 export default class SearchAlgorithm {
   static async linear<T extends Primitive>(
@@ -10,22 +11,27 @@ export default class SearchAlgorithm {
     search: T,
     callback: callback<T> | null = null,
     isSorted = false,
-    direction: "forward" | "reverse" = "forward"
+    direction: Direction = "forward"
   ): Promise<Node<T> | null> {
     if (!array.length || search === null) return null;
     const last = array[array.length - 1];
-    if (last.data === search) return last;
+    if (last.data === search) {
+      if (callback) await callback(last, array.length - 1, true);
+      return last;
+    }
     if (
       isSorted &&
       last.data !== null &&
       ((direction === "forward" && search > last.data) ||
         (direction === "reverse" && search < last.data))
     )
-      return null;
+      {
+       
+        return null;}
 
     for (let i = 0; i < array.length; i++) {
       const node = array[i];
-      if (callback) await callback(node, i);
+      if (callback) await callback(node, i, node.data === search);
       if (node.data === search) return node;
       if (isSorted) {
         const next = array[i + 1];
@@ -35,7 +41,9 @@ export default class SearchAlgorithm {
             (direction === "forward" && nextData > search) ||
             (direction === "reverse" && nextData < search)
           )
-            return null;
+           {
+        
+            return null;}
         }
       }
     }
