@@ -30,12 +30,28 @@ export default function useSearchAlgorithm(
         steps++;
 
         if (node.ref) {
-          await animate(
-            node.ref,
-            !found
-              ? `search-node ${speed === 1 ? 0.4 : speed === 2 ? 0.3 : 0.1}s`
-              : "access-node 0.7s"
-          );
+          //get index div
+          const indexRef = node.ref.parentElement?.parentElement
+            ?.children[2] as HTMLElement;
+          if (indexRef) {
+            indexRef.style.visibility = "visible";
+          }
+
+          try {
+            await animate(
+              node.ref,
+              !found
+                ? `search-node ${speed === 1 ? 0.4 : speed === 2 ? 0.3 : 0.1}s`
+                : "access-node 0.7s",
+              (e) => {
+                if (indexRef) {
+                  indexRef.style.visibility = "hidden";
+                }
+              }
+            );
+          } catch (error) {
+            console.error('###ERROR ANIMATING LINEAR SEARCH ALGORITHM###')
+          }
           if (found) {
             toast.success(
               `${search} found on index ${index}. Steps: ${steps || 1}`,

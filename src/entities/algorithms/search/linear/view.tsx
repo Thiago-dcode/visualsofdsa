@@ -190,7 +190,7 @@ export default function LinearView() {
           array.map((d, i) => {
             return (
 
-              <MemoryAdressContainer size={MemorySize.L} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i + d?.data + d?.id}>
+              <MemoryAdressContainer size={MemorySize.L} index={i} showIndex={false} key={'MemoryAdressContainer-' + i + d?.data + d?.id}>
 
                 {array && array[i] ? <StaticArrayNodeComponent action={''} isLastNode={i === array.length - 1} setAnimationRunning={setAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
               </MemoryAdressContainer>
