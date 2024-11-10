@@ -229,6 +229,7 @@ describe("Testin custom hook useStaticArray", async () => {
       await result.current.createSorted(50,'reverse')
     })
     const array = result.current.array;
+    
     expect(array?.length).toBe(50);
     const memo:{[value:number]:true} = {};
     let isSorted = true;
@@ -240,6 +241,7 @@ describe("Testin custom hook useStaticArray", async () => {
         const value = element.data;
         expect(value).toBeTypeOf('number')
         if(typeof value === 'number'){
+          expect(memo[value]).toBeUndefined()
           const next = array[index+1];
           if(next){
             const nextValue =  next.data;
@@ -250,7 +252,7 @@ describe("Testin custom hook useStaticArray", async () => {
               
             }
           }  
-          expect(memo[value]).toBeUndefined()
+          
           memo[value] = true;
         }
       }

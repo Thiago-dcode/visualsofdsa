@@ -55,7 +55,7 @@ const LINKS: LinkItem[] = [{
         {
             name: 'Non linear',
             link: '/data-structures/non-linear',
-            enable: true,
+            enable: false,
             children: [
                 {
                     name: 'Graph',
@@ -94,6 +94,12 @@ const LINKS: LinkItem[] = [{
                 enable:true,
                 children:null,
                 link:'/algorithms/search/linear'
+            },
+            {
+                name:'Binary',
+                enable:true,
+                children:null,
+                link:'/algorithms/search/binary'
             }
             ],
           

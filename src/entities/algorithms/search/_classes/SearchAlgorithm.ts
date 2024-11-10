@@ -1,15 +1,20 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { Direction, Primitive } from "@/types";
-type callback<T extends Primitive> = (
+type CallbackLinear<T extends Primitive> = (
   node: Node<T>,
   index: number,
   found?: boolean
+) => Promise<void>;
+type CallbackBinary<T extends Primitive> = (
+  middle: number,
+  start: number,
+  end: number
 ) => Promise<void>;
 export default class SearchAlgorithm {
   static async linear<T extends Primitive>(
     array: Node<T>[],
     search: T,
-    callback: callback<T> | null = null,
+    callback: CallbackLinear<T> | null = null,
     isSorted = false,
     direction: Direction = "forward"
   ): Promise<Node<T> | null> {
@@ -24,10 +29,9 @@ export default class SearchAlgorithm {
       last.data !== null &&
       ((direction === "forward" && search > last.data) ||
         (direction === "reverse" && search < last.data))
-    )
-      {
-       
-        return null;}
+    ) {
+      return null;
+    }
 
     for (let i = 0; i < array.length; i++) {
       const node = array[i];
@@ -40,14 +44,49 @@ export default class SearchAlgorithm {
           if (
             (direction === "forward" && nextData > search) ||
             (direction === "reverse" && nextData < search)
-          )
-           {
-        
-            return null;}
+          ) {
+            return null;
+          }
         }
       }
     }
 
     return null;
   }
+  static async binary<T extends Primitive>(
+    array: Node<T>[],
+    search: T,
+    callback: CallbackBinary<T> | null = null,
+    direction: Direction = "forward"  // "forward" for ascending, "backward" for descending
+  ): Promise<Node<T> | null> {
+    if (!array.length || search === null) return null;
+  
+    let start = 0;
+    let end = array.length - 1;
+  
+    while (start <= end) {
+      let middle = Math.floor((start + end) / 2);
+      const middleNode = array[middle];
+      if (callback) await callback(middle, start, end);
+      if (!middleNode || middleNode.data === null) break;
+  
+      if (middleNode.data === search)  return middleNode; 
+      if (direction === "forward") {    
+        if (middleNode.data > search) {
+          end = middle - 1;
+        } else {
+          start = middle + 1;
+        }
+      } else if (direction === "reverse") {
+        if (middleNode.data < search) {
+          end = middle - 1;
+        } else {
+          start = middle + 1;
+        }
+      }
+    }
+
+    return null
+  }
+  
 }

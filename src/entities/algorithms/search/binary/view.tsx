@@ -16,28 +16,22 @@ import MemoryAdressContainer from '@/entities/data-structures/linear/_components
 import StaticArrayNodeComponent from '@/entities/data-structures/linear/staticArray/components/StaticArrayNodeComponent'
 import useStaticArray from '@/entities/data-structures/linear/staticArray/hooks/useStaticArray'
 import { Direction, MemorySize, Primitive, speed } from '@/types'
-import React, { useEffect, useRef, useState } from 'react'
+import React, {useRef, useState } from 'react'
 import { toast } from 'sonner'
 import useSearchAlgorithm from '../_hooks/useSearchAlgorithm'
 import Node from '@/entities/data-structures/linear/_classes/Node'
-import { ArrayActions } from '@/entities/data-structures/linear/staticArray/type'
 import { PopOverComponent } from '@/components/ui/PopOverComponent'
 import { Button } from '@/components/ui/button'
 import { Wrench } from 'lucide-react'
 import ArrayComponent from '../_components/arrayComponent'
 
-export default function LinearView() {
-  const { array, maxSize, createUnsorted, createSorted, flush, error } = useStaticArray(500);
+export default function BinaryView() {
+  const { array, maxSize, createSorted, flush, error } = useStaticArray(500);
   const [speed, setSpeed] = useState<speed>(1)
-  const { linear } = useSearchAlgorithm(array as Node<Primitive>[] | null, speed);
-  const [sorted, setSorted] = useState(false);
-
+  const {binary } = useSearchAlgorithm(array as Node<Primitive>[] | null, speed);
   const [direction, setDirection] = useState<Direction>('forward')
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const toggleSorted = () => {
-    setSorted(prev => !prev)
-  }
   const toggleDirection = () => {
     setDirection(prev => prev === 'forward' ? 'reverse' : 'forward')
   }
@@ -45,7 +39,7 @@ export default function LinearView() {
     const searchValue = getValue();
     if (searchValue === null) return;
     setAnimationRunning(true);
-    await linear(searchValue, sorted, direction);
+    await binary(searchValue, direction);
     setAnimationRunning(false);
 
 
@@ -71,11 +65,8 @@ export default function LinearView() {
     setAnimationRunning(true);
     const arraySize = getValue();
     if (arraySize === null) return;
-    if (!sorted) await createUnsorted(arraySize)
-    else {
-      await createSorted(arraySize, direction)
 
-    }
+    await createSorted(arraySize, direction)
     setAnimationRunning(false)
     resetValue();
 
@@ -89,42 +80,53 @@ export default function LinearView() {
 
     <Main>
       <div className='flex items-center justify-center gap-2'>
-        <Title title={'Linear search'} />
-        <Info title="Linear search" text={<article>
+        <Title title={'Binary search'} />
+        <Info title="Binary search" text={<article>
           <header>
-
-            <p>Linear search or sequential search is a method for finding an element within an array by <b>sequentially checking</b> (or traverse) each element until a match is found or the entire list has been searched**.</p>
+            <h2><strong>Binary Search</strong></h2>
+            <p>Binary search is an efficient method for finding an element within a <strong className='uppercase'>sorted array</strong>. It repeatedly divides the search interval in half, significantly reducing the number of comparisons needed compared to linear search.</p>
           </header>
           <br />
           <main>
-            <p>**If the array is <strong>sorted</strong>, you can make the linear search algorithm more efficient by leveraging the order of elements:</p>
+            <p>By leveraging the sorted order of the array, binary search can locate an element in logarithmic time:</p>
             <br />
             <div>
-              <p>For example, if the target element is <b>greater</b> than the last element in a sorted array (or <b>less</b> than the last element in a reverse-sorted array), you can conclude that the target is not present and skip further checks.</p>
+              <p>For example, to find the target element in a sorted array, binary search begins by comparing the target with the middle element of the array:</p>
 
-              <p>Another optimization involves checking the <b>next element in the loop</b>. If the next element (e.g., <code>array[index + 1]</code>) is <b>greater</b> than the <b>target</b> element, you can safely conclude that the target is not in the array and break the loop. For example, if you are looking for 5 in <code>[2, 4, 7]</code>, when you reach 4, you can check the next element (7), which is greater than 5, and determine that 5 cannot be found in the remaining array. (Note: the same principle applies in a reverse-sorted array.)</p>
+              <ul>
+                <li><b>Step 1:</b> Compare the target element with the middle element of the array.</li>
+                <li><b>Step 2:</b> If the target is equal to the middle element, the search is complete.</li>
+                <li><b>Step 3:</b> If the target is less than the middle element, repeat the search on the left half of the array.</li>
+                <li><b>Step 4:</b> If the target is greater than the middle element, repeat the search on the right half of the array.</li>
+              </ul>
 
+              <p>This process of halving the search interval continues until the target element is found or the interval is empty, indicating that the target is not present in the array.</p>
 
+              <p>For example, if you are searching for the number <Code>5</Code> in the sorted array <Code>[2, 4, 6, 8, 10]</Code>:</p>
+
+              <ol>
+                <li>Compare <Code>5</Code> with the middle element <Code>6</Code>. Since <Code>5</Code> is less than <Code>6</Code>, focus on the left half: <Code>[2, 4]</Code>.</li>
+                <li>Now, compare <Code>5</Code> with the new middle element <Code>2</Code>. Since <Code>5</Code> is greater than <Code>2</Code>, focus on the right half of this subarray: <Code>[4]</Code>.</li>
+                <li>Finally, compare <Code>5</Code> with <Code>4</Code>. Since <Code>5</Code> is greater and there are no more elements to search, conclude that <Code>5</Code> is not present in the array.</li>
+              </ol>
             </div>
           </main>
           <br />
           <footer>
-            <p>In conclusion, regardless of whether the array is sorted or unsorted, the time complexity of the linear search algorithm remains <b>O(n)</b>, as Big O Notation dictates, it always accounts for <b> the worst-case scenario </b> where all elements must be checked.</p>
+            <p>In conclusion, the time complexity of the binary search algorithm is <b>O(log n)</b>, as Big O Notation dictates, it efficiently narrows down the search space by halving it with each step, making it significantly faster than linear search for large, sorted arrays.</p>
           </footer>
-
         </article>
+
         } className="self-start" />
 
       </div>
       <OperationsContainer>
         {!array ? <Section>
           <div className='self-center flex items-center gap-3'>
-            <div className='flex self-center gap-2 items-center'>   <p>Sorted?</p><Switch defaultChecked={sorted} onCheckedChange={() => {
-              toggleSorted()
-            }} /></div>
-            {sorted ? <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'forward' ? false : true} onCheckedChange={() => {
+
+            <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'forward' ? false : true} onCheckedChange={() => {
               toggleDirection()
-            }} /></div> : null}
+            }} /></div>
           </div>
 
           <InputWithButtonContainer key={'linkedList-add-action'}>
@@ -143,7 +145,7 @@ export default function LinearView() {
             <ButtonAction title="Search" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={async () => {
               await handleSearch()
             }} />
-      
+
           </InputWithButtonContainer>
         </Section>
         }  {array && array.length ? <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
@@ -154,12 +156,10 @@ export default function LinearView() {
       <div className='w-full items-end justify-between flex'>
 
         <Properties properties={{
-          'Sorted': {
-            value: sorted ? 'True' : 'False'
-          },
+
           'Direction': {
             value: direction,
-            show: sorted
+            show: true
           },
           maxSize: {
             value: maxSize
@@ -170,7 +170,7 @@ export default function LinearView() {
           }
 
         }} />
-       {array && <PopOverComponent content={
+        {array && <PopOverComponent content={
           <div className='flex flex-col items-start justify-start'>
             <p>Animation Speed</p>
             <Input defaultValue={speed} onChange={(e) => {
@@ -185,7 +185,7 @@ export default function LinearView() {
         } trigger={<Button size={'icon'} variant={'ghost'} className='hover:bg-transparent'><Wrench color="white" /></Button>} />}
 
       </div>
-      <ArrayComponent array={array} setAnimationRunning={setAnimationRunning}/>
+     <ArrayComponent array={array} setAnimationRunning={setAnimationRunning}/>
       {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
         reset()
 

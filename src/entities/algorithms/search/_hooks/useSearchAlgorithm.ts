@@ -50,7 +50,7 @@ export default function useSearchAlgorithm(
               }
             );
           } catch (error) {
-            console.error('###ERROR ANIMATING LINEAR SEARCH ALGORITHM###')
+            console.error("###ERROR ANIMATING LINEAR SEARCH ALGORITHM###");
           }
           if (found) {
             toast.success(
@@ -72,6 +72,8 @@ export default function useSearchAlgorithm(
       });
     }
   };
-
-  return { linear };
+  const binary = async (search: Primitive, direction: Direction) => {
+    alert(`TODO: Implement binary ${search} ${direction}`);
+  };
+  return { linear, binary };
 }

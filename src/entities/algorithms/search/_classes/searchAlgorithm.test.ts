@@ -164,14 +164,14 @@ describe("Test searchAlgorithm.linear", () => {
       true,
       "forward"
     );
-    
+
     expect(j).toBe(0);
     expect(node).toBe(null);
   });
   it("Should take only one step when the search element is less than the last element of a sorted reverse array", async () => {
     const array = createASortedArrayOfNodes(200, "reverse", 1);
     let j = 0;
-    
+
     const node = await SearchAlgorithm.linear(
       array,
       -1,
@@ -184,5 +184,37 @@ describe("Test searchAlgorithm.linear", () => {
     );
     expect(j).toBe(0);
     expect(node).toBe(null);
+  });
+});
+
+describe("Test searchAlgortihm.binary", () => {
+  it("It should search forward", async () => {
+    const array = createASortedArrayOfNodes(200);
+    for (let index = 0; index < array.length; index++) {
+      const element = array[index].data;
+
+      const node = await SearchAlgorithm.binary(
+        array,
+        element,
+        async (middle, start, end) => {}
+      );
+
+      expect(node?.data).toBe(element);
+    }
+  });
+  it("It should search reverse", async () => {
+    const array = createASortedArrayOfNodes(200,'reverse');
+    for (let index = 0; index < array.length; index++) {
+      const element = array[index].data;
+
+      const node = await SearchAlgorithm.binary(
+        array,
+        element,
+        async (middle, start, end) => {},
+        'reverse'
+      );
+
+      expect(node?.data).toBe(element);
+    }
   });
 });
