@@ -240,9 +240,15 @@ export default function DynamicArray() {
             {/* //PROPERTIES AND CONFIG: */}
             <div className="flex  justify-between w-full px-4">
                 <Properties properties={{
-                    size,
-                    capacity,
-                    maxSize
+                    size:{
+                        value:size,
+                    },
+                    capacity:{
+                        value:capacity
+                    },
+                    maxSize:{
+                        value:maxSize
+                    }
                 }} />
                 {/* {!isStackOverFlow && !isFilling && !isAnimationRunning && <div>
             <PopOverComponent content={

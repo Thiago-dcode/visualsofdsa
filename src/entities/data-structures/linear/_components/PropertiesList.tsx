@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { Primitive } from '@/types'
-import Properties from '@/components/app/Properties'
+import Properties, { PropertiesType } from '@/components/app/Properties'
 import List from '../_classes/List'
 
 export default function PropertiesList({ list, trigger }: {
@@ -10,12 +10,20 @@ export default function PropertiesList({ list, trigger }: {
     trigger: any[]
 }) {
 
-    const setProperties = useMemo(() => {
+    const setProperties: PropertiesType = useMemo(() => {
         return {
-            'size': list.size + '',
-            'isEmpty': list.isEmpty.toString(),
-            'isFull': list.isFull.toString(),
-            [`${list.name} size`]: list.maxSize + '',
+            'size': {
+                value: list.size + '',
+            },
+            'isEmpty': {
+                value: list.isEmpty.toString()
+            },
+            'isFull': {
+                value: list.isFull.toString()
+            },
+            [`${list.name} size`]: {
+                value: list.maxSize + ''
+            },
         }
 
     }, trigger);

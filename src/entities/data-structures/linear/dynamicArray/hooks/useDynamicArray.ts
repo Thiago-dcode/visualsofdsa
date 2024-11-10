@@ -126,7 +126,7 @@ export default function useDynamicArray() {
         try {
           await insertAnimation(node, i, () => {});
         } catch (error) {
-          console.log("Insert animation rejected");
+        
         }
         array[i + 1] =
           node !== null
@@ -185,7 +185,7 @@ export default function useDynamicArray() {
                 : null;
             });
           } catch (error) {
-            console.error("DELETE ANIMATION REJECTED");
+          
           }
         } else {
           array[i] = new DynamicArrayNode(node.data, node.position, false);

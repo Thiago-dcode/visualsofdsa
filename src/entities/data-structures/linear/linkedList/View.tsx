@@ -145,7 +145,9 @@ export default function View({ isDoubly = false }: {
 
                     <ButtonAction title="get" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isBlocked} onClick={async () => {
                         if (getIndex === undefined || isBlocked) return;
-                        await handleAction(get(getIndex))
+                        await handleAction((async () => {
+                            await get(getIndex)
+                        })())
 
 
                     }} />
@@ -153,11 +155,15 @@ export default function View({ isDoubly = false }: {
                 </InputWithButtonContainer>
                 <ButtonAction title="getFirst" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isBlocked} onClick={async () => {
                     if (isBlocked) return;
-                    await handleAction(get(0))
+                    await handleAction((async () => {
+                        await get(0)
+                    })())
                 }} />
                 <ButtonAction title="getLast" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isBlocked} onClick={async () => {
                     if (isBlocked) return;
-                    await handleAction(get(linkedList.size - 1))
+                    await handleAction((async () => {
+                        await get(linkedList.size - 1)
+                    })())
                 }} />
 
             </Section> : null}
@@ -200,9 +206,15 @@ export default function View({ isDoubly = false }: {
 
         <div className='flex items-center justify-between w-full'>
             <Properties className='w-full' properties={{
-                'heapSize': heap.size,
-                'heapFreeSpace': heap.freeSpace,
-                'linkedlistSize': linkedList.size,
+                'heapSize': {
+                    value: heap.size
+                },
+                'heapFreeSpace': {
+                    value: heap.freeSpace
+                },
+                'linkedlistSize': {
+                    value: linkedList.size
+                },
 
             }} />
             {linkedList.size > 1 ? <div className='flex items-center '>
@@ -215,7 +227,7 @@ export default function View({ isDoubly = false }: {
                     <p className='text-md'>:Pointer to the <strong>prev</strong> node.</p>
                 </div>}
 
-            </div> :null}
+            </div> : null}
         </div>
 
         {/* HEAP SECTION */}
