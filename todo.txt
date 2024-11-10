@@ -1,3 +1,3 @@
-LINEAR SEARCH ALGORITH
+Add steps taken to all data-structures and algorithms
 
-Hide indexes, and only show when access.
+Implment implementation code on INFO.

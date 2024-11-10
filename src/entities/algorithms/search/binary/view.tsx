@@ -24,11 +24,12 @@ import { PopOverComponent } from '@/components/ui/PopOverComponent'
 import { Button } from '@/components/ui/button'
 import { Wrench } from 'lucide-react'
 import ArrayComponent from '../_components/arrayComponent'
+import Link from 'next/link'
 
 export default function BinaryView() {
   const { array, maxSize, createSorted, flush, error } = useStaticArray(500);
   const [speed, setSpeed] = useState<speed>(1)
-  const {binary } = useSearchAlgorithm(array as Node<Primitive>[] | null, speed);
+  const {binary } = useSearchAlgorithm(array as Node<number>[] | null, speed);
   const [direction, setDirection] = useState<Direction>('forward')
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -84,14 +85,12 @@ export default function BinaryView() {
         <Info title="Binary search" text={<article>
           <header>
             <h2><strong>Binary Search</strong></h2>
-            <p>Binary search is an efficient method for finding an element within a <strong className='uppercase'>sorted array</strong>. It repeatedly divides the search interval in half, significantly reducing the number of comparisons needed compared to linear search.</p>
+            <p>Binary search is an efficient method for finding an element within a <strong className='uppercase'>sorted array</strong>. It repeatedly divides the search interval in half, significantly reducing the number of comparisons needed compared to <Link href={`/algorithms/search/linear`} className='text-blue-500'>linear search.</Link></p>
           </header>
           <br />
           <main>
-            <p>By leveraging the sorted order of the array, binary search can locate an element in logarithmic time:</p>
-            <br />
             <div>
-              <p>For example, to find the target element in a sorted array, binary search begins by comparing the target with the middle element of the array:</p>
+              <p>Steps that binary algorithm takes to find the target value:</p>
 
               <ul>
                 <li><b>Step 1:</b> Compare the target element with the middle element of the array.</li>
@@ -102,18 +101,11 @@ export default function BinaryView() {
 
               <p>This process of halving the search interval continues until the target element is found or the interval is empty, indicating that the target is not present in the array.</p>
 
-              <p>For example, if you are searching for the number <Code>5</Code> in the sorted array <Code>[2, 4, 6, 8, 10]</Code>:</p>
-
-              <ol>
-                <li>Compare <Code>5</Code> with the middle element <Code>6</Code>. Since <Code>5</Code> is less than <Code>6</Code>, focus on the left half: <Code>[2, 4]</Code>.</li>
-                <li>Now, compare <Code>5</Code> with the new middle element <Code>2</Code>. Since <Code>5</Code> is greater than <Code>2</Code>, focus on the right half of this subarray: <Code>[4]</Code>.</li>
-                <li>Finally, compare <Code>5</Code> with <Code>4</Code>. Since <Code>5</Code> is greater and there are no more elements to search, conclude that <Code>5</Code> is not present in the array.</li>
-              </ol>
             </div>
           </main>
           <br />
           <footer>
-            <p>In conclusion, the time complexity of the binary search algorithm is <b>O(log n)</b>, as Big O Notation dictates, it efficiently narrows down the search space by halving it with each step, making it significantly faster than linear search for large, sorted arrays.</p>
+            <p>In conclusion, the time complexity of the binary search algorithm is <b>O(log n)</b>, as Big O Notation dictates, it efficiently narrows down the search space by halving it with each step, making it <b>significantly faster than linear search</b> for large, sorted arrays.</p>
           </footer>
         </article>
 

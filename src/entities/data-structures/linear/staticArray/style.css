@@ -54,3 +54,15 @@
   }
   
 }
+@keyframes disable-node {
+  to {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+}
+@keyframes enable-node {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -29,7 +29,7 @@ import ArrayComponent from '../_components/arrayComponent'
 export default function LinearView() {
   const { array, maxSize, createUnsorted, createSorted, flush, error } = useStaticArray(500);
   const [speed, setSpeed] = useState<speed>(1)
-  const { linear } = useSearchAlgorithm(array as Node<Primitive>[] | null, speed);
+  const { linear } = useSearchAlgorithm(array as Node<number>[] | null, speed);
   const [sorted, setSorted] = useState(false);
 
   const [direction, setDirection] = useState<Direction>('forward')

@@ -3,7 +3,7 @@ import { Direction, Primitive } from "@/types";
 type CallbackLinear<T extends Primitive> = (
   node: Node<T>,
   index: number,
-  found?: boolean
+  found: boolean
 ) => Promise<void>;
 type CallbackBinary<T extends Primitive> = (
   middle: number,
