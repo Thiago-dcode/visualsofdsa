@@ -27,11 +27,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <div id="root">
 
-
           <header className='sticky top-0 z-50 py-8 bg-app-bg '>
            <div className=" flex items-center justify-between px-10">
             
-             <p className="">ICON</p>
+             <Link href={'/'} className="">ICON</Link>
            <Nav/>
            
            </div>
