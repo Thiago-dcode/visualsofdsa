@@ -1,8 +1,10 @@
-import Main from '@/components/container/Main'
-import React from 'react'
+import { LINKS } from '@/components/app/nav/links'
+import PageComponent from '@/components/app/PageComponent'
+
+
 
 export default function AlgorithmPage() {
   return (
-    <Main>HELLO FROM ALGORITHM PAGE</Main>
+    <PageComponent linkItem={LINKS[1]}/>
   )
 }

@@ -28,7 +28,12 @@ const config = {
         app: {
           bg: "#13161B",
           green: '#00FF41',
-          ivory:'#FFFFE1'
+          ivory:'#FFFFE1',
+          ['bauhaus-red']:'#d94527',
+          ['bauhaus-green']:'#elay ',
+          ['bauhaus-yellow']:'#f5a845',
+          ['bauhaus-bone']:'#d6c2af',
+
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

@@ -1,9 +1,14 @@
 import { LinkItem } from "./type";
-
 export const LINKS: LinkItem[] = [
   {
     name: "Data structures",
     link: "/data-structures",
+    image: 'dsimage.png',
+    description: <>
+      <p> <b>A data structure is a way of organizing and storing data in a computer</b> to enable efficient access and use. It encompasses both the logical or mathematical representation of data and its implementation in a computer program. </p>
+
+      <p > Think of it like organizing your belongings in your room—clothes, computer, books, and so on. You could put everything in one spot, like under your bed (very inefficient), but every time you need something, you’d have to dig through the pile.  The more organized your room is, the faster and easier it is to find what you need. Having an efficient <b className="text-app-bauhaus-yellow"> data structure is like having a well-organized room, providing ease, clarity, and a sense of relief that everything is in its place.</b> </p>
+    </>,
     enable: true,
     children: [
       {
@@ -54,7 +59,7 @@ export const LINKS: LinkItem[] = [
       {
         name: "Non linear",
         link: "#",
-        description:'Non-linear data structures are those where data items are not arranged in a sequential manner, unlike linear data structures. In these data structures, elements are stored in a hierarchical or a network-based structure that does not follow a sequential order.',
+        description: 'Non-linear data structures are those where data items are not arranged in a sequential manner, unlike linear data structures. In these data structures, elements are stored in a hierarchical or a network-based structure that does not follow a sequential order.',
         enable: false,
         children: [
           {
@@ -82,11 +87,18 @@ export const LINKS: LinkItem[] = [
   {
     name: "Algorithms",
     link: "/algorithms",
+    image:'algoimage.png',
+    description: <>
+      Algorithm is a step-by-step procedure for solving a problem or accomplishing a task. In the context of data structures and algorithms, <b>it is a set of well-defined instructions for performing a specific computational task.</b> Algorithms are fundamental to computer science and play a very important role in designing efficient solutions for various problems. Understanding algorithms is essential for anyone interested in mastering data structures and algorithms.
+    </>,
     enable: true,
     children: [
       {
         name: "Search",
         link: "/algorithms/search",
+        description: <>
+          Searching algorithms are used to locate specific items within a collection of data. These algorithms are designed to efficiently navigate through data structures to find the desired information, making them fundamental in various applications such as databases, web search engines, and more.
+        </>,
         enable: true,
         children: [
           {

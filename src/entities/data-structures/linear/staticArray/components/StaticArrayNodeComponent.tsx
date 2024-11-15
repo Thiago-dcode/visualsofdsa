@@ -43,7 +43,7 @@ export default function StaticArrayNodeComponent({ node, action = 'create', setA
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [action])
   return (
-    <LinearNodeComponent key={'LinearNodeComponent-'+node.id} ref={(e) => {
+    <LinearNodeComponent key={'LinearNodeComponent-'+node.id}  ref={(e) => {
       setRef(e)
     }} node={node} dsType='staticArray' className='h-full' />
   )

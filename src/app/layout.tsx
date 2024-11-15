@@ -2,16 +2,20 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
-import { links } from "@/config";
 import { Toaster } from 'sonner';
 import { Check, CircleAlert, CircleX } from "lucide-react";
 import Nav from "@/components/app/nav";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
+import Logo from '@/assets/images/logo.png'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "visualsofdsa",
   description: "Visuals of data structure and algorithms",
+  icons:{
+    icon:'/favicon.png'
+  }
 };
 
 export default function RootLayout({
@@ -28,9 +32,9 @@ export default function RootLayout({
         <div id="root">
 
           <header className='sticky top-0 z-50 py-8 bg-app-bg '>
-           <div className=" flex items-center justify-between px-10">
+           <div className=" flex items-end justify-between px-10">
             
-             <Link href={'/'} className="">ICON</Link>
+            <Link href={'/'} className=""><Image alt="visuals of dsa logo" height={65} width={65} src={Logo}/></Link>
            <Nav/>
            
            </div>

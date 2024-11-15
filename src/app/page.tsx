@@ -11,7 +11,7 @@ const ARTICLES = [
   {
     title: 'Why most computer science topics are hard to learn?',
     description: <p>
-      Most computer science topics, especially Data Structures and Algorithms (DSA), are challenging to learn because <b className="text-yellow-400">all processes happen while the computer manipulates binary data</b>—something we can&apos;t directly observe. Imagine trying to learn how a car engine works without ever seeing one in action. You’d have to rely solely on imagination to picture its components and mechanics. Difficult, right? This is exactly how DSA can feel.
+      Most computer science topics, especially Data Structures and Algorithms (DSA), are challenging to learn because <b className="text-app-bauhaus-yellow">all processes happen while the computer manipulates binary data</b>—something we can&apos;t directly observe. Imagine trying to learn how a car engine works without ever seeing one in action. You’d have to rely solely on imagination to picture its components and mechanics. Difficult, right? This is exactly how DSA can feel.
     </p>
 
   },
@@ -19,7 +19,7 @@ const ARTICLES = [
     title: "How to learn DSA effectively?",
     description: <div className="flex flex-col items-start justify-start gap-2">
       <p>
-        Practice is essential for learning anything in life. But before diving into implementing algorithms,<b className="text-yellow-400"> it&apos;s important to understand how those algorithms and data structures work under the hood</b>. It’s like trying to drive a car without knowing what a car is.
+        Practice is essential for learning anything in life. But before diving into implementing algorithms,<b className="text-app-bauhaus-yellow"> it&apos;s important to understand how those algorithms and data structures work under the hood</b>. It’s like trying to drive a car without knowing what a car is.
       </p>
       <p>
         That’s where <b>VISUALS OF DSA</b>  comes into play. VISUALS OF DSA offers an interactive way to explore Data Structures and Algorithms—like <i>opening the car hood for a mechanics student</i>. By visualizing how DSA works, you can gain a deeper understanding and build a solid foundation for hands-on practice.
