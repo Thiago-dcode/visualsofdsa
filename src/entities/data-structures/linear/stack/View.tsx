@@ -29,7 +29,8 @@ const Stack = () => {
       {stack && <Main>
         <div className='flex items-center justify-center gap-2'>
           <Title title={'Stack'} />
-          <Info title="STACK" text={<article>
+          <Info title="STACK" text={
+            <article>
             <p>  A stack is <b>a linear data structure</b> that follows the <b>Last In, First Out (LIFO)</b> principle. This means that the last element added to the stack is the first one to be removed. Stacks are commonly used in various algorithms and applications, such as managing function calls, undo mechanisms in software, and evaluating expressions.</p>
 
             <h4 className="font-semibold py-2"> Key Operations of a Stack:</h4>
@@ -52,12 +53,12 @@ const Stack = () => {
         {/* //ACTION BUTTONS: */}
         {<OperationsContainer open={open} setOpen={setOpen}>
           <div className="flex  items-center gap-2 justify-center">
-            <PushData data={nodeData} setData={setNodeData} onClick={async () => {
+            <PushData  action="write" data={nodeData} setData={setNodeData} onClick={async () => {
               if (isFilling || isStackOverFlow || isAnimationRunning) return;
               setAnimationRunning(true)
               await push(nodeData || 'let x = 50');
             }} isLoading={isAnimationRunning || isFilling} />
-            {stack.size > 0 && <ButtonAction title="pop" className='bg-red-400 hover:bg-red-600' isLoading={isAnimationRunning || isFilling} onClick={async () => {
+            {stack.size > 0 && <ButtonAction action="delete" title="pop" isLoading={isAnimationRunning || isFilling} onClick={async () => {
               if (isFilling || isStackOverFlow || isAnimationRunning) return;
               setAnimationRunning(true)
               await pop(() => {
@@ -65,7 +66,7 @@ const Stack = () => {
               });
             }} />
             }
-            {stack.size > 0 && <ButtonAction title="peek" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning || isFilling} onClick={async () => {
+            {stack.size > 0 && <ButtonAction title="peek" action="read" isLoading={isAnimationRunning || isFilling} onClick={async () => {
               if (isFilling || isStackOverFlow || isAnimationRunning) return;
               setAnimationRunning(true)
               await peek(() => {
@@ -76,7 +77,7 @@ const Stack = () => {
             }
           </div>
 
-          <ButtonAction title="run" className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning || isFilling} onClick={async () => {
+          <ButtonAction action="search" title="run" className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning || isFilling} onClick={async () => {
             if (isFilling || isStackOverFlow) return;
             setOpen(false)
             await fill(0, stack.maxSize - stack.size, (data) => {
@@ -105,7 +106,7 @@ const Stack = () => {
           {!isStackOverFlow && !isFilling && !isAnimationRunning && <div>
             <PopOverComponent content={
               <LinearDsConfig render={render} stack={stack} />
-            } trigger={<Button><Wrench color="white" /></Button>} />
+            } trigger={<Button variant={'ghost'}><Wrench  /></Button>} />
           </div>}
 
         </div>

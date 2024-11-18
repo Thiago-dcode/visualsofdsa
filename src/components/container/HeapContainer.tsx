@@ -84,31 +84,31 @@ function HeapContainer({ heap, children, loading }: {
                 </div>
                 <div className='self-end flex items-center gap-2 relative'>
                     {heapSize <= 0 ? <InputWithButtonContainer key={'linkedList-add-action'}>
-                        <Input value={mallocSize} placeholder="index" className="text-black w-20" onChange={(e) => {
+                        <Input value={mallocSize} placeholder="index"  onChange={(e) => {
                             const n = Number.parseInt(e.target.value);
                             setMallocSize(n)
 
                         }} type="number" min={0} max={100} />
 
-                        <ButtonAction title="malloc" className='bg-green-400 hover:bg-green-600' isLoading={loading} onClick={() => {
+                        <ButtonAction title="malloc" action='write' isLoading={loading} onClick={() => {
                             malloc(mallocSize)
                         }} />
 
                     </InputWithButtonContainer> : <Section className='relative  self-end'><InputWithButtonContainer key={'linkedList-add-action'}>
-                        <Input value={rellocSize} placeholder="index" className="text-black w-20" onChange={(e) => {
+                        <Input value={rellocSize} placeholder="index"  onChange={(e) => {
                             if (loading) return;
                             const n = Number.parseInt(e.target.value);
                             setRellocSize(n)
 
                         }} type="number" min={0} max={100} />
 
-                        <ButtonAction title="Relloc" className='bg-blue-400 hover:bg-blue-600' isLoading={loading} onClick={() => {
+                        <ButtonAction title="Relloc" action='fill' isLoading={loading} onClick={() => {
                             if (loading) return;
                             relloc(rellocSize)
                         }} />
 
                     </InputWithButtonContainer>
-                    <ButtonAction title="Free" className='bg-red-400 hover:bg-red-600' isLoading={loading} onClick={() => {
+                    <ButtonAction title="Free" action='delete' isLoading={loading} onClick={() => {
                             if (loading) return;
                            free()
                         }} />
@@ -117,7 +117,7 @@ function HeapContainer({ heap, children, loading }: {
                 </div>
             </Section>
 
-            {heapSize > 0 ? <div className='p-4 border-white border-2 rounded-sm'>
+            {heapSize > 0 ? <div className='p-4 dark:border-app-off-white border-app-off-black border-2 rounded-sm'>
                 <div className='relative' style={{
                     width: width + 'px',
                     height: height + 'px'

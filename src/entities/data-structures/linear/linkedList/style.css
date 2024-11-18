@@ -1,17 +1,16 @@
-@keyframes find-node {
-  0% {
-   
-
-    
-  }
+@keyframes find-node-dark {
 
   50% {
     box-shadow: rgb(255, 255, 255) 0px 0px 0px 5px;
   }
 
-  100% {
- 
+}
+@keyframes find-node-light {
+
+  50% {
+    box-shadow: rgb(0, 0, 0) 0px 0px 0px 5px;
   }
+
 }
 
 @keyframes del-node {

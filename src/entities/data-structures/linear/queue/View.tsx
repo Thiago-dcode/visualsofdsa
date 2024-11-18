@@ -53,14 +53,14 @@ export default function Queue() {
         {/* //ACTION BUTTONS: */}
         {<OperationsContainer open={open} setOpen={setOpen}>
           <div className="flex flex-wrap  items-end gap-2 justify-end">
-            <PushData title='enqueue' data={nodeData} setData={setNodeData} onClick={async () => {
+            <PushData action='write' title='enqueue' data={nodeData} setData={setNodeData} onClick={async () => {
               if (isFilling || isAnimationRunning) return;
 
               setAnimationRunning(true)
               enqueue(nodeData)
 
             }} isLoading={isFilling || isAnimationRunning} />
-            {queue.size > 0 && <ButtonAction title="dequeue" className='bg-red-400 hover:bg-red-600' isLoading={isFilling || isAnimationRunning} onClick={async () => {
+            {queue.size > 0 && <ButtonAction action='delete' title="dequeue" className='bg-red-400 hover:bg-red-600' isLoading={isFilling || isAnimationRunning} onClick={async () => {
               // console.log('DEQUEUE', isAnimationRunning)
               if (isFilling || isStackOverFlow || isAnimationRunning) return;
 
@@ -72,7 +72,7 @@ export default function Queue() {
 
             }} />
             }
-            {queue.size > 0 && <ButtonAction title="front" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning || isFilling} onClick={async () => {
+            {queue.size > 0 && <ButtonAction action='read' title="front" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning || isFilling} onClick={async () => {
               if (isFilling || isStackOverFlow || isAnimationRunning) return;
               setAnimationRunning(true)
               await peek(() => {
@@ -83,7 +83,7 @@ export default function Queue() {
             }
           </div>
 
-          <ButtonAction title="run" className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning || isFilling} onClick={async () => {
+          <ButtonAction title="run" action='search' className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning || isFilling} onClick={async () => {
             if (isFilling || isStackOverFlow) return;
             setOpen(false)
             await fill(0, queue.maxSize - queue.size, (data) => {
@@ -109,7 +109,7 @@ export default function Queue() {
           {!isStackOverFlow && !isFilling && !isAnimationRunning && <div>
             <PopOverComponent content={
               <LinearDsConfig render={render} stack={queue} />
-            } trigger={<Button><Wrench color="white" /></Button>} />
+            } trigger={<Button variant={'ghost'}><Wrench/></Button>} />
           </div>}
 
         </div>

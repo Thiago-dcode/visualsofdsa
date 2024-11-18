@@ -14,7 +14,7 @@ export default function OperationsContainer({ children, makeResponsive = false, 
     return (
         <>
 
-            {((device.isDesktop || device.isTv) && !makeResponsive) ? < div className={cn("border-2 border-white w-full wrap flex items-start justify-between gap-1 p-2", className)} >
+            {((device.isDesktop || device.isTv) && !makeResponsive) ? < div className={cn("border-b-2 border-b-app-off-gray w-full wrap flex items-start justify-between gap-1 p-2", className)} >
                 {children}
             </div > :
                 <div className='w-full flex items-center justify-end px-10'>

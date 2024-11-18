@@ -16,7 +16,7 @@ function MemoryAdressContainer({ index, showIndex = false, size = MemorySize.M, 
         <div>
             <div style={{
                 width: size + 'px',
-            }} title={"Memory address: " + memoryAdress} className={`${MemorySize.S === size ? 'text-xs' : MemorySize.M === size ? 'text-sm' : 'text-lg'} flex items-center justify-center py-2 border border-white h-[15px]`}>
+            }} title={"Memory address: " + memoryAdress} className={`${MemorySize.S === size ? 'text-xs' : MemorySize.M === size ? 'text-sm' : 'text-lg'} flex items-center justify-center py-2 border dark:border-app-off-white border-app-off-black h-[15px]`}>
                 <p className=''>{memoryAdress}</p>
             </div>
             <div className={`${MemorySize.S === size ? 'text-xs' : MemorySize.M === size ? 'text-sm' : 'text-lg'}`} style={{
@@ -29,7 +29,7 @@ function MemoryAdressContainer({ index, showIndex = false, size = MemorySize.M, 
             <div title={"index: " + index} style={{
                 visibility: showIndex ? 'visible' : 'hidden',
                 width: size + 'px',
-            }} className={` ${MemorySize.S === size ? 'text-xs' : MemorySize.M === size ? 'text-sm' : 'text-lg'} flex items-center justify-center py-2 border border-white  h-[15px] relative`}>
+            }} className={` ${MemorySize.S === size ? 'text-xs' : MemorySize.M === size ? 'text-sm' : 'text-lg'} flex items-center justify-center py-2 border dark:border-app-off-white border-app-off-black  h-[15px] relative`}>
                 <p>{index}</p>
             </div>
         </div>

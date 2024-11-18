@@ -44,7 +44,7 @@ function Properties({ properties, className }: {
                                         await handleAnimation(key, propertie.value, ref)
                                     })()
 
-                                }} key={`propertie-${key}-${propertie.value}-${i}`} className="bg-white px-4 py-1 text-black rounded-md">
+                                }} key={`propertie-${key}-${propertie.value}-${i}`} className=" px-4 py-1 dark:border-app-off-white border-2 border-app-off-black rounded-md">
                                     <h4 className=" font-bold text-lg">{key}: {propertie.value}</h4>
                                 </div>
                             )

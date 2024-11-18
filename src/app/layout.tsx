@@ -5,16 +5,20 @@ import Link from "next/link";
 import { Toaster } from 'sonner';
 import { Check, CircleAlert, CircleX } from "lucide-react";
 import Nav from "@/components/app/nav";
-import { Separator } from "@/components/ui/separator";
+
 import Image from "next/image";
-import Logo from '@/assets/images/logo.png'
+
+import { config } from "@/config";
+import DarkModeTogglerComponent from "@/components/app/DarkModeTogglerComponent";
+import { DarkModeProvider } from "@/context/darkModeContext";
+import LogoComponent from "@/components/app/logoComponent";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "visualsofdsa",
   description: "Visuals of data structure and algorithms",
-  icons:{
-    icon:'/favicon.png'
+  icons: {
+    icon: '/favicon.png'
   }
 };
 
@@ -24,26 +28,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className}${config.darkModeTailwind}`}>
+        <DarkModeProvider>
         <div id="root">
 
-          <header className='sticky top-0 z-50 py-8 bg-app-bg '>
-           <div className=" flex items-end justify-between px-10">
-            
-            <Link href={'/'} className=""><Image alt="visuals of dsa logo" height={65} width={65} src={Logo}/></Link>
-           <Nav/>
-           
-           </div>
-           <Separator color="white"/>
+          <header className='sticky top-0  right-0 z-50 py-2 mb-8 border-b-2 dark:border-b-app-off-white border-b-app-off-black dark:bg-app-off-black/80 bg-app-off-white/70 w-full'>
+            <div className=" flex items-end justify-between px-[30px] w-full ">
+
+             <LogoComponent/>
+              <Nav />
+             <DarkModeTogglerComponent/>
+
+            </div>
+
           </header>
-        
+
           {children}
-          
-          </div>
+
+        </div>
+        </DarkModeProvider>
         <Toaster
 
           toastOptions={{

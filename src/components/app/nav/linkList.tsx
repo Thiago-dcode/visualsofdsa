@@ -39,7 +39,7 @@ export default function LinkList({ link, isFirstLvl }: {
                             setIsOpen(e)
                         }} closeDelay={0} openDelay={0}>
                             <HoverCardTrigger className="flex items-center justify-start"> <LinkItemComponent  pathMatch={pathMatch} isFirstLvl={isFirstLvl} icon={getIcon()} link={link} /> </HoverCardTrigger>
-                            <HoverCardContent className="bg-app-bg text-white" align="start" side={isFirstLvl ? 'bottom' : 'right'}>
+                            <HoverCardContent className="dark:bg-black border dark:border-app-off-white border-app-bg-black " align="start" side={isFirstLvl ? 'bottom' : 'right'}>
 
                                 {children.map((child, i) => {
                                     const arr = child.link.split('/');
@@ -49,12 +49,12 @@ export default function LinkList({ link, isFirstLvl }: {
                                     return (
 
 
-                                        <div key={`${child.link}-${i}`} className={cn({
-                                            'bg-white/80 text-black':arrOfPaths.includes(lastLink) && firtsLink === arrOfPaths[1]
+                                        <div key={`${child.link}-${i}`} className={cn('border-b dark:border-app-off-white border-app-off-black',{ 
+                                            'dark:bg-app-off-white bg-app-off-black dark:text-black text-white':arrOfPaths.includes(lastLink) && firtsLink === arrOfPaths[1]
                                         })} >
 
                                             <LinkList link={child} isFirstLvl={false} />
-                                            <Separator />
+                                           
 
                                         </div>
 

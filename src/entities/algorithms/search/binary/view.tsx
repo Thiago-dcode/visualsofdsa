@@ -124,7 +124,7 @@ export default function BinaryView() {
           <InputWithButtonContainer key={'linkedList-add-action'}>
             <Input ref={inputRef} placeholder="size" className="text-black w-32 text-center" type="number" min={0} />
 
-            <ButtonAction title="create array" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={handleCreate} />
+            <ButtonAction title="create array" action='write' isLoading={isAnimationRunning} onClick={handleCreate} />
 
           </InputWithButtonContainer>
 
@@ -134,13 +134,13 @@ export default function BinaryView() {
           <InputWithButtonContainer key={'linkedList-add-action'}>
             <Input ref={inputRef} placeholder="value" className="text-black w-32 text-center" type="number" />
 
-            <ButtonAction title="Search" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={async () => {
+            <ButtonAction title="Search" action='read' isLoading={isAnimationRunning} onClick={async () => {
               await handleSearch()
             }} />
 
           </InputWithButtonContainer>
         </Section>
-        }  {array && array.length ? <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
+        }  {array && array.length ? <ButtonAction title="delete" action='delete' className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
           reset()
 
         }} /> : null}
@@ -174,7 +174,7 @@ export default function BinaryView() {
             }} type='range' min={1} max={3} />
 
           </div>
-        } trigger={<Button size={'icon'} variant={'ghost'} className='hover:bg-transparent'><Wrench color="white" /></Button>} />}
+        } trigger={<Button size={'icon'} variant={'ghost'} className='hover:bg-transparent'><Wrench /></Button>} />}
 
       </div>
      <ArrayComponent array={array} setAnimationRunning={setAnimationRunning}/>

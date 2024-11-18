@@ -14,26 +14,35 @@ const config = {
       center: true,
       padding: "2rem",
       screens: {
-       
         "2xl": "1400px",
       },
     },
     extend: {
-      screens:{
+      screens: {
         phone: "480px",
         tablet: "860px",
         desktop: "1200px",
       },
       colors: {
         app: {
-          bg: "#13161B",
-          green: '#00FF41',
-          ivory:'#FFFFE1',
-          ['bauhaus-red']:'#d94527',
-          ['bauhaus-green']:'#elay ',
-          ['bauhaus-yellow']:'#f5a845',
-          ['bauhaus-bone']:'#d6c2af',
+          bg: {
+            black: "#13161B",
+          },
 
+          off: {
+            white: "#F2F0EF",
+            black: "#1a1918",
+            gray: "#c9c8c7",
+          },
+          bauhaus: {
+            red: "#d94527",
+            green: "#24a482",
+            yellow: "#f5a845",
+            bone: "#d6c2af",
+            blue: "#458ff5",
+            orange: "#c57634",
+            indigo: "#5a45f5",
+          },
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

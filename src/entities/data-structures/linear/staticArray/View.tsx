@@ -94,7 +94,7 @@ export default function StaticArray() {
                             setData(e.target.value)
                         }} type="text" name="" id="" />
 
-                        <ButtonAction title="write" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
+                        <ButtonAction title="write" action="write" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || index === undefined) return;
                             setIsAnimationRunning(true)
                             setOpen(false)
@@ -113,7 +113,7 @@ export default function StaticArray() {
                         <Input defaultValue={indexAccess} placeholder="index" className="text-black w-20" onChange={(e) => {
                             setIndexAccess(Number.parseInt(e.target.value))
                         }} type="number" min={0} />
-                        <ButtonAction title="access" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={async () => {
+                        <ButtonAction title="access" action="read" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning) return;
                             setIsAnimationRunning(true);
                             setAction('access')
@@ -130,7 +130,7 @@ export default function StaticArray() {
                             setSearchData(e.target.value)
                         }} type="text" name="" id="" />
 
-                        <ButtonAction title="search" className='bg-blue-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
+                        <ButtonAction title="search" action="search" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning) return;
                             setIsAnimationRunning(true)
                             setOpen(!open)
@@ -161,14 +161,14 @@ export default function StaticArray() {
 
 
                     }} type="number" min={0} />
-                    <ButtonAction title="create" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
+                    <ButtonAction title="create" action="write" isLoading={isAnimationRunning} onClick={async () => {
                         if (isAnimationRunning || !size) return;
                         setOpen(!open)
                         setIsAnimationRunning(true)
                         await create(size)
                         setIsAnimationRunning(false)
                     }} />
-                    <ButtonAction title="fill" className='bg-blue-400 hover:bg-blue-600' isLoading={isAnimationRunning} onClick={async () => {
+                    <ButtonAction title="fill" action="fill" isLoading={isAnimationRunning} onClick={async () => {
                         if (isAnimationRunning) return;
                         setOpen(!open)
                         setIsAnimationRunning(true)
@@ -177,7 +177,7 @@ export default function StaticArray() {
                     }} />
                 </div>}
 
-                {array && array.length ? <ButtonAction title="fill" className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning} onClick={async () => {
+                {array && array.length ? <ButtonAction title="fill" action="fill" className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning} onClick={async () => {
                     if (isAnimationRunning) return;
                     setIsAnimationRunning(true)
                     setAction('write')
@@ -193,7 +193,7 @@ export default function StaticArray() {
 
                 }} /> : null}
 
-                {array && array.length ? <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
+                {array && array.length ? <ButtonAction title="delete" action="delete" className='elf-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
                     flush()
                     setIsAnimationRunning(false)
                     setAction('create')
@@ -230,7 +230,7 @@ export default function StaticArray() {
 
                     } trigger={<Button onClick={() => {
 
-                    }}><Wrench color="white" /></Button>} />
+                    }}><Wrench /></Button>} />
                 </div>}
             </div>
 
@@ -242,7 +242,7 @@ export default function StaticArray() {
 
                             <MemoryAdressContainer size={MemorySize.L} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i}>
 
-                                {array && array[i] ? <StaticArrayNodeComponent isLastNode={i === array.length - 1} action={action} setAnimationRunning={setIsAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
+                                {array && array[i] ? <StaticArrayNodeComponent isLastNode={i === array.length - 1} action={action} setAnimationRunning={setIsAnimationRunning} node={array[i]} /> : <p className="border dark:border-white/50 border-black/50 w-full h-full"></p>}
                             </MemoryAdressContainer>
 
 

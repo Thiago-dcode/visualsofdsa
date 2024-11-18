@@ -26,9 +26,9 @@ export default function Arrow({ edge, isActive = false, extraY = 0, extraX = 0, 
     }, [])
     return (
         <div ref={handleRef} className={cn('node-arrow absolute flex flex-row justify-end items-center', {
-            'bg-red-600': color === 'red',
-            'bg-green-600': color === 'green',
-            'bg-blue-600': color === 'blue',
+            'bg-app-bauhaus-red': color === 'red',
+            'bg-app-bauhaus-green': color === 'green',
+            'bg-app-bauhaus-blue': color === 'blue',
        
 
         })} style={{
@@ -45,9 +45,9 @@ export default function Arrow({ edge, isActive = false, extraY = 0, extraX = 0, 
             <div style={{
                 transform: `rotate(${45}deg)`,
             }} className={cn('node-arrow z[99] w-[15px] h-[15px] border-r-4 border-t-4 rounded-tr-sm ', {
-                ' border-r-red-600 border-t-red-600': color === 'red',
-                ' border-r-green-600 border-t-green-600': color === 'green',
-                ' border-r-blue-600 border-t-blue-600': color === 'blue',
+                ' border-r-app-bauhaus-red border-t-app-bauhaus-red': color === 'red',
+                ' border-r-app-bauhaus-green border-t-app-bauhaus-green': color === 'green',
+                ' border-r-bauhaus-blue border-t-bauhaus-blue': color === 'blue',
               
 
             })}>

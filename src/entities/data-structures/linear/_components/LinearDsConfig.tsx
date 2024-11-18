@@ -10,7 +10,7 @@ export default function LinearDsConfig({
     render: (c?: boolean) => void
 }) {
     return (
-        <div className='flex flex-col items-center justify-center gap-4'>
+        <div className='flex flex-col items-center justify-center gap-4 '>
             <div>
                 <label htmlFor="size">Size</label>
                 <Input defaultValue={stack.maxSize} onChange={(e) => {

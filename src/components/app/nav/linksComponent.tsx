@@ -17,8 +17,8 @@ export default function LinksComponent({ title, links }: {
       {links.map((link, i) => {
 
         return (<>
-          <Link href={link.enable ? link.link : '#'} key={link.name} className={cn("text-center  h-20 border-2 bg-app-bauhaus-bone text-black hover:bg-app-bauhaus-bone/80 flex items-center justify-center w-52 p-1  rounded-md", {
-            'opacity-50': !link.enable
+          <Link href={link.enable ? link.link : '#'} key={link.name} className={cn("text-center  h-20 border-4 dark:border-app-off-white border-app-bg-black dark:text-app-off-white text-black hover:bg-app-bauhaus-blue flex items-center justify-center w-52 p-1  rounded-md", {
+            'opacity-50 hover:bg-transparent': !link.enable
           })}><Title bold={1} uppercase={false} xls={2} h={5} title={link.name} /></Link>
           {/* {LINKS.length - 2 === i && <p className="font-bold text-2xl">&</p>} */}
         </>)

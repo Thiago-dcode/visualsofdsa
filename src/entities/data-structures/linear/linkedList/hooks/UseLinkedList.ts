@@ -8,10 +8,11 @@ import "../style.css";
 import UseLinkedListAnimation from "./UseLinkedListAnimation";
 import LinkedListNode from "../classes/LinkedListNode";
 import { animate } from "@/lib/animations";
+import { useDarkMode } from "@/context/darkModeContext";
 const ANIMATION_SPEED = 1;
 export default function UseLinkedList(isDoublyLinkedList = false) {
-  const [linkedList, setLinkedList] = useState(new LinkedList());
-  const { getAnimation } = UseLinkedListAnimation(linkedList);
+  const [linkedList] = useState(new LinkedList());
+ const {isDark} = useDarkMode();
 
   const [error, setError] = useState<{
     name: string;
@@ -45,7 +46,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
             if (_node && _node.ref) {
               await animate(
                 _node.ref,
-                `find-node ${ANIMATION_SPEED * 0.8 + "s"}`
+                `find-node-${isDark?'dark':'light'} ${ANIMATION_SPEED * 0.8 + "s"}`
               );
 
               if (direction === "forward")
@@ -144,7 +145,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
                 await animate(
                   _node.ref,
                   index !== _index
-                    ? `find-node ${ANIMATION_SPEED * 0.8 + "s"}`
+                    ? `find-node-${isDark?'dark':'light'} ${ANIMATION_SPEED * 0.8 + "s"}`
                     : `get-node ${ANIMATION_SPEED + "s"}`
                 );
                 if (index !== _index) {
@@ -180,7 +181,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
         await animate(
           node.ref,
           !(index === j && animateLast)
-            ? `find-node ${ANIMATION_SPEED * 0.8 + "s"}`
+            ? `find-node-${isDark?'dark':'light'} ${ANIMATION_SPEED * 0.8 + "s"}`
             : `${isDel ? "del" : "get"}-node ${ANIMATION_SPEED + "s"}`
         );
 

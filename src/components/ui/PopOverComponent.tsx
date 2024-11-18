@@ -46,7 +46,7 @@ export function PopOverComponent({
       }} asChild>
         {trigger}
       </PopoverTrigger>
-      <PopoverContent id="pop-over" className={cn('w-80', className)}>
+      <PopoverContent id="pop-over" className={cn('w-80 dark:bg-app-off-white dark:text-app-off-black bg-app-off-black text-app-off-white', className)}>
         {
           content
         }

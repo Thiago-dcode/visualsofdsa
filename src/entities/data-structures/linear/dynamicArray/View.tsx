@@ -43,30 +43,30 @@ export default function DynamicArray() {
 
                 <Info title="DYNAMIC ARRAY" text={<article>
                     <p>
-                        A dynamic array is <b>a linear data structure</b> similar to <Link target="_blank" className="italic text-blue-500" href={'/data-structures/linear/static-array'}>static arrays</Link>, but it can grow in size dynamically; in other words, the array size isn&apos;t static. To accomplish this dynamic growth, the array first sets an initial capacity (not the actual size), and when the size grows and there isn&apos;t enough space, the array is copied to a new array with double the capacity.
+                        A dynamic array is <b>a linear data structure</b> similar to <Link target="_blank" className="italic text-app-bauhaus-blue" href={'/data-structures/linear/static-array'}>static arrays</Link>, but it can grow in size dynamically; in other words, the array size isn&apos;t static. To accomplish this dynamic growth, the array first sets an <b className="text-app-bauhaus-yellow">initial capacity</b> (not the actual size), and when the size grows and there isn&apos;t enough space, the array is copied to a new array with double the capacity.
                     </p>
                     <br />
                     <p>
-                        Besides the <Link target="_blank" className="italic text-blue-500" href={'/data-structures/linear/static-array'}>static arrays</Link> operations, dynamic arrays have their own operations:
+                        Besides the <Link target="_blank" className="italic text-app-bauhaus-blue" href={'/data-structures/linear/static-array'}>static arrays</Link> operations, dynamic arrays have their own operations:
                     </p>
 
                     <h4 className="font-semibold py-2">Key Operations of a Dynamic Array:</h4>
                     <br />
                     <ul>
                         <li>
-                            <b className="font-semibold text-yellow-400">Push:</b> This operation <b>adds a new element after the last position</b>, increasing the array&apos;s size by one. Sometimes the array must be copied to a new array due to lack of space, so in this situation, the push operation will take O(n). <br /><b>Overall time complexity: O(1).</b>
+                            <b className="font-semibold text-app-bauhaus-green">Push:</b> This operation <b>adds a new element after the last position</b>, increasing the array&apos;s size by one. Sometimes the array must be copied to a new array due to lack of space, so in this situation, the push operation will take O(n). <br /><b>Overall time complexity: O(1).</b>
                         </li>
                         <br />
                         <li>
-                            <b className="font-semibold text-red-400">Pop:</b> This operation <b>deletes the element at the last position</b>. <br /><b>Time complexity: O(1).</b>
+                            <b className="font-semibold text-app-bauhaus-red">Pop:</b> This operation <b>deletes the element at the last position</b>. <br /><b>Time complexity: O(1).</b>
                         </li>
                         <br />
                         <li>
-                            <b className="font-semibold text-orange-400">Insert:</b> This operation <b>adds an element at a specific position by a given index</b>. To accomplish this operation, all elements on the right side of the desired position must be shifted towards the right before the new element is inserted, and then the new element is written in the released position.<br /><b>Time complexity: O(n).</b>
+                            <b className="font-semibold text-app-bauhaus-orange">Insert:</b> This operation <b>adds an element at a specific position by a given index</b>. To accomplish this operation, all elements on the right side of the desired position must be shifted towards the right before the new element is inserted, and then the new element is written in the released position.<br /><b>Time complexity: O(n).</b>
                         </li>
                         <br />
                         <li>
-                            <b className="font-semibold text-red-400">Delete:</b> This operation <b>removes an element from a specific position by a given index</b>. To accomplish this operation, the program first deletes the desired element, and then all elements on the right side must be shifted to the left, taking the place of the deleted element. <br /><b>Time complexity: O(n).</b>
+                            <b className="font-semibold text-app-bauhaus-red">Delete:</b> This operation <b>removes an element from a specific position by a given index</b>. To accomplish this operation, the program first deletes the desired element, and then all elements on the right side must be shifted to the left, taking the place of the deleted element. <br /><b>Time complexity: O(n).</b>
                         </li>
                         <br />
                     </ul>
@@ -94,7 +94,7 @@ export default function DynamicArray() {
                             setData(e.target.value)
                         }} type="text" name="" id="" />
 
-                        <ButtonAction title="write" className='bg-green-400 hover:bg-green-600' isLoading={isAnimationRunning} onClick={async () => {
+                        <ButtonAction title="write" action="write" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || index === undefined) return;
                             setIsAnimationRunning(true)
                             setOpen(false)
@@ -111,7 +111,7 @@ export default function DynamicArray() {
                             if (isAnimationRunning) return;
                             setPushData(e.target.value)
                         }} type="text" name="" id="" />
-                        <ButtonAction title="push" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={() => {
+                        <ButtonAction title="push" action="write" isLoading={isAnimationRunning} onClick={() => {
                             if (isAnimationRunning || index === undefined) return;
                             setIsAnimationRunning(true)
                             setOpen(false)
@@ -134,7 +134,7 @@ export default function DynamicArray() {
                             setInsertData(e.target.value)
                         }} type="text" name="" id="" />
 
-                        <ButtonAction title="insert" className='bg-orange-400 hover:bg-orange-600' isLoading={isAnimationRunning} onClick={async () => {
+                        <ButtonAction title="insert" action="insert" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || indexInsert === undefined) return;
                             setIsAnimationRunning(true)
                             setOpen(false)
@@ -152,7 +152,7 @@ export default function DynamicArray() {
 
                             setIndexAccess(isNaN(n) ? 0 : n)
                         }} type="number" min={0} />
-                        <ButtonAction title="access" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning} onClick={async () => {
+                        <ButtonAction title="access" action="read" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || indexAccess === undefined) return;
                             setIsAnimationRunning(true)
                             setOpen(false)
@@ -169,7 +169,7 @@ export default function DynamicArray() {
                             setSearchData(e.target.value)
                         }} type="text" name="" id="" />
 
-                        <ButtonAction title="search" className='bg-blue-400 hover:bg-blue-600' isLoading={isAnimationRunning} onClick={async () => {
+                        <ButtonAction title="search" action="search" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning) return;
                             setIsAnimationRunning(true)
                             setOpen(!open)
@@ -186,7 +186,7 @@ export default function DynamicArray() {
                     {/* POP OPERATION */}
                     {!size || !array ? null :
                         <>
-                            <ButtonAction title="pop" className='bg-red-400 hover:bg-red-600' isLoading={isAnimationRunning} onClick={async () => {
+                            <ButtonAction title="pop" action="delete" isLoading={isAnimationRunning} onClick={async () => {
                                 if (isAnimationRunning) return;
                                 setIsAnimationRunning(true)
                                 setOpen(!open)
@@ -203,7 +203,7 @@ export default function DynamicArray() {
                                     setIndexDelete(isNaN(n) ? 0 : n)
                                 }} type="number" min={0} />
 
-                                <ButtonAction title="delete" className='bg-red-400 hover:bg-red-600' isLoading={isAnimationRunning} onClick={async () => {
+                                <ButtonAction title="delete" action="delete" isLoading={isAnimationRunning} onClick={async () => {
                                     if (isAnimationRunning || indexDelete === undefined) return;
                                     setIsAnimationRunning(true)
                                     setOpen(false)
@@ -222,7 +222,7 @@ export default function DynamicArray() {
                             setFillAmount(isNaN(n) ? 0 : n)
                         }} type="number" min={0} />
 
-                        <ButtonAction title="fill" className='bg-lime-400 hover:bg-lime-600' isLoading={isAnimationRunning} onClick={async () => {
+                        <ButtonAction title="fill" action="fill" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || !fillAmount) return;
 
                             setOpen(false)
@@ -263,8 +263,8 @@ export default function DynamicArray() {
                     array.map((node, i) => {
                         return (
                             <MemoryAdressContainer index={i} showIndex={node !== null} key={'memoryAdressContainer-' + `${node ? node.id : 'null-' + i}`}>
-                                {node !== null ? <StaticArrayNodeComponent isLastNode={i === size - 1} action={action} node={node} setAnimationRunning={setIsAnimationRunning} /> : <p className="border-2 flex items-center justify-center
-                     border-white/50 w-full h-full">NULL</p>}
+                                {node !== null ? <StaticArrayNodeComponent isLastNode={i === size - 1} action={action} node={node} setAnimationRunning={setIsAnimationRunning} /> : <p className="border flex items-center justify-center
+                     dark:border-white/50 border-black/50 w-full h-full"></p>}
                             </MemoryAdressContainer>
 
                         )

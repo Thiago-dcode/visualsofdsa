@@ -14,7 +14,7 @@ function LinearDsContainer({ children, className = '', linearDs, dsType = 'stack
                     paddingTop: dsType == 'stack' ? linearDs.nodeHeightSpacing + 'px' : '',
                     paddingBottom: dsType == 'queue' ? linearDs.nodeHeightSpacing + 'px' : ''
                 }
-            } className={`border-l-8 border-r-8 ${dsType == 'stack' ? 'border-b-8 rounded-b-lg' : ''}  border-white px-2`}>
+            } className={` border-l-8 border-r-8 ${dsType == 'stack' ? 'border-b-8 rounded-b-lg' : ''} px-2 dark:border-app-off-white border-app-off-black` }>
 
                 <div style={{
                     height: `${(linearDs.nodeHeight + linearDs.nodeHeightSpacing) * linearDs.maxSize}px`,
