@@ -5,7 +5,7 @@ import StaticArrayNodeComponent from '@/entities/data-structures/linear/staticAr
 import { MemorySize, Primitive } from '@/types'
 import React from 'react'
 
-export default function ArrayComponent({array,setAnimationRunning}:{
+export default function MemoryRamVisualization({array,setAnimationRunning}:{
     array: (Node<Primitive>|null)[] | null,
     setAnimationRunning: (e:boolean)=>void
 }) {

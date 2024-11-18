@@ -1,9 +1,10 @@
-import LinearView from '@/entities/algorithms/search/linear/view'
+
+import SearchView from '@/entities/algorithms/search/view'
 import React from 'react'
 
 function LinearPage() {
   return (
-    <LinearView/>
+    <SearchView searchType='linear'  />
   )
 }
 
