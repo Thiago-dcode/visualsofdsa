@@ -14,7 +14,7 @@ import Title from '@/components/ui/Title'
 import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAction'
 
 import useStaticArray from '@/entities/data-structures/linear/staticArray/hooks/useStaticArray'
-import { Direction, speed, VisualizationAlgorithms } from '@/types'
+import { Direction, Primitive, speed, VisualizationAlgorithms } from '@/types'
 import React, { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import useSearchAlgorithm from './_hooks/useSearchAlgorithm'
@@ -28,9 +28,9 @@ type SearchType = 'linear' | 'binary'
 export default function SearchView({ searchType }: {
   searchType?: SearchType
 }) {
-  const { array, maxSize, createSorted, flush, error } = useStaticArray(500);
+  const { array, maxSize, createSorted,createUnsorted, flush, error } = useStaticArray(500);
   const [speed, setSpeed] = useState<speed>(1)
-  const [visualizationMode, setVisualizationMode] = useState<VisualizationAlgorithms>('memoryRam')
+  const [visualizationMode, setVisualizationMode] = useState<VisualizationAlgorithms>('bars')
   const { binary, linear } = useSearchAlgorithm(array as Node<number>[] | null, speed);
   const [direction, setDirection] = useState<Direction>('forward')
   const [isAnimationRunning, setAnimationRunning] = useState(false);
@@ -83,8 +83,18 @@ export default function SearchView({ searchType }: {
     setAnimationRunning(true);
     const arraySize = getValue();
     if (arraySize === null) return;
+    switch (searchType) {
+      case 'linear':
+        await !sorted? createUnsorted(arraySize):createSorted(arraySize,direction);
+        break;
+      case 'binary':
+        await createSorted(arraySize, direction)
+        break;
 
-    await createSorted(arraySize, direction)
+      default:
+        break;
+    }
+   
     setAnimationRunning(false)
     resetValue();
 
@@ -173,12 +183,12 @@ export default function SearchView({ searchType }: {
             {searchType === 'linear' && <div className='flex self-center gap-2 items-center'>   <p>Sorted?</p><Switch defaultChecked={sorted} onCheckedChange={() => {
               toggleSorted()
             }} /></div>}
-            <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'forward' ? false : true} onCheckedChange={() => {
+            {sorted  || searchType === 'binary'  &&   <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'forward' ? false : true} onCheckedChange={() => {
               toggleDirection()
-            }} /></div>
+            }} /></div>}
           </div>
 
-          <InputWithButtonContainer key={'linkedList-add-action'}>
+        <InputWithButtonContainer key={'linkedList-add-action'}>
             <Input ref={inputRef} placeholder="size" className="text-black w-32 text-center" type="number" min={0} />
 
             <ButtonAction title="create array" action='write' isLoading={isAnimationRunning} onClick={handleCreate} />
@@ -234,7 +244,7 @@ export default function SearchView({ searchType }: {
         } trigger={<Button size={'icon'} variant={'ghost'} className='hover:bg-transparent'><Wrench /></Button>} />}
 
       </div>
-      <RenderVisualization visualizationMode={visualizationMode} array={array} setAnimationRunning={setAnimationRunning} />
+    {array ?  <RenderVisualization direction={direction} sorted={searchType==='binary'?true: sorted} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} />:null}
       {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
         reset()
 

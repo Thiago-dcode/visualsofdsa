@@ -1,3 +1,4 @@
+import Node from "@/entities/data-structures/linear/_classes/Node";
 import { Position, Primitive, speed } from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -45,6 +46,13 @@ export const prefix0 = (n: number): string => {
   }
   return n + "";
 };
+export function calculateRuleOfThree(a: number, b: number, x: number,): number {
+  if (a === 0) {
+      throw new Error("The first value 'a' cannot be zero to avoid division by zero.");
+  }
+  return (b * x) / a;
+}
+
 export const getMemoryAddress = (index: number) => {
   return '0x' + prefix0(index);
 }
@@ -61,7 +69,25 @@ export function getEuclideanDistance(position1: Position, position2: Position) {
   return Math.sqrt(Math.pow(position1.x - position2.x, 2) + Math.pow(position1.y - position2.y, 2))
 
 }
+export const getMinInAnArrayOfNodes = (array:Node<number>[])=>{
+  let min = array[0].data;
+  for (let i = 1; i < array.length; i++) {
+    const num = array[i].data;
+    if(num < min) min = num;
+  }
+  return min;
 
+}
+export const getMaxInAnArrayOfNodes = (array:Node<number>[])=>{
+  let max = array[0].data;
+  for (let i = 1; i < array.length; i++) {
+    const num = array[i].data;
+    if(num > max) max = num;
+  }
+  return max;
+
+}
+export const getValueNormalized = (x:number,minX:number,maxX:number,range:[number,number] = [0,1]) =>  range[0] + (range[1] - range[0]) * ((x - minX) / (maxX - minX));
 export function getAngle(position1: Position, position2: Position) {
   // Calculate the differences in the x and y coordinates
   const deltaX = position2.x - position1.x;
