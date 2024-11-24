@@ -24,6 +24,7 @@ import { Button } from '@/components/ui/button'
 import { Wrench } from 'lucide-react'
 import RenderVisualization from '../_components/visualization/renderVisualization'
 import Link from 'next/link'
+import VisualizationTypes from '../_components/visualization/visualizationTypes'
 type SearchType = 'linear' | 'binary'
 export default function SearchView({ searchType }: {
   searchType?: SearchType
@@ -31,7 +32,7 @@ export default function SearchView({ searchType }: {
   const { array, maxSize, createSorted,createUnsorted, flush, error } = useStaticArray(500);
   const [speed, setSpeed] = useState<speed>(1)
   const [visualizationMode, setVisualizationMode] = useState<VisualizationAlgorithms>('bars')
-  const { binary, linear } = useSearchAlgorithm(array as Node<number>[] | null, speed);
+  const { binary, linear } = useSearchAlgorithm(array as Node<number>[] | null, speed,visualizationMode);
   const [direction, setDirection] = useState<Direction>('forward')
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const [sorted, setSorted] = useState(false);
@@ -206,12 +207,14 @@ export default function SearchView({ searchType }: {
             }} />
 
           </InputWithButtonContainer>
+          
         </Section>
         }  {array && array.length ? <ButtonAction title="delete" action='delete' className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
           reset()
 
         }} /> : null}
       </OperationsContainer>
+    
       <div className='w-full items-end justify-between flex'>
 
         <Properties properties={{
@@ -229,7 +232,8 @@ export default function SearchView({ searchType }: {
           }
 
         }} />
-        {array && <PopOverComponent content={
+        {array && !isAnimationRunning && <VisualizationTypes setVisualization={setVisualizationMode} visualizationSelected={visualizationMode}/>}
+        {array && !isAnimationRunning  ? <PopOverComponent content={
           <div className='flex flex-col items-start justify-start'>
             <p>Animation Speed</p>
             <Input defaultValue={speed} onChange={(e) => {
@@ -241,10 +245,10 @@ export default function SearchView({ searchType }: {
             }} type='range' min={1} max={3} />
 
           </div>
-        } trigger={<Button size={'icon'} variant={'ghost'} className='hover:bg-transparent'><Wrench /></Button>} />}
+        } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} />:<div></div>}
 
       </div>
-    {array ?  <RenderVisualization direction={direction} sorted={searchType==='binary'?true: sorted} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} />:null}
+    {array  ?  <RenderVisualization direction={direction} sorted={searchType==='binary'?true: sorted} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} />:null}
       {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
         reset()
 

@@ -30,7 +30,7 @@ function Properties({ properties, className }: {
     }, [])
 
     return (
-        <div className={cn("flex items-start w-full flex-col pl-4 -mt-4 gap-3", className)}>
+        <div className={cn("flex items-start  flex-col pl-4 -mt-4 gap-3", className)}>
             <h3 className="text-xl font-bold">Properties: </h3>
             <div className="flex  items-start w-full flex-wrap  gap-4">
 

@@ -1,6 +1,6 @@
 import SearchAlgorithm from "../_classes/SearchAlgorithm";
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import { Direction, Primitive, speed } from "@/types";
+import { Direction, Primitive, speed, VisualizationAlgorithms } from "@/types";
 import "@/entities/data-structures/linear/staticArray/style.css";
 import { animate } from "@/lib/animations";
 import { toast } from "sonner";
@@ -8,7 +8,8 @@ import { delay } from "@/lib/utils";
 type AlgotType = "linear" | "binary";
 export default function useSearchAlgorithm(
   array: Node<number>[] | null,
-  speed: speed = 1
+  speed: speed = 1,
+  visualization: VisualizationAlgorithms = 'memoryRam'
 ) {
   const getIndexRef = (ref: HTMLElement) =>
     ref.parentElement?.parentElement?.children[2] as HTMLElement;
@@ -28,7 +29,7 @@ export default function useSearchAlgorithm(
     type: AlgotType
   ) => {
     const indexRef = getIndexRef(ref);
-    if (indexRef) {
+    if (indexRef && visualization ==='memoryRam') {
       indexRef.style.visibility = "visible";
     }
 
@@ -39,7 +40,8 @@ export default function useSearchAlgorithm(
           ? `search-node ${getSpeed(type)}s`
           : `access-node ${type === "linear" ? 0.7 : 1.3}s`,
         (e) => {
-          if (indexRef) {
+          if (indexRef && visualization ==='memoryRam') {
+            console.log('hidden something;')
             indexRef.style.visibility = "hidden";
           }
         }
@@ -103,13 +105,13 @@ export default function useSearchAlgorithm(
       if (isEnable) {
         await animate(ref, "enable-node 0.4s", () => {
           ref.style.opacity = "1";
-          ref.style.transform = "scale(1)";
+         
         });
         return;
       }
       await animate(ref, "disable-node 0.4s", () => {
         ref.style.opacity = "0.4";
-        ref.style.transform = "scale(0.9)";
+       
       });
     };
     let steps = 0;
@@ -166,7 +168,6 @@ export default function useSearchAlgorithm(
     for (let i = 0; i < array.length; i++) {
       const node = array[i];
       if (!node || !node.ref) continue;
-      console.log(node);
       toggleEnableNodeAnimation(node.ref, true);
     }
   };

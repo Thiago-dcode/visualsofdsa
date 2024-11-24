@@ -61,9 +61,9 @@ export default function useStaticArray(size: number = 50) {
     const _array = initArray(size);
     if (!_array) return;
 
-      let data = random(0,20000);
+      let data = random(0,5000);
       for (let i = 0; i < _array.length; i++) {
-        let nRandom = random(1,20000);
+        let nRandom = random(1,5000);
         if(direction ==='forward')  data += nRandom
         else data -= nRandom;
       
