@@ -26,17 +26,19 @@ import RenderVisualization from '../_components/visualization/renderVisualizatio
 import Link from 'next/link'
 import VisualizationTypes from '../_components/visualization/visualizationTypes'
 import { config } from '@/config'
-type SearchType = 'linear' | 'binary'
+import { getMinInAnArrayOfNodes } from '@/lib/utils'
+
 export default function SearchView({ searchType }: {
-  searchType?: SearchType
+  searchType?: AlgoSearchType
 }) {
   const { array, maxSize, createSorted,createUnsorted, flush, error } = useStaticArray(500);
   const [speed, setSpeed] = useState<speed>(1)
-  const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam')
-  const { binary, linear } = useSearchAlgorithm(array as Node<number>[] | null, speed,visualizationMode);
   const [direction, setDirection] = useState<Direction>('forward')
   const [isAnimationRunning, setAnimationRunning] = useState(false);
-  const [sorted, setSorted] = useState(false);
+  const [sorted, setSorted] = useState(searchType==='binary');
+  const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam');
+  const { binary, linear } = useSearchAlgorithm(array as Node<number>[] | null,sorted,direction, speed,visualizationMode);
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   const toggleSorted = () => {
     setSorted(prev => !prev)
@@ -56,10 +58,10 @@ export default function SearchView({ searchType }: {
     setAnimationRunning(true);
     switch (searchType) {
       case 'linear':
-        await linear(searchValue, sorted, direction);
+        await linear(searchValue);
         break;
       case 'binary':
-        await binary(searchValue, direction);
+        await binary(searchValue);
         break;
 
       default:
@@ -191,7 +193,7 @@ export default function SearchView({ searchType }: {
             {searchType === 'linear' && <div className='flex self-center gap-2 items-center'>   <p>Sorted?</p><Switch defaultChecked={sorted} onCheckedChange={() => {
               toggleSorted()
             }} /></div>}
-            {sorted  || searchType === 'binary'  &&   <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'forward' ? false : true} onCheckedChange={() => {
+            {sorted    &&   <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'forward' ? false : true} onCheckedChange={() => {
               toggleDirection()
             }} /></div>}
           </div>

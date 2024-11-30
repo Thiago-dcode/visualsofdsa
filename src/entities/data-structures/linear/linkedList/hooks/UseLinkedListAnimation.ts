@@ -1,5 +1,5 @@
 import { Primitive } from "@/types";
-import { requestAnimation } from "@/lib/utils";
+import { requestAnimation } from "@/lib/animations";
 import LinkedList from "../classes/LinkedList";
 const UseLinkedListAnimation = (linkedList: LinkedList<Primitive> | null) => {
 

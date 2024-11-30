@@ -1,8 +1,5 @@
 
-import { requestAnimation } from "../utils";
 import './style.css'
-
-
   export const animate = async (
     ref: HTMLElement | null,
     animation:string,
@@ -28,4 +25,18 @@ import './style.css'
       }
     });
   };
-  
+  export const requestAnimation = function (
+    ref: HTMLElement,
+    animation: string,
+    animationEvent: (e: AnimationEvent) => void,
+    onlyOnce = false
+  ) {
+    if (!onlyOnce) {
+      ref.style.animation = "none";
+      ref.offsetHeight;
+    }
+    window.requestAnimationFrame(function () {
+      ref.style.animation = animation;
+    });
+    ref.addEventListener("animationend", animationEvent);
+  };

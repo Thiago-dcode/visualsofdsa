@@ -4,7 +4,7 @@ import {
 } from 'react'
 import { Primitive } from '@/types';
 import Node from '../_classes/Node';
-import { cn } from '../../../../lib/utils';
+import { cn, copyToClipboard } from '../../../../lib/utils';
 import { config } from '@/config';
 
 type props = {
@@ -20,7 +20,9 @@ const LinearNodeComponent = forwardRef<HTMLDivElement, props>(({ node, dsType, s
 
   return (
     <>
-      {node && <div ref={ref} id={`${dsType}-node-${node.id}`} style={style} className={cn(' relative border-2  text-center flex items-center justify-center overflow-auto', config.darkModeTailwind, className,{
+      {node && <div onClick={async()=>{
+        if(node.data)  await copyToClipboard(node.data+ '');
+      }} ref={ref} id={`${dsType}-node-${node.id}`} style={style} className={cn(' relative border-2  text-center flex items-center justify-center overflow-auto', config.darkModeTailwind, className,{
            'text-[rgb(226, 232, 240)]' :node.data === null
       })}>
         <p className={cn({

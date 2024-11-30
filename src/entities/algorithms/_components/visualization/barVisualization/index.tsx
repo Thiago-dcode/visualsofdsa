@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Node from '@/entities/data-structures/linear/_classes/Node'
 import { Direction, Primitive } from '@/types'
 import Bar from './bar'
-import { calculateRuleOfThree, getMaxInAnArrayOfNodes, getMinInAnArrayOfNodes, getValueNormalized, removePx } from '@/lib/utils'
+import { getMaxInAnArrayOfNodes, getMinInAnArrayOfNodes, getValueNormalized } from '@/lib/utils'
 
 export default function BarsVisualizationSorted({
   array,
@@ -25,7 +25,6 @@ export default function BarsVisualizationSorted({
 
   // Helper function to normalize and calculate height
   const calculateHeight = (value: number): number => {
-    //x′′=2x−minxmaxx−minx−1
     const valueNormalized = getValueNormalized(value, minXValue, maxXValue, [0.1, 2.1]);
     return valueNormalized * (maxBarSize / 2.1);
   };
@@ -34,7 +33,6 @@ export default function BarsVisualizationSorted({
     
     const event = (e: UIEvent) => {
       if (!containerRef.current) return;
-      console.log(containerRef.current.offsetWidth / array.length);
       setBarWidth(containerRef.current.offsetWidth / array.length)
     }
     window.addEventListener('resize', event);
