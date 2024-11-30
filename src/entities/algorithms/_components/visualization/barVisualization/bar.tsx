@@ -17,14 +17,8 @@ export default function Bar({ height, width = 20, node,className }: {
   return (
     <HoverCard  openDelay={100} closeDelay={100} >
       <HoverCardTrigger onClick={async()=>{
-        const result = await copyToClipboard(node.data +'');
-        if(result){
-          toast.info('Value copied ' +node.data,{
-            position:'bottom-right',
-            duration:1000
-          })
-          return;
-        }
+        await copyToClipboard(node.data +'');
+    
       }} >
         <div style={{
           height: Math.abs(height) + 'px',

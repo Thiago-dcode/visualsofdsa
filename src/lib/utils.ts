@@ -1,6 +1,7 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { Position, Primitive, speed } from "@/types";
 import { type ClassValue, clsx } from "clsx";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { v4 as uuid4 } from "uuid";
 
@@ -73,7 +74,8 @@ export function getEuclideanDistance(position1: Position, position2: Position) {
   );
 }
 export const copyToClipboard = async (
-  text: string
+  text: string,
+  showToast = true
 ): Promise<{
   success: boolean;
   error?: string;
@@ -89,6 +91,10 @@ export const copyToClipboard = async (
     //   throw new Error("Permission denied");
     // }
     await navigator.clipboard.writeText(text);
+    if(showToast) toast.info('Value copied ' +text,{
+      position:'bottom-right',
+      duration:1000
+    })
     return {
       success: true,
     };
