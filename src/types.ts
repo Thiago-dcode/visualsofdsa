@@ -14,4 +14,4 @@ export type Position ={
     x:number,
     y:number
 }
-export type VisualizationAlgorithms = 'memoryRam' | 'bars'
+export type VisualizationArrays = 'memoryRam' | 'bars'

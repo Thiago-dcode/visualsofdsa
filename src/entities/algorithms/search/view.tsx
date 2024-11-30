@@ -14,7 +14,7 @@ import Title from '@/components/ui/Title'
 import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAction'
 
 import useStaticArray from '@/entities/data-structures/linear/staticArray/hooks/useStaticArray'
-import { Direction, Primitive, speed, VisualizationAlgorithms } from '@/types'
+import { Direction, Primitive, speed, VisualizationArrays } from '@/types'
 import React, { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import useSearchAlgorithm from './_hooks/useSearchAlgorithm'
@@ -25,13 +25,14 @@ import { Wrench } from 'lucide-react'
 import RenderVisualization from '../_components/visualization/renderVisualization'
 import Link from 'next/link'
 import VisualizationTypes from '../_components/visualization/visualizationTypes'
+import { config } from '@/config'
 type SearchType = 'linear' | 'binary'
 export default function SearchView({ searchType }: {
   searchType?: SearchType
 }) {
   const { array, maxSize, createSorted,createUnsorted, flush, error } = useStaticArray(500);
   const [speed, setSpeed] = useState<speed>(1)
-  const [visualizationMode, setVisualizationMode] = useState<VisualizationAlgorithms>('bars')
+  const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam')
   const { binary, linear } = useSearchAlgorithm(array as Node<number>[] | null, speed,visualizationMode);
   const [direction, setDirection] = useState<Direction>('forward')
   const [isAnimationRunning, setAnimationRunning] = useState(false);
@@ -39,6 +40,12 @@ export default function SearchView({ searchType }: {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const toggleSorted = () => {
     setSorted(prev => !prev)
+  }
+  const handleSetVisualizationMode = (vimValue:VisualizationArrays) =>{
+
+    localStorage.setItem(config.visualizationMode.localStorageKeys.array,vimValue);
+    setVisualizationMode(vimValue);
+
   }
   const toggleDirection = () => {
     setDirection(prev => prev === 'forward' ? 'reverse' : 'forward')
@@ -232,7 +239,7 @@ export default function SearchView({ searchType }: {
           }
 
         }} />
-        {array && !isAnimationRunning && <VisualizationTypes setVisualization={setVisualizationMode} visualizationSelected={visualizationMode}/>}
+        {array && !isAnimationRunning && <VisualizationTypes setVisualization={handleSetVisualizationMode} visualizationSelected={visualizationMode}/>}
         {array && !isAnimationRunning  ? <PopOverComponent content={
           <div className='flex flex-col items-start justify-start'>
             <p>Animation Speed</p>

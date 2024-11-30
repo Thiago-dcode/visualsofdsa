@@ -2,8 +2,8 @@ Add steps taken to all data-structures and algorithms
 
 Implment implementation code on INFO.
 
-switch all colors for the new palette
-
 Fix responsive addin scroll actionContainer
 
-images light mode
+add sound to bars ?
+
+
