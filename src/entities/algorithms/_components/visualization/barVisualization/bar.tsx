@@ -1,7 +1,8 @@
 import { HoverCardTrigger, HoverCardContent, HoverCard } from '@/components/ui/hover-card';
 import Node from '@/entities/data-structures/linear/_classes/Node'
-import { cn } from '@/lib/utils';
+import { cn, copyToClipboard } from '@/lib/utils';
 import React, { useCallback } from 'react'
+import { toast } from 'sonner';
 
 export default function Bar({ height, width = 20, node,className }: {
   height: number,
@@ -15,7 +16,16 @@ export default function Bar({ height, width = 20, node,className }: {
   }, [node])
   return (
     <HoverCard  openDelay={100} closeDelay={100} >
-      <HoverCardTrigger >
+      <HoverCardTrigger onClick={async()=>{
+        const result = await copyToClipboard(node.data +'');
+        if(result){
+          toast.info('Value copied ' +node.data,{
+            position:'bottom-right',
+            duration:1000
+          })
+          return;
+        }
+      }} >
         <div style={{
           height: Math.abs(height) + 'px',
           width: width + 'px',

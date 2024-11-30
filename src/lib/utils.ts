@@ -27,35 +27,37 @@ export const requestAnimation = function (
   ref: HTMLElement,
   animation: string,
   animationEvent: (e: AnimationEvent) => void,
-  onlyOnce= false
+  onlyOnce = false
 ) {
- if(!onlyOnce){
-  ref.style.animation = "none";
-  ref.offsetHeight;
-
- }
+  if (!onlyOnce) {
+    ref.style.animation = "none";
+    ref.offsetHeight;
+  }
   window.requestAnimationFrame(function () {
     ref.style.animation = animation;
   });
   ref.addEventListener("animationend", animationEvent);
 };
-export const random=(min:number = 0, max:number)=> Math.floor(min + Math.random()*(max - min + 1))
+export const random = (min: number = 0, max: number) =>
+  Math.floor(min + Math.random() * (max - min + 1));
 export const prefix0 = (n: number): string => {
   if (n < 10) {
     return "0" + n;
   }
   return n + "";
 };
-export function calculateRuleOfThree(a: number, b: number, x: number,): number {
+export function calculateRuleOfThree(a: number, b: number, x: number): number {
   if (a === 0) {
-      throw new Error("The first value 'a' cannot be zero to avoid division by zero.");
+    throw new Error(
+      "The first value 'a' cannot be zero to avoid division by zero."
+    );
   }
   return (b * x) / a;
 }
 
 export const getMemoryAddress = (index: number) => {
-  return '0x' + prefix0(index);
-}
+  return "0x" + prefix0(index);
+};
 export const generateKey = (pre: Primitive = "") => {
   return `${pre}_${uuid4()}`;
 };
@@ -65,29 +67,65 @@ export function removePx(value: string): number {
   return isNaN(result) ? 0 : result;
 }
 export function getEuclideanDistance(position1: Position, position2: Position) {
-
-  return Math.sqrt(Math.pow(position1.x - position2.x, 2) + Math.pow(position1.y - position2.y, 2))
-
+  return Math.sqrt(
+    Math.pow(position1.x - position2.x, 2) +
+      Math.pow(position1.y - position2.y, 2)
+  );
 }
-export const getMinInAnArrayOfNodes = (array:Node<number>[])=>{
+export const copyToClipboard = async (
+  text: string
+): Promise<{
+  success: boolean;
+  error?: string;
+}> => {
+  try {
+    if (!(global?.window && window.navigator && navigator.permissions)) {
+      throw new Error("Windows is not defined");
+    }
+    // const result = await navigator.permissions.query({
+    //   name: "clipboard-write" as PermissionName,
+    // });
+    // if (result.state === "denied") {
+    //   throw new Error("Permission denied");
+    // }
+    await navigator.clipboard.writeText(text);
+    return {
+      success: true,
+    };
+  } catch (err) {
+    let message =
+      err instanceof Error
+        ? "Failed to copy: " + err.message
+        : "Failed to copy";
+    console.error(message);
+    return {
+      success: false,
+      error: message,
+    };
+  }
+};
+export const getMinInAnArrayOfNodes = (array: Node<number>[]) => {
   let min = array[0].data;
   for (let i = 1; i < array.length; i++) {
     const num = array[i].data;
-    if(num < min) min = num;
+    if (num < min) min = num;
   }
   return min;
-
-}
-export const getMaxInAnArrayOfNodes = (array:Node<number>[])=>{
+};
+export const getMaxInAnArrayOfNodes = (array: Node<number>[]) => {
   let max = array[0].data;
   for (let i = 1; i < array.length; i++) {
     const num = array[i].data;
-    if(num > max) max = num;
+    if (num > max) max = num;
   }
   return max;
-
-}
-export const getValueNormalized = (x:number,minX:number,maxX:number,range:[number,number] = [0,1]) =>  range[0] + (range[1] - range[0]) * ((x - minX) / (maxX - minX));
+};
+export const getValueNormalized = (
+  x: number,
+  minX: number,
+  maxX: number,
+  range: [number, number] = [0, 1]
+) => range[0] + (range[1] - range[0]) * ((x - minX) / (maxX - minX));
 export function getAngle(position1: Position, position2: Position) {
   // Calculate the differences in the x and y coordinates
   const deltaX = position2.x - position1.x;
@@ -101,4 +139,4 @@ export function getAngle(position1: Position, position2: Position) {
 
   // Return the angle in degrees
   return angleDegrees;
-} 
+}
