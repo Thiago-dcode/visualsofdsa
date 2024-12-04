@@ -8,8 +8,6 @@ import {
   delay,
   getMaxInAnArrayOfNodes,
   getMinInAnArrayOfNodes,
-  getValueNormalized,
-  lerp,
 } from "@/lib/utils";
 import { useAnimation } from "../../_hooks/useAnimations";
 export default function useSearchAlgorithm(
