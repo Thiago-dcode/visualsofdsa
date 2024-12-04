@@ -1,58 +1,35 @@
 import SearchAlgorithm from "../_classes/SearchAlgorithm";
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import { Direction, Primitive, speed } from "@/types";
+import { Direction, Primitive, speed, VisualizationArrays } from "@/types";
 import "@/entities/data-structures/linear/staticArray/style.css";
 import { animate } from "@/lib/animations";
 import { toast } from "sonner";
-import { delay } from "@/lib/utils";
-type AlgotType = "linear" | "binary";
+import {
+  delay,
+  getMaxInAnArrayOfNodes,
+  getMinInAnArrayOfNodes,
+} from "@/lib/utils";
+import { useAnimation } from "../../_hooks/useAnimations";
 export default function useSearchAlgorithm(
   array: Node<number>[] | null,
-  speed: speed = 1
+  sorted: boolean,
+  direction: Direction,
+  speed: speed = 1,
+  visualization: VisualizationArrays = "memoryRam"
 ) {
-  const getIndexRef = (ref: HTMLElement) =>
-    ref.parentElement?.parentElement?.children[2] as HTMLElement;
-  const getSpeed = (type: AlgotType) => {
-    switch (speed) {
-      case 1:
-        return type === "linear" ? 0.5 : 1;
-      case 2:
-        return type === "linear" ? 0.3 : 0.7;
-      case 3:
-        return type === "linear" ? 0.1 : 0.5;
-    }
-  };
-  const animateNode = async (
-    ref: HTMLElement,
-    found: boolean,
-    type: AlgotType
-  ) => {
-    const indexRef = getIndexRef(ref);
-    if (indexRef) {
-      indexRef.style.visibility = "visible";
-    }
+  let minArrayValue = 0;
+  let maxArrayValue = 0;
+  if (array) {
+    minArrayValue = sorted
+      ? array[direction === "forward" ? 0 : array.length - 1].data
+      : getMinInAnArrayOfNodes(array);
+    maxArrayValue = sorted
+      ? array[direction === "forward" ? array.length - 1 : 0].data
+      : getMaxInAnArrayOfNodes(array);
+  }
 
-    try {
-      await animate(
-        ref,
-        !found
-          ? `search-node ${getSpeed(type)}s`
-          : `access-node ${type === "linear" ? 0.7 : 1.3}s`,
-        (e) => {
-          if (indexRef) {
-            indexRef.style.visibility = "hidden";
-          }
-        }
-      );
-    } catch (error) {
-      console.error("###ERROR ANIMATING LINEAR SEARCH ALGORITHM###");
-    }
-  };
-  const linear = async (
-    search: Primitive,
-    isSorted: boolean,
-    direction: Direction
-  ) => {
+  const { animateNode, animateSound } = useAnimation();
+  const linear = async (search: Primitive) => {
     if (!array) {
       toast.error(`Expected an array, null given`, {
         position: "top-center",
@@ -68,7 +45,10 @@ export default function useSearchAlgorithm(
         steps++;
 
         if (node.ref) {
-          await animateNode(node.ref, found, "linear");
+          if (visualization === "bars")
+            animateSound(node.data as number, minArrayValue, maxArrayValue);
+          await animateNode(node.ref, found, "linear", visualization, speed);
+
           if (found) {
             toast.success(
               `${search} found on index ${index}. Steps: ${steps || 1}`,
@@ -79,7 +59,7 @@ export default function useSearchAlgorithm(
           }
         }
       },
-      isSorted,
+      sorted,
       direction
     );
 
@@ -89,7 +69,7 @@ export default function useSearchAlgorithm(
       });
     }
   };
-  const binary = async (search: number, direction: Direction) => {
+  const binary = async (search: number) => {
     if (!array) {
       toast.error(`Expected an array, null given`, {
         position: "top-center",
@@ -103,13 +83,11 @@ export default function useSearchAlgorithm(
       if (isEnable) {
         await animate(ref, "enable-node 0.4s", () => {
           ref.style.opacity = "1";
-          ref.style.transform = "scale(1)";
         });
         return;
       }
       await animate(ref, "disable-node 0.4s", () => {
         ref.style.opacity = "0.4";
-        ref.style.transform = "scale(0.9)";
       });
     };
     let steps = 0;
@@ -121,11 +99,20 @@ export default function useSearchAlgorithm(
         const middleNode = array[middle];
 
         if (middleNode && middleNode.ref) {
+          if (visualization === "bars")
+            animateSound(
+              middleNode.data as number,
+              minArrayValue,
+              maxArrayValue
+            );
           await animateNode(
             middleNode.ref,
             middleNode.data === search,
-            "binary"
+            "binary",
+            visualization,
+            speed
           );
+
           if (middleNode.data !== search) {
             if (
               (direction === "forward" && middleNode.data > search) ||
@@ -159,17 +146,19 @@ export default function useSearchAlgorithm(
       direction
     );
     if (!node) {
-      toast.info(`${search} is not presented in the array. Steps: ${steps || 1}`, {
-        position: "top-center",
-      });
+      toast.info(
+        `${search} is not presented in the array. Steps: ${steps || 1}`,
+        {
+          position: "top-center",
+        }
+      );
     }
     for (let i = 0; i < array.length; i++) {
       const node = array[i];
       if (!node || !node.ref) continue;
-      console.log(node);
       toggleEnableNodeAnimation(node.ref, true);
     }
   };
 
-  return { linear, binary };
+  return { linear, binary, minArrayValue, maxArrayValue };
 }

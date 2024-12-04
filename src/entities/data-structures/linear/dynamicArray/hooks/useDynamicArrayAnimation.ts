@@ -1,7 +1,8 @@
 import { Primitive } from "@/types";
-import { delay, removePx, requestAnimation } from "../../../../../lib/utils";
+import { delay, removePx } from "../../../../../lib/utils";
 import Node from "../../_classes/Node";
 import { DynamicArrayNode } from "../class/DynamicArrayNode";
+import { requestAnimation } from "@/lib/animations";
 const useDynamicArrayAnimation = () => {
   const insertAnimation = async (
     node: DynamicArrayNode<Primitive> | null,

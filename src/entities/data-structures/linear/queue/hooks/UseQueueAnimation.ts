@@ -1,6 +1,7 @@
 import { Primitive } from "@/types";
-import { getSpeed, requestAnimation } from "@/lib/utils";
+import { getSpeed } from "@/lib/utils";
 import LinearDs from "../../_classes/LinearDs";
+import { requestAnimation } from "@/lib/animations";
 const UseQueueAnimation = (linearDs: LinearDs<Primitive> | null) => {
   const enqueueAnimation = async (
     ref: HTMLElement | null,

@@ -1,0 +1,1 @@
+type AlgoSearchType = "linear" | "binary";

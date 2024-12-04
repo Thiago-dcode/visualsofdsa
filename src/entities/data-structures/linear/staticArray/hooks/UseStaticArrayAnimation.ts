@@ -1,5 +1,5 @@
 import { Primitive } from "@/types";
-import { requestAnimation } from "../../../../../lib/utils";
+import { requestAnimation } from "../../../../../lib/animations";
 import Node from "../../_classes/Node";
 const UseStaticArrayAnimation = () => {
   const createAnimation = async (

@@ -2,17 +2,20 @@
 @keyframes access-node {
   0% {
     scale: 1;
-    background: rgba(250, 204, 21, 0.5);
+    background: rgba(250, 204, 21, 0);
+    border-color: rgba(250, 204, 21, 0);
   }
 
   50% {
-    transform: scale(1.1);
-    background: rgba(250, 204, 1);
+    transform: scale(1.2);
+    background: rgba(250, 204, 21);
+    border-color: rgba(250, 204, 21);
   }
 
   100% {
     transform: scale(1);
     background: rgba(250, 204, 21, 0);
+    border-color: rgba(250, 204, 21, 0);
   }
 }
 @keyframes add-node {
@@ -43,26 +46,26 @@
   
 }
 @keyframes search-node {
-  0% {
+
+
+
+  50% {
     background-color: rgba(96, 165, 250);
+    border-color: rgba(96, 165, 250);
     color: white;
   }
 
-  100% {
-    background-color: rgba(96, 165, 250);
-    color: white;
-  }
   
 }
 @keyframes disable-node {
   to {
     opacity: 0.4;
-    transform: scale(0.9);
+   
   }
 }
 @keyframes enable-node {
   to {
     opacity: 1;
-    transform: scale(1);
+
   }
 }
