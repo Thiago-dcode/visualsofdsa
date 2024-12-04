@@ -28,7 +28,7 @@ export default function useSearchAlgorithm(
       : getMaxInAnArrayOfNodes(array);
   }
 
-const {animateNode,animateSound} = useAnimation()
+  const { animateNode, animateSound } = useAnimation();
   const linear = async (search: Primitive) => {
     if (!array) {
       toast.error(`Expected an array, null given`, {
@@ -45,9 +45,10 @@ const {animateNode,animateSound} = useAnimation()
         steps++;
 
         if (node.ref) {
-          animateSound(node.data as number,minArrayValue,maxArrayValue);
+          if (visualization === "bars")
+            animateSound(node.data as number, minArrayValue, maxArrayValue);
           await animateNode(node.ref, found, "linear", visualization, speed);
-         
+
           if (found) {
             toast.success(
               `${search} found on index ${index}. Steps: ${steps || 1}`,
@@ -98,7 +99,12 @@ const {animateNode,animateSound} = useAnimation()
         const middleNode = array[middle];
 
         if (middleNode && middleNode.ref) {
-          animateSound(middleNode.data as number,minArrayValue,maxArrayValue);
+          if (visualization === "bars")
+            animateSound(
+              middleNode.data as number,
+              minArrayValue,
+              maxArrayValue
+            );
           await animateNode(
             middleNode.ref,
             middleNode.data === search,
@@ -106,7 +112,7 @@ const {animateNode,animateSound} = useAnimation()
             visualization,
             speed
           );
-         
+
           if (middleNode.data !== search) {
             if (
               (direction === "forward" && middleNode.data > search) ||
