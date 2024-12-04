@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
+  createArrayOfNodes,
+  createRandomArrayOfNodes,
+  createRandomUniqueArrayOfNodes,
   generateKey,
   getMaxInAnArrayOfNodes,
   getMinInAnArrayOfNodes,
@@ -103,3 +106,75 @@ describe("Testing getValueNormalized", () => {
     }
   });
 });
+describe("Testing createArrayOfNodes",()=>{
+
+  it('Should create an array of nodes by a given array',()=>{
+
+    const arr = [
+      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544,
+      -0.3, 235345, 123123, -5, 1111111111, 455, 3, 23324, 1125565,
+    ];
+    const arrayOfNodes = createArrayOfNodes(arr);
+    expect(arrayOfNodes.length).toBe(arr.length);
+    for (let i = 0; i < arrayOfNodes.length; i++) {
+      const node = arrayOfNodes[i];
+     expect(arr[i]).toBe(node.data);
+      
+    }
+
+  })
+})
+describe("Testing createRandomArrayOfNodes",()=>{
+
+  it('Should create a random array of nodes by a given size',()=>{
+
+    const size = 500;
+    const range = [1,10];
+    const arrayOfNodes = createRandomArrayOfNodes(size,range);
+    expect(arrayOfNodes.length).toBe(size);
+    for (let i = 0; i < arrayOfNodes.length; i++) {
+      const node = arrayOfNodes[i];
+      expect(node.data).toBeGreaterThanOrEqual(range[0])
+      expect(node.data).toBeLessThanOrEqual(range[1])
+      
+    }
+
+  })
+})
+describe("Testing createRandomUniqueArrayOfNodes",()=>{
+
+  it('Should throw error when create a random UNIQUE array of nodes by a given size',()=>{
+
+    const size = 500;
+    const range = [1,10];
+ 
+     try {
+      createRandomUniqueArrayOfNodes(size,range);
+      expect(false).toBe(true);
+  
+     } catch (error) {
+      expect(true).toBe(true);
+     }
+   
+
+  })
+  it('Should create a random array of nodes by a given size',()=>{
+
+    const size = 500;
+    const range = [-1000,1000];
+    const arrayOfNodes = createRandomUniqueArrayOfNodes(size,range);
+    expect(arrayOfNodes.length).toBe(size);
+    const memo:{
+      [key:number]:true;
+    } = {}
+    for (let i = 0; i < arrayOfNodes.length; i++) {
+      const node = arrayOfNodes[i];
+      expect(memo[node.data]).toBeUndefined();
+      memo[node.data];
+     
+      
+      
+    }
+
+  })
+})

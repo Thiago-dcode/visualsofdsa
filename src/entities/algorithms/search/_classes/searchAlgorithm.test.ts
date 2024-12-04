@@ -1,7 +1,8 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import Position from "@/lib/classes/Position";
-import { random } from "@/lib/utils";
+import { createArrayOfNodes, random } from "@/lib/utils";
 import SearchAlgorithm from "./SearchAlgorithm";
+import { Primitive } from "@/types";
 
 // const createUniqueSortedArrayOfNodes = (size: number) => {
 //   const array: Node<number>[] = [];
@@ -17,13 +18,7 @@ import SearchAlgorithm from "./SearchAlgorithm";
 //   array.sort();
 //   return array;
 // };
-const createArrayOfNodes = (array: number[]) => {
-  const arrayNodes: Node<number>[] = [];
-  for (let i = 0; i < array.length; i++) {
-    arrayNodes.push(new Node(array[i], new Position(0, 0), null));
-  }
-  return arrayNodes;
-};
+
 const createASortedArrayOfNodes = (
   size: number,
   direction: "forward" | "reverse" = "forward",

@@ -4,6 +4,7 @@ import { type ClassValue, clsx } from "clsx";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { v4 as uuid4 } from "uuid";
+import PositionClass from "./classes/Position";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -23,7 +24,46 @@ export const getSpeed = (speed: speed) => {
       return 0.5;
   }
 };
+export const createArrayOfNodes = (array: Primitive[]) => {
+  const arrayNodes: Node<Primitive>[] = [];
+  for (let i = 0; i < array.length; i++) {
+    arrayNodes.push(new Node(array[i], new PositionClass(0, 0), null));
+  }
+  return arrayNodes;
+};
+export const createRandomUniqueArrayOfNodes = (size:number,range = [-5000,5000]) => {
+  if(size > Math.abs(range[0])+ Math.abs(range[1])){
+    throw new Error('The size must be LESS or EQUAL to  sum of range');
+  }
+  const memo:{
+    [key:number]:true
+  } = {
 
+  }
+  const getUnique = ()=>{
+    const num =  random(range[0],range[1])
+    if(memo[num]) return getUnique();
+    else{ memo[num] = true
+
+      return num;
+    };
+  }
+  const arrayNodes: Node<number>[] = [];
+  for (let i = 0; i < size; i++) {
+
+    arrayNodes.push(new Node(getUnique(), new PositionClass(0, 0), null));
+  }
+  return arrayNodes;
+};
+export const createRandomArrayOfNodes = (size:number,range = [-500,500]) => {
+  
+  const arrayNodes: Node<number>[] = [];
+  for (let i = 0; i < size; i++) {
+
+    arrayNodes.push(new Node( random(range[0],range[1]), new PositionClass(0, 0), null));
+  }
+  return arrayNodes;
+};
 export const random = (min: number = 0, max: number) =>
   Math.floor(min + Math.random() * (max - min + 1));
 export const prefix0 = (n: number): string => {
