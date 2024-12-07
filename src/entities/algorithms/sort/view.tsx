@@ -17,7 +17,6 @@ import useStaticArray from '@/entities/data-structures/linear/staticArray/hooks/
 import { Direction, speed, VisualizationArrays } from '@/types'
 import React, { useRef, useState } from 'react'
 import { toast } from 'sonner'
-import useSearchAlgorithm from './_hooks/useSearchAlgorithm'
 import Node from '@/entities/data-structures/linear/_classes/Node'
 import { PopOverComponent } from '@/components/ui/PopOverComponent'
 import { Button } from '@/components/ui/button'
@@ -26,48 +25,54 @@ import RenderVisualization from '../_components/visualization/renderVisualizatio
 import Link from 'next/link'
 import VisualizationTypes from '../_components/visualization/visualizationTypes'
 import { config } from '@/config'
-import { AlgoSearchType } from '../types'
+import { AlgoSearchType, AlgoSortType } from '../types'
+import { useSortAlgorithms } from './_hooks/useSortAlgorithms'
 
-export default function SearchView({ searchType }: {
-  searchType?: AlgoSearchType
+export default function SortView({ sortType }: {
+  sortType?: AlgoSortType
 }) {
-  const { array, maxSize, createSorted,createUnsorted, flush, error } = useStaticArray(500);
+  const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500);
   const [speed, setSpeed] = useState<speed>(1)
-  const [direction, setDirection] = useState<Direction>('ascending')
   const [isAnimationRunning, setAnimationRunning] = useState(false);
-  const [sorted, setSorted] = useState(searchType==='binary');
+  const [direction, setDirection] = useState<Direction>('ascending')
   const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam');
-  const { binary, linear } = useSearchAlgorithm(array as Node<number>[] | null,sorted,direction, speed,visualizationMode);
-
+  const { bubble, selection, merge, quick, insertion, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
+  const tempValue = useRef<number>();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const toggleSorted = () => {
-    setSorted(prev => !prev)
-  }
-  const handleSetVisualizationMode = (vimValue:VisualizationArrays) =>{
 
-    localStorage.setItem(config.visualizationMode.localStorageKeys.array,vimValue);
+  const handleSetVisualizationMode = (vimValue: VisualizationArrays) => {
+
+    localStorage.setItem(config.visualizationMode.localStorageKeys.array, vimValue);
     setVisualizationMode(vimValue);
 
   }
-  const toggleDirection = () => {
-    setDirection(prev => prev === 'ascending' ? 'descending' : 'ascending')
-  }
-  const handleSearch = async () => {
-    const searchValue = getValue();
-    if (searchValue === null) return;
+
+  const handleSort = async () => {
     setAnimationRunning(true);
-    switch (searchType) {
-      case 'linear':
-        await linear(searchValue);
+    if (isSorted) {
+      toast.info('Array is already sorted');
+      return;
+    }
+    switch (sortType) {
+      case 'bubble':
+        await bubble();
         break;
-      case 'binary':
-        await binary(searchValue);
+      case 'selection':
+        await selection();
+        break;
+      case 'merge':
+        await merge();
+        break;
+      case 'quick':
+        await quick();
+        break;
+      case 'insertion':
+        await insertion();
         break;
 
       default:
         break;
     }
-
     setAnimationRunning(false);
 
 
@@ -82,6 +87,7 @@ export default function SearchView({ searchType }: {
       })
       return null;
     }
+    tempValue.current = value;
     return value;
   }
   const resetValue = () => {
@@ -92,33 +98,32 @@ export default function SearchView({ searchType }: {
 
     setAnimationRunning(true);
     const arraySize = getValue();
-    if (arraySize === null) return;
-    switch (searchType) {
-      case 'linear':
-        await !sorted? createUnsorted(arraySize):createSorted(arraySize,direction);
-        break;
-      case 'binary':
-        await createSorted(arraySize, direction)
-        break;
+    if (arraySize !== null) createUnsorted(arraySize);
 
-      default:
-        break;
-    }
-   
+
     setAnimationRunning(false)
     resetValue();
 
   }
+  const toggleDirection = () => {
+    setDirection(prev => prev === 'ascending' ? 'descending' : 'ascending');
+  }
+  const reset = () => {
+    flush();
+    setUnsorted();
+    resetValue();
+    setAnimationRunning(false)
+  }
   const renderInfo = () => {
 
-    switch (searchType) {
+    switch (sortType) {
 
-      case 'linear':
+      case 'bubble':
         return (<div className='flex items-center justify-center gap-2'>
           <Title title={'Linear search'} />
           <Info title="Linear search" text={<article>
             <header>
-  
+
               <p>Linear search or sequential search is a method for finding an element within an array by <b>sequentially checking</b> (or traverse) each element until a match is found or the entire list has been searched**.</p>
             </header>
             <br />
@@ -126,24 +131,24 @@ export default function SearchView({ searchType }: {
               <p>**If the array is <strong>sorted</strong>, you can make the linear search algorithm more efficient by leveraging the order of elements:</p>
               <br />
               <div>
-                <p>For example, if the target element is <b>greater</b> than the last element in a sorted array (or <b>less</b> than the last element in a descending-sorted array), you can conclude that the target is not present and skip further checks.</p>
-  
-                <p>Another optimization involves checking the <b>next element in the loop</b>. If the next element (e.g., <code>array[index + 1]</code>) is <b>greater</b> than the <b>target</b> element, you can safely conclude that the target is not in the array and break the loop. For example, if you are looking for 5 in <code>[2, 4, 7]</code>, when you reach 4, you can check the next element (7), which is greater than 5, and determine that 5 cannot be found in the remaining array. (Note: the same principle applies in a descending-sorted array.)</p>
-  
-  
+                <p>For example, if the target element is <b>greater</b> than the last element in a sorted array (or <b>less</b> than the last element in a reverse-sorted array), you can conclude that the target is not present and skip further checks.</p>
+
+                <p>Another optimization involves checking the <b>next element in the loop</b>. If the next element (e.g., <code>array[index + 1]</code>) is <b>greater</b> than the <b>target</b> element, you can safely conclude that the target is not in the array and break the loop. For example, if you are looking for 5 in <code>[2, 4, 7]</code>, when you reach 4, you can check the next element (7), which is greater than 5, and determine that 5 cannot be found in the remaining array. (Note: the same principle applies in a reverse-sorted array.)</p>
+
+
               </div>
             </main>
             <br />
             <footer>
               <p>In conclusion, regardless of whether the array is sorted or unsorted, the time complexity of the linear search algorithm remains <b>O(n)</b>, as Big O Notation dictates, it always accounts for <b> the worst-case scenario </b> where all elements must be checked.</p>
             </footer>
-  
+
           </article>
           } className="self-start" />
-  
+
         </div>)
-      case 'binary':
-        return ( <div className='flex items-center justify-center gap-2'>
+      case 'selection':
+        return (<div className='flex items-center justify-center gap-2'>
           <Title title={'Binary search'} />
           <Info title="Binary search" text={<article>
             <header>
@@ -154,16 +159,16 @@ export default function SearchView({ searchType }: {
             <main>
               <div>
                 <p>Steps that binary algorithm takes to find the target value:</p>
-  
+
                 <ul>
                   <li><b>Step 1:</b> Compare the target element with the middle element of the array.</li>
                   <li><b>Step 2:</b> If the target is equal to the middle element, the search is complete.</li>
                   <li><b>Step 3:</b> If the target is less than the middle element, repeat the search on the left half of the array.</li>
                   <li><b>Step 4:</b> If the target is greater than the middle element, repeat the search on the right half of the array.</li>
                 </ul>
-  
+
                 <p>This process of halving the search interval continues until the target element is found or the interval is empty, indicating that the target is not present in the array.</p>
-  
+
               </div>
             </main>
             <br />
@@ -171,34 +176,24 @@ export default function SearchView({ searchType }: {
               <p>In conclusion, the time complexity of the binary search algorithm is <b>O(log n)</b>, as Big O Notation dictates, it efficiently narrows down the search space by halving it with each step, making it <b>significantly faster than linear search</b> for large, sorted arrays.</p>
             </footer>
           </article>
-  
+
           } className="self-start" />
-  
+
         </div>)
 
     }
   }
-  const reset = () => {
-    flush()
-    resetValue();
-    setAnimationRunning(false)
-  }
+
   return (
 
     <Main>
       {renderInfo()}
       <OperationsContainer>
+ 
         {!array ? <Section>
-          <div className='self-center flex items-center gap-3'>
-            {searchType === 'linear' && <div className='flex self-center gap-2 items-center'>   <p>Sorted?</p><Switch defaultChecked={sorted} onCheckedChange={() => {
-              toggleSorted()
-            }} /></div>}
-            {sorted    &&   <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'ascending' ? false : true} onCheckedChange={() => {
-              toggleDirection()
-            }} /></div>}
-          </div>
 
-        <InputWithButtonContainer key={'linkedList-add-action'}>
+
+          <InputWithButtonContainer key={'linkedList-add-action'}>
             <Input ref={inputRef} placeholder="size" className="text-black w-32 text-center" type="number" min={0} />
 
             <ButtonAction title="create array" action='write' isLoading={isAnimationRunning} onClick={handleCreate} />
@@ -208,29 +203,41 @@ export default function SearchView({ searchType }: {
 
 
         </Section> : <Section className='gap-2 w-full'>
-          <InputWithButtonContainer key={'linkedList-add-action'}>
-            <Input ref={inputRef} placeholder="value" className="text-black w-32 text-center" type="number" />
+        {!isSorted && <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'ascending' ? false : true} onCheckedChange={() => {
+          toggleDirection()
+        }} /></div>}
+          <ButtonAction title="Sort" action='read' isLoading={isAnimationRunning} onClick={async () => {
+            await handleSort()
+          }} />
 
-            <ButtonAction title="Search" action='read' isLoading={isAnimationRunning} onClick={async () => {
-              await handleSearch()
-            }} />
 
-          </InputWithButtonContainer>
-          
+
         </Section>
-        }  {array && array.length ? <ButtonAction title="delete" action='delete' className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
-          reset()
+        }
+        <Section className='justify-end'>
+          {array && array.length && isSorted ? <ButtonAction title="reset" action='fill' className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={async () => {
+            if (tempValue.current) {
 
-        }} /> : null}
+              setAnimationRunning(true);
+              await createUnsorted(tempValue.current)
+              setUnsorted()
+              setAnimationRunning(false);
+            }
+            ;
+
+          }} /> : null}
+          {array && array.length ? <ButtonAction title="delete" action='delete' className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
+            reset()
+
+          }} /> : null}
+        </Section>
       </OperationsContainer>
-    
+
       <div className='w-full items-end justify-between flex'>
 
         <Properties properties={{
-
-          'Direction': {
+          DirectionToSort: {
             value: direction,
-            show: true
           },
           maxSize: {
             value: maxSize
@@ -241,8 +248,8 @@ export default function SearchView({ searchType }: {
           }
 
         }} />
-        {array && !isAnimationRunning && <VisualizationTypes setVisualization={handleSetVisualizationMode} visualizationSelected={visualizationMode}/>}
-        {array && !isAnimationRunning  ? <PopOverComponent content={
+        {array && !isAnimationRunning && <VisualizationTypes setVisualization={handleSetVisualizationMode} visualizationSelected={visualizationMode} />}
+        {array && !isAnimationRunning ? <PopOverComponent content={
           <div className='flex flex-col items-start justify-start'>
             <p>Animation Speed</p>
             <Input defaultValue={speed} onChange={(e) => {
@@ -254,10 +261,10 @@ export default function SearchView({ searchType }: {
             }} type='range' min={1} max={3} />
 
           </div>
-        } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} />:<div></div>}
+        } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} /> : <div></div>}
 
       </div>
-    {array  ?  <RenderVisualization direction={direction} sorted={searchType==='binary'?true: sorted} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} />:null}
+      {array ? <RenderVisualization sorted={false} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} /> : null}
       {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
         reset()
 

@@ -4,12 +4,20 @@ import {
 } from "@/lib/utils";
 import { SortAlgorithms } from "./SortAlgorithms";
 import Node from "@/entities/data-structures/linear/_classes/Node";
-const testIfIsSorted = (array: Node<number>[], log = false) => {
+import { Direction } from "@/types";
+const testIfIsSorted = (
+  array: Node<number>[],
+  direction: Direction,
+  log = false
+) => {
   for (let i = 0; i < array.length - 1; i++) {
     const left = array[i];
     const right = array[i + 1];
     if (log) console.log(left.data);
-    expect(left.data).toBeLessThan(right.data);
+    if (direction === "ascending")
+      expect(left.data).toBeLessThanOrEqual(right.data);
+    else if (direction === "descending")
+      expect(left.data).toBeGreaterThanOrEqual(right.data);
   }
 };
 
@@ -19,11 +27,17 @@ describe("Testing bubble", () => {
 
     expect(array?.length).toBe(0);
   });
-  it("Should sort", async () => {
+  it("Should sort ascending", async () => {
     const array = await SortAlgorithms.bubble(
       createRandomUniqueArrayOfNodes(200, [0, 15000])
     );
-    testIfIsSorted(array);
+    testIfIsSorted(array, "ascending");
+  });
+  it("Should sort descending", async () => {
+    const array = await SortAlgorithms.bubble(
+      createRandomUniqueArrayOfNodes(200, [0, 15000]),"descending"
+    );
+    testIfIsSorted(array, "descending");
   });
 });
 describe("Testing selection", () => {
@@ -32,10 +46,16 @@ describe("Testing selection", () => {
 
     expect(array?.length).toBe(0);
   });
-  it("Should sort", async () => {
+  it("Should sort ascending", async () => {
     const array = await SortAlgorithms.selection(
-      createRandomUniqueArrayOfNodes(10, [0, 15000])
+      createRandomUniqueArrayOfNodes(600, [0, 15000])
     );
-    testIfIsSorted(array);
+    testIfIsSorted(array, "ascending");
+  });
+  it("Should sort descending", async () => {
+    const array = await SortAlgorithms.selection(
+      createRandomUniqueArrayOfNodes(600, [0, 15000]),'descending'
+    );
+    testIfIsSorted(array, "descending");
   });
 });

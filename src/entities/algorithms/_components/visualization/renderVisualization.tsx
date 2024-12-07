@@ -9,7 +9,7 @@ export default function RenderVisualization({array,setAnimationRunning,visualiza
     setAnimationRunning: (e:boolean)=>void,
     visualizationMode: VisualizationArrays,
     sorted:boolean,
-    direction:Direction
+    direction?:Direction
 }) {
     const render = ()=>{
         switch (visualizationMode) {

@@ -1,20 +1,26 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
+import { ClosureCompare } from "../types";
+import { Direction } from "@/types";
 
-type Closure = (a: Node<number>, b: Node<number>) => Promise<void>;
 export class SortAlgorithms {
   public static async bubble(
     array: Node<number>[],
-    onCompare?: Closure,
-    onSwap?: Closure
+    direction: Direction = "ascending",
+    onCompare?: ClosureCompare,
+    onSwap?: ClosureCompare
   ) {
-    if (!array.length) return array;
+    if (array.length <= 1) return array;
     let swapped = false;
     let end = array.length - 1;
     for (let i = 0; i < array.length; i++) {
+      swapped = false;
       for (let j = 0; j < end; j++) {
         const temp = array[j + 1];
         if (onCompare) await onCompare(array[j], array[j + 1]);
-        if (array[j].data > temp.data) {
+        if (
+          (direction === "ascending" && array[j].data > temp.data) ||
+          (direction === "descending" && array[j].data < temp.data)
+        ) {
           if (onSwap) await onSwap(array[j], array[j + 1]);
           swapped = true;
           array[j + 1] = array[j];
@@ -30,22 +36,29 @@ export class SortAlgorithms {
 
   public static async selection(
     array: Node<number>[],
-    onCompare?: Closure,
-    onSwap?: Closure
+    direction: Direction = "ascending",
+    onCompare?: ClosureCompare,
+    onSwap?: ClosureCompare
   ): Promise<Node<number>[]> {
+    if (array.length <= 1) return array;
     for (let i = 0; i < array.length; i++) {
-      let lowestIndex = i;
+      let indexToCompare = i;
       for (let j = i + 1; j < array.length; j++) {
-        if (onCompare) await onCompare(array[j], array[lowestIndex]);
-        if (array[j].data < array[lowestIndex].data) {
-          lowestIndex = j;
+        if (onCompare) await onCompare(array[j], array[indexToCompare]);
+        if (
+          (direction === "ascending" &&
+            array[j].data < array[indexToCompare].data) ||
+          (direction === "descending" &&
+            array[j].data > array[indexToCompare].data)
+        ) {
+          indexToCompare = j;
         }
       }
-      if (i !== lowestIndex) {
-        if (onSwap) await onSwap(array[i], array[lowestIndex]);
+      if (i !== indexToCompare) {
+        if (onSwap) await onSwap(array[i], array[indexToCompare]);
         const temp = array[i];
-        array[i] = array[lowestIndex];
-        array[lowestIndex] = temp;
+        array[i] = array[indexToCompare];
+        array[indexToCompare] = temp;
       }
     }
     return array;

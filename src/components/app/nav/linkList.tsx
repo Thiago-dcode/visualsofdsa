@@ -1,5 +1,4 @@
 'use client'
-import { Separator } from "@/components/ui/separator"
 import LinkItemComponent from "./linkItem"
 import { LinkItem } from "./type"
 

@@ -21,11 +21,11 @@ import { Primitive } from "@/types";
 
 const createASortedArrayOfNodes = (
   size: number,
-  direction: "forward" | "reverse" = "forward",
+  direction: "ascending" | "descending" = "ascending",
   add = 0
 ) => {
   const array: Node<number>[] = [];
-  if (direction === "forward") {
+  if (direction === "ascending") {
     for (let i = 0; i < size; i++) {
       array.push(new Node(i + i * add, new Position(0, 0)));
     }
@@ -70,7 +70,7 @@ describe("Test searchAlgorithm.linear", () => {
     expect(j).toBe(array.length);
     expect(node).toBe(null);
   });
-  it("Should find and a element in a sorted forward array", async () => {
+  it("Should find and a element in a sorted ascending array", async () => {
     const array = createASortedArrayOfNodes(200);
     const node = await SearchAlgorithm.linear(
       array,
@@ -82,7 +82,7 @@ describe("Test searchAlgorithm.linear", () => {
     expect(node instanceof Node && node.data === 100).toBe(true);
   });
   it("Should take one step when element is the last of the array ", async () => {
-    const array = createASortedArrayOfNodes(200, "forward", 0);
+    const array = createASortedArrayOfNodes(200, "ascending", 0);
     let j = 0;
     const node = await SearchAlgorithm.linear(
       array,
@@ -92,13 +92,13 @@ describe("Test searchAlgorithm.linear", () => {
         j++;
       },
       true,
-      "forward"
+      "ascending"
     );
     expect(j).toBe(1);
     expect(node?.data).toBe(199);
   });
   it("Should take one step when element is the last of the array", async () => {
-    const array = createASortedArrayOfNodes(200, "reverse", 0);
+    const array = createASortedArrayOfNodes(200, "descending", 0);
     let j = 0;
     const node = await SearchAlgorithm.linear(
       array,
@@ -108,13 +108,13 @@ describe("Test searchAlgorithm.linear", () => {
         j++;
       },
       true,
-      "reverse"
+      "descending"
     );
     expect(j).toBe(1);
     expect(node?.data).toBe(0);
   });
-  it("Should not traverse a forward sorted array when element not found", async () => {
-    const array = createASortedArrayOfNodes(200, "forward", 1);
+  it("Should not traverse a ascending sorted array when element not found", async () => {
+    const array = createASortedArrayOfNodes(200, "ascending", 1);
     let j = 0;
     const node = await SearchAlgorithm.linear(
       array,
@@ -129,8 +129,8 @@ describe("Test searchAlgorithm.linear", () => {
     expect(j).toBeLessThan(array.length);
     expect(node).toBe(null);
   });
-  it("Should not traverse a reverse sorted array when element not found", async () => {
-    const array = createASortedArrayOfNodes(200, "reverse", 1);
+  it("Should not traverse a descending sorted array when element not found", async () => {
+    const array = createASortedArrayOfNodes(200, "descending", 1);
     let j = 0;
     const node = await SearchAlgorithm.linear(
       array,
@@ -140,14 +140,14 @@ describe("Test searchAlgorithm.linear", () => {
         j++;
       },
       true,
-      "reverse"
+      "descending"
     );
     expect(j).toBeGreaterThan(20);
     expect(j).toBeLessThan(array.length);
     expect(node).toBe(null);
   });
-  it("Should take only one step when the search element is greater than the last element of a sorted forward array", async () => {
-    const array = createASortedArrayOfNodes(200, "forward", 1);
+  it("Should take only one step when the search element is greater than the last element of a sorted ascending array", async () => {
+    const array = createASortedArrayOfNodes(200, "ascending", 1);
     let j = 0;
     const node = await SearchAlgorithm.linear(
       array,
@@ -157,14 +157,14 @@ describe("Test searchAlgorithm.linear", () => {
         j++;
       },
       true,
-      "forward"
+      "ascending"
     );
 
     expect(j).toBe(0);
     expect(node).toBe(null);
   });
-  it("Should take only one step when the search element is less than the last element of a sorted reverse array", async () => {
-    const array = createASortedArrayOfNodes(200, "reverse", 1);
+  it("Should take only one step when the search element is less than the last element of a sorted descending array", async () => {
+    const array = createASortedArrayOfNodes(200, "descending", 1);
     let j = 0;
 
     const node = await SearchAlgorithm.linear(
@@ -175,7 +175,7 @@ describe("Test searchAlgorithm.linear", () => {
         j++;
       },
       true,
-      "reverse"
+      "descending"
     );
     expect(j).toBe(0);
     expect(node).toBe(null);
@@ -183,7 +183,7 @@ describe("Test searchAlgorithm.linear", () => {
 });
 
 describe("Test searchAlgortihm.binary", () => {
-  it("It should search forward", async () => {
+  it("It should search ascending", async () => {
     const array = createASortedArrayOfNodes(200);
     for (let index = 0; index < array.length; index++) {
       const element = array[index].data;
@@ -197,8 +197,8 @@ describe("Test searchAlgortihm.binary", () => {
       expect(node?.data).toBe(element);
     }
   });
-  it("It should search reverse", async () => {
-    const array = createASortedArrayOfNodes(200,'reverse');
+  it("It should search descending", async () => {
+    const array = createASortedArrayOfNodes(200,'descending');
     for (let index = 0; index < array.length; index++) {
       const element = array[index].data;
 
@@ -206,7 +206,7 @@ describe("Test searchAlgortihm.binary", () => {
         array,
         element,
         async (middle, start, end) => {},
-        'reverse'
+        'descending'
       );
 
       expect(node?.data).toBe(element);

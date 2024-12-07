@@ -16,7 +16,7 @@ export default class SearchAlgorithm {
     search: T,
     callback: CallbackLinear<T> | null = null,
     isSorted = false,
-    direction: Direction = "forward"
+    direction: Direction = "ascending"
   ): Promise<Node<T> | null> {
     if (!array.length || search === null) return null;
     const last = array[array.length - 1];
@@ -27,8 +27,8 @@ export default class SearchAlgorithm {
     if (
       isSorted &&
       last.data !== null &&
-      ((direction === "forward" && search > last.data) ||
-        (direction === "reverse" && search < last.data))
+      ((direction === "ascending" && search > last.data) ||
+        (direction === "descending" && search < last.data))
     ) {
       return null;
     }
@@ -42,8 +42,8 @@ export default class SearchAlgorithm {
         if (next && next.data) {
           const nextData = next.data;
           if (
-            (direction === "forward" && nextData > search) ||
-            (direction === "reverse" && nextData < search)
+            (direction === "ascending" && nextData > search) ||
+            (direction === "descending" && nextData < search)
           ) {
             return null;
           }
@@ -57,7 +57,7 @@ export default class SearchAlgorithm {
     array: Node<T>[],
     search: T,
     callback: CallbackBinary<T> | null = null,
-    direction: Direction = "forward"  // "forward" for ascending, "backward" for descending
+    direction: Direction = "ascending"  // "ascending" for ascending, "backward" for descending
   ): Promise<Node<T> | null> {
     if (!array.length || search === null) return null;
   
@@ -71,13 +71,13 @@ export default class SearchAlgorithm {
       if (!middleNode || middleNode.data === null) break;
   
       if (middleNode.data === search)  return middleNode; 
-      if (direction === "forward") {    
+      if (direction === "ascending") {    
         if (middleNode.data > search) {
           end = middle - 1;
         } else {
           start = middle + 1;
         }
-      } else if (direction === "reverse") {
+      } else if (direction === "descending") {
         if (middleNode.data < search) {
           end = middle - 1;
         } else {
