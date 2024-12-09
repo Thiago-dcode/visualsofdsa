@@ -35,6 +35,7 @@ export default function SortView({ sortType }: {
   const [speed, setSpeed] = useState<speed>(1)
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const [direction, setDirection] = useState<Direction>('ascending')
+  const [open,setOpen] = useState(false);
   const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam');
   const { bubble, selection, merge, quick, insertion, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>();
@@ -188,7 +189,7 @@ export default function SortView({ sortType }: {
 
     <Main>
       {renderInfo()}
-      <OperationsContainer>
+      <OperationsContainer open={open} setOpen={setOpen}>
  
         {!array ? <Section>
 

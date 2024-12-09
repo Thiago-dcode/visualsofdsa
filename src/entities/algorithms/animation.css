@@ -46,12 +46,14 @@
 
   @keyframes move-node{
     from {
-      left: var(--from);
+      left: var(--left_from);
+      bottom: var(--bottom_from);
      
     }
   
     to {
-      left: var(--to);
+      left: var(--left_to);
+      bottom: var(--bottom_to);
       background-color:var(--color);
    
     }

@@ -68,8 +68,8 @@ export const useSortAlgorithms = (
     };
     const onSwap: ClosureCompare = async (nodeA, nodeB) => {
       try {
-        animateSound(nodeA.data, minArrayValue, maxArrayValue);
-        animateSound(nodeB.data, minArrayValue, maxArrayValue);
+        // animateSound(nodeA.data, minArrayValue, maxArrayValue);
+        // animateSound(nodeB.data, minArrayValue, maxArrayValue);
         await animateBubbleOnSwap(
           nodeA,
           nodeB,

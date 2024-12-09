@@ -5,12 +5,13 @@ import { useRef } from "react";
 import { AlgoSearchType } from "../types";
 import '../animation.css'
 
-const getIndexRef = (ref: HTMLElement) =>
-  ref.parentElement?.parentElement?.children[2] as HTMLElement;
+
 
 
 export const useAnimation = (visualizationMode: VisualizationArrays) => {
   const audioCtx = useRef<AudioContext | null>(null);
+  const getIndexRef = (ref: HTMLElement) =>
+    ref.parentElement?.parentElement?.children[2] as HTMLElement;
   const animateSound = (x: number, minX: number, maxX: number) => {
     if (!audioCtx.current) {
       audioCtx.current = new AudioContext();
@@ -52,6 +53,7 @@ export const useAnimation = (visualizationMode: VisualizationArrays) => {
   return {
     animateNode,
     animateSound,
+    getIndexRef,
 
 
   };
