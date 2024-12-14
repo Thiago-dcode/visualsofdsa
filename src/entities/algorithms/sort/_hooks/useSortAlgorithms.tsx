@@ -2,7 +2,7 @@ import Node from "@/entities/data-structures/linear/_classes/Node";
 import { Direction, speed, VisualizationArrays } from "@/types";
 import { SortAlgorithms } from "../_classes/SortAlgorithms";
 import { ClosureCompare } from "../types";
-import { useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { useAnimation } from "../../_hooks/useAnimations";
 import { getMaxInAnArrayOfNodes, getMinInAnArrayOfNodes } from "@/lib/utils";
 import { useAnimationSort } from "./useAnimationSort";
@@ -14,13 +14,17 @@ const getSpeed = (type: AlgoSortType, speed: number) => {
       switch (type) {
         case "bubble":
           return 0.275;
-        default: 
+        case "selection":
+          return 0.325;
+        default:
           0.3;
       }
     case 2:
       switch (type) {
         case "bubble":
           return 0.175;
+        case "selection":
+          return 0.225;
         default:
           0.2;
       }
@@ -28,6 +32,8 @@ const getSpeed = (type: AlgoSortType, speed: number) => {
       switch (type) {
         case "bubble":
           return 0.05;
+        case "bubble":
+          return 0.06;
         default:
           0.1;
       }
@@ -49,17 +55,22 @@ export const useSortAlgorithms = (
   const { animateNode, animateSound, animateBubbleOnSwap } =
     useAnimationSort(visualization);
   const [isSorted, setIsSorted] = useState(false);
-  const bubble = async () => {
-    let steps = 0;
+  const [message, setMessage] = useState<{
+    title: string,
+    description: ReactNode,
+  } | null>(null)
+  const steps = useRef(0);
+
+  const comparisionBased = async (type: AlgoSortType) => {
     const onCompare: ClosureCompare = async (nodeA, nodeB) => {
-      steps++;
+      steps.current++;
       try {
         if (nodeA.ref && nodeB.ref) {
           animateSound(nodeA.data, minArrayValue, maxArrayValue);
-          animateSound(nodeB.data, minArrayValue, maxArrayValue);
+          if (type !== 'selection') animateSound(nodeB.data, minArrayValue, maxArrayValue);
           await Promise.all([
-            animateNode(nodeA.ref, "search", getSpeed("bubble", speed)),
-            animateNode(nodeB.ref, "search", getSpeed("bubble", speed)),
+            animateNode(nodeA.ref, 'search', getSpeed(type, speed)),
+            animateNode(nodeB.ref, type !== 'selection' ? "search" : 'select', getSpeed(type, speed)),
           ]);
         }
       } catch (error) {
@@ -73,35 +84,63 @@ export const useSortAlgorithms = (
         await animateBubbleOnSwap(
           nodeA,
           nodeB,
-          getSpeed("bubble", speed) 
+          getSpeed(type, speed)
         );
       } catch (error) {
-        console.error("ERROR ANIMATING BUBBLE SORT ALGORITHM",error);
+        console.error("ERROR ANIMATING BUBBLE SORT ALGORITHM", error);
       }
     };
-    await SortAlgorithms.bubble(array,direction, onCompare, onSwap);
-    toast.success( `Took ${steps|| 1} to sort an array of size ${array.length}`,
-      {
-        position: "top-center",
-      }
-    );
+    switch (type) {
+      case 'bubble':
+        await SortAlgorithms.bubble(array, direction, onCompare, onSwap);
+        break;
+      case 'selection':
+        await SortAlgorithms.selection(array, direction, onCompare, onSwap);
+        break;
+    }
 
     setIsSorted(true);
+  }
+  const bubble = async () => {
+
+    await comparisionBased('bubble');
+
   };
-  const selection = async () => {};
-  const merge = async () => {};
-  const quick = async () => {};
-  const insertion = async () => {};
+
+  const selection = async () => {
+
+    await comparisionBased('selection');
+  };
+  const merge = async () => { };
+  const quick = async () => { };
+  const insertion = async () => { };
   const setUnsorted = () => {
     setIsSorted(false);
   };
+  const clearMessage = () => {
+    setMessage(null);
+  }
+  useEffect(() => {
+    if (!isSorted) {
+      steps.current = 0;
+      setMessage(null)
+    } else {
+      setMessage({
+        title: 'STEPS TAKEN',
+        description: <p>Took <strong >{steps.current} steps</strong>  to sort an array of size {array?.length}</p>
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSorted])
   return {
     bubble,
     selection,
     merge,
     quick,
     insertion,
+    message,
     isSorted,
+    clearMessage,
     setUnsorted,
   };
 };

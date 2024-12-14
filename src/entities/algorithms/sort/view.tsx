@@ -35,9 +35,9 @@ export default function SortView({ sortType }: {
   const [speed, setSpeed] = useState<speed>(1)
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const [direction, setDirection] = useState<Direction>('ascending')
-  const [open,setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam');
-  const { bubble, selection, merge, quick, insertion, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
+  const { bubble, selection, merge, quick, insertion, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -121,62 +121,71 @@ export default function SortView({ sortType }: {
 
       case 'bubble':
         return (<div className='flex items-center justify-center gap-2'>
-          <Title title={'Linear search'} />
-          <Info title="Linear search" text={<article>
+          <Title title={'Bubble sort'} />
+          <Info title="Bubble sort" text={<article>
             <header>
-
-              <p>Linear search or sequential search is a method for finding an element within an array by <b>sequentially checking</b> (or traverse) each element until a match is found or the entire list has been searched**.</p>
+              <p>
+                Bubble Sort is a <b>simple sorting algorithm</b> that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted.
+              </p>
             </header>
             <br />
             <main>
-              <p>**If the array is <strong>sorted</strong>, you can make the linear search algorithm more efficient by leveraging the order of elements:</p>
+              <p>
+                **Although Bubble Sort is easy to understand and implement, it is not efficient for large datasets. However, there are a few optimizations that can improve its performance in specific scenarios:
+              </p>
               <br />
               <div>
-                <p>For example, if the target element is <b>greater</b> than the last element in a sorted array (or <b>less</b> than the last element in a reverse-sorted array), you can conclude that the target is not present and skip further checks.</p>
-
-                <p>Another optimization involves checking the <b>next element in the loop</b>. If the next element (e.g., <code>array[index + 1]</code>) is <b>greater</b> than the <b>target</b> element, you can safely conclude that the target is not in the array and break the loop. For example, if you are looking for 5 in <code>[2, 4, 7]</code>, when you reach 4, you can check the next element (7), which is greater than 5, and determine that 5 cannot be found in the remaining array. (Note: the same principle applies in a reverse-sorted array.)</p>
-
-
+                <p>
+                  For example, if during a single pass through the array no swaps are made, it means the array is already sorted, and you can terminate the algorithm early. This optimization is called the <b>flagged optimization</b> and reduces unnecessary passes over a sorted or nearly sorted array.
+                </p>
+                <p>
+                  Another optimization involves reducing the range of elements to compare in each pass. Since the largest element &quot;bubbles up&quot; to its correct position after each pass, you can ignore the last sorted elements in subsequent iterations. This decreases the number of comparisons over time.
+                </p>
               </div>
             </main>
             <br />
             <footer>
-              <p>In conclusion, regardless of whether the array is sorted or unsorted, the time complexity of the linear search algorithm remains <b>O(n)</b>, as Big O Notation dictates, it always accounts for <b> the worst-case scenario </b> where all elements must be checked.</p>
+              <p>
+                In conclusion, while Bubble Sort is generally inefficient with a time complexity of  <b className='font-bold'>O(n²)</b> in the average and worst cases, these optimizations can improve its performance on specific datasets, such as nearly sorted arrays. However, its simplicity makes it a good choice for educational purposes and visualizations.
+              </p>
             </footer>
-
           </article>
+
           } className="self-start" />
 
         </div>)
       case 'selection':
         return (<div className='flex items-center justify-center gap-2'>
-          <Title title={'Binary search'} />
-          <Info title="Binary search" text={<article>
+          <Title title={'Selection sort'} />
+          <Info title="Selection sort" text={<article>
             <header>
-              <h2><strong>Binary Search</strong></h2>
-              <p>Binary search is an efficient method for finding an element within a <strong className='uppercase'>sorted array</strong>. It repeatedly divides the search interval in half, significantly reducing the number of comparisons needed compared to <Link href={`/algorithms/search/linear`} className='text-blue-500'>linear search.</Link></p>
+              <p>
+                Selection Sort is a <b>simple comparison-based sorting algorithm</b> that works by dividing the list into a sorted and an unsorted region. It repeatedly selects the smallest (or largest, depending on the order) element <span className='text-app-bauhaus-red'>(red color)</span> from the unsorted region and swaps it with the first element in the unsorted region, expanding the sorted region with each iteration.
+              </p>
             </header>
             <br />
             <main>
+              <p>
+                **Selection Sort is straightforward to implement, but its performance is limited by its high number of comparisons. However, its deterministic nature makes it suitable for small datasets or scenarios where memory usage is constrained.
+              </p>
+              <br />
               <div>
-                <p>Steps that binary algorithm takes to find the target value:</p>
-
-                <ul>
-                  <li><b>Step 1:</b> Compare the target element with the middle element of the array.</li>
-                  <li><b>Step 2:</b> If the target is equal to the middle element, the search is complete.</li>
-                  <li><b>Step 3:</b> If the target is less than the middle element, repeat the search on the left half of the array.</li>
-                  <li><b>Step 4:</b> If the target is greater than the middle element, repeat the search on the right half of the array.</li>
-                </ul>
-
-                <p>This process of halving the search interval continues until the target element is found or the interval is empty, indicating that the target is not present in the array.</p>
-
+                <p>
+                  For example, in each pass through the array, Selection Sort identifies the smallest element in the unsorted region and swaps it with the element at the start of the unsorted region. This process continues until the entire array is sorted.
+                </p>
+                <p>
+                  Unlike some other sorting algorithms, Selection Sort performs the same number of comparisons regardless of the initial order of the array. This makes it predictable but not adaptive to already sorted or nearly sorted data.
+                </p>
               </div>
             </main>
             <br />
             <footer>
-              <p>In conclusion, the time complexity of the binary search algorithm is <b>O(log n)</b>, as Big O Notation dictates, it efficiently narrows down the search space by halving it with each step, making it <b>significantly faster than linear search</b> for large, sorted arrays.</p>
+              <p>
+                In conclusion, Selection Sort has a time complexity of <b className='font-bold'>O(n²)</b> in both the average and worst cases. While it is not as efficient as other algorithms for large datasets, its simplicity and lack of additional memory requirements make it useful for learning and for specific use cases where memory is a priority.
+              </p>
             </footer>
           </article>
+
 
           } className="self-start" />
 
@@ -190,7 +199,7 @@ export default function SortView({ sortType }: {
     <Main>
       {renderInfo()}
       <OperationsContainer open={open} setOpen={setOpen}>
- 
+
         {!array ? <Section>
 
 
@@ -204,9 +213,9 @@ export default function SortView({ sortType }: {
 
 
         </Section> : <Section className='gap-2 w-full'>
-        {!isSorted && <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'ascending' ? false : true} onCheckedChange={() => {
-          toggleDirection()
-        }} /></div>}
+          {!isSorted && <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'ascending' ? false : true} onCheckedChange={() => {
+            toggleDirection()
+          }} /></div>}
           <ButtonAction title="Sort" action='read' isLoading={isAnimationRunning} onClick={async () => {
             await handleSort()
           }} />
@@ -269,7 +278,10 @@ export default function SortView({ sortType }: {
       {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
         reset()
 
-      }} open={error ? true : false} showTrigger={false} description={error.description} />}
+      }} open={!!error} showTrigger={false} description={error.description} />}
+      {message && <PopUp title={message.title} buttonText="x" handleOnPopUpButton={() => {
+        clearMessage()
+      }} open={!!message} showTrigger={false} description={message.description} />}
     </Main>
   )
 }

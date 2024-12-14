@@ -3,6 +3,6 @@ import React from 'react'
 
 export default function SelectionPage() {
   return (
-    <SortView type='selection' />
+    <SortView sortType='selection' />
   )
 }

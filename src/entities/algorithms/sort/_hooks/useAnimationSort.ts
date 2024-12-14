@@ -29,8 +29,7 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
           break;
 
         case "memoryRam":
-          console.log(refA);
-          // await delay(20000);
+      
 
           const setUpMemoyRam = (refA: HTMLElement, refB: HTMLElement) => {
             refA.style.position = "relative";

@@ -39,9 +39,9 @@ export function PopUp({
         <h1 className="text-2xl font-bold border-b-2 border-b-black pb-2" >{title}</h1> */}
         <AlertDialogDescription className="text-xl">{description}</AlertDialogDescription>
         <AlertDialogFooter>
-          <Button variant={'destructive'} className="border-2 border-white text-lg" onClick={(e) => {
+          <Button variant={'no-style'} className=" border-2 border-white font-bold bg-app-bauhaus-red flex items-center justify-center" onClick={(e) => {
             handleOnPopUpButton(e)
-          }}>{buttonText}</Button>
+          }}><span className="text-center">{buttonText}</span></Button>
 
         </AlertDialogFooter>
       </AlertDialogContent>

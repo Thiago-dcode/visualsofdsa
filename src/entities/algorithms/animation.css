@@ -30,7 +30,23 @@
   
     
   }
+  @keyframes select-node {
+  
+  
 
+    to {
+      background-color: rgb(217 69 39 / 0.8);
+  
+      color: white;
+    }
+    from {
+      background-color: rgb(217 69 39 / 0.8);
+  
+      color: white;
+    }
+  
+    
+  }
   @keyframes disable-node {
     to {
       opacity: 0.4;
