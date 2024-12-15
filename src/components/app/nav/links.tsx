@@ -139,7 +139,7 @@ export const LINKS: LinkItem[] = [
           },
           {
             name: 'Insertion',
-            enable: false,
+            enable: true,
             children: null,
             link: '/algorithms/sort/insertion'
           },

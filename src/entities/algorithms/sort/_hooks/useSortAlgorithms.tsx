@@ -9,6 +9,7 @@ import { useAnimationSort } from "./useAnimationSort";
 import { AlgoSortType } from "../../types";
 import { toast } from "sonner";
 const getSpeed = (type: AlgoSortType, speed: number) => {
+
   switch (speed) {
     case 1:
       switch (type) {
@@ -16,6 +17,8 @@ const getSpeed = (type: AlgoSortType, speed: number) => {
           return 0.275;
         case "selection":
           return 0.325;
+        case "insertion":
+          return 0.35;
         default:
           0.3;
       }
@@ -25,6 +28,8 @@ const getSpeed = (type: AlgoSortType, speed: number) => {
           return 0.175;
         case "selection":
           return 0.225;
+        case "insertion":
+          return 0.275;
         default:
           0.2;
       }
@@ -32,8 +37,10 @@ const getSpeed = (type: AlgoSortType, speed: number) => {
       switch (type) {
         case "bubble":
           return 0.05;
-        case "bubble":
+        case "selection":
           return 0.06;
+        case "insertion":
+          return 0.08;
         default:
           0.1;
       }
@@ -52,7 +59,7 @@ export const useSortAlgorithms = (
     minArrayValue = getMinInAnArrayOfNodes(array);
     maxArrayValue = getMaxInAnArrayOfNodes(array);
   }
-  const { animateNode, animateSound, animateBubbleOnSwap } =
+  const { animateNode, animateSound, animateOnSwap } =
     useAnimationSort(visualization);
   const [isSorted, setIsSorted] = useState(false);
   const [message, setMessage] = useState<{
@@ -67,10 +74,10 @@ export const useSortAlgorithms = (
       try {
         if (nodeA.ref && nodeB.ref) {
           animateSound(nodeA.data, minArrayValue, maxArrayValue);
-          if (type !== 'selection') animateSound(nodeB.data, minArrayValue, maxArrayValue);
+          if (type !== 'bubble') animateSound(nodeB.data, minArrayValue, maxArrayValue);
           await Promise.all([
             animateNode(nodeA.ref, 'search', getSpeed(type, speed)),
-            animateNode(nodeB.ref, type !== 'selection' ? "search" : 'select', getSpeed(type, speed)),
+            animateNode(nodeB.ref, type !== 'bubble' ? "search" : 'select', getSpeed(type, speed)),
           ]);
         }
       } catch (error) {
@@ -81,7 +88,7 @@ export const useSortAlgorithms = (
       try {
         // animateSound(nodeA.data, minArrayValue, maxArrayValue);
         // animateSound(nodeB.data, minArrayValue, maxArrayValue);
-        await animateBubbleOnSwap(
+        await animateOnSwap(
           nodeA,
           nodeB,
           getSpeed(type, speed)
@@ -96,6 +103,8 @@ export const useSortAlgorithms = (
         break;
       case 'selection':
         await SortAlgorithms.selection(array, direction, onCompare, onSwap);
+      case 'insertion':
+        await SortAlgorithms.insertion(array, direction, onCompare, onSwap);
         break;
     }
 
@@ -111,9 +120,13 @@ export const useSortAlgorithms = (
 
     await comparisionBased('selection');
   };
+  const insertion = async () => {
+
+    await comparisionBased('insertion');
+  };
   const merge = async () => { };
   const quick = async () => { };
-  const insertion = async () => { };
+
   const setUnsorted = () => {
     setIsSorted(false);
   };

@@ -58,4 +58,28 @@ describe("Testing selection", () => {
     );
     testIfIsSorted(array, "descending");
   });
+
+  
+});
+
+describe("Testing Insertion", () => {
+  it("Should return a empty array", async () => {
+    const array = await SortAlgorithms.selection([]);
+
+    expect(array?.length).toBe(0);
+  });
+  it("Should sort ascending", async () => {
+    const array = await SortAlgorithms.insertion(
+      createRandomUniqueArrayOfNodes(600, [0, 15000])
+    );
+    testIfIsSorted(array, "ascending");
+  });
+  it("Should sort descending", async () => {
+    const array = await SortAlgorithms.insertion(
+      createRandomUniqueArrayOfNodes(600, [0, 15000]),'descending'
+    );
+    testIfIsSorted(array, "descending");
+  });
+
+  
 });

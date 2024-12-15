@@ -63,4 +63,31 @@ export class SortAlgorithms {
     }
     return array;
   }
+
+  public static async insertion(
+    array: Node<number>[],
+    direction: Direction = "ascending",
+    onCompare?: ClosureCompare,
+    onShift?: ClosureCompare
+  ) {
+    for (let i = 0; i < array.length - 1; i++) {
+
+
+      for (let j = i; j >= 0; j--) {
+        const temp = array[j + 1];
+        const left = array[j];
+         if (onCompare) await onCompare( array[j ], array[j+1]);
+        if (
+          (direction === "ascending" && left.data < temp.data) ||
+          (direction === "descending" && left.data > temp.data)
+        )
+          break;
+        if (onShift) await onShift( array[j], array[j+1]);
+        array[j + 1] = array[j];
+        array[j] = temp;
+      }
+    }
+
+    return array;
+  }
 }

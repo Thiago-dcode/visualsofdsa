@@ -192,7 +192,42 @@ export default function SortView({ sortType }: {
           } className="self-start" />
 
         </div>)
+      case 'insertion':
+        return (<div className='flex items-center justify-center gap-2'>
+          <Title title={'Insertion sort'} />
+          <Info title="Insertion sort" text={<article>
+            <header>
+              <p>
+                Insertion Sort is a <b>simple and intuitive sorting algorithm</b> that works by building the final sorted array one element at a time. It maintains a sorted region of the array and repeatedly inserts the next unsorted element into its correct position within the sorted region.
+              </p>
+            </header>
+            <br />
+            <main>
+              <p>
+                **Insertion Sort is particularly efficient for small datasets or arrays that are already partially sorted, as it minimizes the number of required comparisons and shifts.
+              </p>
+              <br />
+              <div>
+                <p>
+                  For example, during each pass, the algorithm takes the first element of the unsorted region and compares it with the elements in the sorted region, moving elements one position to the right until the correct position is found. The element is then inserted into its correct position, and the sorted region expands.
+                </p>
+                <p>
+                  This behavior makes Insertion Sort adaptive, meaning it performs fewer operations on nearly sorted arrays. It is often used as a building block for more complex algorithms or for sorting small subsets of data.
+                </p>
+              </div>
+            </main>
+            <br />
+            <footer>
+              <p>
+                In conclusion, the time complexity of Insertion Sort is <b>O(n²)</b> in the worst case but <b>O(n)</b> in the best case, such as when the array is already sorted. Its simplicity, adaptability, and in-place sorting nature make it suitable for small or nearly sorted datasets, despite its limitations for large arrays.
+              </p>
+            </footer>
+          </article>
 
+
+          } className="self-start" />
+
+        </div>)
     }
   }
 

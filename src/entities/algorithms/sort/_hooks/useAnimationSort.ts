@@ -6,7 +6,7 @@ import { delay, removePx } from "@/lib/utils";
 
 export const useAnimationSort = (visualization: VisualizationArrays) => {
   const animations = useAnimation(visualization);
-  const animateBubbleOnSwap = async (
+  const animateOnSwap = async (
     nodeA: Node<number>,
     nodeB: Node<number>,
     speed: number
@@ -124,6 +124,6 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
 
   return {
     ...animations,
-    animateBubbleOnSwap,
+    animateOnSwap,
   };
 };
