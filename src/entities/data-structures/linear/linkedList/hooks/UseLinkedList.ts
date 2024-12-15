@@ -78,7 +78,6 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       let node: LinkedListNode<Primitive> | null = null;
       let steps = index + 1;
       if (!isDoublyLinkedList) await findNode(index, true, true);
-
       node = await linkedList.deleteAndGetNode(
         index,
         async (_node, _index, direction, _steps) => {
@@ -89,11 +88,10 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
             if (_node && _node.ref) {
               await animate(
                 _node.ref,
-                `${index !== _index ? "find" : "del"}-node ${
+                `${index !== _index ? `find-node-${isDark?'dark':'light'}` : "del-node"} ${
                   ANIMATION_SPEED * 0.8 + "s"
                 }`
               );
-
               if (index !== _index) {
                 if (direction === "forward")
                   await animateEdge(_node.nextEdge.ref);

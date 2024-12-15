@@ -27,6 +27,7 @@ import VisualizationTypes from '../_components/visualization/visualizationTypes'
 import { config } from '@/config'
 import { AlgoSearchType, AlgoSortType } from '../types'
 import { useSortAlgorithms } from './_hooks/useSortAlgorithms'
+import useResponsive from '@/hooks/useResponsive'
 
 export default function SortView({ sortType }: {
   sortType?: AlgoSortType
@@ -40,39 +41,40 @@ export default function SortView({ sortType }: {
   const { bubble, selection, merge, quick, insertion, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>();
   const inputRef = useRef<HTMLInputElement | null>(null);
-
   const handleSetVisualizationMode = (vimValue: VisualizationArrays) => {
-
     localStorage.setItem(config.visualizationMode.localStorageKeys.array, vimValue);
     setVisualizationMode(vimValue);
-
   }
-
+  useResponsive(() => {
+    reset();
+  })
   const handleSort = async () => {
+    setOpen(false);
     setAnimationRunning(true);
     if (isSorted) {
       toast.info('Array is already sorted');
-      return;
-    }
-    switch (sortType) {
-      case 'bubble':
-        await bubble();
-        break;
-      case 'selection':
-        await selection();
-        break;
-      case 'merge':
-        await merge();
-        break;
-      case 'quick':
-        await quick();
-        break;
-      case 'insertion':
-        await insertion();
-        break;
 
-      default:
-        break;
+    } else {
+      switch (sortType) {
+        case 'bubble':
+          await bubble();
+          break;
+        case 'selection':
+          await selection();
+          break;
+        case 'merge':
+          await merge();
+          break;
+        case 'quick':
+          await quick();
+          break;
+        case 'insertion':
+          await insertion();
+          break;
+
+        default:
+          break;
+      }
     }
     setAnimationRunning(false);
 

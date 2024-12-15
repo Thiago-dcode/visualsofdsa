@@ -14,7 +14,6 @@ import Properties from '@/components/app/Properties';
 import Section from '@/components/container/Section';
 import Info from '@/components/ui/info';
 import Title from '@/components/ui/Title';
-import Arrow from '@/components/ui/arrow';
 import { ArrowRight } from 'lucide-react';
 
 export default function View({ isDoubly = false }: {
