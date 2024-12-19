@@ -33,9 +33,12 @@ export default class Node<T extends Primitive> extends Memory {
   set ref(ref: Ref) {
     this._ref = ref;
   }
-
+    
   // Setter for the value
   set data(data: T) {
     this._data = data;
+  }
+  clone(){
+    return new Node(this.data,this.position,null)
   }
 }

@@ -1,5 +1,5 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import { ClosureCompare } from "../types";
+import { ClosureCompare, ClosureSlice } from "../types";
 import { Direction } from "@/types";
 
 export class SortAlgorithms {
@@ -71,23 +71,68 @@ export class SortAlgorithms {
     onShift?: ClosureCompare
   ) {
     for (let i = 0; i < array.length - 1; i++) {
-
-
       for (let j = i; j >= 0; j--) {
         const temp = array[j + 1];
         const left = array[j];
-         if (onCompare) await onCompare( array[j ], array[j+1]);
+        if (onCompare) await onCompare(array[j], array[j + 1]);
         if (
           (direction === "ascending" && left.data < temp.data) ||
           (direction === "descending" && left.data > temp.data)
         )
           break;
-        if (onShift) await onShift( array[j], array[j+1]);
+        if (onShift) await onShift(array[j], array[j + 1]);
         array[j + 1] = array[j];
         array[j] = temp;
       }
     }
 
+    return array;
+  }
+
+  public static async merge(
+    array: Node<number>[],
+    direction: Direction = "ascending",
+    onSlice?: ClosureSlice,
+    onMerge?: ClosureCompare
+  ): Promise<Node<number>[]> {
+    if (array.length <= 1) return array;
+    const merge = async (
+      leftArray: Node<number>[],
+      rightArray: Node<number>[],
+      subArray: Node<number>[]
+    ) => {
+      let i = 0;
+      let l = 0;
+      let r = 0;
+
+      while (l < leftArray.length || r < rightArray.length) {
+        const leftNode = leftArray[l];
+        const rightNode = rightArray[r];
+        if (
+          !rightNode ||
+          (leftNode &&
+            ((direction === "ascending" && leftNode.data < rightNode.data) ||
+              (direction === "descending" && leftNode.data > rightNode.data)))
+        ) {
+          if (onMerge) await onMerge(subArray[i], leftNode);
+          l++;
+          subArray[i] = leftNode;
+        } else {
+          if (onMerge) await onMerge(subArray[i], rightNode);
+          r++;
+          subArray[i] = rightNode;
+        }
+        i++;
+      }
+    };
+    const middle = Math.floor(array.length / 2);
+    const leftArray = array.slice(0, middle);
+    const rightArray = array.slice(middle);
+    if (onSlice) await onSlice(leftArray, "left");
+    await this.merge(leftArray, direction, onSlice, onMerge);
+    if (onSlice) await onSlice(rightArray, "right");
+    await this.merge(rightArray, direction, onSlice, onMerge);
+    await merge(leftArray, rightArray, array);
     return array;
   }
 }

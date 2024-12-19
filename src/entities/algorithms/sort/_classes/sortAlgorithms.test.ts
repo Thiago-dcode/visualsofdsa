@@ -64,7 +64,7 @@ describe("Testing selection", () => {
 
 describe("Testing Insertion", () => {
   it("Should return a empty array", async () => {
-    const array = await SortAlgorithms.selection([]);
+    const array = await SortAlgorithms.insertion([]);
 
     expect(array?.length).toBe(0);
   });
@@ -76,6 +76,28 @@ describe("Testing Insertion", () => {
   });
   it("Should sort descending", async () => {
     const array = await SortAlgorithms.insertion(
+      createRandomUniqueArrayOfNodes(600, [0, 15000]),'descending'
+    );
+    testIfIsSorted(array, "descending");
+  });
+
+  
+});
+
+describe("Testing merge", () => {
+  it("Should return a empty array", async () => {
+    const array = await SortAlgorithms.merge([]);
+
+    expect(array?.length).toBe(0);
+  });
+  it("Should sort ascending", async () => {
+    const array = await SortAlgorithms.merge(
+      createRandomUniqueArrayOfNodes(600, [0, 15000])
+    );
+    testIfIsSorted(array, "ascending");
+  });
+  it("Should sort descending", async () => {
+    const array = await SortAlgorithms.merge(
       createRandomUniqueArrayOfNodes(600, [0, 15000]),'descending'
     );
     testIfIsSorted(array, "descending");

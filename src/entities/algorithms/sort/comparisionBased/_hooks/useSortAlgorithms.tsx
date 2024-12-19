@@ -1,14 +1,14 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { Direction, speed, VisualizationArrays } from "@/types";
-import { SortAlgorithms } from "../_classes/SortAlgorithms";
-import { ClosureCompare } from "../types";
+import { SortAlgorithms } from "../../_classes/SortAlgorithms";
+import { ClosureCompare, ClosureSlice } from "../../types";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { useAnimation } from "../../_hooks/useAnimations";
-import { getMaxInAnArrayOfNodes, getMinInAnArrayOfNodes } from "@/lib/utils";
+
+import {  getMaxInAnArrayOfNodes, getMinInAnArrayOfNodes } from "@/lib/utils";
 import { useAnimationSort } from "./useAnimationSort";
-import { AlgoSortType } from "../../types";
+import { AlgoSortComparisionBasedType } from "../../../types";
 import { toast } from "sonner";
-const getSpeed = (type: AlgoSortType, speed: number) => {
+const getSpeed = (type: AlgoSortComparisionBasedType, speed: number) => {
 
   switch (speed) {
     case 1:
@@ -51,7 +51,7 @@ export const useSortAlgorithms = (
   array: Node<number>[],
   speed: speed = 1,
   direction: Direction,
-  visualization: VisualizationArrays = "memoryRam"
+  visualization: VisualizationArrays = "memoryRam",
 ) => {
   let minArrayValue = 0;
   let maxArrayValue = 0;
@@ -59,7 +59,7 @@ export const useSortAlgorithms = (
     minArrayValue = getMinInAnArrayOfNodes(array);
     maxArrayValue = getMaxInAnArrayOfNodes(array);
   }
-  const { animateNode, animateSound, animateOnSwap } =
+  const { animateNode, animateSound, animateOnSwap,animationOnSlice } =
     useAnimationSort(visualization);
   const [isSorted, setIsSorted] = useState(false);
   const [message, setMessage] = useState<{
@@ -68,7 +68,7 @@ export const useSortAlgorithms = (
   } | null>(null)
   const steps = useRef(0);
 
-  const comparisionBased = async (type: AlgoSortType) => {
+  const comparisionBased = async (type: AlgoSortComparisionBasedType) => {
     const onCompare: ClosureCompare = async (nodeA, nodeB) => {
       steps.current++;
       try {
@@ -124,8 +124,7 @@ export const useSortAlgorithms = (
 
     await comparisionBased('insertion');
   };
-  const merge = async () => { };
-  const quick = async () => { };
+  
 
   const setUnsorted = () => {
     setIsSorted(false);
@@ -148,8 +147,7 @@ export const useSortAlgorithms = (
   return {
     bubble,
     selection,
-    merge,
-    quick,
+    
     insertion,
     message,
     isSorted,

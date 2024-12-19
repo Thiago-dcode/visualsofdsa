@@ -2,7 +2,6 @@ import { animate } from "@/lib/animations";
 import { lerp, getValueNormalized, generateAudioFrequency } from "@/lib/utils";
 import { speed, VisualizationArrays } from "@/types";
 import { useRef } from "react";
-import { AlgoSearchType } from "../types";
 import '../animation.css'
 
 

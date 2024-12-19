@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import Node from '@/entities/data-structures/linear/_classes/Node'
 import { Direction, Primitive } from '@/types'
 import Bar from './bar'
@@ -10,13 +10,15 @@ export default function BarsVisualizationSorted({
   setAnimationRunning,
   direction,
   maxBarSize = 650,
-  arrayIsSorted
+  arrayIsSorted,
+  arrayCloned
 }: {
   array: Node<number>[];
   setAnimationRunning: (e: boolean) => void;
   direction?: Direction;
   maxBarSize?: number;
-  arrayIsSorted: boolean
+  arrayIsSorted: boolean,
+  arrayCloned?:Node<number>[]
 }) {
   const theme = useDarkMode();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -65,8 +67,6 @@ export default function BarsVisualizationSorted({
           position:'relative'
         }
       }>
-
-
         {array.map((node, i) => {
         
           return (
@@ -82,8 +82,27 @@ export default function BarsVisualizationSorted({
             />
           )
         })}
-      </div>}
+        { arrayCloned && arrayCloned.map((node, i) => {
+        
+        return (
+
+          <Bar
+          bgColor={ i % 2 !== 0 ? theme.isDark? 'rgb(242 240 239)': 'rgb(26 25 24 / 0.8)' :'rgb(36 164 130 / 0.7)'}
+            left = {i * barWidth}
+            width={barWidth}
+            key={`bar-component-${node?.data}-${node?.id}-${i}`}
+            height={calculateHeight(node.data)}
+            node={node}
+            className={`border-0 border-r-[1px]  dark:border-r-app-bg-black border-r-app-off-white`}
+          />
+        )
+      })}
+      </div>
+    
+      }
+      
     </div>
+
 
 
 

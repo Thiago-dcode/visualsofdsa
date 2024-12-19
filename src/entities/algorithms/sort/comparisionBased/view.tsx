@@ -3,16 +3,13 @@ import Properties from '@/components/app/Properties'
 import InputWithButtonContainer from '@/components/container/InputWithButtonContainer'
 import Main from '@/components/container/Main'
 import OperationsContainer from '@/components/container/OperationsContainer'
-import RamContainer from '@/components/container/RamContainer'
 import Section from '@/components/container/Section'
-import Code from '@/components/ui/Code'
 import Info from '@/components/ui/info'
 import { Input } from '@/components/ui/input'
 import { PopUp } from '@/components/ui/PopUp'
 import { Switch } from '@/components/ui/switch'
 import Title from '@/components/ui/Title'
 import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAction'
-
 import useStaticArray from '@/entities/data-structures/linear/staticArray/hooks/useStaticArray'
 import { Direction, speed, VisualizationArrays } from '@/types'
 import React, { useRef, useState } from 'react'
@@ -21,24 +18,24 @@ import Node from '@/entities/data-structures/linear/_classes/Node'
 import { PopOverComponent } from '@/components/ui/PopOverComponent'
 import { Button } from '@/components/ui/button'
 import { Wrench } from 'lucide-react'
-import RenderVisualization from '../_components/visualization/renderVisualization'
-import Link from 'next/link'
-import VisualizationTypes from '../_components/visualization/visualizationTypes'
+import RenderVisualization from '../../_components/visualization/renderVisualization'
+import VisualizationTypes from '../../_components/visualization/visualizationTypes'
 import { config } from '@/config'
-import { AlgoSearchType, AlgoSortType } from '../types'
+import { AlgoSortComparisionBasedType } from '../../types'
 import { useSortAlgorithms } from './_hooks/useSortAlgorithms'
 import useResponsive from '@/hooks/useResponsive'
 
-export default function SortView({ sortType }: {
-  sortType?: AlgoSortType
+export default function ComparisionBasedSortView({ algoSortComparisionBasedType }: {
+  algoSortComparisionBasedType?: AlgoSortComparisionBasedType
 }) {
-  const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500);
-  const [speed, setSpeed] = useState<speed>(1)
+  const maxBarSize = useRef(650);
+  const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500)
+  const [speed, setSpeed] = useState<speed>(1);
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const [direction, setDirection] = useState<Direction>('ascending')
   const [open, setOpen] = useState(false);
   const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam');
-  const { bubble, selection, merge, quick, insertion, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
+  const { bubble, selection, insertion, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const handleSetVisualizationMode = (vimValue: VisualizationArrays) => {
@@ -55,24 +52,16 @@ export default function SortView({ sortType }: {
       toast.info('Array is already sorted');
 
     } else {
-      switch (sortType) {
+      switch (algoSortComparisionBasedType) {
         case 'bubble':
           await bubble();
           break;
         case 'selection':
           await selection();
           break;
-        case 'merge':
-          await merge();
-          break;
-        case 'quick':
-          await quick();
-          break;
+
         case 'insertion':
           await insertion();
-          break;
-
-        default:
           break;
       }
     }
@@ -119,7 +108,7 @@ export default function SortView({ sortType }: {
   }
   const renderInfo = () => {
 
-    switch (sortType) {
+    switch (algoSortComparisionBasedType) {
 
       case 'bubble':
         return (<div className='flex items-center justify-center gap-2'>
@@ -311,7 +300,7 @@ export default function SortView({ sortType }: {
         } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} /> : <div></div>}
 
       </div>
-      {array ? <RenderVisualization sorted={false} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} /> : null}
+      {array ? <RenderVisualization direction={direction} maxBarSize={maxBarSize.current} sorted={false} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} /> : null}
       {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
         reset()
 

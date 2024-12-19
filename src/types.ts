@@ -1,6 +1,7 @@
 export type Primitive = number | string |null;
 export type speed = 1 | 2 | 3;
 export type Ref = HTMLElement | null;
+export type onAnimationEnds = (e: AnimationEvent,ref:HTMLElement|null) => void
 export type Direction= 'ascending' |'descending'
 export type listName = 'linkedList'| 'queue' | 'stack'
 export type ButtonActionType = 'read'|'write'|'delete'|'search' | 'insert' | 'fill'
