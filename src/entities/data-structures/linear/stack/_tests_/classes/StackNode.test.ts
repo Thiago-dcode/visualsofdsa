@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import StackNode from "../../classes/StackNode";
-import Position from "../../../../../../lib/classes/Position";
+import Position from "../../../../../../lib/classes/position/Position";
 describe("StackNode class test", () => {
   it("Should accept numbers", () => {
     const node = new StackNode<number>(50, new Position(0, 0));

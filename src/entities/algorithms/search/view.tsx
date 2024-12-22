@@ -14,7 +14,7 @@ import Title from '@/components/ui/Title'
 import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAction'
 
 import useStaticArray from '@/entities/data-structures/linear/staticArray/hooks/useStaticArray'
-import { Direction, Primitive, speed, VisualizationArrays } from '@/types'
+import { Direction, speed, VisualizationArrays } from '@/types'
 import React, { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import useSearchAlgorithm from './_hooks/useSearchAlgorithm'
@@ -26,14 +26,14 @@ import RenderVisualization from '../_components/visualization/renderVisualizatio
 import Link from 'next/link'
 import VisualizationTypes from '../_components/visualization/visualizationTypes'
 import { config } from '@/config'
-import { getMinInAnArrayOfNodes } from '@/lib/utils'
+import { AlgoSearchType } from '../types'
 
 export default function SearchView({ searchType }: {
   searchType?: AlgoSearchType
 }) {
   const { array, maxSize, createSorted,createUnsorted, flush, error } = useStaticArray(500);
   const [speed, setSpeed] = useState<speed>(1)
-  const [direction, setDirection] = useState<Direction>('forward')
+  const [direction, setDirection] = useState<Direction>('ascending')
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const [sorted, setSorted] = useState(searchType==='binary');
   const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam');
@@ -50,7 +50,7 @@ export default function SearchView({ searchType }: {
 
   }
   const toggleDirection = () => {
-    setDirection(prev => prev === 'forward' ? 'reverse' : 'forward')
+    setDirection(prev => prev === 'ascending' ? 'descending' : 'ascending')
   }
   const handleSearch = async () => {
     const searchValue = getValue();
@@ -126,9 +126,9 @@ export default function SearchView({ searchType }: {
               <p>**If the array is <strong>sorted</strong>, you can make the linear search algorithm more efficient by leveraging the order of elements:</p>
               <br />
               <div>
-                <p>For example, if the target element is <b>greater</b> than the last element in a sorted array (or <b>less</b> than the last element in a reverse-sorted array), you can conclude that the target is not present and skip further checks.</p>
+                <p>For example, if the target element is <b>greater</b> than the last element in a sorted array (or <b>less</b> than the last element in a descending-sorted array), you can conclude that the target is not present and skip further checks.</p>
   
-                <p>Another optimization involves checking the <b>next element in the loop</b>. If the next element (e.g., <code>array[index + 1]</code>) is <b>greater</b> than the <b>target</b> element, you can safely conclude that the target is not in the array and break the loop. For example, if you are looking for 5 in <code>[2, 4, 7]</code>, when you reach 4, you can check the next element (7), which is greater than 5, and determine that 5 cannot be found in the remaining array. (Note: the same principle applies in a reverse-sorted array.)</p>
+                <p>Another optimization involves checking the <b>next element in the loop</b>. If the next element (e.g., <code>array[index + 1]</code>) is <b>greater</b> than the <b>target</b> element, you can safely conclude that the target is not in the array and break the loop. For example, if you are looking for 5 in <code>[2, 4, 7]</code>, when you reach 4, you can check the next element (7), which is greater than 5, and determine that 5 cannot be found in the remaining array. (Note: the same principle applies in a descending-sorted array.)</p>
   
   
               </div>
@@ -193,7 +193,7 @@ export default function SearchView({ searchType }: {
             {searchType === 'linear' && <div className='flex self-center gap-2 items-center'>   <p>Sorted?</p><Switch defaultChecked={sorted} onCheckedChange={() => {
               toggleSorted()
             }} /></div>}
-            {sorted    &&   <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'forward' ? false : true} onCheckedChange={() => {
+            {sorted    &&   <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'ascending' ? false : true} onCheckedChange={() => {
               toggleDirection()
             }} /></div>}
           </div>

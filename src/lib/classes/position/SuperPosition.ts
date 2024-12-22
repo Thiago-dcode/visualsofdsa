@@ -1,9 +1,10 @@
-export default class Position {
-  private _x: number;
-  private _y: number;
+import Position from "./Position";
+
+export default class SuperPosition extends Position {
+  private _prev: Position;
   constructor(x: number, y: number) {
-    this._x = x;
-    this._y = y;
+    super(x, y);
+    this._prev = new Position(x, y);
   }
 
   get x() {
@@ -11,12 +12,14 @@ export default class Position {
   }
 
   set x(x: number) {
+    this._prev.x = this._x;
     this._x = x;
   }
   get y() {
     return this._y;
   }
   set y(y: number) {
+    this._prev.y = this._y;
     this._y = y;
   }
   get() {
@@ -26,7 +29,13 @@ export default class Position {
     };
   }
   set(x: number, y: number) {
+    this._prev.x = this._x;
+    this._prev.y = this._y;
     this._x = x;
     this._y = y;
+  }
+
+  get prev() {
+    return this._prev;
   }
 }

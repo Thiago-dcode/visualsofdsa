@@ -1,6 +1,6 @@
 import { Primitive, Ref } from "@/types";
 import Node from "../../_classes/Node";
-import Position from "@/lib/classes/Position";
+import Position from "@/lib/classes/position/Position";
 import { Edge } from "@/lib/classes/Edge";
 
 export default class LinkedListNode<T extends Primitive> extends Node<T> {

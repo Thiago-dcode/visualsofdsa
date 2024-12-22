@@ -1,7 +1,7 @@
 import LinkedListNode from "@/entities/data-structures/linear/linkedList/classes/LinkedListNode";
 import Queue from "@/entities/data-structures/linear/queue/classes/Queue";
 import NodeShape from "@/lib/classes/NodeShape";
-import Position from "@/lib/classes/Position";
+import Position from "@/lib/classes/position/Position";
 import NotAllowedSizeError from "@/lib/errors/MaxSizeExceededError";
 import { getMemoryAddress } from "@/lib/utils";
 import { Primitive } from "@/types";

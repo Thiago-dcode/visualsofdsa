@@ -1,4 +1,4 @@
-import Position from "../../../../../lib/classes/Position";
+import Position from "../../../../../lib/classes/position/Position";
 import { Direction, Primitive } from "@/types";
 import { useCallback, useRef, useState } from "react";
 import Node from "../../_classes/Node";
@@ -55,16 +55,17 @@ export default function useStaticArray(size: number = 50) {
     }
     await delay(100);
     setArray(_array);
+    return _array;
   };
 
-  const createSorted = async (size:number,direction:Direction = 'forward') =>{
+  const createSorted = async (size:number,direction:Direction = 'ascending') =>{
     const _array = initArray(size);
     if (!_array) return;
 
       let data = random(0,5000);
       for (let i = 0; i < _array.length; i++) {
         let nRandom = random(1,5000);
-        if(direction ==='forward')  data += nRandom
+        if(direction ==='ascending')  data += nRandom
         else data -= nRandom;
       
         _array[i] = new Node(data, new Position(0, 0));
@@ -72,6 +73,8 @@ export default function useStaticArray(size: number = 50) {
       }
 
     setArray(_array);
+
+    return _array;
 
 
   }

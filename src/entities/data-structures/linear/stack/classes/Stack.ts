@@ -1,6 +1,6 @@
 import { Primitive } from "@/types";
 import LinearDs from "../../_classes/LinearDs";
-import Position from "../../../../../lib/classes/Position";
+import Position from "../../../../../lib/classes/position/Position";
 import LinkedListNode from "../../linkedList/classes/LinkedListNode";
 export default class Stack<T extends Primitive> extends LinearDs<T> {
   constructor(data: T[] = []) {

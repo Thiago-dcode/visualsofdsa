@@ -14,3 +14,5 @@ export default abstract class Memory {
     this._isLastAdd = isLastAdd;
   }
 }
+
+

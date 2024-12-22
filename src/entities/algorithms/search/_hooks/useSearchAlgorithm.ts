@@ -1,15 +1,28 @@
 import SearchAlgorithm from "../_classes/SearchAlgorithm";
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { Direction, Primitive, speed, VisualizationArrays } from "@/types";
-import "@/entities/data-structures/linear/staticArray/style.css";
 import { animate } from "@/lib/animations";
 import { toast } from "sonner";
 import {
   delay,
   getMaxInAnArrayOfNodes,
   getMinInAnArrayOfNodes,
+  getMinMaxFromArrayOfNodes,
 } from "@/lib/utils";
 import { useAnimation } from "../../_hooks/useAnimations";
+import { AlgoSearchType } from "../../types";
+const getSpeed = (type: AlgoSearchType, speed: number) => {
+  switch (speed) {
+    case 1:
+      return type === "linear" ? 0.5 : 1;
+    case 2:
+      return type === "linear" ? 0.3 : 0.65  ;
+    case 3:
+      return type === "linear" ? 0.1 : 0.3;
+    default:
+      return 0.5;
+  }
+};
 export default function useSearchAlgorithm(
   array: Node<number>[] | null,
   sorted: boolean,
@@ -17,18 +30,18 @@ export default function useSearchAlgorithm(
   speed: speed = 1,
   visualization: VisualizationArrays = "memoryRam"
 ) {
+ 
   let minArrayValue = 0;
   let maxArrayValue = 0;
   if (array) {
-    minArrayValue = sorted
-      ? array[direction === "forward" ? 0 : array.length - 1].data
-      : getMinInAnArrayOfNodes(array);
-    maxArrayValue = sorted
-      ? array[direction === "forward" ? array.length - 1 : 0].data
-      : getMaxInAnArrayOfNodes(array);
+    const minMax = getMinMaxFromArrayOfNodes(array,direction,sorted);
+    minArrayValue = minMax.min;
+    maxArrayValue = minMax.max;
   }
 
-  const { animateNode, animateSound } = useAnimation();
+  const { animateNode, animateSound } =
+    useAnimation(visualization);
+
   const linear = async (search: Primitive) => {
     if (!array) {
       toast.error(`Expected an array, null given`, {
@@ -47,7 +60,8 @@ export default function useSearchAlgorithm(
         if (node.ref) {
           if (visualization === "bars")
             animateSound(node.data as number, minArrayValue, maxArrayValue);
-          await animateNode(node.ref, found, "linear", visualization, speed);
+  
+             await animateNode(node.ref,found?'find':'search',found?1.5:getSpeed('linear',speed))
 
           if (found) {
             toast.success(
@@ -105,20 +119,17 @@ export default function useSearchAlgorithm(
               minArrayValue,
               maxArrayValue
             );
-          await animateNode(
-            middleNode.ref,
-            middleNode.data === search,
-            "binary",
-            visualization,
-            speed
-          );
+            const found = middleNode.data === search
+            await animateNode(middleNode.ref,found?'find':'search',found?2:getSpeed('binary',speed))
 
-          if (middleNode.data !== search) {
+
+          if (!found) {
             if (
-              (direction === "forward" && middleNode.data > search) ||
-              (direction === "reverse" && middleNode.data < search)
+                //disable nodes from right side
+              (direction === "ascending" && middleNode.data > search) ||
+              (direction === "descending" && middleNode.data < search)
             ) {
-              //disable nodes from right side
+           
               for (let i = middle; i <= end; i++) {
                 const node = array[i];
                 if (!node || !node.ref) continue;

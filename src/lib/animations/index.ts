@@ -1,9 +1,10 @@
 
+import { onAnimationEnds } from '@/types';
 import './style.css'
   export const animate = async (
     ref: HTMLElement | null,
     animation:string,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
+    onAnimationEnds: onAnimationEnds  | null = null,
   onlyOnce = false
   ): Promise<boolean> => {
 
@@ -13,7 +14,7 @@ import './style.css'
       } else {
         const animationEvent = (e: AnimationEvent) => {
           if (onAnimationEnds) {
-            onAnimationEnds(e);
+            onAnimationEnds(e,ref);
           }
   
           if (ref)

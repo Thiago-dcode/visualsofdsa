@@ -3,9 +3,9 @@ export const LINKS: LinkItem[] = [
   {
     name: "Data structures",
     link: "/data-structures",
-    image:{
-      dark:'dsimagedark.png',
-      light:'dsimagelight.png'
+    image: {
+      dark: 'dsimagedark.png',
+      light: 'dsimagelight.png'
     },
     description: <>
       <p> <b>A data structure is a way of organizing and storing data in a computer</b> to enable efficient access and use. It encompasses both the logical or mathematical representation of data and its implementation in a computer program. </p>
@@ -90,9 +90,9 @@ export const LINKS: LinkItem[] = [
   {
     name: "Algorithms",
     link: "/algorithms",
-    image:{
-      dark:'algoimagedark.png',
-      light:'algoimagelight.png'
+    image: {
+      dark: 'algoimagedark.png',
+      light: 'algoimagelight.png'
     },
     description: <>
       Algorithm is a step-by-step procedure for solving a problem or accomplishing a task. In the context of data structures and algorithms, <b>it is a set of well-defined instructions for performing a specific computational task.</b> Algorithms are fundamental to computer science and play a very important role in designing efficient solutions for various problems. Understanding algorithms is essential for anyone interested in mastering data structures and algorithms.
@@ -123,9 +123,40 @@ export const LINKS: LinkItem[] = [
       },
       {
         name: "Sort",
-        link: "/algorithms/sort",
-        children: null,
-        enable: false,
+        link: "#",
+        children: [
+          {
+            name: 'Bubble',
+            enable: true,
+            children: null,
+            link: '/algorithms/sort/bubble'
+          },
+          {
+            name: 'Selection',
+            enable: true,
+            children: null,
+            link: '/algorithms/sort/selection',
+          },
+          {
+            name: 'Insertion',
+            enable: true,
+            children: null,
+            link: '/algorithms/sort/insertion'
+          },
+          {
+            name: 'Merge',
+            enable: true,
+            children: null,
+            link: '/algorithms/sort/merge'
+          },
+          {
+            name: 'Quick',
+            enable: false,
+            children: null,
+            link: '/algorithms/sort/quick'
+          }
+        ],
+        enable: true,
       },
     ],
   },

@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import StaticArrayNodeComponent from "../../components/StaticArrayNodeComponent";
 import Node from "../../../_classes/Node";
 import { Primitive } from "@/types";
-import Position from "../../../../../../lib/classes/Position";
+import Position from "../../../../../../lib/classes/position/Position";
 const nodeElements = (array: Node<Primitive>[] | null) => {
 
   return (

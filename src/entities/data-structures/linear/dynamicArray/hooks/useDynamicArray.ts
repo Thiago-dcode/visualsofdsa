@@ -5,7 +5,7 @@ import useStaticArray from "../../staticArray/hooks/useStaticArray";
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
 import { searchResult, ArrayActions } from "../../staticArray/type";
 import UseStaticArrayAnimation from "../../staticArray/hooks/UseStaticArrayAnimation";
-import Position from "@/lib/classes/Position";
+import Position from "@/lib/classes/position/Position";
 import { DynamicArrayNode } from "../class/DynamicArrayNode";
 import useDynamicArrayAnimation from "./useDynamicArrayAnimation";
 const maxSize = 500;

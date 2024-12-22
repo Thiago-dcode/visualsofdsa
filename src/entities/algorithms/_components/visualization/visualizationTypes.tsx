@@ -1,17 +1,17 @@
 import { Button } from '@/components/ui/button'
 import Title from '@/components/ui/Title'
 import { cn } from '@/lib/utils'
-import { VisualizationAlgorithms } from '@/types'
+import { VisualizationArrays } from '@/types'
 import React from 'react'
 
 export default function VisualizationTypes({ visualizationSelected, setVisualization }: {
-    visualizationSelected: VisualizationAlgorithms,
-    setVisualization: (v: VisualizationAlgorithms) => void
+    visualizationSelected: VisualizationArrays,
+    setVisualization: (v: VisualizationArrays) => void
 }) {
 
     const visualizationTypes: {
         name: string,
-        mode: VisualizationAlgorithms,
+        mode: VisualizationArrays,
 
     }[] = [
             {
