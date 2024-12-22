@@ -1,8 +1,8 @@
-import SortView from '@/entities/algorithms/sort/comparisionBased/view'
+import SortView from '@/entities/algorithms/sort/view'
 import React from 'react'
 
-export default function MergePage() {
+export default function InsertionPage() {
   return (
-    <SortView algoSortComparisionBasedType='insertion' />
+    <SortView algoSortType='insertion' />
   )
 }

@@ -1,4 +1,4 @@
-import Position from "../../../../../lib/classes/Position";
+import Position from "../../../../../lib/classes/position/Position";
 import { Direction, Primitive } from "@/types";
 import { useCallback, useRef, useState } from "react";
 import Node from "../../_classes/Node";

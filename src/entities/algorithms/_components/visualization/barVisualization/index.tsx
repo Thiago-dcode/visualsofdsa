@@ -32,7 +32,7 @@ export default function BarsVisualizationSorted({
     return valueNormalized * (maxBarSize / 2.1);
   };
   const handleSetBarWidth = (newWidth: number) => {
-    console.log(newWidth)
+
     if (newWidth > MAXBARWIDTH) setBarWidth(MAXBARWIDTH);
     else setBarWidth(newWidth)
   }
@@ -74,6 +74,7 @@ export default function BarsVisualizationSorted({
             <Bar
             bgColor={ i % 2 !== 0 ? theme.isDark? 'rgb(242 240 239)': 'rgb(26 25 24 / 0.8)' :'rgb(36 164 130 / 0.7)'}
               left = {i * barWidth}
+              bottom={node.position.y}
               width={barWidth}
               key={`bar-component-${node?.data}-${node?.id}-${i}`}
               height={calculateHeight(node.data)}
@@ -88,7 +89,8 @@ export default function BarsVisualizationSorted({
 
           <Bar
           bgColor={ i % 2 !== 0 ? theme.isDark? 'rgb(242 240 239)': 'rgb(26 25 24 / 0.8)' :'rgb(36 164 130 / 0.7)'}
-            left = {i * barWidth}
+            left = {node.position.x}
+            bottom={0}
             width={barWidth}
             key={`bar-component-${node?.data}-${node?.id}-${i}`}
             height={calculateHeight(node.data)}

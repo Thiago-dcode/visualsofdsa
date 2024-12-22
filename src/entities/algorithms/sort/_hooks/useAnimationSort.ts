@@ -1,62 +1,65 @@
-import { Direction, onAnimationEnds, VisualizationArrays } from "@/types";
-import { useAnimation } from "../../../_hooks/useAnimations";
+import { VisualizationArrays } from "@/types";
+import { useAnimation } from "../../_hooks/useAnimations";
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { animate } from "@/lib/animations";
-import { removePx } from "@/lib/utils";
+import {  removePx } from "@/lib/utils";
 
 export const useAnimationSort = (visualization: VisualizationArrays) => {
   const animations = useAnimation(visualization);
 
   const animationOnSlice = async (
     array: Node<number>[],
-    maxBarSize: number
+    maxBarSize: number,
+    speed: number
   ) => {
-    const onAnimationEnds = (node: Node<number>) => {
-      if (!node.ref) return;
-
+    const onAnimationEnds = (node:Node<number>) => {
+      if(!node.ref)return;
       node.ref.style.bottom = node.position.y + "px";
+    
     };
-    const arrayOfPromiseses = array.map((node) => {
+    const arrayOfPromiseses = array.map((node,i) => {
       const ref = node.ref;
 
       if (!ref) return null;
-
+      ref.style.marginBottom = '50px'
+      ref.scrollIntoView({
+        behavior:'smooth'
+      })
       ref.style.setProperty("--color", "rgba(245 168 69)");
       ref.style.setProperty("--left_from", `${node.position.x}px`);
       ref.style.setProperty("--bottom_from", `${node.position.y}px`);
       ref.style.setProperty("--left_to", `${node.position.x}px`);
-      node.position.y -= maxBarSize;
+      node.position.y =node.position.y - maxBarSize
       ref.style.setProperty("--bottom_to", `${node.position.y}px`);
-      return animate(ref, "move-node 1s", () => {
+      return animate(ref, `move-node ${speed}s`, () => {
+    
         onAnimationEnds(node);
       });
     });
 
     await Promise.all(arrayOfPromiseses);
   };
-const animationOnMerge = async ( nodeA: Node<number>,
-  nodeB: Node<number>,
-  speed: number) =>{
-
+  const animationOnMerge = async (
+    nodeA: Node<number>,
+    nodeB: Node<number>,
+    speed: number
+  ) => {
     if (nodeA.ref && nodeB.ref) {
       const refA = nodeA.ref;
       const refB = nodeB.ref;
-      // refA.style.setProperty("--left_from", `${nodeA.position.x}px`);
-      // refA.style.setProperty("--bottom_from", `${nodeA.position.y}px`);
-      // refA.style.setProperty("--left_to", `${nodeB.position.x}px`);
-      // refA.style.setProperty("--bottom_to", `${nodeA.position.y}px`);
+      refB.style.setProperty("--color", `rgb(245 168 69 )`);
       refB.style.setProperty("--left_from", `${nodeB.position.x}px`);
-      refB.style.setProperty("--left_to", `${nodeA.position.x}px`);
-      refB.style.setProperty("--bottom_from", `${nodeB.position.y}px`);
-      refB.style.setProperty("--bottom_to", `${nodeA.position.y}px`);
-      await animate(refB, `move-node ${speed}s`, () => {})
-      refB.style.backgroundColor = refA.style.backgroundColor;
-      refB.style.left = nodeA.position.x + "px";
       nodeB.position.x = nodeA.position.x;
-
+      refB.style.setProperty("--left_to", `${nodeB.position.x}px`);
+      refB.style.setProperty("--bottom_from", `${nodeB.position.y}px`);
+      nodeB.position.y = nodeA.position.y;
+      refB.style.setProperty("--bottom_to", `${nodeB.position.y}px`);
+      await animate(refB, `move-node ${speed}s`, () => {});
+       
+      refB.style.left = nodeB.position.x + "px";
+      refB.style.bottom = nodeB.position.y + "px";
     }
-
-  }
+  };
   const animateOnSwap = async (
     nodeA: Node<number>,
     nodeB: Node<number>,
@@ -75,7 +78,7 @@ const animationOnMerge = async ( nodeA: Node<number>,
           refB.style.setProperty("--left_from", `${nodeB.position.x}px`);
           refB.style.setProperty("--left_to", `${nodeA.position.x}px`);
           refB.style.setProperty("--bottom_from", `${nodeB.position.y}px`);
-          refB.style.setProperty("--bottom_to", `${nodeB.position.y}px`);
+          refB.style.setProperty("--bottom_to", `${nodeA.position.y}px`);
 
           break;
 
@@ -148,13 +151,18 @@ const animationOnMerge = async ( nodeA: Node<number>,
       switch (visualization) {
         case "bars":
           const tempAColor = refA.style.backgroundColor;
-          const tempAPosition = nodeA.position.x;
+          const tempXAPosition = nodeA.position.x;
+          const tempYAPosition = nodeA.position.y;
           refA.style.left = nodeB.position.x + "px";
+          refA.style.bottom = nodeB.position.y + "px";
           refA.style.backgroundColor = refB.style.backgroundColor;
           nodeA.position.x = nodeB.position.x;
+          nodeA.position.y = nodeB.position.y;
           refB.style.backgroundColor = tempAColor;
-          refB.style.left = tempAPosition + "px";
-          nodeB.position.x = tempAPosition;
+          refB.style.left = tempXAPosition + "px";
+          refB.style.bottom = tempYAPosition + "px";
+          nodeB.position.x = tempXAPosition;
+          nodeB.position.y = tempYAPosition;
           break;
 
         case "memoryRam":
@@ -183,6 +191,6 @@ const animationOnMerge = async ( nodeA: Node<number>,
     ...animations,
     animateOnSwap,
     animationOnSlice,
-    animationOnMerge
+    animationOnMerge,
   };
 };

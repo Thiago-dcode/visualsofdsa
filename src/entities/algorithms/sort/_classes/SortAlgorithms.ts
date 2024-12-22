@@ -93,7 +93,8 @@ export class SortAlgorithms {
     array: Node<number>[],
     direction: Direction = "ascending",
     onSlice?: ClosureSlice,
-    onMerge?: ClosureCompare
+    onMerge?: ClosureCompare,
+    onLoop?: () => void
   ): Promise<Node<number>[]> {
     if (array.length <= 1) return array;
     const merge = async (
@@ -106,6 +107,7 @@ export class SortAlgorithms {
       let r = 0;
 
       while (l < leftArray.length || r < rightArray.length) {
+        if (onLoop) onLoop();
         const leftNode = leftArray[l];
         const rightNode = rightArray[r];
         if (
@@ -125,9 +127,17 @@ export class SortAlgorithms {
         i++;
       }
     };
+    const leftArray: Node<number>[] = [];
+    const rightArray: Node<number>[] = [];
     const middle = Math.floor(array.length / 2);
-    const leftArray = array.slice(0, middle);
-    const rightArray = array.slice(middle);
+    for (let i = 0; i < array.length; i++) {
+      if (onLoop) onLoop();
+      if (i < middle) {
+        leftArray.push(array[i].clone(true));
+      } else {
+        rightArray.push(array[i].clone(true));
+      }
+    }
     if (onSlice) await onSlice(leftArray, "left");
     await this.merge(leftArray, direction, onSlice, onMerge);
     if (onSlice) await onSlice(rightArray, "right");

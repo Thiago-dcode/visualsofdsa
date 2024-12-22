@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LinkedList from "../classes/LinkedList";
 import { Primitive } from "@/types";
-import Position from "@/lib/classes/Position";
+import Position from "@/lib/classes/position/Position";
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
 import { toast } from "sonner";
 import "../style.css";

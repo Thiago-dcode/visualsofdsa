@@ -1,9 +1,9 @@
 
-import ComparisionBasedSortView from '@/entities/algorithms/sort/comparisionBased/view'
+import SortView from '@/entities/algorithms/sort/view'
 import React from 'react'
 
 export default function BubblePage() {
   return (
-    <ComparisionBasedSortView algoSortComparisionBasedType='bubble' />
+    <SortView algoSortType='bubble' />
   )
 }

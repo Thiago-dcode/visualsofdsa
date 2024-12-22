@@ -18,15 +18,15 @@ import Node from '@/entities/data-structures/linear/_classes/Node'
 import { PopOverComponent } from '@/components/ui/PopOverComponent'
 import { Button } from '@/components/ui/button'
 import { Wrench } from 'lucide-react'
-import RenderVisualization from '../../_components/visualization/renderVisualization'
-import VisualizationTypes from '../../_components/visualization/visualizationTypes'
+import RenderVisualization from '../_components/visualization/renderVisualization'
+import VisualizationTypes from '../_components/visualization/visualizationTypes'
 import { config } from '@/config'
-import { AlgoSortComparisionBasedType } from '../../types'
+import { AlgoSortType } from '../types'
 import { useSortAlgorithms } from './_hooks/useSortAlgorithms'
 import useResponsive from '@/hooks/useResponsive'
 
-export default function ComparisionBasedSortView({ algoSortComparisionBasedType }: {
-  algoSortComparisionBasedType?: AlgoSortComparisionBasedType
+export default function SortView({ algoSortType }: {
+  algoSortType: AlgoSortType
 }) {
   const maxBarSize = useRef(650);
   const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500)
@@ -35,7 +35,7 @@ export default function ComparisionBasedSortView({ algoSortComparisionBasedType 
   const [direction, setDirection] = useState<Direction>('ascending')
   const [open, setOpen] = useState(false);
   const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam');
-  const { bubble, selection, insertion, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
+  const { bubble, selection, insertion, merge, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const handleSetVisualizationMode = (vimValue: VisualizationArrays) => {
@@ -52,16 +52,18 @@ export default function ComparisionBasedSortView({ algoSortComparisionBasedType 
       toast.info('Array is already sorted');
 
     } else {
-      switch (algoSortComparisionBasedType) {
+      switch (algoSortType) {
         case 'bubble':
           await bubble();
           break;
         case 'selection':
           await selection();
           break;
-
         case 'insertion':
           await insertion();
+          break;
+        case 'merge':
+          await merge(maxBarSize.current);
           break;
       }
     }
@@ -108,7 +110,7 @@ export default function ComparisionBasedSortView({ algoSortComparisionBasedType 
   }
   const renderInfo = () => {
 
-    switch (algoSortComparisionBasedType) {
+    switch (algoSortType) {
 
       case 'bubble':
         return (<div className='flex items-center justify-center gap-2'>
@@ -217,12 +219,48 @@ export default function ComparisionBasedSortView({ algoSortComparisionBasedType 
           } className="self-start" />
 
         </div>)
+      case 'merge':
+        return (<div className='flex items-center justify-center gap-2'>
+          <Title title={'Insertion sort'} />
+          <Info title="Insertion sort" text={<article>
+            <header>
+              <p>
+                Insertion Sort is a <b>simple and intuitive sorting algorithm</b> that works by building the final sorted array one element at a time. It maintains a sorted region of the array and repeatedly inserts the next unsorted element into its correct position within the sorted region.
+              </p>
+            </header>
+            <br />
+            <main>
+              <p>
+                **Insertion Sort is particularly efficient for small datasets or arrays that are already partially sorted, as it minimizes the number of required comparisons and shifts.
+              </p>
+              <br />
+              <div>
+                <p>
+                  For example, during each pass, the algorithm takes the first element of the unsorted region and compares it with the elements in the sorted region, moving elements one position to the right until the correct position is found. The element is then inserted into its correct position, and the sorted region expands.
+                </p>
+                <p>
+                  This behavior makes Insertion Sort adaptive, meaning it performs fewer operations on nearly sorted arrays. It is often used as a building block for more complex algorithms or for sorting small subsets of data.
+                </p>
+              </div>
+            </main>
+            <br />
+            <footer>
+              <p>
+                In conclusion, the time complexity of Insertion Sort is <b>O(n²)</b> in the worst case but <b>O(n)</b> in the best case, such as when the array is already sorted. Its simplicity, adaptability, and in-place sorting nature make it suitable for small or nearly sorted datasets, despite its limitations for large arrays.
+              </p>
+            </footer>
+          </article>
+
+
+          } className="self-start" />
+
+        </div>)
     }
   }
 
   return (
 
-    <Main>
+    <Main className='pb-20'>
       {renderInfo()}
       <OperationsContainer open={open} setOpen={setOpen}>
 

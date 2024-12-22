@@ -12,7 +12,7 @@ import {
   removePx,
 } from "./utils";
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import Position from "./classes/Position";
+import Position from "./classes/position/Position";
 
 describe("testing getSpeed", () => {
   it("should return the proper number", () => {

@@ -1,6 +1,6 @@
 import { Primitive } from "@/types";
 import LinkedListNode from "./LinkedListNode";
-import Position from "../../../../../lib/classes/Position";
+import Position from "../../../../../lib/classes/position/Position";
 import IndexOutOfBoundsError from "../../../../../lib/errors/IndexOutOfTheBondError";
 import List from "../../_classes/List";
 type callback =

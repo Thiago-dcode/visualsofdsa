@@ -1,5 +1,5 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import Position from "@/lib/classes/Position";
+import Position from "@/lib/classes/position/Position";
 import { createArrayOfNodes, random } from "@/lib/utils";
 import SearchAlgorithm from "./SearchAlgorithm";
 import { Primitive } from "@/types";

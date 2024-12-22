@@ -1,6 +1,6 @@
 import { Primitive } from "@/types";
 import LinearDs from "../../_classes/LinearDs";
-import Position from "../../../../../lib/classes/Position";
+import Position from "../../../../../lib/classes/position/Position";
 import Node from "../../_classes/Node";
 import LinkedListNode from "../../linkedList/classes/LinkedListNode";
 

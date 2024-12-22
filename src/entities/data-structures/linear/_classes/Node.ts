@@ -1,6 +1,7 @@
 import { Primitive, Ref } from "@/types";
-import Position from "@/lib/classes/Position";
+
 import Memory from "@/lib/classes/Memory";
+import Position from "@/lib/classes/position/Position";
 
 export default class Node<T extends Primitive> extends Memory {
   private _data: T;
@@ -8,6 +9,7 @@ export default class Node<T extends Primitive> extends Memory {
   private static _id: number = 0;
   private __id: number;
   private _position: Position;
+
   constructor(data: T, position: Position, ref: Ref = null) {
     super();
     this._ref = ref;
@@ -33,12 +35,12 @@ export default class Node<T extends Primitive> extends Memory {
   set ref(ref: Ref) {
     this._ref = ref;
   }
-    
+
   // Setter for the value
   set data(data: T) {
     this._data = data;
   }
-  clone(){
-    return new Node(this.data,this.position,null)
+  clone(withRef = false) {
+    return new Node(this.data, new Position(this.position.x,this.position.y), withRef ? this.ref : null);
   }
 }

@@ -1,9 +1,9 @@
 
-import ComparisionBasedSortView from '@/entities/algorithms/sort/comparisionBased/view'
+import SortView from '@/entities/algorithms/sort/view'
 import React from 'react'
 
 export default function SelectionPage() {
   return (
-    <ComparisionBasedSortView algoSortComparisionBasedType='selection' />
+    <SortView algoSortType='selection' />
   )
 }

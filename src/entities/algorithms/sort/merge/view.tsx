@@ -21,18 +21,14 @@ import useResponsive from '@/hooks/useResponsive'
 import BarVisualization from '../../_components/visualization/barVisualization'
 import { SortAlgorithms } from '../_classes/SortAlgorithms'
 import { ClosureCompare, ClosureSlice } from '../types'
-import Bar from '../../_components/visualization/barVisualization/bar'
-import { delay } from '@/lib/utils'
-import { animate } from '@/lib/animations'
-import { useAnimation } from '../../_hooks/useAnimations'
-import { useAnimationSort } from '../comparisionBased/_hooks/useAnimationSort'
+
+import { useAnimationSort } from '../_hooks/useAnimationSort'
 
 export default function MergeSortView() {
-  const { animationOnSlice, animateSound,animationOnMerge } = useAnimationSort('bars')
+  const { animationOnSlice, animateSound, animationOnMerge, animateOnSwap } = useAnimationSort('bars')
   const maxBarSize = useRef(500);
   const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500);
-  const [arrayClone, setArrayClone] = useState<Node<number>[] | null>(null)
-  console.log(arrayClone)
+  const [arrayClone, setArrayClone] = useState<Node<number>[] | null>(null);
   const [speed, setSpeed] = useState<speed>(1);
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const [direction, setDirection] = useState<Direction>('ascending')
@@ -51,16 +47,7 @@ export default function MergeSortView() {
       return;
     }
 
-    const onSlice: ClosureSlice = async (array, side) => {
-
-       await animationOnSlice(array,maxBarSize.current)
-    }
-    const onMerge:ClosureCompare = async (nodeA,nodeB)=>{
-
-      await animationOnMerge(nodeA,nodeB,1)
-
-    }
-    await SortAlgorithms.merge(array as Node<number>[], direction, onSlice,onMerge)
+ 
     setIsSorted(true)
     setAnimationRunning(false);
 
@@ -89,9 +76,9 @@ export default function MergeSortView() {
     const arraySize = getValue();
     if (arraySize !== null) {
       const _array = await createUnsorted(arraySize) as Node<number>[]
-      setArrayClone(_array.map(node=>node.clone()))
+      // setArrayClone(_array.map(node=>node.clone()))
     }
-     
+
 
     setAnimationRunning(false)
     resetValue();

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import LinkedList from "../../classes/LinkedList";
 import Node from "../../../_classes/Node";
 import LinkedListNode from "../../classes/LinkedListNode";
-import Position from "@/lib/classes/Position";
+import Position from "@/lib/classes/position/Position";
 import { delay } from "@/lib/utils";
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
 import { Primitive } from "@/types";

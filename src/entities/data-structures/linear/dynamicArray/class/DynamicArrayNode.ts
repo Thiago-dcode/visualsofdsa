@@ -1,6 +1,6 @@
 import { MemorySize, Primitive } from "@/types";
 import Node from "../../_classes/Node";
-import Position from "@/lib/classes/Position";
+import Position from "@/lib/classes/position/Position";
 
 export class DynamicArrayNode<T extends Primitive> extends Node<T> {
 

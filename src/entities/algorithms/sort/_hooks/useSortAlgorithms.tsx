@@ -1,14 +1,14 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { Direction, speed, VisualizationArrays } from "@/types";
-import { SortAlgorithms } from "../../_classes/SortAlgorithms";
-import { ClosureCompare, ClosureSlice } from "../../types";
+import { SortAlgorithms } from "../_classes/SortAlgorithms";
+import { ClosureCompare, ClosureSlice } from "../types";
 import { ReactNode, useEffect, useRef, useState } from "react";
 
-import {  getMaxInAnArrayOfNodes, getMinInAnArrayOfNodes } from "@/lib/utils";
+import { getMaxInAnArrayOfNodes, getMinInAnArrayOfNodes } from "@/lib/utils";
 import { useAnimationSort } from "./useAnimationSort";
-import { AlgoSortComparisionBasedType } from "../../../types";
+import { AlgoSortType } from "../../types";
 import { toast } from "sonner";
-const getSpeed = (type: AlgoSortComparisionBasedType, speed: number) => {
+const getSpeed = (type: AlgoSortType, speed: number) => {
 
   switch (speed) {
     case 1:
@@ -19,6 +19,8 @@ const getSpeed = (type: AlgoSortComparisionBasedType, speed: number) => {
           return 0.325;
         case "insertion":
           return 0.35;
+        case "merge":
+          return 0.7;
         default:
           0.3;
       }
@@ -30,6 +32,8 @@ const getSpeed = (type: AlgoSortComparisionBasedType, speed: number) => {
           return 0.225;
         case "insertion":
           return 0.275;
+        case "merge":
+          return 0.4;
         default:
           0.2;
       }
@@ -41,6 +45,8 @@ const getSpeed = (type: AlgoSortComparisionBasedType, speed: number) => {
           return 0.06;
         case "insertion":
           return 0.08;
+        case "merge":
+          return 0.2;
         default:
           0.1;
       }
@@ -59,7 +65,7 @@ export const useSortAlgorithms = (
     minArrayValue = getMinInAnArrayOfNodes(array);
     maxArrayValue = getMaxInAnArrayOfNodes(array);
   }
-  const { animateNode, animateSound, animateOnSwap,animationOnSlice } =
+  const { animateNode, animateSound, animateOnSwap, animationOnSlice, animationOnMerge } =
     useAnimationSort(visualization);
   const [isSorted, setIsSorted] = useState(false);
   const [message, setMessage] = useState<{
@@ -68,7 +74,7 @@ export const useSortAlgorithms = (
   } | null>(null)
   const steps = useRef(0);
 
-  const comparisionBased = async (type: AlgoSortComparisionBasedType) => {
+  const comparisionBased = async (type: AlgoSortType) => {
     const onCompare: ClosureCompare = async (nodeA, nodeB) => {
       steps.current++;
       try {
@@ -77,7 +83,7 @@ export const useSortAlgorithms = (
           if (type !== 'bubble') animateSound(nodeB.data, minArrayValue, maxArrayValue);
           await Promise.all([
             animateNode(nodeA.ref, 'search', getSpeed(type, speed)),
-            animateNode(nodeB.ref, type !== 'bubble' ? "search" : 'select', getSpeed(type, speed)),
+            animateNode(nodeB.ref, type !== 'selection' ? "search" : 'select', getSpeed(type, speed)),
           ]);
         }
       } catch (error) {
@@ -86,8 +92,8 @@ export const useSortAlgorithms = (
     };
     const onSwap: ClosureCompare = async (nodeA, nodeB) => {
       try {
-        // animateSound(nodeA.data, minArrayValue, maxArrayValue);
-        // animateSound(nodeB.data, minArrayValue, maxArrayValue);
+        animateSound(nodeA.data, minArrayValue, maxArrayValue);
+        animateSound(nodeB.data, minArrayValue, maxArrayValue);
         await animateOnSwap(
           nodeA,
           nodeB,
@@ -124,7 +130,23 @@ export const useSortAlgorithms = (
 
     await comparisionBased('insertion');
   };
-  
+
+  const merge = async (maxBarSize: number) => {
+    const onSlice: ClosureSlice = async (array) => {
+      steps.current += array.length
+
+      await animationOnSlice(array, maxBarSize, getSpeed('merge', speed));
+
+    }
+    const onMerge: ClosureCompare = async (nodeA, nodeB) => {
+      steps.current++;
+      await animationOnMerge(nodeA, nodeB, getSpeed('merge', speed));
+
+    }
+    // setArrayClone(array as Node<number>[]);
+    await SortAlgorithms.merge(array as Node<number>[], direction, onSlice, onMerge)
+    setIsSorted(true);
+  }
 
   const setUnsorted = () => {
     setIsSorted(false);
@@ -147,7 +169,7 @@ export const useSortAlgorithms = (
   return {
     bubble,
     selection,
-    
+    merge,
     insertion,
     message,
     isSorted,

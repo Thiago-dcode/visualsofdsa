@@ -3,23 +3,24 @@ import Node from '@/entities/data-structures/linear/_classes/Node'
 import { cn, copyToClipboard } from '@/lib/utils';
 import React, { useCallback } from 'react'
 
-export default function Bar({ height, width = 20, node, className, left, bgColor, onRefSet }: {
+export default function Bar({ height, bottom, width = 20, node, className, left, bgColor }: {
   left: number,
+  bottom: number,
   height: number,
   width?: number,
   node: Node<number>,
   className?: string,
   bgColor: string,
-  onRefSet?: (node: Node<number>) => Promise<void>
+
 }) {
   const setRef = useCallback(async (ref: HTMLElement | HTMLDivElement | null) => {
     node.position.x = left;
     if (!ref) return;
     node.ref = ref;
-  
-    if (onRefSet) await onRefSet(node)
 
-  }, [node, left])
+
+
+  }, [])
 
   return (
     <HoverCard openDelay={100} closeDelay={100} >
@@ -28,8 +29,8 @@ export default function Bar({ height, width = 20, node, className, left, bgColor
 
       }} >
         <div style={{
-          left: left,
-          bottom: 0,
+          left,
+          bottom,
           height: Math.abs(height) + 'px',
           width: width + 'px',
           maxWidth: '80px',
@@ -39,7 +40,7 @@ export default function Bar({ height, width = 20, node, className, left, bgColor
           setRef(e)
         }} className={cn('border  dark:border-app-off-white border-app-off-black absolute', className)}></div>
       </HoverCardTrigger>
-      <HoverCardContent className='font-bold dark:bg-app-off-white bg-app-bg-black dark:text(-app-bg-black text-app-off-white'>
+      <HoverCardContent className='font-bold dark:bg-app-off-white bg-app-bg-black dark:text-app-bg-black text-app-off-white'>
         <div>{node.data}</div>
       </HoverCardContent>
     </HoverCard>

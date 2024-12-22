@@ -4,7 +4,7 @@ import { type ClassValue, clsx } from "clsx";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { v4 as uuid4 } from "uuid";
-import PositionClass from "./classes/Position";
+import PositionClass from "./classes/position/Position";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
