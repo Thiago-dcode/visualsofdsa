@@ -10,27 +10,29 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
   const animationOnSlice = async (
     array: Node<number>[],
     maxBarSize: number,
-    speed: number
+    speed: number,
+    beforeAnimation=async(node:Node<number>)=>{}
   ) => {
     const onAnimationEnds = (node:Node<number>) => {
       if(!node.ref)return;
       node.ref.style.bottom = node.position.y + "px";
+      node.ref.scrollIntoView({
+        behavior:'smooth'
+      })
     
     };
     const arrayOfPromiseses = array.map((node,i) => {
       const ref = node.ref;
 
       if (!ref) return null;
-      ref.style.marginBottom = '50px'
-      ref.scrollIntoView({
-        behavior:'smooth'
-      })
+ 
       ref.style.setProperty("--color", "rgba(245 168 69)");
       ref.style.setProperty("--left_from", `${node.position.x}px`);
       ref.style.setProperty("--bottom_from", `${node.position.y}px`);
       ref.style.setProperty("--left_to", `${node.position.x}px`);
-      node.position.y =node.position.y - maxBarSize
+      node.position.y =node.position.y -( maxBarSize+1)
       ref.style.setProperty("--bottom_to", `${node.position.y}px`);
+      beforeAnimation(node)
       return animate(ref, `move-node ${speed}s`, () => {
     
         onAnimationEnds(node);
@@ -54,6 +56,7 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
       refB.style.setProperty("--bottom_from", `${nodeB.position.y}px`);
       nodeB.position.y = nodeA.position.y;
       refB.style.setProperty("--bottom_to", `${nodeB.position.y}px`);
+    
       await animate(refB, `move-node ${speed}s`, () => {});
        
       refB.style.left = nodeB.position.x + "px";

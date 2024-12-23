@@ -28,7 +28,7 @@ import useResponsive from '@/hooks/useResponsive'
 export default function SortView({ algoSortType }: {
   algoSortType: AlgoSortType
 }) {
-  const maxBarSize = useRef(650);
+  const maxBarSize = useRef(algoSortType !== 'merge' ? 650 : 300);
   const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500)
   const [speed, setSpeed] = useState<speed>(1);
   const [isAnimationRunning, setAnimationRunning] = useState(false);
@@ -221,35 +221,39 @@ export default function SortView({ algoSortType }: {
         </div>)
       case 'merge':
         return (<div className='flex items-center justify-center gap-2'>
-          <Title title={'Insertion sort'} />
-          <Info title="Insertion sort" text={<article>
+          <Title title={'Merge sort'} />
+          <Info title="Merge sort" text={<article>
             <header>
               <p>
-                Insertion Sort is a <b>simple and intuitive sorting algorithm</b> that works by building the final sorted array one element at a time. It maintains a sorted region of the array and repeatedly inserts the next unsorted element into its correct position within the sorted region.
+                <strong>Merge Sort</strong> is a <b>divide-and-conquer sorting algorithm</b> that splits the input array into smaller subarrays, sorts each subarray, and then merges them back together in sorted order. It is highly efficient for <strong>large datasets</strong> due to its <b>predictable time complexity</b> and <b>suitability for parallel processing</b>.
               </p>
             </header>
             <br />
             <main>
               <p>
-                **Insertion Sort is particularly efficient for small datasets or arrays that are already partially sorted, as it minimizes the number of required comparisons and shifts.
+                **Merge Sort works by <b>recursively dividing</b> the array into two halves until each subarray contains only a single element (or is empty). These smaller arrays are inherently sorted, and the algorithm proceeds to <strong>merge</strong> them in a way that maintains sorted order.
               </p>
               <br />
               <div>
                 <p>
-                  For example, during each pass, the algorithm takes the first element of the unsorted region and compares it with the elements in the sorted region, moving elements one position to the right until the correct position is found. The element is then inserted into its correct position, and the sorted region expands.
+                  For example, if the array is <code>[38, 27, 43, 3, 9, 82, 10]</code>, Merge Sort first <b>divides</b> it into two halves: <code>[38, 27, 43]</code> and <code>[3, 9, 82, 10]</code>. Each of these halves is further divided until individual elements are isolated: <code>[38]</code>, <code>[27]</code>, <code>[43]</code>, and so on. The algorithm then <b>merges</b> these elements back together in sorted order, resulting in <code>[3, 9, 10, 27, 38, 43, 82]</code>.
                 </p>
                 <p>
-                  This behavior makes Insertion Sort adaptive, meaning it performs fewer operations on nearly sorted arrays. It is often used as a building block for more complex algorithms or for sorting small subsets of data.
+                  During the <strong>merging phase</strong>, Merge Sort <b>compares</b> the smallest elements of each subarray and <b>appends</b> the smaller element to the resulting merged array. This process is repeated until all elements are merged. The <strong>merging step</strong> is key to the algorithm&apos;s efficiency, as it ensures that each merge operation processes only the required comparisons and shifts.
+                </p>
+                <p>
+                  Merge Sort is a <b>stable algorithm</b>, meaning it preserves the <strong>relative order</strong> of elements with equal values. This property, combined with its <b>predictable performance</b>, makes it a popular choice for sorting <strong>large datasets</strong> or implementing complex systems like database queries and <b>external sorting</b> for data that exceeds memory capacity.
                 </p>
               </div>
             </main>
             <br />
             <footer>
               <p>
-                In conclusion, the time complexity of Insertion Sort is <b>O(n²)</b> in the worst case but <b>O(n)</b> in the best case, such as when the array is already sorted. Its simplicity, adaptability, and in-place sorting nature make it suitable for small or nearly sorted datasets, despite its limitations for large arrays.
+                In conclusion, Merge Sort has a consistent <b>time complexity</b> of <strong>O(n log n)</strong> for all cases—best, average, and worst. Its <b>space complexity</b> is <strong>O(n)</strong> due to the additional arrays used during the merging process. While its memory usage can be a limitation, Merge Sort&apos;s <b>stability</b> and <strong>efficiency</strong> make it a powerful tool for sorting large datasets, particularly when the data cannot fit entirely in memory.
               </p>
             </footer>
           </article>
+
 
 
           } className="self-start" />
