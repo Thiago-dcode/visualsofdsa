@@ -20,7 +20,7 @@ const getSpeed = (type: AlgoSortType, speed: number) => {
         case "insertion":
           return 0.35;
         case "merge":
-          return 0.7;
+          return 0.5;
         default:
           0.3;
       }
@@ -33,7 +33,7 @@ const getSpeed = (type: AlgoSortType, speed: number) => {
         case "insertion":
           return 0.275;
         case "merge":
-          return 0.4;
+          return 0.3;
         default:
           0.2;
       }
@@ -46,7 +46,7 @@ const getSpeed = (type: AlgoSortType, speed: number) => {
         case "insertion":
           return 0.08;
         case "merge":
-          return 0.2;
+          return 0.1;
         default:
           0.1;
       }
@@ -135,11 +135,15 @@ export const useSortAlgorithms = (
     const onSlice: ClosureSlice = async (array) => {
       steps.current += array.length
 
-      await animationOnSlice(array, maxBarSize, getSpeed('merge', speed));
+      await animationOnSlice(array, maxBarSize, getSpeed('merge', speed),async(node)=>{
+          animateSound(node.data,minArrayValue,maxArrayValue)
+
+      });
 
     }
     const onMerge: ClosureCompare = async (nodeA, nodeB) => {
       steps.current++;
+      animateSound(nodeB.data,minArrayValue,maxArrayValue)
       await animationOnMerge(nodeA, nodeB, getSpeed('merge', speed));
 
     }

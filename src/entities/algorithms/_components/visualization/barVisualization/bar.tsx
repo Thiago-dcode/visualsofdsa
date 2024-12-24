@@ -15,6 +15,7 @@ export default function Bar({ height, bottom, width = 20, node, className, left,
 }) {
   const setRef = useCallback(async (ref: HTMLElement | HTMLDivElement | null) => {
     node.position.x = left;
+    node.color =bgColor;
     if (!ref) return;
     node.ref = ref;
 
