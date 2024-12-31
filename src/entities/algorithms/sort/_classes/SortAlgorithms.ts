@@ -9,12 +9,14 @@ export class SortAlgorithms {
     onCompare?: ClosureCompare,
     onSwap?: ClosureCompare
   ) {
-    if (array.length <= 1) return array;
+    if (array.length <= 1) return 1;
+    let steps = 0;
     let swapped = false;
     let end = array.length - 1;
     for (let i = 0; i < array.length; i++) {
       swapped = false;
       for (let j = 0; j < end; j++) {
+        steps++;
         const temp = array[j + 1];
         if (onCompare) await onCompare(array[j], array[j + 1]);
         if (
@@ -31,7 +33,7 @@ export class SortAlgorithms {
       end--;
     }
 
-    return array;
+    return steps;
   }
 
   public static async selection(
@@ -39,11 +41,13 @@ export class SortAlgorithms {
     direction: Direction = "ascending",
     onCompare?: ClosureCompare,
     onSwap?: ClosureCompare
-  ): Promise<Node<number>[]> {
-    if (array.length <= 1) return array;
+  ) {
+    if (array.length <= 1) return 1;
+    let steps = 0;
     for (let i = 0; i < array.length; i++) {
       let indexToCompare = i;
       for (let j = i + 1; j < array.length; j++) {
+        steps++;
         if (onCompare) await onCompare(array[j], array[indexToCompare]);
         if (
           (direction === "ascending" &&
@@ -61,7 +65,7 @@ export class SortAlgorithms {
         array[indexToCompare] = temp;
       }
     }
-    return array;
+    return steps;
   }
 
   public static async insertion(
@@ -70,8 +74,11 @@ export class SortAlgorithms {
     onCompare?: ClosureCompare,
     onShift?: ClosureCompare
   ) {
+    if (array.length <= 1) return 1;
+    let steps = 0;
     for (let i = 0; i < array.length - 1; i++) {
       for (let j = i; j >= 0; j--) {
+        steps++;
         const temp = array[j + 1];
         const left = array[j];
         if (onCompare) await onCompare(array[j], array[j + 1]);
@@ -86,64 +93,72 @@ export class SortAlgorithms {
       }
     }
 
-    return array;
+    return steps;
   }
 
   public static async merge(
     array: Node<number>[],
     direction: Direction = "ascending",
     onSlice?: ClosureSlice,
-    onMerge?: ClosureCompare,
-    onLoop?: () => Promise<void>
-  ): Promise<Node<number>[]> {
-    if (array.length <= 1) return array;
-    const merge = async (
-      leftArray: Node<number>[],
-      rightArray: Node<number>[],
-      subArray: Node<number>[]
+    onMerge?: ClosureCompare
+  ) {
+    let steps = 0;
+    if (array.length <= 1) return 1;
+    const _merge = async (
+      array: Node<number>[],
+      onSlice?: ClosureSlice,
+      onMerge?: ClosureCompare
     ) => {
-      let i = 0;
-      let l = 0;
-      let r = 0;
+      if (array.length <= 1) return;
+      const merge = async (
+        leftArray: Node<number>[],
+        rightArray: Node<number>[],
+        subArray: Node<number>[]
+      ) => {
+        let i = 0;
+        let l = 0;
+        let r = 0;
 
-      while (l < leftArray.length || r < rightArray.length) {
-        if (onLoop) await onLoop();
-        const leftNode = leftArray[l];
-        const rightNode = rightArray[r];
-        if (
-          !rightNode ||
-          (leftNode &&
-            ((direction === "ascending" && leftNode.data < rightNode.data) ||
-              (direction === "descending" && leftNode.data > rightNode.data)))
-        ) {
-          if (onMerge) await onMerge(subArray[i], leftNode);
-          l++;
-          subArray[i] = leftNode;
-        } else {
-          if (onMerge) await onMerge(subArray[i], rightNode);
-          r++;
-          subArray[i] = rightNode;
+        while (l < leftArray.length || r < rightArray.length) {
+          steps++;
+          const leftNode = leftArray[l];
+          const rightNode = rightArray[r];
+          if (
+            !rightNode ||
+            (leftNode &&
+              ((direction === "ascending" && leftNode.data < rightNode.data) ||
+                (direction === "descending" && leftNode.data > rightNode.data)))
+          ) {
+            if (onMerge) await onMerge(subArray[i], leftNode);
+            l++;
+            subArray[i] = leftNode;
+          } else {
+            if (onMerge) await onMerge(subArray[i], rightNode);
+            r++;
+            subArray[i] = rightNode;
+          }
+          i++;
         }
-        i++;
+      };
+      const leftArray: Node<number>[] = [];
+      const rightArray: Node<number>[] = [];
+      const middle = Math.floor(array.length / 2);
+      for (let i = 0; i < array.length; i++) {
+        steps++;
+        if (i < middle) {
+          leftArray.push(array[i].clone(true));
+        } else {
+          rightArray.push(array[i].clone(true));
+        }
       }
+      if (onSlice) await onSlice(leftArray, "left");
+      await _merge(leftArray, onSlice, onMerge);
+      if (onSlice) await onSlice(rightArray, "right");
+      await _merge(rightArray, onSlice, onMerge);
+      await merge(leftArray, rightArray, array);
     };
-    const leftArray: Node<number>[] = [];
-    const rightArray: Node<number>[] = [];
-    const middle = Math.floor(array.length / 2);
-    for (let i = 0; i < array.length; i++) {
-      if (onLoop) await onLoop();
-      if (i < middle) {
-        leftArray.push(array[i].clone(true));
-      } else {
-        rightArray.push(array[i].clone(true));
-      }
-    }
-    if (onSlice) await onSlice(leftArray, "left");
-    await this.merge(leftArray, direction, onSlice, onMerge);
-    if (onSlice) await onSlice(rightArray, "right");
-    await this.merge(rightArray, direction, onSlice, onMerge);
-    await merge(leftArray, rightArray, array);
-    return array;
+    await _merge(array, onSlice, onMerge);
+    return steps;
   }
   public static async quick(
     array: Node<number>[],
@@ -152,13 +167,16 @@ export class SortAlgorithms {
     onSwap?: ClosureCompare,
     onCompare?: ClosureCompare
   ) {
+    let steps = 0;
+    if (array.length <= 1) return 1;
     const quick = async (startIndex: number, endIndex: number) => {
       if (endIndex <= startIndex) return;
       let i = startIndex - 1;
       const pivot = array[endIndex];
       if (onPivot) await onPivot(pivot);
       for (let j = startIndex; j < endIndex; j++) {
-        if (onCompare) await onCompare (array[i], array[j]);
+        steps++;
+        if (onCompare) await onCompare(array[i], array[j]);
         if (
           (direction === "ascending" && array[j].data < pivot.data) ||
           (direction === "descending" && array[j].data > pivot.data)
@@ -179,6 +197,6 @@ export class SortAlgorithms {
       await quick(i + 1, endIndex);
     };
     await quick(0, array.length - 1);
-    return array;
+    return steps;
   }
 }

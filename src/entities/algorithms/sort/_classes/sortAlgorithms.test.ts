@@ -22,110 +22,116 @@ const testIfIsSorted = (
 };
 
 describe("Testing bubble", () => {
-  it("Should return a empty array", async () => {
-    const array = await SortAlgorithms.bubble([]);
+  it("Should return an empty array", async () => {
+    const array:Node<number>[] = [];
+     await SortAlgorithms.bubble(array);
 
     expect(array?.length).toBe(0);
   });
+
   it("Should sort ascending", async () => {
-    const array = await SortAlgorithms.bubble(
-      createRandomUniqueArrayOfNodes(200, [0, 15000])
-    );
+    const array = createRandomUniqueArrayOfNodes(200, [0, 15000]);
+     await SortAlgorithms.bubble(array);
+
     testIfIsSorted(array, "ascending");
   });
+
   it("Should sort descending", async () => {
-    const array = await SortAlgorithms.bubble(
-      createRandomUniqueArrayOfNodes(200, [0, 15000]),"descending"
-    );
+    const array = createRandomUniqueArrayOfNodes(200, [0, 15000]);
+     await SortAlgorithms.bubble(array, "descending");
+
     testIfIsSorted(array, "descending");
   });
 });
+
 describe("Testing selection", () => {
-  it("Should return a empty array", async () => {
-    const array = await SortAlgorithms.selection([]);
+  it("Should return an empty array", async () => {
+    const array:Node<number>[] = [];
+     await SortAlgorithms.selection(array);
 
     expect(array?.length).toBe(0);
   });
+
   it("Should sort ascending", async () => {
-    const array = await SortAlgorithms.selection(
-      createRandomUniqueArrayOfNodes(600, [0, 15000])
-    );
+    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+     await SortAlgorithms.selection(array);
+
     testIfIsSorted(array, "ascending");
   });
+
   it("Should sort descending", async () => {
-    const array = await SortAlgorithms.selection(
-      createRandomUniqueArrayOfNodes(600, [0, 15000]),'descending'
-    );
+    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+     await SortAlgorithms.selection(array, "descending");
+
     testIfIsSorted(array, "descending");
   });
-
-  
 });
 
-describe("Testing Insertion", () => {
-  it("Should return a empty array", async () => {
-    const array = await SortAlgorithms.insertion([]);
+describe("Testing insertion", () => {
+  it("Should return an empty array", async () => {
+    const array:Node<number>[] = [];
+     await SortAlgorithms.insertion(array);
 
     expect(array?.length).toBe(0);
   });
+
   it("Should sort ascending", async () => {
-    const array = await SortAlgorithms.insertion(
-      createRandomUniqueArrayOfNodes(600, [0, 15000])
-    );
+    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+     await SortAlgorithms.insertion(array);
+
     testIfIsSorted(array, "ascending");
   });
+
   it("Should sort descending", async () => {
-    const array = await SortAlgorithms.insertion(
-      createRandomUniqueArrayOfNodes(600, [0, 15000]),'descending'
-    );
+    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+     await SortAlgorithms.insertion(array, "descending");
+
     testIfIsSorted(array, "descending");
   });
-
-  
 });
 
 describe("Testing merge", () => {
-  it("Should return a empty array", async () => {
-    const array = await SortAlgorithms.merge([]);
+  it("Should return an empty array", async () => {
+    const array:Node<number>[] = [];
+     await SortAlgorithms.merge(array);
 
     expect(array?.length).toBe(0);
   });
+
   it("Should sort ascending", async () => {
-    const array = await SortAlgorithms.merge(
-      createRandomUniqueArrayOfNodes(600, [0, 15000])
-    );
+    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+     await SortAlgorithms.merge(array);
+
     testIfIsSorted(array, "ascending");
   });
+
   it("Should sort descending", async () => {
-    const array = await SortAlgorithms.merge(
-      createRandomUniqueArrayOfNodes(600, [0, 15000]),'descending'
-    );
+    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+     await SortAlgorithms.merge(array, "descending");
+
     testIfIsSorted(array, "descending");
   });
-
-  
 });
 
-
-
 describe("Testing quick", () => {
-  it("Should return a empty array", async () => {
-    const array = await SortAlgorithms.quick([]);
+  it("Should return an empty array", async () => {
+    const array:Node<number>[] = [];
+     await SortAlgorithms.quick(array);
 
     expect(array?.length).toBe(0);
   });
+
   it("Should sort ascending", async () => {
-    const array = await SortAlgorithms.quick(
-      createRandomUniqueArrayOfNodes(600, [0, 15000])
-    );
+    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+     await SortAlgorithms.quick(array);
+
     testIfIsSorted(array, "ascending");
   });
+
   it("Should sort descending", async () => {
-    const array = await SortAlgorithms.quick(
-      createRandomUniqueArrayOfNodes(600, [0, 15000]),'descending'
-    );
+    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+     await SortAlgorithms.quick(array, "descending");
+
     testIfIsSorted(array, "descending");
   });
-
-  
 });

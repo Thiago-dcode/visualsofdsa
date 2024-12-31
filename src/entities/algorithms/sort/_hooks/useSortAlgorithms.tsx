@@ -76,7 +76,7 @@ export const useSortAlgorithms = (
 
   const comparisionBased = async (type: AlgoSortType) => {
     const onCompare: ClosureCompare = async (nodeA, nodeB) => {
-      steps.current++;
+
       try {
         if (nodeA.ref && nodeB.ref) {
           animateSound(nodeA.data, minArrayValue, maxArrayValue);
@@ -105,12 +105,12 @@ export const useSortAlgorithms = (
     };
     switch (type) {
       case 'bubble':
-        await SortAlgorithms.bubble(array, direction, onCompare, onSwap);
+        steps.current = await SortAlgorithms.bubble(array, direction, onCompare, onSwap);
         break;
       case 'selection':
-        await SortAlgorithms.selection(array, direction, onCompare, onSwap);
+        steps.current = await SortAlgorithms.selection(array, direction, onCompare, onSwap);
       case 'insertion':
-        await SortAlgorithms.insertion(array, direction, onCompare, onSwap);
+        steps.current = await SortAlgorithms.insertion(array, direction, onCompare, onSwap);
         break;
     }
 
@@ -135,40 +135,40 @@ export const useSortAlgorithms = (
     const onSlice: ClosureSlice = async (array) => {
       steps.current += array.length
 
-      await animationOnSlice(array, maxBarSize, getSpeed('merge', speed),async(node)=>{
-          animateSound(node.data,minArrayValue,maxArrayValue)
+      await animationOnSlice(array, maxBarSize, getSpeed('merge', speed), async (node) => {
+        animateSound(node.data, minArrayValue, maxArrayValue)
 
       });
 
     }
     const onMerge: ClosureCompare = async (nodeA, nodeB) => {
-      steps.current++;
-      animateSound(nodeB.data,minArrayValue,maxArrayValue)
+
+      animateSound(nodeB.data, minArrayValue, maxArrayValue)
       await animationOnMerge(nodeA, nodeB, getSpeed('merge', speed));
 
     }
     // setArrayClone(array as Node<number>[]);
-    await SortAlgorithms.merge(array as Node<number>[], direction, onSlice, onMerge )
+    steps.current = await SortAlgorithms.merge(array as Node<number>[], direction, onSlice, onMerge)
     setIsSorted(true);
   }
 
-  const quick = async ()=>{
-    const onPivot = async (pivot:Node<number>)=>{
-     if(pivot.ref) pivot.ref.style.backgroundColor = 'red'
-      
+  const quick = async () => {
+    const onPivot = async (pivot: Node<number>) => {
+      if (pivot.ref) pivot.ref.style.backgroundColor = 'red'
+
 
     }
 
-    const onSwap:ClosureCompare = async (nodeA,nodeB)=>{
+    const onSwap: ClosureCompare = async (nodeA, nodeB) => {
       animateSound(nodeA.data, minArrayValue, maxArrayValue);
       animateSound(nodeB.data, minArrayValue, maxArrayValue);
-      await animateOnSwap(nodeA,nodeB,getSpeed('quick',speed));
+      await animateOnSwap(nodeA, nodeB, getSpeed('quick', speed));
     }
-    const onCompare:ClosureCompare = async (nodeA,nodeB)=>{
-    
-      steps.current = steps.current +1;
+    const onCompare: ClosureCompare = async (nodeA, nodeB) => {
+
+      steps.current = steps.current + 1;
     }
-    await SortAlgorithms.quick(array as Node<number>[], direction,onPivot,onSwap,onCompare)
+    steps.current = await SortAlgorithms.quick(array as Node<number>[], direction, onPivot, onSwap, onCompare)
     setIsSorted(true);
   }
 
