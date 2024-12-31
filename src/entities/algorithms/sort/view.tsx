@@ -35,7 +35,7 @@ export default function SortView({ algoSortType }: {
   const [direction, setDirection] = useState<Direction>('ascending')
   const [open, setOpen] = useState(false);
   const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam');
-  const { bubble, selection, insertion, merge, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
+  const { bubble, selection, insertion, merge,quick, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const handleSetVisualizationMode = (vimValue: VisualizationArrays) => {
@@ -65,6 +65,9 @@ export default function SortView({ algoSortType }: {
         case 'merge':
           await merge(maxBarSize.current);
           break;
+          case 'quick':
+            await quick();
+            break;
       }
     }
     setAnimationRunning(false);

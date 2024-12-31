@@ -151,7 +151,7 @@ export const LINKS: LinkItem[] = [
           },
           {
             name: 'Quick',
-            enable: false,
+            enable: true,
             children: null,
             link: '/algorithms/sort/quick'
           }

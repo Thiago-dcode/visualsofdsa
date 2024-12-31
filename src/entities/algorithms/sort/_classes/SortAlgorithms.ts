@@ -94,7 +94,7 @@ export class SortAlgorithms {
     direction: Direction = "ascending",
     onSlice?: ClosureSlice,
     onMerge?: ClosureCompare,
-    onLoop?: () => void
+    onLoop?: () => Promise<void>
   ): Promise<Node<number>[]> {
     if (array.length <= 1) return array;
     const merge = async (
@@ -107,7 +107,7 @@ export class SortAlgorithms {
       let r = 0;
 
       while (l < leftArray.length || r < rightArray.length) {
-        if (onLoop) onLoop();
+        if (onLoop) await onLoop();
         const leftNode = leftArray[l];
         const rightNode = rightArray[r];
         if (
@@ -131,7 +131,7 @@ export class SortAlgorithms {
     const rightArray: Node<number>[] = [];
     const middle = Math.floor(array.length / 2);
     for (let i = 0; i < array.length; i++) {
-      if (onLoop) onLoop();
+      if (onLoop) await onLoop();
       if (i < middle) {
         leftArray.push(array[i].clone(true));
       } else {
@@ -143,6 +143,42 @@ export class SortAlgorithms {
     if (onSlice) await onSlice(rightArray, "right");
     await this.merge(rightArray, direction, onSlice, onMerge);
     await merge(leftArray, rightArray, array);
+    return array;
+  }
+  public static async quick(
+    array: Node<number>[],
+    direction: Direction = "ascending",
+    onPivot?: (pivot: Node<number>) => Promise<void>,
+    onSwap?: ClosureCompare,
+    onCompare?: ClosureCompare
+  ) {
+    const quick = async (startIndex: number, endIndex: number) => {
+      if (endIndex <= startIndex) return;
+      let i = startIndex - 1;
+      const pivot = array[endIndex];
+      if (onPivot) await onPivot(pivot);
+      for (let j = startIndex; j < endIndex; j++) {
+        if (onCompare) await onCompare (array[i], array[j]);
+        if (
+          (direction === "ascending" && array[j].data < pivot.data) ||
+          (direction === "descending" && array[j].data > pivot.data)
+        ) {
+          i++;
+          if (onSwap) await onSwap(array[i], array[j]);
+          const temp = array[i];
+          array[i] = array[j];
+          array[j] = temp;
+        }
+      }
+      i++;
+      if (onSwap) await onSwap(array[i], array[endIndex]);
+      const temp = array[i];
+      array[i] = array[endIndex];
+      array[endIndex] = temp;
+      await quick(startIndex, i - 1);
+      await quick(i + 1, endIndex);
+    };
+    await quick(0, array.length - 1);
     return array;
   }
 }

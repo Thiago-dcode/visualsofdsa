@@ -20,7 +20,7 @@ const getSpeed = (type: AlgoSortType, speed: number) => {
         case "insertion":
           return 0.35;
         case "merge":
-          return 0.5;
+          return 0.45;
         default:
           0.3;
       }
@@ -46,7 +46,7 @@ const getSpeed = (type: AlgoSortType, speed: number) => {
         case "insertion":
           return 0.08;
         case "merge":
-          return 0.1;
+          return 0.08;
         default:
           0.1;
       }
@@ -148,7 +148,27 @@ export const useSortAlgorithms = (
 
     }
     // setArrayClone(array as Node<number>[]);
-    await SortAlgorithms.merge(array as Node<number>[], direction, onSlice, onMerge)
+    await SortAlgorithms.merge(array as Node<number>[], direction, onSlice, onMerge )
+    setIsSorted(true);
+  }
+
+  const quick = async ()=>{
+    const onPivot = async (pivot:Node<number>)=>{
+     if(pivot.ref) pivot.ref.style.backgroundColor = 'red'
+      
+
+    }
+
+    const onSwap:ClosureCompare = async (nodeA,nodeB)=>{
+      animateSound(nodeA.data, minArrayValue, maxArrayValue);
+      animateSound(nodeB.data, minArrayValue, maxArrayValue);
+      await animateOnSwap(nodeA,nodeB,getSpeed('quick',speed));
+    }
+    const onCompare:ClosureCompare = async (nodeA,nodeB)=>{
+    
+      steps.current = steps.current +1;
+    }
+    await SortAlgorithms.quick(array as Node<number>[], direction,onPivot,onSwap,onCompare)
     setIsSorted(true);
   }
 
@@ -174,6 +194,7 @@ export const useSortAlgorithms = (
     bubble,
     selection,
     merge,
+    quick,
     insertion,
     message,
     isSorted,

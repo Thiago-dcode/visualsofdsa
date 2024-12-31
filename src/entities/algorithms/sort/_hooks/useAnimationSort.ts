@@ -152,15 +152,17 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
       //After animation
       switch (visualization) {
         case "bars":
-          const tempAColor = refA.style.backgroundColor;
+          const tempAColor = nodeA.color;
           const tempXAPosition = nodeA.position.x;
           const tempYAPosition = nodeA.position.y;
+          nodeA.color = nodeB.color;
+          refA.style.backgroundColor = nodeA.color;
           refA.style.left = nodeB.position.x + "px";
           refA.style.bottom = nodeB.position.y + "px";
-          refA.style.backgroundColor = refB.style.backgroundColor;
           nodeA.position.x = nodeB.position.x;
           nodeA.position.y = nodeB.position.y;
-          refB.style.backgroundColor = tempAColor;
+          nodeB.color = tempAColor;
+          refB.style.backgroundColor = nodeB.color;
           refB.style.left = tempXAPosition + "px";
           refB.style.bottom = tempYAPosition + "px";
           nodeB.position.x = tempXAPosition;
