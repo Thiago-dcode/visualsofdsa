@@ -12,7 +12,7 @@ import Title from '@/components/ui/Title'
 import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAction'
 import useStaticArray from '@/entities/data-structures/linear/staticArray/hooks/useStaticArray'
 import { Direction, speed, VisualizationArrays } from '@/types'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import Node from '@/entities/data-structures/linear/_classes/Node'
 import { PopOverComponent } from '@/components/ui/PopOverComponent'
@@ -34,17 +34,22 @@ export default function SortView({ algoSortType }: {
   const [isAnimationRunning, setAnimationRunning] = useState(false);
   const [direction, setDirection] = useState<Direction>('ascending')
   const [open, setOpen] = useState(false);
-  const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>(localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null || 'memoryRam');
-  const { bubble, selection, insertion, merge,quick, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
+  const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>('bars');
+  const { bubble, selection, insertion, merge, quick, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const handleSetVisualizationMode = (vimValue: VisualizationArrays) => {
-    localStorage.setItem(config.visualizationMode.localStorageKeys.array, vimValue);
-    setVisualizationMode(vimValue);
-  }
   useResponsive(() => {
+    //Every time the screen size is updated, will reset the array
     reset();
   })
+  const handleSetVisualizationMode = (vimValue: VisualizationArrays) => {
+    localStorage.setItem(config.localStorageKeys.visualizationMode.array, vimValue);
+    setVisualizationMode(vimValue);
+  }
+  const handleSetSpeed = (speed: speed) => {
+    localStorage.setItem(config.localStorageKeys.speed.sort, speed.toString());
+    setSpeed(speed);
+  }
   const handleSort = async () => {
     setOpen(false);
     setAnimationRunning(true);
@@ -65,9 +70,9 @@ export default function SortView({ algoSortType }: {
         case 'merge':
           await merge(maxBarSize.current);
           break;
-          case 'quick':
-            await quick();
-            break;
+        case 'quick':
+          await quick();
+          break;
       }
     }
     setAnimationRunning(false);
@@ -262,9 +267,58 @@ export default function SortView({ algoSortType }: {
           } className="self-start" />
 
         </div>)
+      case 'quick':
+        return (<div className='flex items-center justify-center gap-2'>
+          <Title title={'Quick sort'} />
+          <Info title="Quick sort" text={
+            <article>
+              <header>
+                <p>
+                  <strong>Quick Sort</strong> is a <b>divide-and-conquer sorting algorithm</b> that partitions the input array into smaller subarrays based on a pivot element and recursively sorts the subarrays. It is highly efficient for <strong>large datasets</strong> due to its <b>average-case time complexity</b> and <b>in-place sorting capability</b>.
+                </p>
+              </header>
+              <br />
+              <main>
+                <p>
+                  **Quick Sort works by selecting a <b>pivot element</b> and <strong>partitioning</strong> the array so that all elements smaller than the pivot are placed on its left, and all elements greater than the pivot are placed on its right. This partitioning process creates two subarrays, which are then recursively sorted.
+                </p>
+                <br />
+                <div>
+                  <p>
+                    For example, if the array is <code>[38, 27, 43, 3, 9, 82, 10]</code> and the last element, <code>10</code>, is chosen as the pivot, the partitioning process begins by comparing each element to the pivot. The algorithm rearranges the array into <code>[3, 9, 10, 43, 38, 82, 27]</code>, placing all elements smaller than <code>10</code> to its left and larger elements to its right.
+                  </p>
+                  <p>
+                    After partitioning, the pivot (<code>10</code>) is in its correct sorted position. Quick Sort then recursively applies the same process to the subarray on the left (<code>[3, 9]</code>) and the subarray on the right (<code>[43, 38, 82, 27]</code>). This process continues until all subarrays are sorted, resulting in the final sorted array: <code>[3, 9, 10, 27, 38, 43, 82]</code>.
+                  </p>
+                  <p>
+                    During the <strong>partitioning phase</strong>, Quick Sort swaps elements to ensure proper placement around the pivot. Choosing the last element as the pivot is a common approach, but it may lead to inefficiency in already sorted or reverse-sorted arrays, as the partitioning becomes unbalanced.
+                  </p>
+                  <p>
+                    While Quick Sort is not a <b>stable algorithm</b>, meaning it does not preserve the <strong>relative order</strong> of equal elements, its <b>in-place sorting</b> nature (requiring minimal extra memory) and <strong>efficient average-case performance</strong> make it suitable for large datasets where memory efficiency is critical.
+                  </p>
+                </div>
+              </main>
+              <br />
+              <footer>
+                <p>
+                  In conclusion, Quick Sort has a <b>time complexity</b> of <strong>O(n log n)</strong> in the average case and <b>O(n²)</b> in the worst case, such as when the pivot divides the array unevenly. Its <b>space complexity</b> is <strong>O(log n)</strong> due to recursive calls. Despite its sensitivity to pivot selection, Quick Sort&apos;s <b>efficiency</b> and <strong>low memory usage</strong> make it one of the most widely used sorting algorithms for large datasets.
+                </p>
+              </footer>
+            </article>
+
+
+          } className="self-start" />
+
+        </div>)
     }
   }
-
+  useEffect(() => {
+    if (!window) return;
+    const visualization = localStorage.getItem(config.localStorageKeys.visualizationMode.array) as VisualizationArrays | null
+    const speed = localStorage.getItem(config.localStorageKeys.speed.sort) ? parseInt(localStorage.getItem(config.localStorageKeys.speed.sort)!) as speed : null
+    if (visualization) setVisualizationMode(visualization)
+    if (speed) setSpeed(speed)
+  }, [])
   return (
 
     <Main className='pb-20'>
@@ -335,11 +389,11 @@ export default function SortView({ algoSortType }: {
             <p>Animation Speed</p>
             <Input defaultValue={speed} onChange={(e) => {
               const speed = parseInt(e.target.value)
-              if (speed == 1 || speed == 2 || speed == 3) {
-                setSpeed(speed)
-                // render()
+              if (speed == 1 || speed == 2 || speed == 3 || speed == 4) {
+                handleSetSpeed(speed)
+
               }
-            }} type='range' min={1} max={3} />
+            }} type='range' min={1} max={4} />
 
           </div>
         } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} /> : <div></div>}

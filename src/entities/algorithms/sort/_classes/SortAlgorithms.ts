@@ -44,6 +44,7 @@ export class SortAlgorithms {
   ) {
     if (array.length <= 1) return 1;
     let steps = 0;
+
     for (let i = 0; i < array.length; i++) {
       let indexToCompare = i;
       for (let j = i + 1; j < array.length; j++) {
@@ -165,18 +166,22 @@ export class SortAlgorithms {
     direction: Direction = "ascending",
     onPivot?: (pivot: Node<number>) => Promise<void>,
     onSwap?: ClosureCompare,
-    onCompare?: ClosureCompare
+    onCompare?: (start: number, end: number) => Promise<void>
   ) {
-    let steps = 0;
+    let steps = 0; // Tracks steps
     if (array.length <= 1) return 1;
+
     const quick = async (startIndex: number, endIndex: number) => {
+      steps++; 
       if (endIndex <= startIndex) return;
+
       let i = startIndex - 1;
       const pivot = array[endIndex];
       if (onPivot) await onPivot(pivot);
+      if (onCompare) await onCompare(startIndex, endIndex);
+
       for (let j = startIndex; j < endIndex; j++) {
-        steps++;
-        if (onCompare) await onCompare(array[i], array[j]);
+        steps++; 
         if (
           (direction === "ascending" && array[j].data < pivot.data) ||
           (direction === "descending" && array[j].data > pivot.data)
@@ -193,9 +198,11 @@ export class SortAlgorithms {
       const temp = array[i];
       array[i] = array[endIndex];
       array[endIndex] = temp;
+
       await quick(startIndex, i - 1);
       await quick(i + 1, endIndex);
     };
+
     await quick(0, array.length - 1);
     return steps;
   }

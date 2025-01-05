@@ -32,7 +32,7 @@ export function PopUp({
       </AlertDialogTrigger>}
       <AlertDialogContent style={{
         zIndex:99
-      }}  className=" text-black flex flex-col justify-between">
+      }}  className="dark:text-app-off-white text-app-off-black flex flex-col justify-between">
       <AlertDialogTitle>{title}</AlertDialogTitle>
       
 {/* 
