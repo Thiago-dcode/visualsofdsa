@@ -1,7 +1,17 @@
 import { Primitive } from "@/types";
 import Node from "../_classes/Node";
-
-export type ArrayActions = "create" | "write" | "access" | "search" | "push" |'insert' |'pop'|'delete'| "fill" |'';
+export type LinearDsActions = "push" | "pop" | "peek" | "fill";
+export type ArrayActions =
+  | "create"
+  | "write"
+  | "access"
+  | "search"
+  | "push"
+  | "insert"
+  | "pop"
+  | "delete"
+  | "fill"
+  | "";
 export type searchResult = {
   steps: number;
   found: boolean;
@@ -10,5 +20,5 @@ export type searchResult = {
 
 export type ArrayNodeWithKey = {
   node: Node<Primitive> | null;
-  key: string
-}
+  key: string;
+};

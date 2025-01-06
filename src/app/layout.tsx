@@ -12,6 +12,10 @@ import { config } from "@/config";
 import DarkModeTogglerComponent from "@/components/app/DarkModeTogglerComponent";
 import { DarkModeProvider } from "@/context/darkModeContext";
 import LogoComponent from "@/components/app/logoComponent";
+import { MuteProvider } from "@/context/muteContext";
+import MuteComponent from "@/components/app/MuteTogglerComponent";
+import { AnimationRunningProvider } from "@/context/animationRunningContext";
+import ConfigSection from "@/components/app/ConfigSection";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -33,24 +37,29 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={`${inter.className}${config.darkModeTailwind}`}>
-        <DarkModeProvider>
-        <div id="root">
+        <AnimationRunningProvider>
+          <DarkModeProvider>
+            <MuteProvider>
+              <div id="root">
 
-          <header className='sticky top-0  right-0 z-50 py-2 mb-8 border-b-2 dark:border-b-app-off-white border-b-app-off-black dark:bg-app-off-black/80 bg-app-off-white/70 w-full'>
-            <div className=" flex items-end justify-between px-[30px] w-full ">
+                <header className='sticky top-0  right-0 z-50 py-2 mb-8 border-b-2 dark:border-b-app-off-white border-b-app-off-black dark:bg-app-off-black/80 bg-app-off-white/70 w-full'>
+                  <div className=" flex items-end justify-between px-[30px] w-full ">
 
-             <LogoComponent/>
-              <Nav />
-             <DarkModeTogglerComponent/>
+                    <LogoComponent />
+                    <Nav />
 
-            </div>
+                    <ConfigSection />
 
-          </header>
+                  </div>
 
-          {children}
+                </header>
 
-        </div>
-        </DarkModeProvider>
+                {children}
+
+              </div>
+            </MuteProvider>
+          </DarkModeProvider>
+        </AnimationRunningProvider>
         <Toaster
 
           toastOptions={{

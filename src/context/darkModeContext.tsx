@@ -1,5 +1,6 @@
 'use client'
 
+import { config } from "@/config";
 import { createContext, ReactElement, useContext, useEffect, useState } from "react";
 
 type DarkMode = {
@@ -23,7 +24,7 @@ export function DarkModeProvider({ children }: {
     }
     useEffect(() => {
         if (document) {
-            const theme = localStorage.getItem('theme');
+            const theme = localStorage.getItem(config.localStorageKeys.theme);
             if (theme) {
                 setIsDark(theme === 'dark');
                 return;
@@ -36,9 +37,9 @@ export function DarkModeProvider({ children }: {
         if (isDark === null) return;
         if (isDark) {
             document.documentElement.classList.add('dark')
-            localStorage.setItem('theme', 'dark')
+            localStorage.setItem(config.localStorageKeys.theme, 'dark')
         } else {
-            localStorage.setItem('theme', 'light')
+            localStorage.setItem(config.localStorageKeys.theme, 'light')
             document.documentElement.classList.remove('dark')
         }
 

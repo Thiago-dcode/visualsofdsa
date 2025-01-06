@@ -13,21 +13,20 @@ import './style.css'
 import { searchResult, ArrayActions } from "./type"
 import Info from "@/components/ui/info"
 import Section from "@/components/container/Section"
-import UseLinear from "../_hooks/UseLinear"
 import { PopOverComponent } from "@/components/ui/PopOverComponent"
 import { Button } from "@/components/ui/button"
 import { Wrench } from "lucide-react"
-import LinearDsConfig from "../_components/LinearDsConfig"
 import RamConteiner from "@/components/container/RamContainer"
 import MemoryAdressContainer from "../_components/MemoryAdressContainer"
 import { MemorySize } from "@/types"
 import Title from "@/components/ui/Title"
 import Properties from "@/components/app/Properties"
+import { useAnimationRunning } from "@/context/animationRunningContext"
 
 
 export default function StaticArray() {
     const { array, create, write, access, search, error, flush, maxSize, setMaxSize } = useStaticArray();
-    const [isAnimationRunning, setIsAnimationRunning] = useState(false)
+    const { isAnimationRunning, setAnimationRunning } = useAnimationRunning()
     const [action, setAction] = useState<ArrayActions>('create')
     const [data, setData] = useState<string>('');
     const [searchData, setSearchData] = useState<string>('');
@@ -38,7 +37,7 @@ export default function StaticArray() {
     const [searchResult, setSearchResult] = useState<searchResult | null>(null);
     const [render, setRender] = useState(false)
     const cleanUp = () => {
-        setIsAnimationRunning(false)
+        setAnimationRunning(false)
         flush();
         setAction('create')
         setSize(0)
@@ -96,7 +95,7 @@ export default function StaticArray() {
 
                         <ButtonAction title="write" action="write" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || index === undefined) return;
-                            setIsAnimationRunning(true)
+                            setAnimationRunning(true)
                             setOpen(false)
                             setAction('write')
                             console.log(data, index)
@@ -104,7 +103,7 @@ export default function StaticArray() {
 
 
                             })
-                            setIsAnimationRunning(false)
+                            setAnimationRunning(false)
 
                         }} />
                     </InputWithButtonContainer>
@@ -115,11 +114,11 @@ export default function StaticArray() {
                         }} type="number" min={0} />
                         <ButtonAction title="access" action="read" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning) return;
-                            setIsAnimationRunning(true);
+                            setAnimationRunning(true);
                             setAction('access')
                             setOpen(false)
                             await access(indexAccess, () => {
-                                setIsAnimationRunning(false)
+                                setAnimationRunning(false)
                             })
 
                         }} />
@@ -132,11 +131,11 @@ export default function StaticArray() {
 
                         <ButtonAction title="search" action="search" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning) return;
-                            setIsAnimationRunning(true)
+                            setAnimationRunning(true)
                             setOpen(!open)
                             setAction('search')
                             await search(searchData === '' ? null : searchData, (data) => {
-                                setIsAnimationRunning(false)
+                                setAnimationRunning(false)
                                 setSearchData('')
                                 setSearchResult(data)
                             })
@@ -164,22 +163,22 @@ export default function StaticArray() {
                     <ButtonAction title="create" action="write" isLoading={isAnimationRunning} onClick={async () => {
                         if (isAnimationRunning || !size) return;
                         setOpen(!open)
-                        setIsAnimationRunning(true)
+                        setAnimationRunning(true)
                         await create(size)
-                        setIsAnimationRunning(false)
+                        setAnimationRunning(false)
                     }} />
                     <ButtonAction title="fill" action="fill" isLoading={isAnimationRunning} onClick={async () => {
                         if (isAnimationRunning) return;
                         setOpen(!open)
-                        setIsAnimationRunning(true)
+                        setAnimationRunning(true)
                         await create(maxSize)
-                        setIsAnimationRunning(false)
+                        setAnimationRunning(false)
                     }} />
                 </div>}
 
                 {array && array.length ? <ButtonAction title="fill" action="fill" className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning} onClick={async () => {
                     if (isAnimationRunning) return;
-                    setIsAnimationRunning(true)
+                    setAnimationRunning(true)
                     setAction('write')
                     for (let i = 0; i < array.length; i++) {
                         const element = array[i];
@@ -189,13 +188,13 @@ export default function StaticArray() {
                         }, true);
 
                     }
-                    setIsAnimationRunning(false);
+                    setAnimationRunning(false);
 
                 }} /> : null}
 
                 {array && array.length ? <ButtonAction title="delete" action="delete" className='elf-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
                     flush()
-                    setIsAnimationRunning(false)
+                    setAnimationRunning(false)
                     setAction('create')
                 }} /> : null}
 
@@ -205,16 +204,16 @@ export default function StaticArray() {
             {/* EXTRA INFO SECTION */}
             <div className="flex  justify-between w-full px-4">
 
-            <Properties properties={{
-                        'ArraySize':{
-                            value:array?.length||null
-                        },
-                        'memorySize':{
-                            value:maxSize
-                        }
-                    }}/>
+                <Properties properties={{
+                    'ArraySize': {
+                        value: array?.length || null
+                    },
+                    'memorySize': {
+                        value: maxSize
+                    }
+                }} />
                 {!isAnimationRunning && <div>
-                   
+
                     <PopOverComponent content={
                         <div className='flex flex-col items-center justify-center gap-4'>
                             <div>
@@ -242,7 +241,7 @@ export default function StaticArray() {
 
                             <MemoryAdressContainer size={MemorySize.L} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i}>
 
-                                {array && array[i] ? <StaticArrayNodeComponent isLastNode={i === array.length - 1} action={action} setAnimationRunning={setIsAnimationRunning} node={array[i]} /> : <p className="border dark:border-white/50 border-black/50 w-full h-full"></p>}
+                                {array && array[i] ? <StaticArrayNodeComponent isLastNode={i === array.length - 1} action={action} setAnimationRunning={setAnimationRunning} node={array[i]} /> : <p className="border dark:border-white/50 border-black/50 w-full h-full"></p>}
                             </MemoryAdressContainer>
 
 

@@ -1,2 +1,2 @@
 export type AlgoSearchType = "linear" | "binary";
-export type AlgoSortType = "bubble" | "selection"| 'insertion'|'merge';
+export type AlgoSortType = "bubble" | "selection"| 'insertion'|'merge'|'quick';
