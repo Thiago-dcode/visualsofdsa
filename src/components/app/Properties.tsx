@@ -1,32 +1,35 @@
 import { animate } from "@/lib/animations"
 import { cn } from "@/lib/utils"
 import { Primitive } from "@/types"
+import { ValueOf } from "next/dist/shared/lib/constants"
 import { useEffect, useRef, useState } from "react"
-
-export type PropertiesType = 
-{ [id: string]: {
+type Property = {
     value: Primitive,
+    render?: boolean,
     show?: boolean
-} }
+}
+export type PropertiesType =
+    { [id: string]: Property }
 function Properties({ properties, className }: {
     properties: PropertiesType,
     className?: string,
 }) {
 
     const prevProperties = useRef<typeof properties>()
-    const handleAnimation = async (key: string, value: Primitive, ref: HTMLDivElement) => {
+    const handleAnimation = async (key: keyof PropertiesType, property: Property, ref: HTMLDivElement) => {
 
+        const { value, render } = property;
+        if (!prevProperties.current || !prevProperties.current[key] || (typeof render === 'boolean' && prevProperties.current[key].render === render) || (prevProperties.current[key].value === value)) {
 
-        if (!prevProperties.current || prevProperties.current[key].value === value) return;
-
+            return
+        };
         await animate(ref, 'animate-property 1s')
-        prevProperties.current[key].value = value;
+        prevProperties.current[key] = property
 
     }
     useEffect(() => {
         prevProperties.current = properties;
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -37,11 +40,11 @@ function Properties({ properties, className }: {
                 {
                     properties && Object.entries(properties).map(([key, propertie], i) => {
 
-                        if (propertie.show || (typeof propertie.show  === 'undefined')) {
+                        if (propertie.show || (typeof propertie.show === 'undefined')) {
                             return (
                                 <div ref={(ref) => {
                                     if (ref) (async () => {
-                                        await handleAnimation(key, propertie.value, ref)
+                                        await handleAnimation(key, propertie, ref)
                                     })()
 
                                 }} key={`propertie-${key}-${propertie.value}-${i}`} className=" px-4 py-1 dark:border-app-off-white border-2 border-app-off-black rounded-md">

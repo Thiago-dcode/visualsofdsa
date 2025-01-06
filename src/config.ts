@@ -21,9 +21,11 @@ export const config = {
       graphs: "vod_vmg",
     },
     speed: {
-      sort: "vod_sort_speed"
+      sort: "vod_sort_speed",
+      search: "vod_search_speed",
     },
     theme: "vod_theme",
+    muted: "vod_muted",
   },
   darkModeTailwind:
     "text-app-off-black bg-app-off-white  dark:text-app-off-white dark:bg-app-off-black dark:border-app-off-white border-app-off-black",

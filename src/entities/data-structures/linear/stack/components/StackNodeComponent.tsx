@@ -4,6 +4,7 @@ import {
 } from 'react'
 import Node from '../../_classes/Node';
 import LinearNodeComponent from '../../_components/LinearNodeComponent';
+import { LinearDsActions } from '../../staticArray/type';
 type props = {
 
     node: Node<Primitive>,
@@ -11,16 +12,18 @@ type props = {
     height: number,
     setAnimationIsRunning: (value: boolean) => void;
     handlePushAnimation: (ele: HTMLElement | null, onAnimationEnds: (e: AnimationEvent) => void) => void;
-    action?: 'add' | 'delete'
+    action?: LinearDsActions
 }
-const StackNodeComponent = ({ node, height, id, setAnimationIsRunning = () => { }, handlePushAnimation }: props) => {
+const StackNodeComponent = ({ node, height, id, setAnimationIsRunning = () => { }, handlePushAnimation, action = 'push' }: props) => {
     const handleRef = useCallback((element: HTMLDivElement | null) => {
         if (element == null) return
         node.ref = element;
-        handlePushAnimation(node.ref, () => {
-            setAnimationIsRunning(false)
-        })
-    }, [])
+        if (action === 'push' || action === 'fill') {
+            handlePushAnimation(node.ref, () => {
+                if (action === 'push') setAnimationIsRunning(false)
+            })
+        }
+    }, [action, node])
 
     return (
         <LinearNodeComponent style={{

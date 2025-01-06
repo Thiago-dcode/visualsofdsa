@@ -15,6 +15,7 @@ import Section from '@/components/container/Section';
 import Info from '@/components/ui/info';
 import Title from '@/components/ui/Title';
 import { ArrowRight } from 'lucide-react';
+import { useAnimationRunning } from '@/context/animationRunningContext';
 
 export default function View({ isDoubly = false }: {
     isDoubly?: boolean
@@ -26,7 +27,7 @@ export default function View({ isDoubly = false }: {
     });
     const [size, setSize] = useState(0);
     const [open, setOpen] = useState(false)
-    const [isAnimationRunning, setIsAnimationRunning] = useState(false);
+    const {isAnimationRunning,setAnimationRunning} = useAnimationRunning()
     const [addIndex, setAddIndex] = useState(0);
     const [getIndex, setGetIndex] = useState<number | undefined>(undefined);
     const [deleteIndex, setDeleteIndex] = useState<number | undefined>(undefined);
@@ -48,9 +49,9 @@ export default function View({ isDoubly = false }: {
     const handleAction = async (action: Promise<void>) => {
         if (isBlocked) return;
         setOpen(false)
-        setIsAnimationRunning(true);
+        setAnimationRunning(true);
         await action
-        setIsAnimationRunning(false);
+        setAnimationRunning(false);
 
     }
     const handleDelete = async (index: number) => {
@@ -269,7 +270,7 @@ export default function View({ isDoubly = false }: {
                     return (
                         <>
 
-                            <LinkedListNodeComponent isDoubly={isDoubly} setIsAnimationRunning={setIsAnimationRunning} isHead={linkedList.head && linkedList.head.id === node.id ? true : false} isTail={linkedList.tail && linkedList.tail.id === node.id ? true : false} key={`linkedListNodeComponent-${node.data}-${node.id}-(${node.position.x},${node.position.y})`} index={i} node={node} nodeShape={linkedList} />
+                            <LinkedListNodeComponent isDoubly={isDoubly} setAnimationRunning={setAnimationRunning} isHead={linkedList.head && linkedList.head.id === node.id ? true : false} isTail={linkedList.tail && linkedList.tail.id === node.id ? true : false} key={`linkedListNodeComponent-${node.data}-${node.id}-(${node.position.x},${node.position.y})`} index={i} node={node} nodeShape={linkedList} />
 
                         </>
                     )

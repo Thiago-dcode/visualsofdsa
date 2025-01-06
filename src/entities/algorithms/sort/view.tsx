@@ -24,17 +24,21 @@ import { config } from '@/config'
 import { AlgoSortType } from '../types'
 import { useSortAlgorithms } from './_hooks/useSortAlgorithms'
 import useResponsive from '@/hooks/useResponsive'
+import { useAnimationRunning } from '@/context/animationRunningContext'
+import { useVisualizationArray } from '@/hooks/useVisualizationArray'
+import SpeedComponent from '@/components/app/speedComponent'
+import { useSpeed } from '@/hooks/useSpeed'
 
 export default function SortView({ algoSortType }: {
   algoSortType: AlgoSortType
 }) {
   const maxBarSize = useRef(algoSortType !== 'merge' ? 650 : 300);
   const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500)
-  const [speed, setSpeed] = useState<speed>(1);
-  const [isAnimationRunning, setAnimationRunning] = useState(false);
+  const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
   const [direction, setDirection] = useState<Direction>('ascending')
   const [open, setOpen] = useState(false);
-  const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>('bars');
+  const { speed, handleSetSpeed } = useSpeed(1, config.localStorageKeys.speed.sort)
+  const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray('bars');
   const { bubble, selection, insertion, merge, quick, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>();
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -42,14 +46,7 @@ export default function SortView({ algoSortType }: {
     //Every time the screen size is updated, will reset the array
     reset();
   })
-  const handleSetVisualizationMode = (vimValue: VisualizationArrays) => {
-    localStorage.setItem(config.localStorageKeys.visualizationMode.array, vimValue);
-    setVisualizationMode(vimValue);
-  }
-  const handleSetSpeed = (speed: speed) => {
-    localStorage.setItem(config.localStorageKeys.speed.sort, speed.toString());
-    setSpeed(speed);
-  }
+
   const handleSort = async () => {
     setOpen(false);
     setAnimationRunning(true);
@@ -312,13 +309,7 @@ export default function SortView({ algoSortType }: {
         </div>)
     }
   }
-  useEffect(() => {
-    if (!window) return;
-    const visualization = localStorage.getItem(config.localStorageKeys.visualizationMode.array) as VisualizationArrays | null
-    const speed = localStorage.getItem(config.localStorageKeys.speed.sort) ? parseInt(localStorage.getItem(config.localStorageKeys.speed.sort)!) as speed : null
-    if (visualization) setVisualizationMode(visualization)
-    if (speed) setSpeed(speed)
-  }, [])
+
   return (
 
     <Main className='pb-20'>
@@ -385,17 +376,7 @@ export default function SortView({ algoSortType }: {
         }} />
         {array && !isAnimationRunning && <VisualizationTypes setVisualization={handleSetVisualizationMode} visualizationSelected={visualizationMode} />}
         {array && !isAnimationRunning ? <PopOverComponent content={
-          <div className='flex flex-col items-start justify-start'>
-            <p>Animation Speed</p>
-            <Input defaultValue={speed} onChange={(e) => {
-              const speed = parseInt(e.target.value)
-              if (speed == 1 || speed == 2 || speed == 3 || speed == 4) {
-                handleSetSpeed(speed)
-
-              }
-            }} type='range' min={1} max={4} />
-
-          </div>
+          <SpeedComponent setSpeed={handleSetSpeed} speed={speed} />
         } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} /> : <div></div>}
 
       </div>

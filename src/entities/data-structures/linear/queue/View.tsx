@@ -16,11 +16,14 @@ import QueueNodeComponent from './components/QueueNodeComponent';
 import PropertiesList from '../_components/PropertiesList';
 import LinearDsConfig from '../_components/LinearDsConfig';
 import Title from '@/components/ui/Title';
+import { useAnimationRunning } from '@/context/animationRunningContext';
+import { LinearDsActions } from '../staticArray/type';
 export default function Queue() {
 
   const { enqueue, queue, dequeue, isStackOverFlow, setIsStackOverFlow } = UseQueue();
   const [open, setOpen] = useState(false)
-  const [isAnimationRunning, setAnimationRunning] = useState(false);
+  const { isAnimationRunning, setAnimationRunning } = useAnimationRunning()
+  const [action, setAction] = useState<LinearDsActions>("push")
   const { isFilling, fill, empty, _render, render, flush, peek } = UseLinear(queue)
   const [nodeData, setNodeData] = useState('let x = 25')
   return (
@@ -57,7 +60,8 @@ export default function Queue() {
               if (isFilling || isAnimationRunning) return;
 
               setAnimationRunning(true)
-              enqueue(nodeData)
+              setAction('push')
+              await enqueue(nodeData)
 
             }} isLoading={isFilling || isAnimationRunning} />
             {queue.size > 0 && <ButtonAction action='delete' title="dequeue" className='bg-red-400 hover:bg-red-600' isLoading={isFilling || isAnimationRunning} onClick={async () => {
@@ -65,6 +69,7 @@ export default function Queue() {
               if (isFilling || isStackOverFlow || isAnimationRunning) return;
 
               setAnimationRunning(true);
+              setAction('pop')
               await dequeue(() => {
                 setAnimationRunning(false)
 
@@ -75,6 +80,7 @@ export default function Queue() {
             {queue.size > 0 && <ButtonAction action='read' title="front" className='bg-yellow-400 hover:bg-yellow-600' isLoading={isAnimationRunning || isFilling} onClick={async () => {
               if (isFilling || isStackOverFlow || isAnimationRunning) return;
               setAnimationRunning(true)
+              setAction('peek')
               await peek(() => {
                 setAnimationRunning(false);
               });
@@ -86,11 +92,14 @@ export default function Queue() {
           <ButtonAction title="run" action='search' className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning || isFilling} onClick={async () => {
             if (isFilling || isStackOverFlow) return;
             setOpen(false)
+            setAnimationRunning(true)
+            setAction("fill")
             await fill(0, queue.maxSize - queue.size, (data) => {
-              setAnimationRunning(true)
+              render()
               return enqueue(data)
             });
             await empty(() => {
+              render()
               return dequeue(() => {
               })
             });
@@ -109,7 +118,7 @@ export default function Queue() {
           {!isStackOverFlow && !isFilling && !isAnimationRunning && <div>
             <PopOverComponent content={
               <LinearDsConfig render={render} stack={queue} />
-            } trigger={<Button variant={'ghost'}><Wrench/></Button>} />
+            } trigger={<Button variant={'ghost'}><Wrench /></Button>} />
           </div>}
 
         </div>
@@ -120,7 +129,7 @@ export default function Queue() {
 
               return (
 
-                <QueueNodeComponent setIsAnimationRunning={setAnimationRunning} queue={queue} height={queue.nodeHeight} key={`${queue.name}-node-${node.id}`} node={node} id={i} />
+                <QueueNodeComponent action={action} setIsAnimationRunning={setAnimationRunning} queue={queue} height={queue.nodeHeight} key={`${queue.name}-node-${node.id}`} node={node} id={i} />
 
               )
             })

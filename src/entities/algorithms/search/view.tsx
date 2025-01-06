@@ -22,31 +22,30 @@ import { Wrench } from 'lucide-react'
 import RenderVisualization from '../_components/visualization/renderVisualization'
 import Link from 'next/link'
 import VisualizationTypes from '../_components/visualization/visualizationTypes'
-import { config } from '@/config'
 import { AlgoSearchType } from '../types'
+import { useVisualizationArray } from '@/hooks/useVisualizationArray'
+import { useAnimationRunning } from '@/context/animationRunningContext'
+import SpeedComponent from '@/components/app/speedComponent'
+import { config } from '@/config'
+import { useSpeed } from '@/hooks/useSpeed'
 
 export default function SearchView({ searchType }: {
   searchType?: AlgoSearchType
 }) {
 
   const { array, maxSize, createSorted, createUnsorted, flush, error } = useStaticArray(500);
-  const [speed, setSpeed] = useState<speed>(1)
+  const { speed, handleSetSpeed } = useSpeed(1, config.localStorageKeys.speed.sort)
   const [direction, setDirection] = useState<Direction>('ascending')
-  const [isAnimationRunning, setAnimationRunning] = useState(false);
+  const { isAnimationRunning, setAnimationRunning } = useAnimationRunning()
   const [sorted, setSorted] = useState(searchType === 'binary');
-  const [visualizationMode, setVisualizationMode] = useState<VisualizationArrays>('memoryRam');
-  const { binary, linear } = useSearchAlgorithm(array as Node<number>[] | null, sorted, direction, speed, visualizationMode);
+  const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray('bars');
+  const { binary, linear, message, clearMessage } = useSearchAlgorithm(array as Node<number>[] | null, sorted, direction, speed, visualizationMode);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const toggleSorted = () => {
     setSorted(prev => !prev)
   }
-  const handleSetVisualizationMode = (vimValue: VisualizationArrays) => {
-    if (!window) return;
-    localStorage.setItem(config.visualizationMode.localStorageKeys.array, vimValue);
-    setVisualizationMode(vimValue);
 
-  }
   const toggleDirection = () => {
     setDirection(prev => prev === 'ascending' ? 'descending' : 'ascending')
   }
@@ -107,11 +106,7 @@ export default function SearchView({ searchType }: {
     resetValue();
 
   }
-  useEffect(() => {
-    if (!window) return;
-    const visualization = localStorage.getItem(config.visualizationMode.localStorageKeys.array) as VisualizationArrays | null
-    if (visualization) setVisualizationMode(visualization)
-  }, [])
+
   const renderInfo = () => {
 
     switch (searchType) {
@@ -215,6 +210,7 @@ export default function SearchView({ searchType }: {
             <Input ref={inputRef} placeholder="value" className="text-black w-32 text-center" type="number" />
 
             <ButtonAction title="Search" action='read' isLoading={isAnimationRunning} onClick={async () => {
+              if (isAnimationRunning) return;
               await handleSearch()
             }} />
 
@@ -246,17 +242,7 @@ export default function SearchView({ searchType }: {
         }} />
         {array && !isAnimationRunning && <VisualizationTypes setVisualization={handleSetVisualizationMode} visualizationSelected={visualizationMode} />}
         {array && !isAnimationRunning ? <PopOverComponent content={
-          <div className='flex flex-col items-start justify-start'>
-            <p>Animation Speed</p>
-            <Input defaultValue={speed} onChange={(e) => {
-              const speed = parseInt(e.target.value)
-              if (speed == 1 || speed == 2 || speed == 3) {
-                setSpeed(speed)
-                // render()
-              }
-            }} type='range' min={1} max={3} />
-
-          </div>
+          <SpeedComponent setSpeed={handleSetSpeed} speed={speed} />
         } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} /> : <div></div>}
 
       </div>
@@ -265,6 +251,10 @@ export default function SearchView({ searchType }: {
         reset()
 
       }} open={error ? true : false} showTrigger={false} description={error.description} />}
+
+      {message && <PopUp title={message.title} buttonText="x" handleOnPopUpButton={() => {
+        clearMessage()
+      }} open={!!message} showTrigger={false} description={message.description} />}
     </Main>
   )
 }

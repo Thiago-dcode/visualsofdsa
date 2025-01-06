@@ -13,10 +13,10 @@ type LinkedListNodeProps = {
     isHead?: boolean,
     isTail?: boolean,
     isDoubly: boolean
-    setIsAnimationRunning: (e: boolean) => void
+    setAnimationRunning: (e: boolean) => void
 }
 
-export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, index, isHead = false, isTail = false, setIsAnimationRunning }: LinkedListNodeProps) {
+export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, index, isHead = false, isTail = false, setAnimationRunning }: LinkedListNodeProps) {
     const [isOver, setIsOver] = useState(false);
 
     const handleRef = useCallback(async (element: HTMLElement | HTMLDivElement | null) => {
@@ -24,16 +24,16 @@ export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, ind
         if (!element) return
         node.ref = element;
         if (node.next && node.next.isLastAdd && node.nextEdge) {
-            setIsAnimationRunning(true)
+            setAnimationRunning(true)
             await animate(node.nextEdge.ref, 'lit-node-edge 1s')
         }
         if (node.isLastAdd) {
-            setIsAnimationRunning(true)
+            setAnimationRunning(true)
 
             await animate(element, 'add-node 1s', () => {
 
             }, true)
-            setIsAnimationRunning(false)
+            setAnimationRunning(false)
         }
 
         node.isLastAdd = false;

@@ -5,7 +5,6 @@ import { Primitive } from '@/types'
 import '../style.css'
 function LinearDsContainer({ children, className = '', linearDs, dsType = 'stack' }: { linearDs: LinearDs<Primitive>, children: React.ReactNode, className?: string, dsType?: 'stack' | 'queue' }) {
 
-    console.log(dsType, linearDs.nodeHeight,linearDs.nodeHeightSpacing)
     return (
         <div className={cn('w-full h-full flex items-center justify-center', className)}>
 

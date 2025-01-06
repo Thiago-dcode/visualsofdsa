@@ -17,10 +17,11 @@ import './style.css'
 import Info from "@/components/ui/info"
 import Link from "next/link"
 import Title from "@/components/ui/Title"
+import { useAnimationRunning } from "@/context/animationRunningContext"
 export default function DynamicArray() {
     const { array, write, insert, fill, access, error, maxSize, capacity, size, cleanUp, delete: del, action, push, pop, search } = useDynamicArray();
     const [open, setOpen] = useState(false);
-    const [isAnimationRunning, setIsAnimationRunning] = useState(false)
+    const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
     const [data, setData] = useState<string>('');
     const [pushData, setPushData] = useState<string>('');
     const [searchData, setSearchData] = useState<string>('');
@@ -96,11 +97,11 @@ export default function DynamicArray() {
 
                         <ButtonAction title="write" action="write" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || index === undefined) return;
-                            setIsAnimationRunning(true)
+                            setAnimationRunning(true)
                             setOpen(false)
                             // setAction('write')
                             await write(data === '' ? null : data, index)
-                            setIsAnimationRunning(false)
+                            setAnimationRunning(false)
 
                         }} />
 
@@ -113,7 +114,7 @@ export default function DynamicArray() {
                         }} type="text" name="" id="" />
                         <ButtonAction title="push" action="write" isLoading={isAnimationRunning} onClick={() => {
                             if (isAnimationRunning || index === undefined) return;
-                            setIsAnimationRunning(true)
+                            setAnimationRunning(true)
                             setOpen(false)
                             // setAction('write')
                             push(pushData === '' ? null : pushData)
@@ -136,7 +137,7 @@ export default function DynamicArray() {
 
                         <ButtonAction title="insert" action="insert" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || indexInsert === undefined) return;
-                            setIsAnimationRunning(true)
+                            setAnimationRunning(true)
                             setOpen(false)
                             await insert(insertData === '' ? null : insertData, indexInsert)
 
@@ -154,11 +155,11 @@ export default function DynamicArray() {
                         }} type="number" min={0} />
                         <ButtonAction title="access" action="read" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning || indexAccess === undefined) return;
-                            setIsAnimationRunning(true)
+                            setAnimationRunning(true)
                             setOpen(false)
                             // setAction('write')
                             await access(indexAccess)
-                            setIsAnimationRunning(false)
+                            setAnimationRunning(false)
 
                         }} />
                     </InputWithButtonContainer>
@@ -171,11 +172,11 @@ export default function DynamicArray() {
 
                         <ButtonAction title="search" action="search" isLoading={isAnimationRunning} onClick={async () => {
                             if (isAnimationRunning) return;
-                            setIsAnimationRunning(true)
+                            setAnimationRunning(true)
                             setOpen(!open)
 
                             await search(searchData === '' ? null : searchData, (data) => {
-                                setIsAnimationRunning(false)
+                                setAnimationRunning(false)
                                 setSearchData('')
                                 setSearchResult(data)
                             })
@@ -188,11 +189,11 @@ export default function DynamicArray() {
                         <>
                             <ButtonAction title="pop" action="delete" isLoading={isAnimationRunning} onClick={async () => {
                                 if (isAnimationRunning) return;
-                                setIsAnimationRunning(true)
+                                setAnimationRunning(true)
                                 setOpen(!open)
 
                                 await pop()
-                                setIsAnimationRunning(false)
+                                setAnimationRunning(false)
                             }} />
                             {/* DELETE OPERATION */}
 
@@ -205,10 +206,10 @@ export default function DynamicArray() {
 
                                 <ButtonAction title="delete" action="delete" isLoading={isAnimationRunning} onClick={async () => {
                                     if (isAnimationRunning || indexDelete === undefined) return;
-                                    setIsAnimationRunning(true)
+                                    setAnimationRunning(true)
                                     setOpen(false)
                                     await del(indexDelete)
-                                    setIsAnimationRunning(false)
+                                    setAnimationRunning(false)
 
 
 
@@ -226,7 +227,7 @@ export default function DynamicArray() {
                             if (isAnimationRunning || !fillAmount) return;
 
                             setOpen(false)
-                            setIsAnimationRunning(true);
+                            setAnimationRunning(true);
                             fill(fillAmount);
 
 
@@ -240,14 +241,14 @@ export default function DynamicArray() {
             {/* //PROPERTIES AND CONFIG: */}
             <div className="flex  justify-between w-full px-4">
                 <Properties properties={{
-                    size:{
-                        value:size,
+                    size: {
+                        value: size,
                     },
-                    capacity:{
-                        value:capacity
+                    capacity: {
+                        value: capacity
                     },
-                    maxSize:{
-                        value:maxSize
+                    maxSize: {
+                        value: maxSize
                     }
                 }} />
                 {/* {!isStackOverFlow && !isFilling && !isAnimationRunning && <div>
@@ -263,7 +264,7 @@ export default function DynamicArray() {
                     array.map((node, i) => {
                         return (
                             <MemoryAdressContainer index={i} showIndex={node !== null} key={'memoryAdressContainer-' + `${node ? node.id : 'null-' + i}`}>
-                                {node !== null ? <StaticArrayNodeComponent isLastNode={i === size - 1} action={action} node={node} setAnimationRunning={setIsAnimationRunning} /> : <p className="border flex items-center justify-center
+                                {node !== null ? <StaticArrayNodeComponent isLastNode={i === size - 1} action={action} node={node} setAnimationRunning={setAnimationRunning} /> : <p className="border flex items-center justify-center
                      dark:border-white/50 border-black/50 w-full h-full"></p>}
                             </MemoryAdressContainer>
 
@@ -287,7 +288,7 @@ export default function DynamicArray() {
                 {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
                     cleanUp()
                     setIndex(0)
-                    setIsAnimationRunning(false)
+                    setAnimationRunning(false)
 
                 }} open={error ? true : false} showTrigger={false} description={error.description} />}
             </RamContainer>

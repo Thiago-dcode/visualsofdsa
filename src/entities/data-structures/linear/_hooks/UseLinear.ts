@@ -16,25 +16,7 @@ function UseLinear(linearDs: LinearDs<Primitive> | null) {
     callBack()
     linearDs.flush();
   };
-  const fill = async (
-    i = 0,
-    spaceRemaining: number,
-    callBackFiller: (data: Primitive) => Promise<boolean>
-  ) => {
-    if (!linearDs) return;
-    setIsFilling(true);
-    const _delay = getSpeed(linearDs.speed) * 1000;
 
-    if (spaceRemaining <= i) {
-      setIsFilling(false);
-
-      return;
-    }
-    i++;
-    await callBackFiller("let foo = " + i);
-    await delay(_delay);
-    await fill(i, spaceRemaining, callBackFiller);
-  };
   const render = (clean = false) => {
     if (clean && linearDs != null && linearDs?.size > 0) {
       flush();
@@ -62,6 +44,25 @@ function UseLinear(linearDs: LinearDs<Primitive> | null) {
       }
     });
   };
+  const fill = async (
+    i = 0,
+    spaceRemaining: number,
+    callBackFiller: (data: Primitive) => Promise<boolean>
+  ) => {
+    if (!linearDs) return;
+    setIsFilling(true);
+    const _delay = getSpeed(linearDs.speed) * 1000;
+
+    if (spaceRemaining <= i) {
+      setIsFilling(false);
+
+      return;
+    }
+    i++;
+    await callBackFiller("let foo = " + i);
+    await delay(_delay);
+    await fill(i, spaceRemaining, callBackFiller);
+  };
   const empty = async (callBackEmptier: () => Promise<boolean>) => {
     setIsFilling(true);
     if (!linearDs) {
@@ -73,7 +74,7 @@ function UseLinear(linearDs: LinearDs<Primitive> | null) {
       return;
     }
     await callBackEmptier();
-    render();
+
    await empty(callBackEmptier);
   };
   return {
