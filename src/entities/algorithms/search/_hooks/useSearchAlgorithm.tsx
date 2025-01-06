@@ -154,7 +154,7 @@ export default function useSearchAlgorithm(
   const onSearchEnds = (found: boolean, steps: number, value: number, index: number) => {
     setMessage({
       title: 'STEPS TAKEN',
-      description: found ? <p>Value <strong>{value}</strong> found at index <strong>{index}</strong>, steps taken: <strong>{steps}</strong></p> : <p>Value <strong>{value}</strong> not found, steps taken: <strong>{steps}</strong></p>
+      description: found ? <>Value <strong>{value}</strong> found at index <strong>{index}</strong>, steps taken: <strong>{steps}</strong></> : <>Value <strong>{value}</strong> not found, steps taken: <strong>{steps}</strong></>
     })
 
   }

@@ -6,7 +6,7 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { getMaxInAnArrayOfNodes, getMinInAnArrayOfNodes } from "@/lib/utils";
 import { useAnimationSort } from "./useAnimationSort";
 import { AlgoSortType } from "../../types";
-const getSpeed = ( speed: number) => {
+const getSpeed = (speed: number) => {
   switch (speed) {
     case 1:
       return 0.3;
@@ -134,7 +134,7 @@ export const useSortAlgorithms = (
   const onSortEnds = (steps: number) => {
     setMessage({
       title: 'STEPS TAKEN',
-      description: <p>Took <strong >{steps} steps</strong>  to sort an array of size {array?.length}</p>
+      description: <>Took <strong >{steps} steps</strong>  to sort an array of size {array?.length}</>
     })
     setIsSorted(true);
   }
