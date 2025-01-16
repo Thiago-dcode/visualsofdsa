@@ -1,22 +1,23 @@
 import React, { ReactNode } from 'react'
 import Title from './ui/Title'
-import dynamic from 'next/dynamic'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion'
 type Props = {
     title: string,
     info: ReactNode
 }
 function PageHeaderTitle({ title, info }: Props) {
 
-    const Info = dynamic(() => import('@/components/ui/info'), {
-        ssr: true,
-        loading: () => <div className='bg-red-700'>loading</div>
-    });
-
-
     return (
-        <div className='flex items-center justify-center gap-2'>
+        <div className='flex flex-col w-full items-center justify-center'>
             <Title title={title} />
-            <Info title={title} text={info} />
+            <Accordion defaultValue='item-1'  className='w-full' type="single" collapsible>
+                <AccordionItem className='flex flex-col w-full items-end'defaultChecked  value="item-1">
+                    <AccordionTrigger className='p-1'></AccordionTrigger>
+                    <AccordionContent className='text-xl'>
+                        {info}
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
         </div>
     )
 }

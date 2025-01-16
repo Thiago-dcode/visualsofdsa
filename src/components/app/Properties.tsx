@@ -33,8 +33,8 @@ function Properties({ properties, className }: {
     }, [])
 
     return (
-        <div className={cn("flex items-start  flex-col pl-4 -mt-4 gap-3", className)}>
-            <h3 className="text-xl font-bold">Properties: </h3>
+        <div className={cn("flex items-start  flex-col pl-4 -mt-4 gap-2", className)}>
+            <h3 className=" font-bold">Properties: </h3>
             <div className="flex  items-start w-full flex-wrap  gap-4">
 
                 {
@@ -47,8 +47,8 @@ function Properties({ properties, className }: {
                                         await handleAnimation(key, propertie, ref)
                                     })()
 
-                                }} key={`propertie-${key}-${propertie.value}-${i}`} className=" px-4 py-1 dark:border-app-off-white border-2 border-app-off-black rounded-md">
-                                    <h4 className=" font-bold text-lg">{key}: {propertie.value}</h4>
+                                }} key={`propertie-${key}-${propertie.value}-${i}`} className=" px-3 text-center dark:border-app-off-white border-2 border-app-off-black rounded-md">
+                                    <h4 className=" font-medium"><span className="font-bold">{key}</span>: {propertie.value}</h4>
                                 </div>
                             )
                         }
