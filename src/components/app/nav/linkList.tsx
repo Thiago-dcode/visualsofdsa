@@ -7,8 +7,6 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 
-
-
 export default function LinkList({ link, isFirstLvl }: {
     link: LinkItem,
     isFirstLvl: boolean

@@ -10,9 +10,9 @@ import ButtonAction from "../_components/ButtonAction"
 import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import Section from "@/components/container/Section"
-import StaticArrayNodeComponent from "../staticArray/components/StaticArrayNodeComponent"
+import StaticArrayNodeComponent from "../static-array/components/StaticArrayNodeComponent"
 import Properties from "@/components/app/Properties"
-import { searchResult } from "../staticArray/type"
+import { searchResult } from "../static-array/type"
 import './style.css'
 import Info from "@/components/ui/info"
 import Link from "next/link"
@@ -38,43 +38,7 @@ export default function DynamicArray() {
 
     }, [action])
     return (
-        <Main className="">
-            <div className='flex items-center justify-center gap-2'>
-                <Title title={'Dynamic Array'} />
-
-                <Info title="DYNAMIC ARRAY" text={<article>
-                    <p>
-                        A dynamic array is <b>a linear data structure</b> similar to <Link target="_blank" className="italic text-app-bauhaus-blue" href={'/data-structures/linear/static-array'}>static arrays</Link>, but it can grow in size dynamically; in other words, the array size isn&apos;t static. To accomplish this dynamic growth, the array first sets an <b className="text-app-bauhaus-yellow">initial capacity</b> (not the actual size), and when the size grows and there isn&apos;t enough space, the array is copied to a new array with double the capacity.
-                    </p>
-                    <br />
-                    <p>
-                        Besides the <Link target="_blank" className="italic text-app-bauhaus-blue" href={'/data-structures/linear/static-array'}>static arrays</Link> operations, dynamic arrays have their own operations:
-                    </p>
-
-                    <h4 className="font-semibold py-2">Key Operations of a Dynamic Array:</h4>
-                    <br />
-                    <ul>
-                        <li>
-                            <b className="font-semibold text-app-bauhaus-green">Push:</b> This operation <b>adds a new element after the last position</b>, increasing the array&apos;s size by one. Sometimes the array must be copied to a new array due to lack of space, so in this situation, the push operation will take O(n). <br /><b>Overall time complexity: O(1).</b>
-                        </li>
-                        <br />
-                        <li>
-                            <b className="font-semibold text-app-bauhaus-red">Pop:</b> This operation <b>deletes the element at the last position</b>. <br /><b>Time complexity: O(1).</b>
-                        </li>
-                        <br />
-                        <li>
-                            <b className="font-semibold text-app-bauhaus-orange">Insert:</b> This operation <b>adds an element at a specific position by a given index</b>. To accomplish this operation, all elements on the right side of the desired position must be shifted towards the right before the new element is inserted, and then the new element is written in the released position.<br /><b>Time complexity: O(n).</b>
-                        </li>
-                        <br />
-                        <li>
-                            <b className="font-semibold text-app-bauhaus-red">Delete:</b> This operation <b>removes an element from a specific position by a given index</b>. To accomplish this operation, the program first deletes the desired element, and then all elements on the right side must be shifted to the left, taking the place of the deleted element. <br /><b>Time complexity: O(n).</b>
-                        </li>
-                        <br />
-                    </ul>
-                </article>
-
-                } className="self-start" />
-            </div>
+        <>
             {<OperationsContainer setOpen={(value) => {
 
                 setOpen(value)
@@ -293,6 +257,6 @@ export default function DynamicArray() {
                 }} open={error ? true : false} showTrigger={false} description={error.description} />}
             </RamContainer>
 
-        </Main >
+        </ >
     )
 }

@@ -1,10 +1,17 @@
-import { LINKS } from '@/components/app/nav/links'
 import PageComponent from '@/components/app/PageComponent'
+import AlgorithmService from '@/entities/algorithms/__classes/AlgorithmService';
 
 
 
-export default function AlgorithmPage() {
+export default async function AlgorithmPage() {
+  const algorithmTypes = await AlgorithmService.getAllTypes();
   return (
-    <PageComponent linkItem={LINKS[1]}/>
-  )
+
+    <PageComponent entityParent="algorithms" title="Algorithms" description={<>
+      Algorithm is a step-by-step procedure for solving a problem or accomplishing a task. In the context of data structures and algorithms, <b>it is a set of well-defined instructions for performing a specific computational task.</b> Algorithms are fundamental to computer science and play a very important role in designing efficient solutions for various problems. Understanding algorithms is essential for anyone interested in mastering data structures and algorithms.
+    </>} image={{
+      dark: 'algoimagedark.png',
+      light: 'algoimagelight.png'
+    }} entityTypes={algorithmTypes} />
+  );
 }

@@ -1,11 +1,9 @@
-import { LINKS } from "@/components/app/nav/links";
-import LinksComponent from "@/components/app/nav/linksComponent";
+ import LinksComponent from "@/components/app/nav/linksComponent";
 import Main from "@/components/container/Main";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+
 import Title from "@/components/ui/Title";
+import { LINKS } from "@/lib/links";
 import { ArrowRight, ArrowUpRight, ChevronsRight } from "lucide-react";
-import Link from "next/link";
 
 const ARTICLES = [
   {

@@ -4,7 +4,7 @@ import Node from '../../_classes/Node';
 import UseStaticArrayAnimation from '../hooks/UseStaticArrayAnimation';
 import LinearNodeComponent from '../../_components/LinearNodeComponent';
 import { ArrayActions } from '../type';
-import { DynamicArrayNode } from '../../dynamicArray/class/DynamicArrayNode';
+import { DynamicArrayNode } from '../../dynamic-array/class/DynamicArrayNode';
 
 type props = {
   node: Node<Primitive>;

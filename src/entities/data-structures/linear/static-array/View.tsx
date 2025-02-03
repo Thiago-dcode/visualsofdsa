@@ -47,32 +47,7 @@ export default function StaticArray() {
 
     }
     return (
-        <Main className="">
-            <div className='flex items-center justify-center gap-2'>
-                <Title title={'Static Array'} />
-
-                <Info title="Static Array" text={<article>
-                    <p> A static array is <b>a linear data structure</b> that has a <b>fixed size</b> determined at the time of creation(compiler time). This means that the number of elements in the array is set and cannot be changed dynamically. Static arrays are commonly used in various algorithms and applications where the size of the data set is known in advance, such as storing a collection of items, implementing lookup tables, and representing matrices.</p>
-                    <br />
-                    <h4 className="font-semibold py-2"> Key Operations of a Static Array:</h4>
-
-                    <ul>
-                        <li>
-                            <b className="font-semibold text-green-400"> Write: </b> This operation <b>sets the value of an element at a specified index</b>. Since the array size is fixed, writing a value to an existing position is straightforward and efficient. <br /><b>Time complexity: O(1).</b>
-                        </li>
-                        <br />
-                        <li>
-                            <b className="font-semibold text-yellow-400"> Access: </b>This operation <b>retrieves an element at a specified index</b>. Since arrays provide direct access to any element via its index, accessing an element is very efficient. <br /><b>Time complexity: O(1).</b>
-                        </li>
-                        <br />
-
-                        <li>
-                            <b className="font-semibold text-purple-400"> Search: </b> This operation is the most complex and time-consuming because the program must start from the beginning of the array, checking each memory address until the desired value is found or the end of the array is reached. This is because, by default, the program does not know which index stores the value, so it must consider the worst-case scenario. <br /><b>Time complexity: O(n).</b>
-                        </li>
-                    </ul>
-                </article>
-                } className="self-start" />
-            </div>
+        <>
             {<OperationsContainer setOpen={(value) => {
 
                 setOpen(value)
@@ -266,6 +241,6 @@ export default function StaticArray() {
                 cleanUp()
 
             }} open={error ? true : false} showTrigger={false} description={error.description} />}
-        </Main >
+        </>
     )
 }

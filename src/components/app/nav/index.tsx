@@ -1,7 +1,7 @@
 'use client'
 
 import LinkList from './linkList';
-import { LINKS } from './links';
+import { LINKS } from '../../../lib/links';
 
 
 function Nav() {
