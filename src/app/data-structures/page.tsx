@@ -1,6 +1,7 @@
 
 import PageComponent from "@/components/app/PageComponent";
 import DataStructureService from "@/entities/data-structures/__classes/DataStructureService";
+import { EntityType } from "@/types";
 
 
 
@@ -15,6 +16,6 @@ export default async function DataStructurePage() {
         </>} image={{
             dark: 'dsimagedark.png',
             light: 'dsimagelight.png'
-        }} entityTypes={dataStructureTypes} />
+        }} entityTypes={dataStructureTypes as EntityType[]} />
     );
 }

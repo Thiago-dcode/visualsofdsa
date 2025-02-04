@@ -6,7 +6,7 @@ import { ChevronsRight } from 'lucide-react'
 import LinksComponent from './nav/linksComponent'
 import ImageComponent from './imageComponent'
 import { Entities, EntityType } from '@/types'
-import { buildEntityLink } from '@/lib/utils'
+import { buildLinkFromArgs } from '@/lib/utils'
 
 export default function PageComponent({ entityTypes, entityParent, title, description, image }: {
     image: {
@@ -56,10 +56,9 @@ export default function PageComponent({ entityTypes, entityParent, title, descri
                                             {entityType.children &&
                                                 <LinksComponent title={``} links={entityType.children.map(ent => {
                                                     return {
-                                                        children: null,
                                                         name: ent.name,
                                                         enable: ent.enable,
-                                                        link: buildEntityLink(entityParent, ent)
+                                                        link: buildLinkFromArgs(entityParent, ent.type.link, ent.link)
                                                     }
                                                 })} />
 

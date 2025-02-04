@@ -16,6 +16,22 @@ class AlgorithmService extends BaseService {
       },
     });
   }
+  async getAllTypesSimple() {
+    return await this.client.algorithmType.findMany({
+      select: {
+        name: true,
+        enable: true,
+        link: true,
+        children: {
+          select: {
+            name: true,
+            link: true,
+            enable: true,
+          },
+        },
+      },
+    });
+  }
 }
 
 let singleton: AlgorithmService | null = null;

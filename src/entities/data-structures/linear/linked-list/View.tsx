@@ -12,8 +12,7 @@ import { PopUp } from '@/components/ui/PopUp';
 import HeapContainer from '@/components/container/HeapContainer';
 import Properties from '@/components/app/Properties';
 import Section from '@/components/container/Section';
-import Info from '@/components/ui/info';
-import Title from '@/components/ui/Title';
+
 import { ArrowRight } from 'lucide-react';
 import { useAnimationRunning } from '@/context/animationRunningContext';
 

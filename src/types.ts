@@ -37,6 +37,11 @@ export type EntityBase = {
   description: string | null;
   link: string;
 };
+export type EntitySimple = {
+  name: string;
+  enable: boolean;
+  link: string;
+};
 export type EntityWithType = EntityBase & {
   type: EntityBase;
 };
@@ -48,4 +53,8 @@ export type EntityType = EntityBase & {
   children: EntityWithType[];
   description: string;
 };
+export type EntityTypeSimple = EntitySimple & {
+  children: EntitySimple[];
+};
+
 export type Entities = "data-structures" | "algorithms";

@@ -17,10 +17,9 @@ import { Link } from "@/components/app/nav/type";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-export const buildEntityLink = (
-  entityParent: Entities,
-  entity: EntityWithType
-): Link => `/${entityParent}/${entity.type.link}/${entity.link}`;
+export const buildLinkFromArgs = (...args: string[]): Link => {
+  return args.reduce((prev, curr) => prev + `/${curr}`, "") as Link;
+};
 export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 export const getSpeed = (speed: speed) => {

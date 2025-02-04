@@ -10,7 +10,7 @@ import { PopUp } from '@/components/ui/PopUp'
 import { Switch } from '@/components/ui/switch'
 import Title from '@/components/ui/Title'
 import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAction'
-import useStaticArray from '@/entities/data-structures/linear/staticArray/hooks/useStaticArray'
+import useStaticArray from '@/entities/data-structures/linear/static-array/hooks/useStaticArray'
 import { Direction, speed, VisualizationArrays } from '@/types'
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
@@ -29,15 +29,15 @@ import SpeedComponent from '@/components/app/speedComponent'
 import { config } from '@/config'
 import { useSpeed } from '@/hooks/useSpeed'
 
-export default function SearchView({ searchType }: {
-  searchType?: AlgoSearchType
+export default function SearchView({ type }: {
+  type?: AlgoSearchType
 }) {
 
   const { array, maxSize, createSorted, createUnsorted, flush, error } = useStaticArray(500);
   const { speed, handleSetSpeed } = useSpeed(1, config.localStorageKeys.speed.sort)
   const [direction, setDirection] = useState<Direction>('ascending')
   const { isAnimationRunning, setAnimationRunning } = useAnimationRunning()
-  const [sorted, setSorted] = useState(searchType === 'binary');
+  const [sorted, setSorted] = useState(type === 'binary');
   const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray('bars');
   const { binary, linear, message, clearMessage } = useSearchAlgorithm(array as Node<number>[] | null, sorted, direction, speed, visualizationMode);
 
@@ -53,7 +53,7 @@ export default function SearchView({ searchType }: {
     const searchValue = getValue();
     if (searchValue === null) return;
     setAnimationRunning(true);
-    switch (searchType) {
+    switch (type) {
       case 'linear':
         await linear(searchValue);
         break;
@@ -90,7 +90,7 @@ export default function SearchView({ searchType }: {
     setAnimationRunning(true);
     const arraySize = getValue();
     if (arraySize === null) return;
-    switch (searchType) {
+    switch (type) {
       case 'linear':
         await !sorted ? createUnsorted(arraySize) : createSorted(arraySize, direction);
         break;
@@ -107,19 +107,19 @@ export default function SearchView({ searchType }: {
 
   }
 
-  
+
   const reset = () => {
     flush()
     resetValue();
     setAnimationRunning(false)
   }
-  return (  
+  return (
 
     <>
       <OperationsContainer>
         {!array ? <Section>
           <div className='self-center flex items-center gap-3'>
-            {searchType === 'linear' && <div className='flex self-center gap-2 items-center'>   <p>Sorted?</p><Switch defaultChecked={sorted} onCheckedChange={() => {
+            {type === 'linear' && <div className='flex self-center gap-2 items-center'>   <p>Sorted?</p><Switch defaultChecked={sorted} onCheckedChange={() => {
               toggleSorted()
             }} /></div>}
             {sorted && <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'ascending' ? false : true} onCheckedChange={() => {
@@ -177,7 +177,7 @@ export default function SearchView({ searchType }: {
         } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} /> : <div></div>}
 
       </div>
-      {array ? <RenderVisualization direction={direction} sorted={searchType === 'binary' ? true : sorted} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} /> : null}
+      {array ? <RenderVisualization direction={direction} sorted={type === 'binary' ? true : sorted} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} /> : null}
       {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
         reset()
 
@@ -186,6 +186,6 @@ export default function SearchView({ searchType }: {
       {message && <PopUp title={message.title} buttonText="x" handleOnPopUpButton={() => {
         clearMessage()
       }} open={!!message} showTrigger={false} description={message.description} />}
-  </>
+    </>
   )
 }

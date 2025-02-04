@@ -1,7 +1,7 @@
 import RamContainer from '@/components/container/RamContainer'
 import Node from '@/entities/data-structures/linear/_classes/Node'
 import MemoryAdressContainer from '@/entities/data-structures/linear/_components/MemoryAdressContainer'
-import StaticArrayNodeComponent from '@/entities/data-structures/linear/staticArray/components/StaticArrayNodeComponent'
+import StaticArrayNodeComponent from '@/entities/data-structures/linear/static-array/components/StaticArrayNodeComponent'
 import { MemorySize, Primitive } from '@/types'
 import React from 'react'
 

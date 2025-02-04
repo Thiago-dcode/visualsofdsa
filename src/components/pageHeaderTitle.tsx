@@ -6,7 +6,7 @@ type Props = {
     info: string
 }
 function PageHeaderTitle({ title, info }: Props) {
-    console.log(info)
+  
     return (
         <div className='flex flex-col w-full items-center justify-center'>
             <Title title={title} />

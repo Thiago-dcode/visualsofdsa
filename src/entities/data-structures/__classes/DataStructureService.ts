@@ -17,6 +17,22 @@ class DataStructureService extends BaseService {
       },
     });
   }
+  async getAllTypesSimple() {
+    return await this.client.dataStructureType.findMany({
+      select: {
+        name: true,
+        enable: true,
+        link: true,
+        children: {
+          select: {
+            name: true,
+            link: true,
+            enable: true,
+          },
+        },
+      },
+    });
+  }
 }
 
 let singleton: DataStructureService | null = null;

@@ -382,10 +382,12 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                         </p>
                     </footer>
                 </article>`,
+              enable: true,
             },
             {
               name: "insertion",
               link: "insertion",
+              enable: true,
               algorithmTypeId: result.id,
               description: `<article>
                     <header>
@@ -420,6 +422,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               name: "merge",
               link: "merge",
               algorithmTypeId: result.id,
+              enable: true,
               description: `<article>
                     <header>
                         <p>
@@ -456,6 +459,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               name: "quick",
               link: "quick",
               algorithmTypeId: result.id,
+              enable: true,
               description: `<article>
                         <header>
                             <p>
