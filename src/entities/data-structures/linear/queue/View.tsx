@@ -17,7 +17,7 @@ import PropertiesList from '../_components/PropertiesList';
 import LinearDsConfig from '../_components/LinearDsConfig';
 import Title from '@/components/ui/Title';
 import { useAnimationRunning } from '@/context/animationRunningContext';
-import { LinearDsActions } from '../staticArray/type';
+import { LinearDsActions } from '../static-array/type';
 export default function Queue() {
 
   const { enqueue, queue, dequeue, isStackOverFlow, setIsStackOverFlow } = UseQueue();
@@ -28,31 +28,8 @@ export default function Queue() {
   const [nodeData, setNodeData] = useState('let x = 25')
   return (
     <>
-      {queue && <Main className="">
-        <div className='flex items-center justify-center gap-2'>
-          <Title title={'Queue'} />
-          <Info title="QUEUE" text={<article>
-            <p> A queue is <b>a linear data structure</b> that follows the <b>First In, First Out (FIFO)</b> principle. This means that the first element added to the queue is the first one to be removed. Queues are commonly used in various algorithms and applications, such as managing tasks in a printer, handling requests in web servers, and implementing breadth-first search (BFS) in graphs.</p>
-            <br />
-            <h4 className="font-semibold py-2"> Key Operations of a Queue:</h4>
+      {queue && <>
 
-            <ul>
-              <li>
-                <b className="font-semibold text-green-400"> Enqueue: </b>This operation <b>adds an element to the end of the queue</b>. When a new element is enqueued, it becomes the new rear element, and the previous rear element is now just before the new rear element. <br /><b>Time complexity: O(1).</b>
-              </li>
-              <br />
-              <li>
-                <b className="font-semibold text-red-400"> Dequeue: </b>This operation <b>removes and returns the front element of the queue</b>. Since the queue follows the FIFO principle, the element that was first added is the one that is removed. If the queue is empty, attempting to dequeue an element will usually result in an error or an undefined value. <br /><b>Time complexity: O(1).</b>
-              </li>
-              <br />
-              <li>
-                <b className="font-semibold text-yellow-400"> Front: </b> This operation <b>returns the front element of the queue without removing it</b>. It allows you to inspect the element at the front of the queue without modifying the queue&lsquo;s state. This is useful when you need to see what the front element is without altering the queue. <br /><b>Time complexity: O(1).</b>
-              </li>
-            </ul>
-          </article>
-          } className="self-start" />
-
-        </div>
         {/* //ACTION BUTTONS: */}
         {<OperationsContainer open={open} setOpen={setOpen}>
           <div className="flex flex-wrap  items-end gap-2 justify-end">
@@ -144,7 +121,7 @@ export default function Queue() {
         }} open={isStackOverFlow} showTrigger={false} description={`A Stack overflow error has ocurred. Stack maximum size of ${queue.maxSize} exceeded.`} />
 
 
-      </Main>}
+      </>}
     </>
   )
 }

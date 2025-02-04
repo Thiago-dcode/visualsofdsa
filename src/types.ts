@@ -24,3 +24,37 @@ export type Position = {
   y: number;
 };
 export type VisualizationArrays = "memoryRam" | "bars";
+
+export type Implementation = {
+  id: number;
+  javaScript?: string;
+  java?: string;
+};
+export type EntityBase = {
+  id: number;
+  name: string;
+  enable: boolean;
+  description: string | null;
+  link: string;
+};
+export type EntitySimple = {
+  name: string;
+  enable: boolean;
+  link: string;
+};
+export type EntityWithType = EntityBase & {
+  type: EntityBase;
+};
+export type EntityWithImplementation = EntityBase & {
+  implementation?: Implementation;
+};
+export type EntityFull = EntityWithType & EntityWithImplementation;
+export type EntityType = EntityBase & {
+  children: EntityWithType[];
+  description: string;
+};
+export type EntityTypeSimple = EntitySimple & {
+  children: EntitySimple[];
+};
+
+export type Entities = "data-structures" | "algorithms";

@@ -1,18 +1,15 @@
 'use client'
 import Properties from '@/components/app/Properties'
 import InputWithButtonContainer from '@/components/container/InputWithButtonContainer'
-import Main from '@/components/container/Main'
 import OperationsContainer from '@/components/container/OperationsContainer'
 import Section from '@/components/container/Section'
-import Info from '@/components/ui/info'
 import { Input } from '@/components/ui/input'
 import { PopUp } from '@/components/ui/PopUp'
 import { Switch } from '@/components/ui/switch'
-import Title from '@/components/ui/Title'
 import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAction'
-import useStaticArray from '@/entities/data-structures/linear/staticArray/hooks/useStaticArray'
-import { Direction, speed, VisualizationArrays } from '@/types'
-import React, { useEffect, useRef, useState } from 'react'
+import useStaticArray from '@/entities/data-structures/linear/static-array/hooks/useStaticArray'
+import { Direction, } from '@/types'
+import React, {useRef, useState } from 'react'
 import { toast } from 'sonner'
 import Node from '@/entities/data-structures/linear/_classes/Node'
 import { PopOverComponent } from '@/components/ui/PopOverComponent'
@@ -29,10 +26,10 @@ import { useVisualizationArray } from '@/hooks/useVisualizationArray'
 import SpeedComponent from '@/components/app/speedComponent'
 import { useSpeed } from '@/hooks/useSpeed'
 
-export default function SortView({ algoSortType }: {
-  algoSortType: AlgoSortType
+export default function SortView({ type }: {
+  type: AlgoSortType
 }) {
-  const maxBarSize = useRef(algoSortType !== 'merge' ? 650 : 300);
+  const maxBarSize = useRef(type !== 'merge' ? 650 : 300);
   const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500)
   const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
   const [direction, setDirection] = useState<Direction>('ascending')
@@ -54,7 +51,7 @@ export default function SortView({ algoSortType }: {
       toast.info('Array is already sorted');
 
     } else {
-      switch (algoSortType) {
+      switch (type) {
         case 'bubble':
           await bubble();
           break;

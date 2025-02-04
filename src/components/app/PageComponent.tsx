@@ -1,50 +1,66 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import Main from '../container/Main'
 import Title from '../ui/Title'
-import { LinkItem } from './nav/type'
+
 import { ChevronsRight } from 'lucide-react'
 import LinksComponent from './nav/linksComponent'
-import Image from 'next/image'
 import ImageComponent from './imageComponent'
+import { Entities, EntityType } from '@/types'
+import { buildLinkFromArgs } from '@/lib/utils'
 
-export default function PageComponent({ linkItem }: {
-    linkItem: LinkItem
+export default function PageComponent({ entityTypes, entityParent, title, description, image }: {
+    image: {
+        light: string,
+        dark: string,
+    },
+    title: string,
+    description: ReactElement,
+    entityParent: Entities,
+    entityTypes: EntityType[]
 }) {
-    const childrenLinks = linkItem.children;
+
     return (
         <Main className="">
             <header className="flex flex-col items-center justify-center gap-4 my-10 w-full">
-                <Title xls={5} title={linkItem.name} />
+                <Title xls={5} title={title} />
 
 
             </header>
 
             <main className="flex flex-col gap-14 items-center justify-center max-w-[1400px]">
                 <article className="text-2xl flex flex-col gap-2 text-justify">
-                    {linkItem.description}
+
+                    {description}
+
                 </article>
 
-                {linkItem.image && <ImageComponent image={linkItem.image}/>}
+                <ImageComponent image={image} />
                 <article className="self-start flex flex-col items-start justify-start gap-4 w-full">
 
                     <div className=" flex items-center justify-start gap-2">
 
-                        <Title xls={2} h={3} uppercase={false} title={`${linkItem.name} can be divided in:`} /></div>
+                        <Title xls={2} h={3} uppercase={false} title={`${title} can be divided in:`} /></div>
                     <div className="flex flex-col items-start just start gap-10 w-full">
-                        {childrenLinks &&
-                            childrenLinks.map((childLink) => {
+                        {entityTypes &&
+                            entityTypes.map((entityType) => {
 
-                                return (<div key={`${childLink.link}`} className="flex flex-col w-full ">
+                                return (<div key={`${entityType.link}`} className="flex flex-col w-full ">
                                     <div className="flex items-center justify-start">
-                                        <ChevronsRight /><Title uppercase={false} title={`${childLink.name} `} xls={3} h={4} />
+                                        <ChevronsRight /><Title uppercase={false} title={`${entityType.name} `} xls={3} h={4} />
                                     </div>
 
                                     <div className=" flex flex-col items-start justify-start gap-2 border-t border-t-app-off-black ark:border-t-white p-4 w-full">
-                                        <p className="text-xl">{childLink.description}</p>
+                                        <p className="text-xl">{entityType.description}</p>
                                         <div className='w-full'>
 
-                                            {childLink?.children &&
-                                                <LinksComponent title={``} links={childLink.children} />
+                                            {entityType.children &&
+                                                <LinksComponent title={``} links={entityType.children.map(ent => {
+                                                    return {
+                                                        name: ent.name,
+                                                        enable: ent.enable,
+                                                        link: buildLinkFromArgs(entityParent, ent.type.link, ent.link)
+                                                    }
+                                                })} />
 
                                             }
                                         </div>

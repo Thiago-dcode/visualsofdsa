@@ -1,4 +1,4 @@
-import LinkedListNode from "@/entities/data-structures/linear/linkedList/classes/LinkedListNode";
+import LinkedListNode from "@/entities/data-structures/linear/linked-list/classes/LinkedListNode";
 import Queue from "@/entities/data-structures/linear/queue/classes/Queue";
 import NodeShape from "@/lib/classes/NodeShape";
 import Position from "@/lib/classes/position/Position";

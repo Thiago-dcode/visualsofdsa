@@ -1,13 +1,8 @@
-import { ReactElement } from "react"
 
+export type Link = `/${string}` | "#";
 export type LinkItem = {
-    name: string,
-    link: `/${string}` | '#',
-    children: LinkItem[] | null,
-    image?: {
-        dark: string,
-        light:string
-    },
-    description?: string|ReactElement,
-    enable: boolean
-}
+  name: string;
+  link: Link;
+  children?: LinkItem[];
+  enable: boolean;
+};

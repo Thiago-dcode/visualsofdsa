@@ -4,7 +4,7 @@ import {
 } from 'react'
 import Node from '../../_classes/Node';
 import LinearNodeComponent from '../../_components/LinearNodeComponent';
-import { LinearDsActions } from '../../staticArray/type';
+import { LinearDsActions } from '../../static-array/type';
 type props = {
 
     node: Node<Primitive>,

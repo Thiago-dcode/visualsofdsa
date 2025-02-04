@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id     Int     @id @default(autoincrement())
+  email  String  @unique
+  name   String?
+  avatar String?
+}
+
+model DataStructure {
+  id                            Int                          @id @default(autoincrement())
+  name                          String                       @unique
+  enable                        Boolean                      @default(false)
+  link                          String                       @unique
+  description                   String?
+  dataStructureTypeId           Int
+  dataStructureImplementationId Int?
+  implementation                DataStructureImplementation? @relation(fields: [dataStructureImplementationId], references: [id], onDelete: Cascade)
+  type                          DataStructureType            @relation(fields: [dataStructureTypeId], references: [id], onDelete: Cascade)
+}
+
+model DataStructureType {
+  id          Int             @id @default(autoincrement())
+  name        String          @unique
+  description String
+  enable      Boolean         @default(false)
+  link        String          @unique
+  children    DataStructure[]
+}
+
+model DataStructureImplementation {
+  id         Int             @id @default(autoincrement())
+  javaScript String?
+  java       String?
+  children   DataStructure[]
+}
+
+model Algorithm {
+  id                        Int                      @id @default(autoincrement())
+  name                      String                   @unique
+  enable                    Boolean                  @default(false)
+  link                      String                   @unique
+  description               String?
+  algorithmTypeId           Int
+  algorithmImplementationId Int?
+  implementation            AlgorithmImplementation? @relation(fields: [algorithmImplementationId], references: [id], onDelete: Cascade)
+  type                      AlgorithmType            @relation(fields: [algorithmTypeId], references: [id], onDelete: Cascade)
+}
+
+model AlgorithmType {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  description String
+  link        String      @unique
+  enable      Boolean     @default(false)
+  children    Algorithm[]
+}
+
+model AlgorithmImplementation {
+  id         Int         @id @default(autoincrement())
+  javaScript String?
+  java       String?
+  children   Algorithm[]
+}

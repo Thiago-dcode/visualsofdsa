@@ -7,8 +7,8 @@ import LinearNodeComponent from '../../_components/LinearNodeComponent';
 import UseQueueAnimation from '../hooks/UseQueueAnimation';
 import Queue from '../classes/Queue';
 
-import LinkedListNode from '../../linkedList/classes/LinkedListNode';
-import { LinearDsActions } from '../../staticArray/type';
+import LinkedListNode from '../../linked-list/classes/LinkedListNode';
+import { LinearDsActions } from '../../static-array/type';
 type props = {
 
     node: LinkedListNode<Primitive>,

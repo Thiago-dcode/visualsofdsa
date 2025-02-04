@@ -1,14 +1,25 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import { Direction, Position, Primitive, speed } from "@/types";
+import {
+  Direction,
+  Entities,
+  EntityWithType,
+  Position,
+  Primitive,
+  speed,
+} from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { v4 as uuid4 } from "uuid";
 import PositionClass from "./classes/position/Position";
+import { Link } from "@/components/app/nav/type";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+export const buildLinkFromArgs = (...args: string[]): Link => {
+  return args.reduce((prev, curr) => prev + `/${curr}`, "") as Link;
+};
 export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 export const getSpeed = (speed: speed) => {

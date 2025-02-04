@@ -1,6 +1,6 @@
 import { listName, Primitive } from "@/types";
-import LinkedList from "../linkedList/classes/LinkedList";
-import LinkedListNode from "../linkedList/classes/LinkedListNode";
+import LinkedList from "../linked-list/classes/LinkedList";
+import LinkedListNode from "../linked-list/classes/LinkedListNode";
 import List from "./List";
 import { speed } from "@/types";
 export default abstract class LinearDs<T extends Primitive> extends List {
