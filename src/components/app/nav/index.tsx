@@ -11,11 +11,11 @@ import { buildLinkFromArgs } from '@/lib/utils';
 async function Nav() {
 
     const [dsTypes, algoTypes] = await Promise.all([DataStructureService.getAllTypesSimple(), AlgorithmService.getAllTypesSimple()]);
-    const formatToLinkItem = (entity: Entities, entityTypes: EntityTypeSimple[]) => {
+    const formatToLinkItem = (entity: Entities, entityTypes: EntityTypeSimple[]): LinkItem[] => {
 
         return entityTypes.map(({ name, link, enable, children }) => {
             return {
-                name, enable, link: buildLinkFromArgs(entity, link), children: children.map(child => {
+                name, enable, link: '#', children: children.map(child => {
                     return {
                         name: child.name, enable: child.enable, link: buildLinkFromArgs(entity, link, child.link),
                     }

@@ -1,8 +1,12 @@
 import { Primitive } from "@/types";
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { OnCompare } from "../types";
+import NodeShape from "@/lib/classes/NodeShape";
 
-export default abstract class Tree<T extends Primitive, K extends Node<T>> {
+export default abstract class Tree<
+  T extends Primitive,
+  K extends Node<T>
+> extends NodeShape {
   protected _root: K | null = null;
 
   abstract insert(data: T, onCompare: OnCompare<T, K> | null): Promise<void>;

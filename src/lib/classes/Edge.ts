@@ -1,8 +1,9 @@
-import LinkedListNode from "@/entities/data-structures/linear/linkedList/classes/LinkedListNode";
+
 import { Primitive, Ref } from "@/types";
 import { getEuclideanDistance, getAngle } from "../utils";
 import NodeShape from "./NodeShape";
-import { requestAnimation } from "@/lib/utils";
+import Node from "@/entities/data-structures/linear/_classes/Node";
+
 export class Edge {
   constructor(
     public ref: Ref = null,
@@ -19,8 +20,8 @@ export class Edge {
     this.angle = 0;
   }
   public setShape(
-    nodeStart: LinkedListNode<Primitive> | null,
-    nodeEnd: LinkedListNode<Primitive> | null,
+    nodeStart: Node<Primitive> | null,
+    nodeEnd: Node<Primitive> | null,
     nodeShape: NodeShape,
     extraHeight = 0,
     extraWidth = 0

@@ -1,16 +1,16 @@
-import BinaryTreeNode from "../../../_classes/BinaryTreeNode";
-import { BinaryTreeSearch } from "../Bts";
+import BinaryTreeNode from "../../../tree/_classes/BinaryTreeNode";
+import { BinarySearchTree } from "../BinarySearchTree";
 
 describe("Testing insert method", () => {
   it("should insert when root is null", () => {
-    const bts = new BinaryTreeSearch();
+    const bts = new BinarySearchTree();
     const data = 234;
     bts.insert(data);
     expect(bts.root).toBeTruthy();
     expect(bts.root?.data).toBe(data);
   });
   it("should insert on the right side", () => {
-    const bts = new BinaryTreeSearch();
+    const bts = new BinarySearchTree();
 
     bts.insert(100);
     bts.insert(120);
@@ -36,11 +36,11 @@ describe("Testing insert method", () => {
 
 describe("Testing Search method", () => {
   it("Should return null when root is null", async () => {
-    const bts = new BinaryTreeSearch();
+    const bts = new BinarySearchTree();
     expect(await bts.search(244)).toBeNull();
   });
   it("Should search", async () => {
-    const bts = new BinaryTreeSearch();
+    const bts = new BinarySearchTree();
     for (let index = 0; index < 1000; index++) {
       bts.insert(index);
     }
@@ -58,7 +58,7 @@ describe("Testing Search method", () => {
 
 describe("Testing remove method", () => {
   it("Should remove on case 1 and 2", async () => {
-    const bts = new BinaryTreeSearch();
+    const bts = new BinarySearchTree();
     await bts.insert(1);
     //case 1 no child
     expect(await bts.remove(1)).toBeTruthy();
@@ -84,7 +84,7 @@ describe("Testing remove method", () => {
     bts.clear();
   });
   it("Should remove on case 3", async () => {
-    const bts = new BinaryTreeSearch();
+    const bts = new BinarySearchTree();
 
     // Build the tree:
     //         15
@@ -138,7 +138,7 @@ describe("Testing remove method", () => {
 
 describe("Test inOrderTraversal", async () => {
   it("Should traverse", async () => {
-    const bts = new BinaryTreeSearch();
+    const bts = new BinarySearchTree();
 
     // Build the tree:
     //         15

@@ -40,17 +40,17 @@ export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, ind
     }, [])
 
     useEffect(() => {
-      
+
         if (node.next && node.next.ref) {
-            node.next.ref.style.outline = isOver?'rgb(22,163,74,0.8) solid 5px':'none'
-            node.next.ref.style.borderRadius = isOver?'5px':'none'
+            node.next.ref.style.outline = isOver ? 'rgb(22,163,74,0.8) solid 5px' : 'none'
+            node.next.ref.style.borderRadius = isOver ? '5px' : 'none'
         }
         if (node.prev && node.prev.ref && isDoubly) {
-            node.prev.ref.style.outline =isOver?'rgb(220,38,38,0.8) solid 5px':'none'
-             node.prev.ref.style.borderRadius = isOver?'5px':'none'
+            node.prev.ref.style.outline = isOver ? 'rgb(220,38,38,0.8) solid 5px' : 'none'
+            node.prev.ref.style.borderRadius = isOver ? '5px' : 'none'
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOver])
     return (
         <div onMouseLeave={(e) => {
@@ -95,8 +95,8 @@ export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, ind
                 </div> : null}
                 {/* NODE-DATA */}
                 <div className='w-3/5 dark:bg-app-off-white dark:text-black  bg-app-off-black text-white  h-full flex items-center justify-center text-center text-xs overflow-auto'>
-                    <p className={cn('h-full w-full text-center flex items-center justify-center  break-all font-semibold text-sm border-r dark:border-r-white border-r-black',{
-                        'border-l dark:border-l-white border-l-black':isDoubly
+                    <p className={cn('h-full w-full text-center flex items-center justify-center  break-all font-semibold text-sm border-r dark:border-r-white border-r-black', {
+                        'border-l dark:border-l-white border-l-black': isDoubly
                     })} style={{
                         zIndex: 49,
                     }}>&quot;{node.data}&quot;</p>
