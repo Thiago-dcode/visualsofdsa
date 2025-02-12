@@ -1,9 +1,9 @@
 import Position from "@/lib/classes/position/Position";
-import BinaryTree from "../../_classes/BinaryTree";
-import BinaryTreeNode from "../../_classes/BinaryTreeNode";
-import { OnCompare, OnTraversal } from "../../types";
+import BinaryTree from "../../tree/_classes/BinaryTree";
+import BinaryTreeNode from "../../../non-linear/tree/_classes/BinaryTreeNode";
+import { OnCompare, OnTraversal } from "../../../non-linear/tree/types";
 
-export class BinaryTreeSearch<T extends number> extends BinaryTree<T> {
+export class BinarySearchTree<T extends number> extends BinaryTree<T> {
   async insert(
     data: T,
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null

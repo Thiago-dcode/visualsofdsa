@@ -1,5 +1,5 @@
-import { PrismaClient, Prisma } from "@prisma/client";
-const prisma = new PrismaClient();
+import { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 const dataStructureTypes: Prisma.DataStructureTypeCreateInput[] = [
   {
@@ -126,7 +126,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               link: "dynamic-array",
               description: `<article>
                     <p>
-                        A dynamic array is <b>a linear data structure</b> similar to <Link target="_blank" className="italic text-app-bauhaus-blue" href={'/data-structures/linear/static-array'}>static arrays</Link>, but it can grow in size dynamically; in other words, the array size isn&apos;t static. To accomplish this dynamic growth, the array first sets an <b className="text-app-bauhaus-yellow">initial capacity</b> (not the actual size), and when the size grows and there isn&apos;t enough space, the array is copied to a new array with double the capacity.
+                        A dynamic array is <b>a linear data structure</b> similar to <a target="_blank" className="italic text-app-bauhaus-blue" href={'/data-structures/linear/static-array'}>static arrays</a>, but it can grow in size dynamically; in other words, the array size isn&apos;t static. To accomplish this dynamic growth, the array first sets an <b className="text-app-bauhaus-yellow">initial capacity</b> (not the actual size), and when the size grows and there isn&apos;t enough space, the array is copied to a new array with double the capacity.
                     </p>
                     <br />
                     <p>
@@ -215,8 +215,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                         <b>Time complexity:</b> O(n), as each node still needs to be checked sequentially.
                     </li>
                 </ul>
-            </article>)
-        }`,
+            </article>`,
               enable: true,
               dataStructureTypeId: result.id,
             },
@@ -227,8 +226,39 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
         await prisma.dataStructure.createMany({
           data: [
             {
-              name: "bts",
-              link: "bts",
+              name: "binary search tree",
+              link: "binary-search-tree",
+              description: `<article>
+  <p>A <b>Binary Tree</b> is a <b>hierarchical data structure</b> where each node has at most two children, referred to as the <b>left child</b> and the <b>right child</b>. A <b>Binary Search Tree (BST)</b> is a special type of binary tree where the value of each node is greater than all values in its left subtree and less than all values in its right subtree. This property makes BSTs highly efficient for search, insertion, and deletion operations.</p>
+
+  <h4 class="font-semibold py-2">Key Operations of a Binary Search Tree:</h4>
+
+  <ul>
+    <li>
+      <b class="font-semibold text-green-400">Insert:</b>
+      This operation <b>adds a new node to the binary search tree</b>. The node is placed in the correct position based on its value, ensuring the BST property is maintained. <br />
+      <b>Time complexity:</b> O(log n) on average, O(n) in the worst case (unbalanced tree).
+    </li>
+    <br />
+    <li>
+      <b class="font-semibold text-red-400">Delete:</b>
+      This operation <b>removes a node from the binary search tree</b>. There are three cases: deleting a leaf node, deleting a node with one child, and deleting a node with two children. The BST property must be preserved after deletion. <br />
+      <b>Time complexity:</b> O(log n) on average, O(n) in the worst case (unbalanced tree).
+    </li>
+    <br />
+    <li>
+      <b class="font-semibold text-yellow-400">Search:</b>
+      This operation <b>finds a node with a specific value in the binary search tree</b>. It starts at the root and recursively compares the target value with the current node, moving left or right based on the comparison. <br />
+      <b>Time complexity:</b> O(log n) on average, O(n) in the worst case (unbalanced tree).
+    </li>
+    <br />
+    <li>
+      <b class="font-semibold text-blue-400">Traversal:</b>
+      This operation <b>visits all nodes in the binary search tree</b> in a specific order. Common traversal methods include <b>in-order</b> (left, root, right), <b>pre-order</b> (root, left, right), and <b>post-order</b> (left, right, root). <br />
+      <b>Time complexity:</b> O(n), as each node is visited once.
+    </li>
+  </ul>
+</article>`,
               enable: true,
               dataStructureTypeId: result.id,
             },

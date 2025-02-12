@@ -5,7 +5,7 @@ import AlgorithmService from "@/entities/algorithms/__classes/AlgorithmService";
 import { AlgoSearchType, AlgoSortType } from "@/entities/algorithms/types";
 import View from "@/entities/data-structures/linear/linked-list/View";
 import dynamic from "next/dynamic";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default async function AlgorithmsPage({ params }: { params: { type: string, algo: string } }) {
 
@@ -15,6 +15,7 @@ export default async function AlgorithmsPage({ params }: { params: { type: strin
 
     if (!algo) notFound();
 
+    if (!algo.enable) redirect('/algorithms')
     const getView = () => {
 
         switch (typeParam) {

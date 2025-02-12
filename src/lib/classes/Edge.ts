@@ -1,8 +1,8 @@
-import LinkedListNode from "@/entities/data-structures/linear/linkedList/classes/LinkedListNode";
 import { Primitive, Ref } from "@/types";
 import { getEuclideanDistance, getAngle } from "../utils";
 import NodeShape from "./NodeShape";
-import { requestAnimation } from "@/lib/utils";
+import Node from "@/entities/data-structures/linear/_classes/Node";
+
 export class Edge {
   constructor(
     public ref: Ref = null,
@@ -19,8 +19,8 @@ export class Edge {
     this.angle = 0;
   }
   public setShape(
-    nodeStart: LinkedListNode<Primitive> | null,
-    nodeEnd: LinkedListNode<Primitive> | null,
+    nodeStart: Node<Primitive> | null,
+    nodeEnd: Node<Primitive> | null,
     nodeShape: NodeShape,
     extraHeight = 0,
     extraWidth = 0
@@ -29,11 +29,11 @@ export class Edge {
       return;
     }
     const nodeStartPosition = {
-      x: nodeStart.position.x ,
+      x: nodeStart.position.x,
       y: nodeStart.position.y + nodeShape.nodeHeight / 2,
     };
     const nodeNextPosition = {
-      x: nodeEnd.position.x ,
+      x: nodeEnd.position.x,
       y: nodeEnd.position.y + nodeShape.nodeHeight / 2,
     };
 
@@ -42,9 +42,9 @@ export class Edge {
     const angle = getAngle(nodeStartPosition, nodeNextPosition);
 
     this.x = 0;
-      this.y = nodeShape.nodeHeight / 2 ;
-      this.length = length;
-      this.angle = angle;
+    this.y = nodeShape.nodeHeight / 2;
+    this.length = length;
+    this.angle = angle;
   }
   get shape() {
     return {
