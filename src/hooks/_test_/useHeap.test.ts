@@ -1,10 +1,10 @@
 import { renderHook } from "@testing-library/react";
 import useHeap from "../useHeap";
-import LinkedList from "@/entities/data-structures/linear/linkedList/classes/LinkedList";
+import LinkedList from "@/entities/data-structures/linear/linked-list/classes/LinkedList";
 import NodeShape from "@/lib/classes/NodeShape";
 import { act } from "react";
 import Position from "@/lib/classes/position/Position";
-import LinkedListNode from "@/entities/data-structures/linear/linkedList/classes/LinkedListNode";
+import LinkedListNode from "@/entities/data-structures/linear/linked-list/classes/LinkedListNode";
 import { Primitive } from "@/types";
 import { ACTION } from "next/dist/client/components/app-router-headers";
 

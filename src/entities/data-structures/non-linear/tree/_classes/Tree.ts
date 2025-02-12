@@ -1,6 +1,6 @@
 import { Primitive } from "@/types";
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import { OnCompare } from "../types";
+import { OnCompare, OnTraversal, TreeObj } from "../types";
 import NodeShape from "@/lib/classes/NodeShape";
 
 export default abstract class Tree<
@@ -13,6 +13,10 @@ export default abstract class Tree<
   abstract remove(data: T, onCompare: OnCompare<T, K> | null): Promise<boolean>;
   abstract search(data: T): Promise<K | null>;
   abstract traversal(): Promise<void>;
+  abstract levelOrderTraversal(
+    onTraversal: OnTraversal<T, K> | null
+  ): Promise<K[][]>;
+  abstract toTreeObj(): TreeObj | null;
   clear() {
     this._root = null;
   }

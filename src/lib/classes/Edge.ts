@@ -1,4 +1,3 @@
-
 import { Primitive, Ref } from "@/types";
 import { getEuclideanDistance, getAngle } from "../utils";
 import NodeShape from "./NodeShape";
@@ -30,11 +29,11 @@ export class Edge {
       return;
     }
     const nodeStartPosition = {
-      x: nodeStart.position.x ,
+      x: nodeStart.position.x,
       y: nodeStart.position.y + nodeShape.nodeHeight / 2,
     };
     const nodeNextPosition = {
-      x: nodeEnd.position.x ,
+      x: nodeEnd.position.x,
       y: nodeEnd.position.y + nodeShape.nodeHeight / 2,
     };
 
@@ -43,9 +42,9 @@ export class Edge {
     const angle = getAngle(nodeStartPosition, nodeNextPosition);
 
     this.x = 0;
-      this.y = nodeShape.nodeHeight / 2 ;
-      this.length = length;
-      this.angle = angle;
+    this.y = nodeShape.nodeHeight / 2;
+    this.length = length;
+    this.angle = angle;
   }
   get shape() {
     return {

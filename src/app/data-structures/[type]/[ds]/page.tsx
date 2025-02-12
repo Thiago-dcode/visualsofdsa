@@ -9,7 +9,6 @@ export default async function DsPage({ params }: { params: { type: string, ds: s
     const typeParam = params.type.toLocaleLowerCase();
     const dsParam = params.ds.toLocaleLowerCase()
     const ds = await DataStructureService.getOneByLink(dsParam);
-    console.log(dsParam, ds)
     if (!ds) notFound();
     if (!ds.enable) redirect('/data-structures');
     const DsView = dynamic(() => import(`@/entities/data-structures/${typeParam}/${ds.link}/View`), {

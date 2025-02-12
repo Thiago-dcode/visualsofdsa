@@ -1,6 +1,5 @@
 import { Primitive } from "@/types";
 import Node from "../../linear/_classes/Node";
-import BinaryTreeNode from "./_classes/BinaryTreeNode";
 import { Edge } from "@/lib/classes/Edge";
 
 export type OnCompare<T extends Primitive, K extends Node<T>> = (
@@ -12,8 +11,14 @@ export type OnTraversal<T extends Primitive, K extends Node<T>> = (
   node: K
 ) => Promise<void>;
 
+export type OnLevelInOrderTraversal<T extends Primitive, K extends Node<T>> = (
+  node: K,
+  level: number
+) => Promise<void>;
+
 export type TreeObj = {
   node: Node<Primitive>;
-  edge: Edge;
-  children?: TreeObj[] | null;
+  edge: Edge | null;
+  depth: number;
+  children: TreeObj[];
 };

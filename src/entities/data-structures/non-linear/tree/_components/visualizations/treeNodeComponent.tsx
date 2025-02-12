@@ -16,9 +16,9 @@ function TreeNodeComponent({ node, nodeShape }: Props) {
             <div style={{
                 width: nodeShape.nodeWidth + 'px',
                 height: nodeShape.nodeHeight + 'px',
-                left: node.position.x,
-                top: node.position.y
-            }} className='absolute border-2 rounded-full bg-white'>{node.data}</div>
+                left: node.position.x + 'px',
+                top: node.position.y + 'px'
+            }} className='absolute border-2 rounded-full bg-white text-black flex items-center justify-center'><p>{node.data}</p></div>
 
         </>
     )
