@@ -20,7 +20,7 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
         behavior: "smooth",
       });
     };
-    const arrayOfPromiseses = array.map((node, i) => {
+    const promises = array.map((node, i) => {
       const ref = node.ref;
 
       if (!ref) return null;
@@ -37,7 +37,7 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
       });
     });
 
-    await Promise.all(arrayOfPromiseses);
+    await Promise.all(promises);
   };
   const animationOnMerge = async (
     nodeA: Node<number>,
