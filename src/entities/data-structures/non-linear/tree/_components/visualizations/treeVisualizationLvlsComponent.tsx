@@ -6,17 +6,20 @@ import { Primitive } from '@/types'
 import Arrow from '@/components/ui/arrow'
 import Tree from '../../_classes/Tree'
 import BinaryTree from '../../_classes/BinaryTree'
+import { Edge } from '@/lib/classes/Edge'
 
-function TreeVisualizationLvlsComponent({ treeObj, tree, parent, width, prevDepth = 1, height, x, initialX, setX }: {
-    treeObj: TreeObj,
+function TreeVisualizationLvlsComponent<T extends Primitive, K extends Node<T>>({ treeObj, tree, parent, width, prevDepth = 1, height, x, initialX, setX, onInsertAnimation, onCreateEdgeAnimation }: {
+    treeObj: TreeObj<K>,
     parent?: Node<Primitive>
-    tree: Tree<Primitive, Node<Primitive>>
+    tree: Tree<T, K>
     width: number
     prevDepth?: number,
     height: number,
     x: number,
     initialX: number,
-    setX: (x: number) => void
+    setX: (x: number, currentNodePosition: number) => void,
+    onInsertAnimation?: (node: K) => Promise<void>,
+    onCreateEdgeAnimation?: (edge: Edge) => Promise<void>,
 
 }) {
     const { node, edge, depth, children } = treeObj
@@ -36,21 +39,24 @@ function TreeVisualizationLvlsComponent({ treeObj, tree, parent, width, prevDept
         node.position.set(baseX, y)
         if (parent && ((Math.abs(parent.position.x - node.position.x) <= tree.nodeWidth / 2) || (Math.abs(initialX - node.position.x) <= tree.nodeWidth / 2))) {
 
-            setX(initialX + (tree.nodeWidth * 2))
+            setX(initialX + (tree.nodeWidth), node.position.x)
         }
 
     }
     const setEdge = () => {
         if (!parent || !edge) return;
-        edge.setShape(parent, node, tree)
-        edge.x = parent.position.x + tree.nodeWidth / 2
-        edge.y = parent.position.y + tree.nodeHeight / 2
+        edge.setShapeByPosition({
+            x: parent.position.x + tree.nodeWidth / 2,
+            y: parent.position.y + tree.nodeHeight / 2
+        }, {
+            x: node.position.x + tree.nodeWidth / 2,
+            y: node.position.y + tree.nodeHeight / 2
+        })
+
     }
 
     setPosition();
     setEdge();
-
-    // console.log(prevDepth, depth)
 
     return (
         <>
@@ -61,9 +67,9 @@ function TreeVisualizationLvlsComponent({ treeObj, tree, parent, width, prevDept
                 left: '0px'
             }} className='absolute border-2 border-red-600 '>
             </div> : null}
-            <TreeNodeComponent node={node} nodeShape={tree} />
-            {edge ? <Arrow color='green' edge={edge} /> : null}
-            {children && children.length ? children.map(treeObjChild => <TreeVisualizationLvlsComponent key={`tree-visualization-lvls-component-${treeObjChild.node.id}`} treeObj={treeObjChild} tree={tree} width={width} prevDepth={depth} parent={node} height={height} x={prevDepth === treeObjChild.depth ? x : x * 0.5} initialX={initialX} setX={setX} />) : null}
+            <TreeNodeComponent onInsertAnimation={onInsertAnimation} node={node} nodeShape={tree} />
+            {edge ? <Arrow onCreateEdgeAnimation={onCreateEdgeAnimation} color='green' edge={edge} /> : null}
+            {children && children.length ? children.map(treeObjChild => <TreeVisualizationLvlsComponent<T,K> key={`tree-visualization-lvls-component-${treeObjChild.node.id}`} treeObj={treeObjChild} tree={tree} width={width} prevDepth={depth} parent={node} height={height} x={prevDepth === treeObjChild.depth ? x : x * 0.5} initialX={initialX} setX={setX} onInsertAnimation={onInsertAnimation} onCreateEdgeAnimation={onCreateEdgeAnimation} />) : null}
         </>
     )
 }

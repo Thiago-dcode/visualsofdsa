@@ -168,7 +168,7 @@ describe("Test inOrderTraversal", async () => {
 
     await buildATree([15, 10, 20, 5, 12, 17, 25], bst);
     let data = 0;
-    bst.inOrderTraversal(async (node) => {
+    bst.inOrderTraversal(null,async (node) => {
       expect(data).toBeLessThan(node.data);
       data = node.data;
     });

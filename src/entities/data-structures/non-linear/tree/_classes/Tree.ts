@@ -9,14 +9,21 @@ export default abstract class Tree<
 > extends NodeShape {
   protected _root: K | null = null;
 
-  abstract insert(data: T, onCompare: OnCompare<T, K> | null): Promise<void>;
+  abstract insert(
+    data: T,
+    onCompare: OnCompare<T, K> | null
+  ): Promise<K | null>;
   abstract remove(data: T, onCompare: OnCompare<T, K> | null): Promise<boolean>;
   abstract search(data: T): Promise<K | null>;
   abstract traversal(): Promise<void>;
+  abstract inOrderTraversal(
+    branch: K | null,
+    onTraversal: OnTraversal<T, K> | null
+  ): Promise<void>;
   abstract levelOrderTraversal(
     onTraversal: OnTraversal<T, K> | null
   ): Promise<K[][]>;
-  abstract toTreeObj(): TreeObj | null;
+  abstract toTreeObj(): TreeObj<K> | null;
   clear() {
     this._root = null;
   }

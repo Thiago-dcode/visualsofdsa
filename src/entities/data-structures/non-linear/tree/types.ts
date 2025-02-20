@@ -4,7 +4,9 @@ import { Edge } from "@/lib/classes/Edge";
 
 export type OnCompare<T extends Primitive, K extends Node<T>> = (
   nodeA: K,
-  data: T
+  edge: Edge | null,
+  data: T,
+  oppositeNode?: K | null
 ) => Promise<void>;
 
 export type OnTraversal<T extends Primitive, K extends Node<T>> = (
@@ -16,9 +18,9 @@ export type OnLevelInOrderTraversal<T extends Primitive, K extends Node<T>> = (
   level: number
 ) => Promise<void>;
 
-export type TreeObj = {
-  node: Node<Primitive>;
+export type TreeObj<T extends Node<Primitive>> = {
+  node: T;
   edge: Edge | null;
   depth: number;
-  children: TreeObj[];
+  children: TreeObj<T>[];
 };

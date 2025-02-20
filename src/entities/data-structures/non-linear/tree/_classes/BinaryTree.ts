@@ -11,7 +11,7 @@ export default class BinaryTree<T extends Primitive> extends Tree<
   async insert(
     data: T,
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
-  ): Promise<void> {
+  ): Promise<BinaryTreeNode<T> | null> {
     throw new Error("Method not implemented.");
   }
   remove(
@@ -25,6 +25,19 @@ export default class BinaryTree<T extends Primitive> extends Tree<
   }
   traversal(): Promise<void> {
     throw new Error("Method not implemented.");
+  }
+  async inOrderTraversal(
+    branch: BinaryTreeNode<T> | null = null,
+    onTraversal: OnTraversal<T, BinaryTreeNode<T>> | null = null
+  ) {
+    const _traversal = async (node: BinaryTreeNode<T> | null) => {
+      if (!node) return;
+
+      await _traversal(node.left);
+      if (onTraversal) await onTraversal(node);
+      await _traversal(node.right);
+    };
+    await _traversal(branch || this._root);
   }
   async levelOrderTraversal(
     onTraversal: OnTraversal<T, BinaryTreeNode<T>> | null = null
@@ -70,8 +83,8 @@ export default class BinaryTree<T extends Primitive> extends Tree<
     node: BinaryTreeNode<T>,
     edge: Edge | null = null,
     depth = 0
-  ): TreeObj {
-    const children: TreeObj[] = [];
+  ): TreeObj<BinaryTreeNode<T>> {
+    const children: TreeObj<BinaryTreeNode<T>>[] = [];
     let _edge = edge;
     if (node.left) {
       children.push(this.toTreeObjRec(node.left, node.leftEdge, depth - 1));

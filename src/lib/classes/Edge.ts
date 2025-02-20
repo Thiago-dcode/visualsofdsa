@@ -18,6 +18,15 @@ export class Edge {
     this.length = 0;
     this.angle = 0;
   }
+  public setShapeByPosition(
+    start: { x: number; y: number },
+    end: { x: number; y: number }
+  ) {
+    this.x = start.x;
+    this.y = start.y;
+    this.length = getEuclideanDistance(start, end);
+    this.angle = getAngle(start, end);
+  }
   public setShape(
     nodeStart: Node<Primitive> | null,
     nodeEnd: Node<Primitive> | null,

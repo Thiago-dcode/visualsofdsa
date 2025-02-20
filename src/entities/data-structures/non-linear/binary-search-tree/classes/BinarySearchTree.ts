@@ -2,6 +2,7 @@ import Position from "@/lib/classes/position/Position";
 import BinaryTree from "../../tree/_classes/BinaryTree";
 import BinaryTreeNode from "../../../non-linear/tree/_classes/BinaryTreeNode";
 import { OnCompare, OnTraversal } from "../../../non-linear/tree/types";
+import { Edge } from "@/lib/classes/Edge";
 
 export class BinarySearchTree<T extends number> extends BinaryTree<T> {
   async insert(
@@ -9,10 +10,12 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> {
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
   ) {
     const node = new BinaryTreeNode(data, new Position(0, 0), null);
+
     if (!this._root) {
       this._root = node;
+      return this._root;
     }
-    await this._insert(this._root, node, onCompare);
+    return await this._insert(this._root, null, node, onCompare);
   }
   async insertNode(
     node: BinaryTreeNode<T>,
@@ -21,14 +24,14 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> {
     if (!this._root) {
       this._root = node;
     }
-    this._insert(this._root, node, onCompare);
+    return await this._insert(this._root, null, node, onCompare);
   }
 
   async search(
     data: T,
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
   ) {
-    return await this._search(this._root, data, onCompare);
+    return await this._search(this._root, null, data, onCompare);
   }
   async remove(
     data: T,
@@ -58,37 +61,55 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> {
   }
   private async _insert(
     node: BinaryTreeNode<T>,
+    edge: Edge | null,
     nodeToInsert: BinaryTreeNode<T>,
-    onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
-  ) {
-    if (onCompare) await onCompare(node, nodeToInsert.data);
-    if (node.data === nodeToInsert.data) return;
-    if (node.data < nodeToInsert.data) {
-      if (!node.right) {
-        node.right = nodeToInsert;
-        return;
+    onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null,
+    oppositeNode: BinaryTreeNode<T> | null = null
+  ): Promise<BinaryTreeNode<T> | null> {
+    node.isLastAdd = false;
+    if (onCompare) await onCompare(node, edge, nodeToInsert.data, oppositeNode);
+    if (node.data === nodeToInsert.data) return null;
+    else {
+      if (node.data < nodeToInsert.data) {
+        if (!node.right) {
+          node.right = nodeToInsert;
+          return node.right;
+        }
+        return await this._insert(
+          node.right,
+          node.rightEdge,
+          nodeToInsert,
+          onCompare,
+          node.left
+        );
+      } else {
+        if (!node.left) {
+          node.left = nodeToInsert;
+          return node.left;
+        }
+        return await this._insert(
+          node.left,
+          node.leftEdge,
+          nodeToInsert,
+          onCompare,
+          node.right
+        );
       }
-      this._insert(node.right, nodeToInsert, onCompare);
-    } else {
-      if (!node.left) {
-        node.left = nodeToInsert;
-        return;
-      }
-      this._insert(node.left, nodeToInsert, onCompare);
     }
   }
 
   private async _search(
     node: BinaryTreeNode<T> | null,
+    edge: Edge | null,
     dataToSearch: T,
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
   ): Promise<BinaryTreeNode<T> | null> {
-    if (onCompare && node) await onCompare(node, dataToSearch);
+    if (onCompare && node) await onCompare(node, edge, dataToSearch);
     if (!node || node.data === dataToSearch) return node;
     if (dataToSearch > node.data) {
-      return this._search(node.right, dataToSearch, onCompare);
+      return this._search(node.right, node.rightEdge, dataToSearch, onCompare);
     } else {
-      return this._search(node.left, dataToSearch, onCompare);
+      return this._search(node.left, node.leftEdge, dataToSearch, onCompare);
     }
   }
   private async _remove(
@@ -168,18 +189,5 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> {
       }
     }
     return successor;
-  }
-
-  async inOrderTraversal(
-    onTraversal: OnTraversal<T, BinaryTreeNode<T>> | null = null
-  ) {
-    const _traversal = async (node: BinaryTreeNode<T> | null) => {
-      if (!node) return;
-
-      await _traversal(node.left);
-      if (onTraversal) await onTraversal(node);
-      await _traversal(node.right);
-    };
-    await _traversal(this._root);
   }
 }
