@@ -33,6 +33,23 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    /* Background Colors */
+    --app-bg-black: #13161b;
+
+    /* Off Colors */
+    --app-off-white: #f2f0ef;
+    --app-off-black: #1a1918;
+    --app-off-gray: #c9c8c7;
+
+    /* Bauhaus Colors */
+    --app-bauhaus-red: #d94527;
+    --app-bauhaus-green: #24a482;
+    --app-bauhaus-yellow: #f5a845;
+    --app-bauhaus-bone: #d6c2af;
+    --app-bauhaus-blue: #458ff5;
+    --app-bauhaus-orange: #c57634;
+    --app-bauhaus-indigo: #5a45f5;
   }
 
   .dark {
@@ -75,7 +92,7 @@
   }
 }
 
-body{
+body {
   width: 100vw;
   height: 100vh;
 }
@@ -93,5 +110,3 @@ header {
   gap: 1.5rem;
   width: 100%;
 }
-
-
