@@ -1,35 +1,41 @@
 import { useEffect, useRef, useState } from "react";
-import { OnCompare, TreeObj } from "../../tree/types";
+import { TreeObj, TreeObjFull } from "../../tree/types";
 import { BinarySearchTree } from "../classes/BinarySearchTree";
 import useAnimationBts from "../../tree/hooks/useTreeAnimaton";
-import { Primitive } from "@/types";
 import BinaryTreeNode from "../../tree/_classes/BinaryTreeNode";
 
 export const useBinarySearchTree = () => {
   const { current: binarySearchTree } = useRef(new BinarySearchTree());
   const { onCompareAnimation, insertAnimation, oppositeBranchAnimation } =
     useAnimationBts<number, BinaryTreeNode<number>>(binarySearchTree);
-  const [treeObj, _setTreeObj] = useState<TreeObj<
+  const [treeObjFull, _setTreeObjFull] = useState<TreeObjFull<
     BinaryTreeNode<number>
   > | null>(null);
 
-  const setTreeObj = () => {
-    _setTreeObj(binarySearchTree.toTreeObj());
+  const setTreeObjFull = () => {
+    _setTreeObjFull(binarySearchTree.toTreeObj());
   };
-  const insert = async (data: number) => {
-    const _onCompare: OnCompare<number, BinaryTreeNode<number>> = async (
-      node,
-      edge,
-      data,
-      oppoNode
-    ) => {
-      await onCompareAnimation(node, edge, oppoNode || undefined);
-    };
-    const node = await binarySearchTree.insert(data, _onCompare);
-    if (node) node.isLastAdd = true;
-    else await oppositeBranchAnimation();
 
-    setTreeObj();
+  const mock = async (arr: number[]) => {
+    arr.forEach(async (n) => await binarySearchTree.insert(n));
+
+    setTreeObjFull();
+  };
+
+  const insert = async (data: number, onEnd = () => {}) => {
+    const node = await binarySearchTree.insert(data, onCompareAnimation);
+    if (node) node.isLastAdd = true;
+    else {
+      await oppositeBranchAnimation();
+      onEnd();
+    }
+
+    setTreeObjFull();
+  };
+  const search = async (data: number) => {
+    const node = await binarySearchTree.search(data, onCompareAnimation);
+
+    await oppositeBranchAnimation();
   };
   useEffect(() => {
     binarySearchTree.nodeHeight = 75;
@@ -37,8 +43,10 @@ export const useBinarySearchTree = () => {
   }, []);
   return {
     binarySearchTree,
-    treeObj,
+    treeObjFull,
     insert,
     insertAnimation,
+    search,
+    mock,
   };
 };

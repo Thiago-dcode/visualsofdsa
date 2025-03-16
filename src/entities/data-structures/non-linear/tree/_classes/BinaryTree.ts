@@ -1,13 +1,19 @@
 import { Primitive } from "@/types";
 import Tree from "./Tree";
 import BinaryTreeNode from "./BinaryTreeNode";
-import { OnCompare, OnTraversal, TreeObj } from "../types";
+import {
+  OnCompare,
+  OnPostOrderTraversal,
+  OnTraversal,
+  TreeObj,
+} from "../types";
 import { Edge } from "@/lib/classes/Edge";
 
 export default class BinaryTree<T extends Primitive> extends Tree<
   T,
   BinaryTreeNode<T>
 > {
+ 
   async insert(
     data: T,
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
@@ -73,30 +79,84 @@ export default class BinaryTree<T extends Primitive> extends Tree<
 
     return result;
   }
+
+  async postOrderTraversal(
+    onTraversal: OnPostOrderTraversal<T, BinaryTreeNode<T>> | null = null
+  ): Promise<BinaryTreeNode<T>[]> {
+    const result: BinaryTreeNode<T>[] = [];
+
+    const traverse = async (
+      node: BinaryTreeNode<T> | null,
+      parent: BinaryTreeNode<T> | null = null
+    ) => {
+      if (!node) return;
+
+      await traverse(node.left, node);
+      await traverse(node.right, node); 
+      if (onTraversal) {
+        onTraversal(node, this.getSiblings( parent));
+      }
+      result.push(node); 
+    };
+
+    await traverse(this.root);
+    return result;
+  }
+  private getSiblings(
+    parent: BinaryTreeNode<T> | null
+  ): BinaryTreeNode<T>[] {
+    if (!parent) return []; // Root has no siblings
+    return [parent.left, parent.right].filter(
+      (sibling) => sibling
+    ) as BinaryTreeNode<T>[];
+  }
   toTreeObj() {
     if (!this.root) return null;
 
-    return this.toTreeObjRec(this.root);
+    let maxDepth = 0;
+    const treeObj = this.toTreeObjRec(this.root, null, null, 0, (depth) => {
+      if (depth < maxDepth) maxDepth = depth;
+    });
+    return {
+      maxDepth,
+      treeObj,
+    };
   }
 
   private toTreeObjRec(
     node: BinaryTreeNode<T>,
+    parent: TreeObj<BinaryTreeNode<T>> | null = null,
     edge: Edge | null = null,
-    depth = 0
+    depth = 0,
+    onCall?: (depth: number) => void
   ): TreeObj<BinaryTreeNode<T>> {
+    if (onCall) onCall(depth);
     const children: TreeObj<BinaryTreeNode<T>>[] = [];
     let _edge = edge;
-    if (node.left) {
-      children.push(this.toTreeObjRec(node.left, node.leftEdge, depth - 1));
-    }
-    if (node.right) {
-      children.push(this.toTreeObjRec(node.right, node.rightEdge, depth - 1));
-    }
-    return {
+    const treeObj = {
       node,
+      parent,
       depth,
       edge: _edge,
       children,
     };
+
+    if (node.left) {
+      children.push(
+        this.toTreeObjRec(node.left, treeObj, node.leftEdge, depth - 1, onCall)
+      );
+    }
+    if (node.right) {
+      children.push(
+        this.toTreeObjRec(
+          node.right,
+          treeObj,
+          node.rightEdge,
+          depth - 1,
+          onCall
+        )
+      );
+    }
+    return treeObj;
   }
 }

@@ -16,24 +16,30 @@ const buildATree = async (arr: number[], bst: BinarySearchTree<number>) => {
 type TreeObjMock = {
   node: number;
   depth: number;
+  parent:TreeObjMock|null;
   children: TreeObjMock[];
 };
 function generateExpectedTreeObj(
   node: BinaryTreeNode<number>,
-  depth: number = 0
+  parent: TreeObjMock|null,
+  depth: number = 0,
+  onCall?: (depth: number) => void
 ): TreeObjMock {
   const children: TreeObjMock[] = [];
-  if (node.left) {
-    children.push(generateExpectedTreeObj(node.left, depth - 1));
-  }
-  if (node.right) {
-    children.push(generateExpectedTreeObj(node.right, depth - 1));
-  }
-  return {
+  const treeObjMock = {
     node: node.data,
     depth,
+    parent,
     children,
   };
+  if (onCall) onCall(depth);
+  if (node.left) {
+    children.push(generateExpectedTreeObj(node.left, treeObjMock,depth - 1, onCall));
+  }
+  if (node.right) {
+    children.push(generateExpectedTreeObj(node.right,treeObjMock, depth - 1, onCall));
+  }
+  return treeObjMock
 }
 describe("Testing insert method", () => {
   it("should insert when root is null", () => {
@@ -168,7 +174,7 @@ describe("Test inOrderTraversal", async () => {
 
     await buildATree([15, 10, 20, 5, 12, 17, 25], bst);
     let data = 0;
-    bst.inOrderTraversal(null,async (node) => {
+    bst.inOrderTraversal(null, async (node) => {
       expect(data).toBeLessThan(node.data);
       data = node.data;
     });
@@ -208,19 +214,122 @@ describe("Testing toTreeObj", () => {
     expect(result).toBeTruthy();
     if (!result) return;
 
-    // Generate the expected tree object dynamically
-    const _expected = generateExpectedTreeObj(bst.root!);
-
+    let maxDepth = 0;
+    const _expected = generateExpectedTreeObj(bst.root!, null,0, (depth) => {
+      if (depth < maxDepth) maxDepth = depth;
+    });
+    expect(maxDepth).toEqual(result.maxDepth);
     // Test the tree object
-    const testTreeObj = (treeObj: TreeObj, expected: typeof _expected) => {
+    const testTreeObj = (
+      treeObj: TreeObj<BinaryTreeNode<number>>,
+      expected: typeof _expected
+    ) => {
       expect(treeObj.node.data).toEqual(expected.node);
       expect(treeObj.depth).toEqual(expected.depth);
       expect(treeObj.children.length).toEqual(expected.children.length);
+      if(treeObj.parent){
+
+        expect(treeObj.parent.node.data).toEqual(expected.parent?.node)
+      }
       for (let i = 0; i < expected.children.length; i++) {
         testTreeObj(treeObj.children[i], expected.children[i]);
       }
     };
 
-    testTreeObj(result, _expected);
+    testTreeObj(result.treeObj, _expected);
+  });
+});
+
+describe("Testing TreeNode relationships", () => {
+  it("should maintain correct parent-child relationships", async () => {
+    const bst = new BinarySearchTree();
+    await buildATree([15, 10, 20, 5, 12, 17, 25], bst);
+
+    // Test root has no parent
+    expect(bst.root?.parent).toBeNull();
+
+    // Test direct parent-child relationships
+    expect(bst.root?.left?.parent).toBe(bst.root);
+    expect(bst.root?.right?.parent).toBe(bst.root);
+    expect(bst.root?.left?.left?.parent).toBe(bst.root?.left);
+    expect(bst.root?.left?.right?.parent).toBe(bst.root?.left);
+    expect(bst.root?.right?.left?.parent).toBe(bst.root?.right);
+    expect(bst.root?.right?.right?.parent).toBe(bst.root?.right);
+  });
+
+  it("should maintain correct sibling relationships", async () => {
+    const bst = new BinarySearchTree();
+    await buildATree([15, 10, 20, 5, 12, 17, 25], bst);
+
+    // Test siblings at different levels
+    expect(bst.root?.left?.nextSibling).toBe(bst.root?.right);
+    expect(bst.root?.right?.previousSibling).toBe(bst.root?.left);
+    
+    expect(bst.root?.left?.left?.nextSibling).toBe(bst.root?.left?.right);
+    expect(bst.root?.left?.right?.previousSibling).toBe(bst.root?.left?.left);
+    
+    expect(bst.root?.right?.left?.nextSibling).toBe(bst.root?.right?.right);
+    expect(bst.root?.right?.right?.previousSibling).toBe(bst.root?.right?.left);
+
+    // Test edge cases
+    expect(bst.root?.left?.left?.previousSibling).toBeNull();
+    expect(bst.root?.right?.right?.nextSibling).toBeNull();
+  });
+
+  it("should maintain correct leftmost/rightmost relationships", async () => {
+    const bst = new BinarySearchTree();
+    await buildATree([15, 10, 20, 5, 12, 17, 25], bst);
+
+    // Test root level
+    expect(bst.root?.leftmostChild).toBe(bst.root?.left);
+    expect(bst.root?.rightmostChild).toBe(bst.root?.right);
+
+    // Test second level
+    expect(bst.root?.left?.leftmostChild).toBe(bst.root?.left?.left);
+    expect(bst.root?.left?.rightmostChild).toBe(bst.root?.left?.right);
+    expect(bst.root?.right?.leftmostChild).toBe(bst.root?.right?.left);
+    expect(bst.root?.right?.rightmostChild).toBe(bst.root?.right?.right);
+
+    // Test leaf nodes
+    expect(bst.root?.left?.left?.leftmostChild).toBeNull();
+    expect(bst.root?.left?.left?.rightmostChild).toBeNull();
+  });
+
+  it("should maintain correct leftmost/rightmost sibling relationships", async () => {
+    const bst = new BinarySearchTree();
+    await buildATree([15, 10, 20, 5, 12, 17, 25], bst);
+
+    // Test root level
+    expect(bst.root?.leftmostSibling).toBeNull();
+    expect(bst.root?.rightmostSibling).toBeNull();
+
+    // Test second level
+    expect(bst.root?.left?.leftmostSibling).toBe(bst.root?.left);
+    expect(bst.root?.left?.rightmostSibling).toBe(bst.root?.right);
+    expect(bst.root?.right?.leftmostSibling).toBe(bst.root?.left);
+    expect(bst.root?.right?.rightmostSibling).toBe(bst.root?.right);
+
+    // Test third level
+    expect(bst.root?.left?.left?.leftmostSibling).toBe(bst.root?.left?.left);
+    expect(bst.root?.left?.left?.rightmostSibling).toBe(bst.root?.left?.right);
+    expect(bst.root?.left?.right?.leftmostSibling).toBe(bst.root?.left?.left);
+    expect(bst.root?.left?.right?.rightmostSibling).toBe(bst.root?.left?.right);
+  });
+
+  it("should maintain correct mod values", async () => {
+    const bst = new BinarySearchTree();
+    await buildATree([15, 10, 20, 5, 12, 17, 25], bst);
+
+    // Test mod values are initialized to 0
+    expect(bst.root?.mod).toBe(0);
+    expect(bst.root?.left?.mod).toBe(0);
+    expect(bst.root?.right?.mod).toBe(0);
+
+    // Test mod values can be set
+    bst.root!.mod = 5;
+    expect(bst.root?.mod).toBe(5);
+
+    bst.root!.left!.mod = -3;
+    expect(bst.root?.left?.mod).toBe(-3);
   });
 });

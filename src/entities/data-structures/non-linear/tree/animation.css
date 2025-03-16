@@ -1,4 +1,4 @@
-@keyframes create-node {
+@keyframes insert-node {
   0% {
     scale: 1;
     background: rgba(250, 204, 21, 0);
@@ -7,6 +7,25 @@
 
   50% {
     transform: scale(1.2);
+    background: var(--app-bauhaus-green);
+    border-color: var(--app-bauhaus-green);
+  }
+
+  100% {
+    transform: scale(1);
+    background: rgba(250, 204, 21, 0);
+    border-color: rgba(250, 204, 21, 0);
+  }
+}
+@keyframes find-node {
+  0% {
+    scale: 1;
+    background: rgba(250, 204, 21, 0);
+    border-color: rgba(250, 204, 21, 0);
+  }
+
+  50% {
+    transform: scale(1.4);
     background: var(--app-bauhaus-blue);
     border-color: var(--app-bauhaus-blue);
   }

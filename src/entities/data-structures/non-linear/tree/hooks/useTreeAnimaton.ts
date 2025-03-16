@@ -3,28 +3,34 @@ import { animate } from "@/lib/animations";
 import { Edge } from "@/lib/classes/Edge";
 import { Primitive } from "@/types";
 import Tree from "../_classes/Tree";
+import { OnCompare } from "../types";
 
 const useTreeAnimaton = <T extends Primitive, K extends Node<T>>(
   tree: Tree<T, K>
 ) => {
-  const onCompareAnimation = async (
-    node: K,
-    edge: Edge | null,
-    oppositeNode?: K
+  const onCompareAnimation: OnCompare<T, K> = async (
+    node,
+    edge,
+    data,
+    oppositeNode
   ) => {
     if (oppositeNode) await oppositeBranchAnimation(oppositeNode, false);
     if (edge && edge.ref) {
       await animate(edge.ref, `lit-node-edge ${0.5}s`);
     }
     if (node.ref) {
-      await animate(node.ref, `compare-node ${0.5}s`);
+      await animate(
+        node.ref,
+        `${node.data === data ? `find-node ${0.8}s` : `compare-node ${0.5}s`}`
+      );
     }
   };
   const insertAnimation = async (node: K) => {
-    await animate(node.ref, `create-node ${0.5}s`, () => {}, true);
+    await animate(node.ref, `insert-node ${0.8}s`, () => {}, true);
     await oppositeBranchAnimation();
     node.isLastAdd = false;
   };
+
   const oppositeBranchAnimation = async (
     branch: K | null = null,
     enable = true
@@ -51,6 +57,7 @@ const useTreeAnimaton = <T extends Primitive, K extends Node<T>>(
     onCompareAnimation,
     insertAnimation,
     oppositeBranchAnimation,
+
   };
 };
 

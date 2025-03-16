@@ -73,6 +73,7 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> {
       if (node.data < nodeToInsert.data) {
         if (!node.right) {
           node.right = nodeToInsert;
+          node.right.parent = node;
           return node.right;
         }
         return await this._insert(
@@ -85,6 +86,7 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> {
       } else {
         if (!node.left) {
           node.left = nodeToInsert;
+          node.left.parent = node;
           return node.left;
         }
         return await this._insert(
@@ -102,14 +104,27 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> {
     node: BinaryTreeNode<T> | null,
     edge: Edge | null,
     dataToSearch: T,
-    onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
+    onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null,
+    oppoNode: BinaryTreeNode<T> | null = null
   ): Promise<BinaryTreeNode<T> | null> {
-    if (onCompare && node) await onCompare(node, edge, dataToSearch);
+    if (onCompare && node) await onCompare(node, edge, dataToSearch, oppoNode);
     if (!node || node.data === dataToSearch) return node;
     if (dataToSearch > node.data) {
-      return this._search(node.right, node.rightEdge, dataToSearch, onCompare);
+      return await this._search(
+        node.right,
+        node.rightEdge,
+        dataToSearch,
+        onCompare,
+        node.left
+      );
     } else {
-      return this._search(node.left, node.leftEdge, dataToSearch, onCompare);
+      return await this._search(
+        node.left,
+        node.leftEdge,
+        dataToSearch,
+        onCompare,
+        node.right
+      );
     }
   }
   private async _remove(

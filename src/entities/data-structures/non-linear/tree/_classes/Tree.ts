@@ -1,11 +1,11 @@
 import { Primitive } from "@/types";
-import Node from "@/entities/data-structures/linear/_classes/Node";
-import { OnCompare, OnTraversal, TreeObj } from "../types";
-import NodeShape from "@/lib/classes/NodeShape";
 
+import { OnCompare, OnPostOrderTraversal, OnTraversal, TreeObj, TreeObjFull } from "../types";
+import NodeShape from "@/lib/classes/NodeShape";
+import TreeNode from "./TreeNode";
 export default abstract class Tree<
   T extends Primitive,
-  K extends Node<T>
+  K extends TreeNode<T>
 > extends NodeShape {
   protected _root: K | null = null;
 
@@ -23,7 +23,10 @@ export default abstract class Tree<
   abstract levelOrderTraversal(
     onTraversal: OnTraversal<T, K> | null
   ): Promise<K[][]>;
-  abstract toTreeObj(): TreeObj<K> | null;
+  abstract postOrderTraversal(
+    onTraversal: OnPostOrderTraversal<T, K> | null
+  ): Promise<K[]>;
+  abstract toTreeObj(): TreeObjFull<K> | null;
   clear() {
     this._root = null;
   }
