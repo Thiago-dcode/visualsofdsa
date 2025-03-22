@@ -1,11 +1,10 @@
-import Node from "@/entities/data-structures/linear/_classes/Node";
 import { animate } from "@/lib/animations";
-import { Edge } from "@/lib/classes/Edge";
 import { Primitive } from "@/types";
 import Tree from "../_classes/Tree";
-import { OnCompare } from "../types";
+import { OnCompare, OnTraversal, OnRemove } from "../types";
+import TreeNode from "../_classes/TreeNode";
 
-const useTreeAnimaton = <T extends Primitive, K extends Node<T>>(
+const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
   tree: Tree<T, K>
 ) => {
   const onCompareAnimation: OnCompare<T, K> = async (
@@ -24,6 +23,32 @@ const useTreeAnimaton = <T extends Primitive, K extends Node<T>>(
         `${node.data === data ? `find-node ${0.8}s` : `compare-node ${0.5}s`}`
       );
     }
+  };
+  const findSuccessor: OnTraversal<T, K> = async (node: K) => {
+    // await animate(node.ref, `find-successor ${0.8}s`, () => {}, true);
+  };
+  const onRemoveAnimation: OnRemove<T, K> = async (node: K, substituteNode: K | null | undefined) => {
+    if (!node.ref) return;
+    if (substituteNode && substituteNode.ref) {
+      await animate(node.ref, `remove-node ${0.8}s`, () => {}, true);
+      node.ref.style.display = "none";
+      substituteNode.ref.style.setProperty("--left_from", `${substituteNode.position.x}px`);
+      substituteNode.ref.style.setProperty("--top_from", `${substituteNode.position.y}px`);
+      substituteNode.ref.style.setProperty("--left_to", `${node.position.x}px`);
+      substituteNode.ref.style.setProperty("--top_to", `${node.position.y}px`);
+      await animate(substituteNode.ref, `move-node ${0.8}s`, () => {}, true);
+      node.ref.textContent = substituteNode.data?.toString() ?? "";
+      node.ref.style.display = "block";
+     substituteNode.ref.style.display = "none";
+
+
+    }
+    else {
+      await animate(node.ref, `remove-node ${0.8}s`, () => {}, true);
+      node.ref.style.display = "none";
+    }
+   
+    
   };
   const insertAnimation = async (node: K) => {
     await animate(node.ref, `insert-node ${0.8}s`, () => {}, true);
@@ -57,6 +82,8 @@ const useTreeAnimaton = <T extends Primitive, K extends Node<T>>(
     onCompareAnimation,
     insertAnimation,
     oppositeBranchAnimation,
+    onRemoveAnimation,
+    findSuccessor
 
   };
 };

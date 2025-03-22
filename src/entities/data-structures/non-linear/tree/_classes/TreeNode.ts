@@ -7,6 +7,7 @@ export default abstract class TreeNode<T extends Primitive> extends Node<T> {
   private _mod: number = 0;
   private _isLeftmost: boolean = false;
   private _isRightmost: boolean = false;
+  private _isRoot: boolean = false;
 
   // Abstract property
   abstract get children(): TreeNode<T>[];
@@ -83,5 +84,13 @@ export default abstract class TreeNode<T extends Primitive> extends Node<T> {
 
   set mod(value: number) {
     this._mod = value;
+  }
+
+  get isRoot() {
+    return this._isRoot;
+  }
+
+  set isRoot(value: boolean) {
+    this._isRoot = value;
   }
 }

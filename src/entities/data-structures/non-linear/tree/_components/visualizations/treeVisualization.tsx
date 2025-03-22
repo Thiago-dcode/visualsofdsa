@@ -1,27 +1,24 @@
 
 'use client'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { TreeObj, TreeObjFull } from '../../types'
+import React, {  useEffect, useRef, useState } from 'react'
+import {  TreeObjFull } from '../../types'
 import TreeVisualizationLvlsComponent from './treeVisualizationLvlsComponent'
-import Tree from '../../_classes/Tree'
 import { Primitive } from '@/types'
 import TreeNode from '../../_classes/TreeNode'
 import { Edge } from '@/lib/classes/Edge'
 import TreeLayout from '../../_classes/TreeLayout'
 type Props<T extends Primitive, K extends TreeNode<T>> = {
-    treeObjFull: TreeObjFull<K>,
+    
     onInsertAnimation?: (node: K) => Promise<void>,
     onCreateEdgeAnimation?: (edge: Edge) => Promise<void>,
-    tree: Tree<T, K>
+    treeLayout: TreeLayout<T, K>
 }
-const HEIGHT = 200
-const BASE_SPACING = 10;
-
-function TreeVisualization<T extends Primitive, K extends TreeNode<T>>({ treeObjFull, tree, onInsertAnimation, onCreateEdgeAnimation }: Props<T, K>) {
+const HEIGHT = 80
+const PADDING_X = 10;
+function TreeVisualization<T extends Primitive, K extends TreeNode<T>>({ treeLayout, onInsertAnimation, onCreateEdgeAnimation }: Props<T, K>) {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [_treeObj, setTreeObj] = useState<TreeObj<K> | null>(null);
-    const [width, _setWidth] = useState<number | null>(null)
-    const treeLayout = useRef<TreeLayout<T, K> | null>(null);
+    const [parentWidth, _setparentWidth] = useState<number | null>(null)
+    const [treeWidth, setTreeWidth] = useState<number | null>(null)
 
     const centerScroll = (width: number) => {
         if (containerRef.current) {
@@ -36,45 +33,49 @@ function TreeVisualization<T extends Primitive, K extends TreeNode<T>>({ treeObj
         if (!containerRef.current) return;
         const setWidth = () => {
 
-            _setWidth(containerRef.current!.offsetWidth)
+            _setparentWidth(containerRef.current!.offsetWidth)
 
-            centerScroll(containerRef.current!.offsetWidth);
+
         }
         setWidth()
         window.addEventListener('resize', setWidth)
-
         return () => window.removeEventListener('resize', setWidth)
     }, [containerRef])
 
     useEffect(() => {
-        if (width) {
-            const treeLayout = new TreeLayout(tree, HEIGHT, width);
-            treeLayout.layout();
-            console.log(treeLayout)
-            setTreeObj(treeLayout.tree.toTreeObj()?.treeObj || null);
-        }
-    }, [width])
+        if (!parentWidth) return;
+        treeLayout.tree.nodeHeight = 30;
+        treeLayout.tree.nodeWidth = 30;
+        treeLayout.lvlHeight = HEIGHT;
+        treeLayout.paddingX = PADDING_X;
+        treeLayout.minSeparation = 10;
+        treeLayout.layout();
+        treeLayout.centerTree(Math.max(parentWidth, treeLayout.treeWidth));
+        setTreeWidth(Math.max(parentWidth, treeLayout.treeWidth));
+        centerScroll(Math.max(parentWidth, treeLayout.treeWidth));
+    }, [parentWidth, treeLayout])
     return (
 
         <div
             ref={containerRef}
-            className="relative w-full flex items-start justify-start overflow-auto"
+            className="relative w-full flex items-start justify-start overflow-x"
             style={{ width: "100vw", height: '100vh' }}
         >
-            {width && _treeObj ? (
+            { treeWidth && treeLayout ? (
                 <div
                     style={{
-                        width: width + "px",
-                        height: 200 * (Math.abs(treeObjFull.maxDepth))
+                        width: `${treeWidth + PADDING_X * 2}px`,
+
+                            height: HEIGHT * (Math.abs(treeLayout.maxDepth))
                     }}
                     className="absolute"
                 >
                     <TreeVisualizationLvlsComponent
 
-                        width={width}
-                        tree={tree}
-                        treeObj={_treeObj}
-                        maxDepth={treeObjFull.maxDepth}
+                        width={treeWidth}
+                        tree={treeLayout.tree}
+                        treeObj={treeLayout.tree.toTreeObj()}
+                        maxDepth={treeLayout.maxDepth}
                         height={HEIGHT}
 
                         onInsertAnimation={onInsertAnimation}

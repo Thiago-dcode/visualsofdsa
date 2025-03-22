@@ -42,7 +42,7 @@ export default function RootLayout({
             <MuteProvider>
               <div id="root">
 
-                <header className='sticky top-0  right-0 z-50 py-2 mb-8 border-b-2 dark:border-b-app-off-white border-b-app-off-black dark:bg-app-off-black/80 bg-app-off-white/70 w-full'>
+                <header className=' top-0  right-0 z-50 py-2 mb-8 border-b-2 dark:border-b-app-off-white border-b-app-off-black dark:bg-app-off-black/80 bg-app-off-white/70 w-full'>
                   <div className=" flex items-end justify-between px-[30px] w-full ">
 
                     <LogoComponent />

@@ -45,6 +45,20 @@ export default class BinaryTree<T extends Primitive> extends Tree<
     };
     await _traversal(branch || this._root);
   }
+  leftMostNode(branch: BinaryTreeNode<T> | null = this._root): BinaryTreeNode<T> | null {
+    if (!branch) return null;
+    while (branch.left) {
+      branch = branch.left;
+    }
+    return branch;
+  }
+  rightMostNode(branch: BinaryTreeNode<T> | null = this._root): BinaryTreeNode<T> | null {
+    if (!branch) return null;
+    while (branch.right) {
+      branch = branch.right;
+    }
+    return branch;
+  }
   async levelOrderTraversal(
     onTraversal: OnTraversal<T, BinaryTreeNode<T>> | null = null
   ): Promise<BinaryTreeNode<T>[][]> {
@@ -113,14 +127,8 @@ export default class BinaryTree<T extends Primitive> extends Tree<
   toTreeObj() {
     if (!this.root) return null;
 
-    let maxDepth = 0;
-    const treeObj = this.toTreeObjRec(this.root, null, null, 0, (depth) => {
-      if (depth < maxDepth) maxDepth = depth;
-    });
-    return {
-      maxDepth,
-      treeObj,
-    };
+   return this.toTreeObjRec(this.root, null, null, 0);
+   
   }
 
   private toTreeObjRec(
@@ -128,9 +136,9 @@ export default class BinaryTree<T extends Primitive> extends Tree<
     parent: TreeObj<BinaryTreeNode<T>> | null = null,
     edge: Edge | null = null,
     depth = 0,
-    onCall?: (depth: number) => void
+    
   ): TreeObj<BinaryTreeNode<T>> {
-    if (onCall) onCall(depth);
+
     const children: TreeObj<BinaryTreeNode<T>>[] = [];
     let _edge = edge;
     const treeObj = {
@@ -143,7 +151,7 @@ export default class BinaryTree<T extends Primitive> extends Tree<
 
     if (node.left) {
       children.push(
-        this.toTreeObjRec(node.left, treeObj, node.leftEdge, depth - 1, onCall)
+        this.toTreeObjRec(node.left, treeObj, node.leftEdge, depth + 1)
       );
     }
     if (node.right) {
@@ -152,8 +160,8 @@ export default class BinaryTree<T extends Primitive> extends Tree<
           node.right,
           treeObj,
           node.rightEdge,
-          depth - 1,
-          onCall
+          depth + 1,
+          
         )
       );
     }

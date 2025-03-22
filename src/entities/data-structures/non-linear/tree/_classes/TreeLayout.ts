@@ -1,35 +1,56 @@
 import { Primitive } from "@/types";
 import Tree from "./Tree";
 import TreeNode from "./TreeNode";
-import Position from "@/lib/classes/position/Position";
 
 export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
   private _tree: Tree<T, K>;
   private _lvlHeight: number;
   private _treeWidth: number;
-  private _minSeparation: number = 2; // Minimum separation between nodes
+  private _minSeparation: number;
+  private _paddingX: number;
+  private _maxDepth: number;
 
-  constructor(tree: Tree<T, K>, lvlHeight: number, treeWidth: number) {
+  constructor(
+    tree: Tree<T, K>, 
+    lvlHeight: number = 100,  
+    paddingX: number = 10,
+    minSeparation: number = tree.nodeWidth / 2
+  ) {
     this._tree = tree;
     this._lvlHeight = lvlHeight;
-    this._treeWidth = treeWidth;
+    this._treeWidth = 0;
+    this._minSeparation = minSeparation;
+    this._paddingX = paddingX;
+    this._maxDepth = 0;
   }
 
+  // Public methods
   public async layout(): Promise<void> {
     if (!this._tree.root) return;
 
     //TODO: set root initial position
-
     this.firstWalk(this._tree.root);
     this.secondWalk(this._tree.root);
     this.thirdWalk(this._tree.root, 0);
+    this.setTreeWidth();
   }
 
+  public centerTree(width: number) {
+    if (!(this._tree.root && width > 0)) return;
+    const center = width / 2 - this._tree.root.position.x;
+    const shift = center > 0 ? center + this._paddingX : this._paddingX;
+    this._centerTree(this._tree.root, shift);
+  }
+
+  // Private tree walk methods
   private firstWalk(node: TreeNode<T>, depth: number = 0) {
     // Initialize current node
     node.position.x = -1;
     node.position.y = depth;
     node.mod = 0;
+    if (depth > this._maxDepth) {
+      this._maxDepth = depth;
+    }
 
     // Process all children at depth + 1
     for (const child of node.children) {
@@ -43,7 +64,35 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
     }
   }
 
-  private calculateInitialX(node: TreeNode<T>, currentIndex: number = 0) {
+  private secondWalk(node: TreeNode<T>) {
+    const nodeCountour = new Map<number, number>();
+    this.getLeftContour(node, 0, nodeCountour);
+
+    let shiftAmount = 0;
+    for (const y of Array.from(nodeCountour.keys())) {
+      const value = nodeCountour.get(y);
+      if (value !== undefined && value + shiftAmount < 0) {
+        shiftAmount = value * -1;
+      }
+    }
+
+    if (shiftAmount > 0) {
+      node.position.x += shiftAmount;
+      node.mod += shiftAmount;
+    }
+  }
+
+  private thirdWalk(node: TreeNode<T>, modSum: number) {
+    node.position.x += modSum;
+
+    modSum += node.mod;
+    for (const child of node.children) {
+      this.thirdWalk(child, modSum);
+    }
+  }
+
+  // Position calculation methods
+  private calculateInitialX(node: TreeNode<T>) {
     if (node.isLeaf) {
       if (!node.isLeftmost) {
         node.position.x = node.previousSibling
@@ -85,7 +134,7 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
   }
 
   private checkForConflicts(node: TreeNode<T>): void {
-    const minDistance = this._treeWidth + this._tree.nodeWidth;
+    const minDistance = this._tree.nodeWidth * 2;
     let shiftValue = 0;
 
     const nodeContour = new Map<number, number>();
@@ -127,6 +176,8 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
       sibling = sibling.nextSibling;
     }
   }
+
+  // Helper methods
   private centerNodesBetween(node: TreeNode<T>, sibling: TreeNode<T>): void {
     if (!node.parent) return;
     const leftIndex = node.parent.children.indexOf(sibling);
@@ -153,30 +204,21 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
     }
   }
 
-  private secondWalk(node: TreeNode<T>) {
-    const nodeCountour = new Map<number, number>();
-    this.getLeftContour(node, 0, nodeCountour);
-
-    let shiftAmount = 0;
-    for (const y of Array.from(nodeCountour.keys())) {
-      const value = nodeCountour.get(y);
-      if (value !== undefined && value + shiftAmount < 0) {
-        shiftAmount = value * -1;
-      }
-    }
-
-    if (shiftAmount > 0) {
-      node.position.x += shiftAmount;
-      node.mod += shiftAmount;
-    }
-  }
-  private thirdWalk(node: TreeNode<T>, modSum: number) {
-    node.position.x += modSum;
-    modSum += node.mod;
+  private _centerTree(node: TreeNode<T>, shift: number) {
+    node.position.x += shift;
     for (const child of node.children) {
-      this.thirdWalk(child, modSum);
+      this._centerTree(child, shift);
     }
   }
+
+  private setTreeWidth() {
+    if (!this._tree.root) return;
+    const leftMostX = this._tree.leftMostNode(this._tree.root)!.position.x;
+    const rightMostX = this._tree.rightMostNode(this._tree.root)!.position.x;
+    const maxWidth = rightMostX - leftMostX;
+    this._treeWidth = maxWidth + this._tree.nodeWidth;
+  }
+
   private getLeftContour(
     node: TreeNode<T>,
     modSum: number,
@@ -214,21 +256,38 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
       this.getRightContour(child, modSum, values);
     }
   }
+
+  // Getters and setters
+  get paddingX(): number {
+    return this._paddingX;
+  }
+
+  set paddingX(padding: number) {
+    this._paddingX = padding;
+  }
+
   get tree(): Tree<T, K> {
     return this._tree;
   }
 
   get treeWidth(): number {
-    return this._treeWidth;
+    return this._treeWidth + (this._paddingX ? this._paddingX * 2 : 0);
   }
+
   set treeWidth(width: number) {
     this._treeWidth = width;
   }
+
   get lvlHeight(): number {
     return this._lvlHeight;
   }
+
   set lvlHeight(height: number) {
     this._lvlHeight = height;
+  }
+
+  get maxDepth(): number {
+    return this._maxDepth;
   }
 
   get minSeparation(): number {

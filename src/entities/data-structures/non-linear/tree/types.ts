@@ -10,8 +10,16 @@ export type OnCompare<T extends Primitive, K extends Node<T>> = (
 ) => Promise<void>;
 
 export type OnTraversal<T extends Primitive, K extends Node<T>> = (
-  node: K
+  node: K,
+  edge?: Edge | null,
 ) => Promise<void>;
+
+export type OnRemove<T extends Primitive, K extends Node<T>> = (
+  node: K,
+  substituteNode?: K | null
+) => Promise<void>;
+
+
 
 export type OnLevelInOrderTraversal<T extends Primitive, K extends Node<T>> = (
   node: K,

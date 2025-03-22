@@ -67,6 +67,36 @@
     border-color: rgba(250, 204, 21, 0);
   }
 }
+
+@keyframes remove-node {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+    background: var(--app-bauhaus-red);
+    border-color: var(--app-bauhaus-red);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1);
+   
+  } 
+}
+@keyframes move-node {
+  from {
+    left: var(--left_from);
+    top: var(--top_from);
+  }
+
+  to {
+    left: var(--left_to);
+    top: var(--top_to);
+  }
+}
 @keyframes lit-node-edge {
   0% {
     opacity: 0.5;

@@ -1,6 +1,6 @@
 import { Primitive } from "@/types";
 
-import { OnCompare, OnPostOrderTraversal, OnTraversal, TreeObj, TreeObjFull } from "../types";
+import { OnCompare, OnPostOrderTraversal, OnTraversal, TreeObj } from "../types";
 import NodeShape from "@/lib/classes/NodeShape";
 import TreeNode from "./TreeNode";
 export default abstract class Tree<
@@ -16,6 +16,8 @@ export default abstract class Tree<
   abstract remove(data: T, onCompare: OnCompare<T, K> | null): Promise<boolean>;
   abstract search(data: T): Promise<K | null>;
   abstract traversal(): Promise<void>;
+  abstract leftMostNode(branch: K | null): K | null;
+  abstract rightMostNode(branch: K | null): K | null;
   abstract inOrderTraversal(
     branch: K | null,
     onTraversal: OnTraversal<T, K> | null
@@ -26,7 +28,7 @@ export default abstract class Tree<
   abstract postOrderTraversal(
     onTraversal: OnPostOrderTraversal<T, K> | null
   ): Promise<K[]>;
-  abstract toTreeObj(): TreeObjFull<K> | null;
+  abstract toTreeObj(): TreeObj<K> | null;
   clear() {
     this._root = null;
   }
