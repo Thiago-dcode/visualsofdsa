@@ -3,18 +3,27 @@ import { BinarySearchTree } from "../classes/BinarySearchTree";
 import useAnimationBts from "../../tree/hooks/useTreeAnimaton";
 import BinaryTreeNode from "../../tree/_classes/BinaryTreeNode";
 import TreeLayout from "../../tree/_classes/TreeLayout";
+import { TraversalType } from "../../tree/types";
+import { speed } from "@/types";
 
-export const useBinarySearchTree = () => {
+export const useBinarySearchTree = (speed:speed) => {
   const { current: binarySearchTree } = useRef(new BinarySearchTree<number>());
   const [treeLayout, setTreeLayout] = useState(
     () => new TreeLayout<number, BinaryTreeNode<number>>(binarySearchTree)
   );
-  const { onCompareAnimation, insertAnimation, oppositeBranchAnimation, onRemoveAnimation ,findSuccessor} =
-    useAnimationBts<number, BinaryTreeNode<number>>(treeLayout.tree);
+  const {
+    onCompareAnimation,
+    insertAnimation,
+    oppositeBranchAnimation,
+    onRemoveAnimation,
+    findSuccessor,
+    onTraversal,
+    animateEdge
+  } = useAnimationBts<number, BinaryTreeNode<number>>(treeLayout.tree,speed);
 
   const render = () => {
     setTreeLayout(
-      prev => new TreeLayout<number, BinaryTreeNode<number>>(prev.tree)
+      (prev) => new TreeLayout<number, BinaryTreeNode<number>>(prev.tree)
     );
   };
 
@@ -40,9 +49,17 @@ export const useBinarySearchTree = () => {
     await oppositeBranchAnimation();
   };
   const remove = async (data: number) => {
-    const result = await binarySearchTree.remove(data, onCompareAnimation,findSuccessor,onRemoveAnimation);
+    const result = await binarySearchTree.remove(
+      data,
+      onCompareAnimation,
+      findSuccessor,
+      onRemoveAnimation
+    );
     await oppositeBranchAnimation();
     render();
+  };
+  const traverse = async (traverseType: TraversalType) => {
+   await binarySearchTree.traverse(traverseType,binarySearchTree.root,onTraversal);
   };
 
   return {
@@ -52,5 +69,7 @@ export const useBinarySearchTree = () => {
     search,
     mock,
     remove,
+    traverse,
+    animateEdge
   };
 };

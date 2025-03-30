@@ -1,15 +1,7 @@
 import { Edge } from '@/lib/classes/Edge'
 import { cn } from '@/lib/utils'
-import { REFUSED } from 'dns'
 import React, { useCallback } from 'react'
-export type ArrowShape = {
-    x: number,
-    y: number,
-    width: number,
-    angle: number,
 
-
-}
 type ArrowProps = {
     isActive?: boolean,
     extraY?: number,
@@ -17,9 +9,12 @@ type ArrowProps = {
     extraLenght?: number,
     onCreateEdgeAnimation?: (edge: Edge) => Promise<void>,
     edge: Edge,
-    color?: 'red' | 'green' | 'blue'
+    color?: 'red' | 'green' | 'blue',
+    shape?: 'arrow' | 'line'
+   
+
 }
-export default function Arrow({ edge, isActive = false, extraY = 0, extraX = 0, extraLenght = 0, color = 'red', onCreateEdgeAnimation }: ArrowProps) {
+export default function EdgeComponent({ edge, isActive = false, extraY = 0, extraX = 0, extraLenght = 0, color = 'red', onCreateEdgeAnimation, shape = 'arrow' }: ArrowProps) {
     const { x, y, length, angle } = edge.shape;
     const handleRef = useCallback(async (element: HTMLElement | HTMLDivElement | null) => {
         if (!element) return
@@ -27,7 +22,7 @@ export default function Arrow({ edge, isActive = false, extraY = 0, extraX = 0, 
         if (onCreateEdgeAnimation) await onCreateEdgeAnimation(edge)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    return (
+    return (    
         <div ref={(ref) => {
             handleRef(ref)
         }} className={cn('node-arrow absolute flex flex-row justify-end items-center', {
@@ -47,7 +42,7 @@ export default function Arrow({ edge, isActive = false, extraY = 0, extraX = 0, 
             transformOrigin: `top left`,
             zIndex: 45
         }}>
-            <div style={{
+          { shape === 'arrow' && <div style={{
                 transform: `rotate(${45}deg)`,
             }} className={cn('node-arrow z[99] w-[15px] h-[15px] border-r-4 border-t-4 rounded-tr-sm ', {
                 ' border-r-app-bauhaus-red border-t-app-bauhaus-red': color === 'red',
@@ -57,7 +52,7 @@ export default function Arrow({ edge, isActive = false, extraY = 0, extraX = 0, 
 
             })}>
 
-            </div>
+            </div>}
         </div>
     )
 }
