@@ -1,4 +1,4 @@
-import { Primitive } from "@/types";
+import { Primitive, Ref } from "@/types";
 import Tree from "./Tree";
 import TreeNode from "./TreeNode";
 
@@ -51,7 +51,7 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
     if (depth > this._maxDepth) {
       this._maxDepth = depth;
     }
-
+    this.resetStyles(node.ref);
     // Process all children at depth + 1
     for (const child of node.children) {
       this.firstWalk(child, depth + 1);
@@ -218,7 +218,17 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
     const maxWidth = rightMostX - leftMostX;
     this._treeWidth = maxWidth + this._tree.nodeWidth;
   }
-
+ private resetStyles(ref:Ref){
+  if(ref){
+    ref.style.display = 'block';
+    ref.style.visibility = 'visible';
+    ref.style.opacity = '1';
+    ref.style.removeProperty('--left_from');
+    ref.style.removeProperty('--left_to');
+    ref.style.removeProperty('--top_from');
+    ref.style.removeProperty('--top_to');
+  }
+ }
   private getLeftContour(
     node: TreeNode<T>,
     modSum: number,

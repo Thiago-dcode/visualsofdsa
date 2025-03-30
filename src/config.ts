@@ -23,6 +23,7 @@ export const config = {
     speed: {
       sort: "vod_sort_speed",
       search: "vod_search_speed",
+      binarySearchTree: "vod_binary_search_tree_speed",
     },
     theme: "vod_theme",
     muted: "vod_muted",

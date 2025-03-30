@@ -53,7 +53,7 @@ function TreeVisualizationLvlsComponent<T extends Primitive, K extends TreeNode<
             })}>
             </div> : null}
             <TreeNodeComponent onInsertAnimation={onInsertAnimation} node={node} nodeShape={tree} />
-            {edge ? <Arrow onCreateEdgeAnimation={onCreateEdgeAnimation} color='green' edge={edge} /> : null}
+            {edge ? <Arrow onCreateEdgeAnimation={onCreateEdgeAnimation} color='green' edge={edge}  shape='line'/> : null}
             {children && children.length ? children.map(treeObjChild => <TreeVisualizationLvlsComponent<T, K> key={`tree-visualization-lvls-component-${treeObjChild.node.id}`} treeObj={treeObjChild} maxDepth={maxDepth} tree={tree} width={width} height={height} onInsertAnimation={onInsertAnimation} onCreateEdgeAnimation={onCreateEdgeAnimation} />) : null}
         </>
     )

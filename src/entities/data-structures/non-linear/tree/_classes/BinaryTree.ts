@@ -3,8 +3,8 @@ import Tree from "./Tree";
 import BinaryTreeNode from "./BinaryTreeNode";
 import {
   OnCompare,
-  OnPostOrderTraversal,
   OnTraversal,
+  TraversalType,
   TreeObj,
 } from "../types";
 import { Edge } from "@/lib/classes/Edge";
@@ -13,7 +13,7 @@ export default class BinaryTree<T extends Primitive> extends Tree<
   T,
   BinaryTreeNode<T>
 > {
- 
+  
   async insert(
     data: T,
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
@@ -29,21 +29,33 @@ export default class BinaryTree<T extends Primitive> extends Tree<
   search(data: T): Promise<BinaryTreeNode<T> | null> {
     throw new Error("Method not implemented.");
   }
-  traversal(): Promise<void> {
-    throw new Error("Method not implemented.");
+ async traverse( traverseType: TraversalType,branch: BinaryTreeNode<T> | null = null,onTraversal?: OnTraversal<T, BinaryTreeNode<T>> | null): Promise<void> {
+  if (!branch) return;
+
+  if(traverseType ==='lvlOrder'){
+    await this.levelOrderTraversal(branch,onTraversal);
+    return;
   }
+  if (onTraversal && traverseType ==='preOrder') await onTraversal(branch);
+  await this.traverse(traverseType,branch.left,onTraversal);
+  if (onTraversal && traverseType ==='inOrder') await onTraversal(branch);
+  await this.traverse(traverseType,branch.right,onTraversal);
+  if (onTraversal && traverseType ==='postOrder') await onTraversal(branch);
+}
+
+async preOrderTraversal(
+  branch: BinaryTreeNode<T> | null = null,
+  onTraversal: OnTraversal<T, BinaryTreeNode<T>> | null = null
+) {
+
+  await this.traverse('preOrder',branch,onTraversal);
+}
   async inOrderTraversal(
     branch: BinaryTreeNode<T> | null = null,
     onTraversal: OnTraversal<T, BinaryTreeNode<T>> | null = null
   ) {
-    const _traversal = async (node: BinaryTreeNode<T> | null) => {
-      if (!node) return;
-
-      await _traversal(node.left);
-      if (onTraversal) await onTraversal(node);
-      await _traversal(node.right);
-    };
-    await _traversal(branch || this._root);
+  
+    await this.traverse('inOrder',branch,onTraversal);
   }
   leftMostNode(branch: BinaryTreeNode<T> | null = this._root): BinaryTreeNode<T> | null {
     if (!branch) return null;
@@ -60,14 +72,16 @@ export default class BinaryTree<T extends Primitive> extends Tree<
     return branch;
   }
   async levelOrderTraversal(
+    branch: BinaryTreeNode<T> | null = null,
     onTraversal: OnTraversal<T, BinaryTreeNode<T>> | null = null
   ): Promise<BinaryTreeNode<T>[][]> {
-    if (!this.root) return [];
+    const _branch = branch || this.root;
+    if (!_branch) return [];
 
     const result: BinaryTreeNode<T>[][] = [];
     const queue: BinaryTreeNode<T>[] = [];
 
-    queue.push(this.root);
+    queue.push(_branch);
 
     while (queue.length > 0) {
       const levelSize = queue.length;
@@ -95,26 +109,13 @@ export default class BinaryTree<T extends Primitive> extends Tree<
   }
 
   async postOrderTraversal(
-    onTraversal: OnPostOrderTraversal<T, BinaryTreeNode<T>> | null = null
-  ): Promise<BinaryTreeNode<T>[]> {
-    const result: BinaryTreeNode<T>[] = [];
+    branch: BinaryTreeNode<T> | null = null,
+    onTraversal: OnTraversal<T, BinaryTreeNode<T>> | null = null
+  ): Promise<void> {
+  
 
-    const traverse = async (
-      node: BinaryTreeNode<T> | null,
-      parent: BinaryTreeNode<T> | null = null
-    ) => {
-      if (!node) return;
-
-      await traverse(node.left, node);
-      await traverse(node.right, node); 
-      if (onTraversal) {
-        onTraversal(node, this.getSiblings( parent));
-      }
-      result.push(node); 
-    };
-
-    await traverse(this.root);
-    return result;
+    await this.traverse('postOrder',branch,onTraversal);
+  
   }
   private getSiblings(
     parent: BinaryTreeNode<T> | null
@@ -122,7 +123,7 @@ export default class BinaryTree<T extends Primitive> extends Tree<
     if (!parent) return []; // Root has no siblings
     return [parent.left, parent.right].filter(
       (sibling) => sibling
-    ) as BinaryTreeNode<T>[];
+        ) as BinaryTreeNode<T>[];
   }
   toTreeObj() {
     if (!this.root) return null;

@@ -2,6 +2,8 @@ import { Primitive } from "@/types";
 import Node from "../../linear/_classes/Node";
 import { Edge } from "@/lib/classes/Edge";
 
+export type TraversalType = 'inOrder'| 'postOrder'| 'lvlOrder'| 'preOrder'
+
 export type OnCompare<T extends Primitive, K extends Node<T>> = (
   nodeA: K,
   edge: Edge | null,
@@ -13,10 +15,17 @@ export type OnTraversal<T extends Primitive, K extends Node<T>> = (
   node: K,
   edge?: Edge | null,
 ) => Promise<void>;
+export type OnFindSuccessor<T extends Primitive, K extends Node<T>> = (
+  node: K,
+  edge?: Edge | null,
+  isFirstCall?: boolean,
+  found?: boolean,
 
+) => Promise<void>;
 export type OnRemove<T extends Primitive, K extends Node<T>> = (
   node: K,
-  substituteNode?: K | null
+  substituteNode?: K | null,
+  isCaseThree?: boolean
 ) => Promise<void>;
 
 
@@ -38,7 +47,4 @@ export type TreeObj<T extends Node<Primitive>> = {
   children: TreeObj<T>[];
 };
 
-export type TreeObjFull<T extends Node<Primitive>> = {
-  maxDepth: number;
-  treeObj: TreeObj<T>;
-};
+

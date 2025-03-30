@@ -1,3 +1,18 @@
+@keyframes hover-node {
+  0% {
+    scale: 1;
+  }
+  50%{
+    scale: 1.2;
+    background: var(--app-bauhaus-green);
+    border-color: var(--app-bauhaus-green);
+  }
+  100% {
+    scale: 1;
+    background: var(--app-bauhaus-green);
+    border-color: var(--app-bauhaus-green);
+  }
+}
 @keyframes insert-node {
   0% {
     scale: 1;

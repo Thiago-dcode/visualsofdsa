@@ -3,7 +3,6 @@ import Node from "@/entities/data-structures/linear/_classes/Node";
 
 export default abstract class TreeNode<T extends Primitive> extends Node<T> {
   // Core properties
-  private _parent: TreeNode<T> | null = null;
   private _mod: number = 0;
   private _isLeftmost: boolean = false;
   private _isRightmost: boolean = false;
@@ -16,13 +15,8 @@ export default abstract class TreeNode<T extends Primitive> extends Node<T> {
     return this.children.length === 0;
   }
   // Parent-related accessors
-  get parent(): TreeNode<T> | null {
-    return this._parent;
-  }
-
-  set parent(node: TreeNode<T>) {
-    this._parent = node;
-  }
+  abstract get parent(): TreeNode<T> | null;
+  abstract set parent(node: TreeNode<T> | null);
 
   // Position flags
   get isLeftmost() {
@@ -43,28 +37,28 @@ export default abstract class TreeNode<T extends Primitive> extends Node<T> {
 
   // Sibling accessors
   get previousSibling(): TreeNode<T> | null {
-    if (!this._parent) return null;
-    const siblings = this._parent.children;
+    if (!this.parent) return null;
+    const siblings = this.parent.children;
     const index = siblings.indexOf(this);
     return siblings[index - 1] || null;
   }
 
   get nextSibling(): TreeNode<T> | null {
-    if (!this._parent) return null;
-    const siblings = this._parent.children;
+    if (!this.parent) return null;
+    const siblings = this.parent.children;
     const index = siblings.indexOf(this);
     return siblings[index + 1] || null;
   }
 
   get leftmostSibling(): TreeNode<T> | null {
-    if (!this._parent) return null;
-    const siblings = this._parent.children;
+    if (!this.parent) return null;
+    const siblings = this.parent.children;
     return siblings[0] || null;
   }
 
   get rightmostSibling(): TreeNode<T> | null {
-    if (!this._parent) return null;
-    const siblings = this._parent.children;
+    if (!this.parent) return null;
+    const siblings = this.parent.children;
     return siblings[siblings.length - 1] || null;
   }
 
