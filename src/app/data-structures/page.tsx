@@ -1,9 +1,11 @@
 
 import PageComponent from "@/components/app/PageComponent";
 import DataStructureService from "@/entities/data-structures/__classes/DataStructureService";
+import { appMetadata } from "@/lib/metadata";
 import { EntityType } from "@/types";
 
 
+export const metadata = appMetadata({title:'Data structures',description:'Display info about data structures.'})
 
 export default async function DataStructurePage() {
     const dataStructureTypes = await DataStructureService.getAllTypes();

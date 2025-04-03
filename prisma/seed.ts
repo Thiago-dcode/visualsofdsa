@@ -5,17 +5,17 @@ const dataStructureTypes: Prisma.DataStructureTypeCreateInput[] = [
   {
     name: "linear",
     description:
-      "Linear Data Structures are a type of data structure in computer science where data elements are arranged sequentially or linearly. Each element has a previous and next adjacent, except for the first and last elements.",
+      "Linear Data Structures organize elements sequentially with direct predecessor-successor relationships, enabling efficient O(1) ACCESS patterns. Ideal for memory-efficient storage and real-world applications like queue operations, stack management, and array implementations. Common examples are linked lists where elements follow strict insertion order.",
     enable: true,
     link: "linear",
   },
   {
     name: "non linear",
     description:
-      "Non-linear data structures are those where data items are not arranged in a sequential manner, unlike linear data structures. In these data structures, elements are stored in a hierarchical or a network-based structure that does not follow a sequential order.",
+      "Non-linear data structures manage complex hierarchical relationships through multi-dimensional connections, essential for graph algorithms and tree traversal systems. These network-based organizations enable efficient representation of social networks, file systems, and neural networks through structures like binary search trees and adjacency matrices, optimizing pathfinding and parent-child node operations.",
     enable: true,
     link: "non-linear",
-  },
+  }
 ];
 
 const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [

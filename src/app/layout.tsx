@@ -16,6 +16,9 @@ import { MuteProvider } from "@/context/muteContext";
 import MuteComponent from "@/components/app/MuteTogglerComponent";
 import { AnimationRunningProvider } from "@/context/animationRunningContext";
 import ConfigSection from "@/components/app/ConfigSection";
+import { Suspense } from "react";
+import Loader from "@/components/ui/Loader";
+import Main from "@/components/container/Main";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -54,8 +57,14 @@ export default function RootLayout({
 
                 </header>
 
+                  <Main>
+                <Suspense fallback={<Loader/>}>
                 {children}
-
+                </Suspense>
+                </Main>
+                <footer>
+                  
+                </footer>
               </div>
             </MuteProvider>
           </DarkModeProvider>

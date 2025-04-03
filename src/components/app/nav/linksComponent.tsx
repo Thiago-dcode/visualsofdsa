@@ -6,14 +6,16 @@ import { LinkItem } from './type'
 import {cn } from '@/lib/utils'
 
 
-export default function LinksComponent({ title, links }: {
-  title: string,
-  links: LinkItem[]
+export default function LinksComponent({ title, links,containerClassname,linksContainerClassname }: {
+  title?  : string,
+  links: LinkItem[],
+  containerClassname?:string,
+  linksContainerClassname?:string
 
 }) {
-  return (<div className="flex flex-col  items-start justify-start gap-4 w-full">
-    <Title h={3} xls={2} uppercase={false} title={title} />
-    <div className="flex  items-start justify-start gap-5 flex-wrap w-full">
+  return (<div className={cn("flex flex-col  items-start justify-start gap-4 w-full",containerClassname)}>
+    {title && <Title h={3} xls={2} uppercase={false} title={title} />}
+    <div className={cn("flex  items-start justify-start gap-5 flex-wrap w-full",linksContainerClassname)}>
 
       {links.map((entity, i) => {
 

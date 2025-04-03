@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
-import React from 'react'
+import React, { ReactNode } from 'react'
 
-export default function Title({ title, xls, h, uppercase = true, bold }: { uppercase?: boolean, title: string, xls?: 1 | 2 | 3 | 4 | 5, h?: 1 | 2 | 3 | 4 | 5 | 6, bold?: 1 | 2 | 3 | 4 | 5 }) {
+export default function Title({ title, xls, h, uppercase = true, bold }: { uppercase?: boolean, title: string|ReactNode, xls?: 1 | 2 | 3 | 4 | 5, h?: 1 | 2 | 3 | 4 | 5 | 6, bold?: 1 | 2 | 3 | 4 | 5 }) {
 
   const fontSize = () => {
     switch (xls) {

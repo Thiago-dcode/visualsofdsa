@@ -1,7 +1,10 @@
 import PageComponent from '@/components/app/PageComponent'
 import AlgorithmService from '@/entities/algorithms/__classes/AlgorithmService';
+import { Metadata } from 'next';
+import { appMetadata } from '@/lib/metadata';
 
 
+export const metadata = appMetadata({title:'Algorithms',description:'Display info about algorithms.'})
 
 export default async function AlgorithmPage() {
   const algorithmTypes = await AlgorithmService.getAllTypes();

@@ -5,6 +5,7 @@ import BinaryTreeNode from "../../tree/_classes/BinaryTreeNode";
 import TreeLayout from "../../tree/_classes/TreeLayout";
 import { TraversalType } from "../../tree/types";
 import { speed } from "@/types";
+import { toast } from "sonner";
 
 export const useBinarySearchTree = (speed:speed) => {
   const { current: binarySearchTree } = useRef(new BinarySearchTree<number>());
@@ -59,7 +60,11 @@ export const useBinarySearchTree = (speed:speed) => {
     render();
   };
   const traverse = async (traverseType: TraversalType) => {
+    const id = toast.loading(`Traversing: ${traverseType}`,{
+      duration:Infinity
+    })
    await binarySearchTree.traverse(traverseType,binarySearchTree.root,onTraversal);
+   toast.dismiss(id);
   };
 
   return {

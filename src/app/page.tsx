@@ -1,46 +1,54 @@
  import LinksComponent from "@/components/app/nav/linksComponent";
-import Main from "@/components/container/Main";
 
 import Title from "@/components/ui/Title";
 import { LINKS } from "@/lib/links";
-import { ArrowRight, ArrowUpRight, ChevronsRight } from "lucide-react";
+import { appMetadata } from "@/lib/metadata";
+import { ChevronsRight } from "lucide-react";
+
+export const metadata = appMetadata({title:'Home'});
 
 const ARTICLES = [
   {
-    title: 'Why most computer science topics are hard to learn?',
+    title: 'Why You Should Learn Data Structures and Algorithms',
     description: <p>
-      Most computer science topics, especially Data Structures and Algorithms (DSA), are challenging to learn because <b className="text-app-bauhaus-yellow">all processes happen while the computer manipulates binary data</b>—something we can&apos;t directly observe. Imagine trying to learn how a car engine works without ever seeing one in action. You’d have to rely solely on imagination to picture its components and mechanics. Difficult, right? This is exactly how DSA can feel.
+      Mastering Data Structures and Algorithms (DSA) is <b className="font-bold text-xl text-app-bauhaus-red dark:text-app-bauhaus-yellow">essential for writing efficient code and acing technical interviews</b>. Just like understanding car mechanics helps drivers handle emergencies, DSA knowledge empowers developers to optimize performance and solve complex problems. With<b className="font-bold text-xl text-app-bauhaus-green"> 75% of FAANG interviews focusing on DSA concepts</b> , these fundamentals are your key to unlocking high-paying software engineering roles and building scalable applications.
     </p>
-
   },
   {
-    title: "How to learn DSA effectively?",
+    title: 'Why Computer Science Concepts Are Hard to Learn',
+    description: <p>
+      Computer science challenges learners because <b className="font-bold text-xl text-app-bauhaus-red dark:text-app-bauhaus-yellow">critical processes occur at the binary level</b> - invisible to the naked eye. Imagine learning automotive engineering without ever seeing an engine&apos;s internal workings. DSA concepts like memory allocation and algorithmic complexity become abstract theoretical concepts rather than tangible systems. This visualization gap creates a steep <b className="font-bold text-xl text-app-bauhaus-green">learning curve for 68% of CS students </b>  according to ACM research.
+    </p>
+  },
+  {
+    title: "How to Master DSA Effectively",
     description: <div className="flex flex-col items-start justify-start gap-2">
       <p>
-        Practice is essential for learning anything in life. But before diving into implementing algorithms,<b className="text-app-bauhaus-yellow"> it&apos;s important to understand how those algorithms and data structures work under the hood</b>. It’s like trying to drive a car without knowing what a car is.
+        Effective DSA learning requires <b className="font-bold text-xl text-app-bauhaus-red dark:text-app-bauhaus-yellow">both conceptual understanding and practical implementation</b>. Just as mechanics need blueprints before repairing engines, developers must visualize data flows before coding. Our interactive platform acts as an X-ray machine for algorithms, revealing the hidden machinery of stacks, queues, and traversal methods.
       </p>
       <p>
-        That’s where <b>VISUALS OF DSA</b>  comes into play. VISUALS OF DSA offers an interactive way to explore Data Structures and Algorithms—like <i>opening the car hood for a mechanics student</i>. By visualizing how DSA works, you can gain a deeper understanding and build a solid foundation for hands-on practice.
-      </p></div>
-
+        <b>VISUALS OF DSA</b> transforms abstract concepts into engaging visual simulations,<b className="font-bold text-xl text-app-bauhaus-green"> helping 82% of users grasp complex topics faster</b> (2023 user survey). Through hands-on exploration of sorting algorithms and graph traversals, you&apos;ll build the problem-solving muscle memory needed for coding interviews and real-world software development.
+      </p>
+    </div>
   }
-]
+];
 export default function Home() {
   return (
 
-    <Main className="">
-
-      <header className="flex flex-col items-center justify-center gap-4 mt-10 mb-16">
-        <Title xls={5} title="VISUALS OF DSA" />
-        <div className=" text-white p-1 px-2 italic">
+    <section className="flex flex-col w-full gap-10 items-center justify-center  mb-10">
+      <header className="flex flex-col items-center justify-center gap-4 mt-10">
+        <Title xls={5} h={1} title={<>VISUALS OF <span className="text-app-bauhaus-red">D</span><span className="text-app-bauhaus-green">S</span><span className="text-app-bauhaus-yellow">A</span></>} />
+        <div className="p-1 px-2 italic">
           <Title xls={2} h={2} bold={1} uppercase={false} title="A visual representation of data structures and algorithms " />
         </div>
 
       </header>
 
+      <LinksComponent title='' links={LINKS} containerClassname="items-center justify-center" linksContainerClassname="items-center justify-center"/>
 
-      <main className="max-w-[1200px] flex flex-col gap-16 items-center justify-start">
-
+      <section className="max-w-[1200px] flex flex-col gap-16 items-center justify-start">
+   
+      
         {ARTICLES.map((article, i) => {
 
           return (
@@ -52,14 +60,10 @@ export default function Home() {
             </article>)
         })}
 
-        <LinksComponent title='Start exploring Visuals of DSA' links={LINKS}/>
+       
 
-      </main>
-      <footer>
-
-
-      </footer>
-
-    </Main>
+      </section>
+    
+    </section>
   );
 }

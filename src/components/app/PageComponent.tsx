@@ -20,7 +20,7 @@ export default function PageComponent({ entityTypes, entityParent, title, descri
 }) {
 
     return (
-        <Main className="">
+        <>
             <header className="flex flex-col items-center justify-center gap-4 my-10 w-full">
                 <Title xls={5} title={title} />
 
@@ -78,6 +78,6 @@ export default function PageComponent({ entityTypes, entityParent, title, descri
             </main>
 
 
-        </Main>
+        </>
     )
 }

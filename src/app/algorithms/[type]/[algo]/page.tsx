@@ -4,9 +4,22 @@ import PageHeaderTitle from "@/components/pageHeaderTitle";
 import AlgorithmService from "@/entities/algorithms/__classes/AlgorithmService";
 import { AlgoSearchType, AlgoSortType } from "@/entities/algorithms/types";
 import View from "@/entities/data-structures/linear/linked-list/View";
+import { appMetadata } from "@/lib/metadata";
+import { Metadata, ResolvingMetadata } from "next";
 import dynamic from "next/dynamic";
 import { notFound, redirect } from "next/navigation";
 
+type Props = {
+    params: Promise<{ type: string,algo:string }>
+  }
+   
+  export async function generateMetadata(
+    { params }: Props
+  ): Promise<Metadata> {
+    // read route params
+    const { type,algo } = await params;
+    return appMetadata({title:` ${algo} ${type} algorithm`, description:`Display info about ${algo} ${type} data structure`})
+  }
 export default async function AlgorithmsPage({ params }: { params: { type: string, algo: string } }) {
 
     const typeParam = params.type.toLocaleLowerCase();
@@ -53,9 +66,9 @@ export default async function AlgorithmsPage({ params }: { params: { type: strin
 
     return (
 
-        <Main>
-            <PageHeaderTitle info={algo.description || ''} title={algo.name} />
+        <>
+            <PageHeaderTitle info={algo.description || ''} title={algo.name + ' ' + typeParam } />
             {view}
-        </Main>
+        </>
     );
 }

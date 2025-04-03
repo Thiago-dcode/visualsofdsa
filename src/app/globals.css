@@ -110,3 +110,17 @@ header {
   gap: 1.5rem;
   width: 100%;
 }
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 40px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--app-bauhaus-red); 
+  clip-path: polygon(0 0,100% 0,100% 100%,0 100%);
+  animation: l1 2s infinite cubic-bezier(0.3,1,0,1);
+}
+@keyframes l1 {
+  33% {border-radius: 0;background: var(--app-bauhaus-blue) ;clip-path: polygon(0 0,100% 0,100% 100%,0 100%)}
+  66% {border-radius: 0;background: var(--app-bauhaus-yellow) ;clip-path: polygon(50% 0,50% 0,100% 100%,0 100%)}
+}
