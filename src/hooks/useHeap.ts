@@ -61,7 +61,7 @@ export default function useHeap({
   const currentCol = useRef(0);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
-  const allocateMemory = (size: number) => {
+  const allocateMemory =  (size: number) => {
     for (let i = 0; i < size; i++) {
       const node = new LinkedListNode(
         `${currentRow.current + 1},${currentCol.current + 1}`,
@@ -73,7 +73,7 @@ export default function useHeap({
         )
       );
       node.memoryAddress = getMemoryAddress(i);
-      freePositions.current.enqueue(node);
+     freePositions.current.add(node);
       currentCol.current++;
       if (table.current.col === currentCol.current) {
         currentCol.current = 0;
@@ -125,7 +125,7 @@ export default function useHeap({
     setFreeSpace(freePositions.current.size);
     const newNode = new LinkedListNode(``, node.position);
     newNode.memoryAddress = node.memoryAddress;
-    const _node = freePositions.current.enqueue(newNode);
+    const _node = freePositions.current.add(newNode);
     setFreeSpace(freePositions.current.size);
     return _node;
   };

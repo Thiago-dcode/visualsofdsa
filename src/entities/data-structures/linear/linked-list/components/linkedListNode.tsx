@@ -25,12 +25,12 @@ export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, ind
         node.ref = element;
         if (node.next && node.next.isLastAdd && node.nextEdge) {
             setAnimationRunning(true)
-            await animate(node.nextEdge.ref, 'lit-node-edge 1s')
+            await animate(node.nextEdge.ref, 'lit-node-edge', 1)
         }
         if (node.isLastAdd) {
             setAnimationRunning(true)
 
-            await animate(element, 'add-node 1s', () => {
+            await animate(element, 'add-node', 1, () => {
 
             }, true)
             setAnimationRunning(false)

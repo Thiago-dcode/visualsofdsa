@@ -28,9 +28,9 @@ function TreeNodeComponent<K extends TreeNode<Primitive>>({ node, nodeShape, onI
                 }} onMouseEnter={async () => {
 
                     if (node.ref) {
-                        console.log('hover')
-                        await animate(node.ref, 'hover-node');
-                        console.log(node.ref.style.animation)
+                        
+                        await animate(node.ref, 'hover-node',0.5);
+                       
                     }
                 }} ref={(ref) => {
                     setRef(ref)

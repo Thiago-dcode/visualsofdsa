@@ -4,14 +4,13 @@ import { listName } from "@/types";
 
 export default abstract class List extends NodeShape {
   private _maxSize;
-  private _beginner: number;
+  private _beginner: number = 0;
   private _name: listName;
   constructor(_name: listName) {
     super(100, 50, 5);
     this._name = _name;
- 
     this._maxSize = 10;
-    this._beginner = this.maxSize * this.nodeHeight;
+    this.setBeginner();
   }
   get name() {
     return this._name;
@@ -23,14 +22,19 @@ export default abstract class List extends NodeShape {
     if (max > 100 || max < 1) {
       throw new NotAllowedSizeError("a size must be between 1 and 100");
     }
-    this.beginner = max * this.nodeHeight;
+
     this._maxSize = max;
+    this.setBeginner();
   }
   get beginner() {
     return this._beginner;
   }
-  set beginner(beginner: number) {
-    this._beginner = beginner;
+  private setBeginner() {
+    if (this.name === 'stack') {
+      this._beginner = this.maxSize * (this.nodeHeightSpacing + this.nodeHeight);
+    }else{
+      this._beginner = 0;
+    }
   }
   abstract get isEmpty(): boolean;
   abstract get isFull(): boolean;

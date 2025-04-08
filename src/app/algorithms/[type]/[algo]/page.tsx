@@ -1,11 +1,9 @@
 
-import Main from "@/components/container/Main";
 import PageHeaderTitle from "@/components/pageHeaderTitle";
 import AlgorithmService from "@/entities/algorithms/__classes/AlgorithmService";
 import { AlgoSearchType, AlgoSortType } from "@/entities/algorithms/types";
-import View from "@/entities/data-structures/linear/linked-list/View";
 import { appMetadata } from "@/lib/metadata";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata, } from "next";
 import dynamic from "next/dynamic";
 import { notFound, redirect } from "next/navigation";
 

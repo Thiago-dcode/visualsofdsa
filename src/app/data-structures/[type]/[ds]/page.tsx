@@ -1,5 +1,4 @@
-
-import Main from "@/components/container/Main";
+;
 import PageHeaderTitle from "@/components/pageHeaderTitle";
 import Loader from "@/components/ui/Loader";
 import DataStructureService from "@/entities/data-structures/__classes/DataStructureService";

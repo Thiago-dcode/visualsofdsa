@@ -24,6 +24,7 @@ export const config = {
       sort: "vod_sort_speed",
       search: "vod_search_speed",
       binarySearchTree: "vod_binary_search_tree_speed",
+      linearDs: "vod_linear_ds_speed",
     },
     theme: "vod_theme",
     muted: "vod_muted",

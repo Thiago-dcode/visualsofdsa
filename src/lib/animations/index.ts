@@ -1,11 +1,15 @@
 
 import { onAnimationEnds } from '@/types';
 import './style.css'
+
+
+
   export const animate = async (
     ref: HTMLElement | null,
     animation:string,
+    speed:number,
     onAnimationEnds: onAnimationEnds  | null = null,
-  onlyOnce = false
+    onlyOnce = false
   ): Promise<boolean> => {
 
     return new Promise((resolve, reject) => {
@@ -22,7 +26,7 @@ import './style.css'
   
           resolve(true);
         };
-        requestAnimation(ref, animation, animationEvent,onlyOnce);
+        requestAnimation(ref, `${animation} ${speed}s`, animationEvent,onlyOnce);
       }
     });
   };

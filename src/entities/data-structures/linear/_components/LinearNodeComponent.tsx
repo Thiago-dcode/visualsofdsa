@@ -22,7 +22,7 @@ const LinearNodeComponent = forwardRef<HTMLDivElement, props>(({ node, dsType, s
     <>
       {node && <div onClick={async()=>{
         if(node.data)  await copyToClipboard(node.data+ '');
-      }} ref={ref} id={`${dsType}-node-${node.id}`} style={style} className={cn(' relative border-2  text-center flex items-center justify-center overflow-auto', config.darkModeTailwind, className,{
+      }} ref={ref} id={`${dsType}-node-${node.id}-${node.data}`} style={style} className={cn(' relative border-2  text-center flex items-center justify-center overflow-auto', config.darkModeTailwind, className,{
            'text-[rgb(226, 232, 240)]' :node.data === null
       })}>
         <p className={cn({

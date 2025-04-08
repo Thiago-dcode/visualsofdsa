@@ -4,8 +4,7 @@ import { Primitive } from "@/types";
 import Position from "@/lib/classes/position/Position";
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
 import { toast } from "sonner";
-import "../style.css";
-import UseLinkedListAnimation from "./UseLinkedListAnimation";
+import "../animation.css";
 import LinkedListNode from "../classes/LinkedListNode";
 import { animate } from "@/lib/animations";
 import { useDarkMode } from "@/context/darkModeContext";
@@ -23,7 +22,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
 
   const animateEdge = (ref: HTMLElement | null) =>
-    animate(ref, `lit-node-edge ${ANIMATION_SPEED * 0.5}s`);
+    animate(ref, `lit-node-edge`, ANIMATION_SPEED * 0.5);
   const add = async (
     data: Primitive,
     index: number,
@@ -46,7 +45,8 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
             if (_node && _node.ref) {
               await animate(
                 _node.ref,
-                `find-node-${isDark?'dark':'light'} ${ANIMATION_SPEED * 0.8 + "s"}`
+                `find-node-${isDark?'dark':'light'}`,
+                ANIMATION_SPEED * 0.8
               );
 
               if (direction === "forward")
@@ -88,9 +88,8 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
             if (_node && _node.ref) {
               await animate(
                 _node.ref,
-                `${index !== _index ? `find-node-${isDark?'dark':'light'}` : "del-node"} ${
-                  ANIMATION_SPEED * 0.8 + "s"
-                }`
+                `${index !== _index ? `find-node-${isDark?'dark':'light'}` : "del-node"}`,
+                ANIMATION_SPEED * 0.8
               );
               if (index !== _index) {
                 if (direction === "forward")
@@ -143,8 +142,9 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
                 await animate(
                   _node.ref,
                   index !== _index
-                    ? `find-node-${isDark?'dark':'light'} ${ANIMATION_SPEED * 0.8 + "s"}`
-                    : `get-node ${ANIMATION_SPEED + "s"}`
+                    ? `find-node-${isDark?'dark':'light'}`
+                    : `get-node`,
+                    index !== _index?ANIMATION_SPEED * 0.8:ANIMATION_SPEED
                 );
                 if (index !== _index) {
                   if (direction === "forward")
@@ -179,8 +179,9 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
         await animate(
           node.ref,
           !(index === j && animateLast)
-            ? `find-node-${isDark?'dark':'light'} ${ANIMATION_SPEED * 0.8 + "s"}`
-            : `${isDel ? "del" : "get"}-node ${ANIMATION_SPEED + "s"}`
+            ? `find-node-${isDark?'dark':'light'}`
+            : `${isDel ? "del" : "get"}-node`,
+            !(index === j && animateLast)?ANIMATION_SPEED * 0.8:ANIMATION_SPEED
         );
 
       if (index === j) {

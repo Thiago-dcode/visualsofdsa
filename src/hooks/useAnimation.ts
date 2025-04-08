@@ -6,7 +6,7 @@ import { Ref } from "@/types";
 const useAnimation = () => {
 
     const animateEdge = async (edge: Edge,speed:number,firstCall:boolean =false) => {
-        await animate(edge.ref, `lit-node-edge ${speed}s`, () => { }, firstCall);
+        await animate(edge.ref, `lit-node-edge`,speed,() => { }, firstCall);
       }
       const focus = (ref:Ref) => {
        

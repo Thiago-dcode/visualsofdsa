@@ -1,0 +1,60 @@
+.linear-node {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  animation-timing-function: ease-out;
+  animation-duration: 0.5s;
+}
+
+
+@keyframes add-node-linear {
+  from {
+    bottom: var(--start);
+    opacity: 0.5;
+    background: var(--app-bauhaus-green);
+  }
+
+  to {
+    bottom: var(--end);
+    opacity: 1;
+    background: none;
+  }
+}
+@keyframes move-node-linear {
+  from {
+    bottom: var(--start);
+  }
+
+  to {
+    bottom: var(--end);
+  }
+} 
+
+@keyframes remove-node-linear {
+  from {
+    bottom: var(--start);
+    opacity: 1;
+    background: none;
+  }
+
+  to {
+    bottom: var(--end);
+    opacity: 0.1;
+    background: var(--app-bauhaus-red);
+  }
+}
+
+@keyframes peek-node-linear {
+  0% {
+    background:var(--app-bauhaus-yellow);
+  }
+
+  80% {
+    background: var(--app-bauhaus-yellow);
+  }
+
+  100% {
+    background: none;
+  }
+}

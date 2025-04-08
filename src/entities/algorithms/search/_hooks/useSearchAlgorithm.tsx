@@ -88,12 +88,12 @@ export default function useSearchAlgorithm(
       isEnable = false
     ) => {
       if (isEnable) {
-        await animate(ref, "enable-node 0.4s", () => {
+        await animate(ref, "enable-node", 0.4, () => {
           ref.style.opacity = "1";
         });
         return;
       }
-      await animate(ref, "disable-node 0.4s", () => {
+      await animate(ref, "disable-node", 0.4, () => {
         ref.style.opacity = "0.4";
       });
     };

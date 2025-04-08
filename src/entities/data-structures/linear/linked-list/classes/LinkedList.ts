@@ -113,10 +113,10 @@ export default class LinkedList<T extends Primitive> extends List {
   }
 
   addFirst(data: T, position = new Position(0, 0)) {
-    this.add(data, 0, position);
+    return this.add(data, 0, position);
   }
   addLast(data: T | LinkedListNode<T>, position = new Position(0, 0)) {
-    this.add(data, this.size, position);
+    return this.add(data, this.size, position);
   }
 
   private _addFirst(node: LinkedListNode<T>) {
@@ -189,7 +189,7 @@ export default class LinkedList<T extends Primitive> extends List {
       return this.deleteFirstAndGetNode();
     } else if (index === this.size - 1) {
       if (callback) await callback(this.tail, index).catch();
-      return this.deleteLastAnGetNode();
+      return this.deleteLastAndGetNode();
     } else {
       const node = await this.findNodeAsync(
         index,
@@ -242,7 +242,7 @@ export default class LinkedList<T extends Primitive> extends List {
     this._size--;
     return data;
   }
-  deleteLastAnGetNode() {
+  deleteLastAndGetNode() {
     const node = this._tail;
     if (!this._tail) return null;
 

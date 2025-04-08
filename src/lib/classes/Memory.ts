@@ -1,5 +1,6 @@
 export default abstract class Memory {
-  constructor(private _memoryAdress = "",private _isLastAdd = false) {}
+
+  constructor(private _memoryAdress = "",private _isLastAdd = false,private _isFiller = false) {}
 
   get memoryAddress() {
     return this._memoryAdress;
@@ -12,6 +13,12 @@ export default abstract class Memory {
   }
   set isLastAdd(isLastAdd: boolean) {
     this._isLastAdd = isLastAdd;
+  }
+  get isFiller() {
+    return this._isFiller;
+  }
+  set isFiller(isFiller: boolean) {
+    this._isFiller = isFiller;
   }
 }
 

@@ -1,8 +1,7 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import UseLinkedList from './hooks/UseLinkedList'
 import useHeap from '@/hooks/useHeap';
-import Main from '@/components/container/Main';
 import LinkedListNodeComponent from './components/linkedListNode';
 import OperationsContainer from '@/components/container/OperationsContainer';
 import ButtonAction from '../_components/ButtonAction';

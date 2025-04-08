@@ -1,8 +1,7 @@
 import { animate } from "@/lib/animations"
 import { cn } from "@/lib/utils"
 import { Primitive } from "@/types"
-import { ValueOf } from "next/dist/shared/lib/constants"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 type Property = {
     value: Primitive,
     render?: boolean,
@@ -16,21 +15,21 @@ function Properties({ properties, className }: {
 }) {
 
     const prevProperties = useRef<typeof properties>()
-    const handleAnimation = async (key: keyof PropertiesType, property: Property, ref: HTMLDivElement) => {
+    const handleAnimation = useCallback(async (key: keyof PropertiesType, property: Property, ref: HTMLDivElement) => {
 
         const { value, render } = property;
         if (!prevProperties.current || !prevProperties.current[key] || (typeof render === 'boolean' && prevProperties.current[key].render === render) || (prevProperties.current[key].value === value)) {
 
             return
         };
-        await animate(ref, 'animate-property 1s')
+        await animate(ref, 'animate-property', 1)
         prevProperties.current[key] = property
 
-    }
+    },[])
     useEffect(() => {
         prevProperties.current = properties;
 
-    }, [])
+    }, [properties])
 
     return (
         <div className={cn("flex items-start  flex-col pl-4 -mt-4 gap-2", className)}>

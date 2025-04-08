@@ -1,6 +1,6 @@
 import { Primitive } from "@/types";
 import Node from "../_classes/Node";
-export type LinearDsActions = "push" | "pop" | "peek" | "fill";
+export type LinearDsActions = "add" | "remove" | "peek" | "fill" | "flush";
 export type ArrayActions =
   | "create"
   | "write"

@@ -56,4 +56,6 @@ export default abstract class LinearDs<T extends Primitive> extends List {
   abstract peek(): T | null;
   abstract peekNode(): LinkedListNode<T> | null;
   abstract currentNode(): LinkedListNode<T> | null;
+  abstract add(data: T): Promise<LinkedListNode<T>>;
+  abstract remove(): Promise<LinkedListNode<T>|null>;
 }
