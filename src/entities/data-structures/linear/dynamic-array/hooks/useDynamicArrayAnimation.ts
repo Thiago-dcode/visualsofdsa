@@ -7,9 +7,7 @@ import useAnimation from "@/hooks/useAnimation";
 import { useEffect, useRef } from "react";
 import { useCallback } from "react";
 const useDynamicArrayAnimation = (speed:speed) => {
-
   const {focus} = useAnimation()
-
   const speedRef = useRef<speed | null>(null);
   const getSpeed = useCallback(() => {
     if (!speedRef.current) return 0.5;

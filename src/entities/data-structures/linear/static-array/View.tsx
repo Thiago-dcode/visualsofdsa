@@ -63,8 +63,8 @@ export default function StaticArray() {
         if (isAnimationRunning || !refSearch.current) return;
         setAnimationRunning(true)
         setOpen(!open)
-         const result = await search(refSearch.current.value === '' ? null : refSearch.current.value)
-         setSearchResult(result)
+        const result = await search(refSearch.current.value === '' ? null : refSearch.current.value)
+        setSearchResult(result)
         refSearch.current.value = ''
         setAnimationRunning(false)
     }, [isAnimationRunning])
@@ -198,10 +198,6 @@ export default function StaticArray() {
                     <SpeedComponent speed={speed} setSpeed={handleSetSpeed} />
 
                 </ConfigComponent>
-
-
-
-
             </div>
 
             <RamConteiner>

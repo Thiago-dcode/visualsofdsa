@@ -18,7 +18,7 @@ import SpeedComponent from "@/components/app/speedComponent"
 import ConfigComponent from "@/components/app/ConfigComponent"
 export default function DynamicArray() {
     const { toastInfo } = useToast();
-    const { array, write, insert, fill, access, error, maxSize, capacity, size, cleanUp, delete: del, push, pop, search, memorySize, setMemorySize,speed,handleSetSpeed } = useDynamicArray();
+    const { array, write, insert, fill, access, error, maxSize, capacity, size, cleanUp, delete: del, push, pop, search, memorySize, setMemorySize, speed, handleSetSpeed } = useDynamicArray();
     const [open, setOpen] = useState(false);
     const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
     const [searchResult, setSearchResult] = useState<searchResult | null>(null);
@@ -210,8 +210,6 @@ export default function DynamicArray() {
                             }} />
                         </>
                     }
-
-
                 </Section> : null}
             </OperationsContainer>}
 
@@ -229,11 +227,11 @@ export default function DynamicArray() {
                     }
                 }} />
 
-<ConfigComponent showWhen={!isAnimationRunning}>
-                    
-                        <SpeedComponent speed={speed} setSpeed={handleSetSpeed} />
+                <ConfigComponent showWhen={!isAnimationRunning}>
 
-                    </ConfigComponent>
+                    <SpeedComponent speed={speed} setSpeed={handleSetSpeed} />
+
+                </ConfigComponent>
             </div>
 
             <RamContainer>
