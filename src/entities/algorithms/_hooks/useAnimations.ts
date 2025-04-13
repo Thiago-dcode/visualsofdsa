@@ -37,9 +37,11 @@ export const useAnimation = (visualizationMode: VisualizationArrays) => {
       ref,
       `${animation}-node`,
       speed,
-      (e) => {
-        if (indexRef && visualizationMode === "memoryRam") {
-          indexRef.style.visibility = "hidden";
+      {
+        onAnimationEnds:  () => {
+          if (indexRef && visualizationMode === "memoryRam") {
+            indexRef.style.visibility = "hidden";
+          }
         }
       }
     );

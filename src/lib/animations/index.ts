@@ -8,14 +8,20 @@ import './style.css'
     ref: HTMLElement | null,
     animation:string,
     speed:number,
-    onAnimationEnds: onAnimationEnds  | null = null,
-    onlyOnce = false
+    settings?:{
+       properties?:{
+        [key: string]: string;
+       },
+       onAnimationEnds?: onAnimationEnds  | null,
+       onlyOnce?: boolean
+    },
   ): Promise<boolean> => {
 
     return new Promise((resolve, reject) => {
       if (ref === null) {
-        reject(false);
+        resolve(false);
       } else {
+        const {properties,onAnimationEnds,onlyOnce} = settings || {};
         const animationEvent = (e: AnimationEvent) => {
           if (onAnimationEnds) {
             onAnimationEnds(e,ref);
@@ -26,6 +32,12 @@ import './style.css'
   
           resolve(true);
         };
+        if(properties){
+          Object.entries(properties).forEach(([key, value]) => {
+            ref.style.setProperty(`--${key}`, value);
+          });
+    
+        }
         requestAnimation(ref, `${animation} ${speed}s`, animationEvent,onlyOnce);
       }
     });

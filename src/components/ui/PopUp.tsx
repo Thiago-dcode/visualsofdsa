@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 export function PopUp({
   open,
@@ -16,14 +17,16 @@ export function PopUp({
   title,
   showTrigger = true,
   handleOnPopUpButton = () => { },
-  buttonText
+  buttonText,
+  className
 }: {
   open: boolean;
   description: ReactNode;
   showTrigger?: boolean;
   handleOnPopUpButton?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
   buttonText: string;
-  title: string
+  title: string;
+  className?: string
 }) {
   return (
     <AlertDialog open={open}>
@@ -32,7 +35,7 @@ export function PopUp({
       </AlertDialogTrigger>}
       <AlertDialogContent style={{
         zIndex: 99
-      }} className="dark:text-app-off-white text-app-off-black flex flex-col justify-between">
+      }} className={cn("dark:text-app-off-white text-app-off-black flex flex-col justify-between",className)}>
         <AlertDialogTitle>{title}</AlertDialogTitle>
 
         {/* 

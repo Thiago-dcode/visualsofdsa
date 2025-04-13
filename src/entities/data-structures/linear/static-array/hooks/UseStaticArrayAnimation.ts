@@ -1,98 +1,90 @@
-import { Primitive } from "@/types";
-import { requestAnimation } from "../../../../../lib/animations";
+import { Primitive, speed } from "@/types";
+import { animate } from "@/lib/animations";
 import Node from "../../_classes/Node";
-const UseStaticArrayAnimation = () => {
-  const createAnimation = async (
-    node: Node<Primitive> | null,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
-  ): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      if (!node || !node.ref) {
-        reject(false);
-      } else {
-        const ref = node.ref;
-        const animationEvent = (e: AnimationEvent) => {
-          if (onAnimationEnds) {
-            onAnimationEnds(e);
-          }
-        
-          resolve(true);
-        
-          ref.removeEventListener("animationend", animationEvent);
-        };
+import useAnimation from "@/hooks/useAnimation";
+import "../animation.css";
+import { useCallback, useEffect, useRef } from "react";
 
-     
-        ref.style.animation = `add-node ${"1s"}`;
+const UseStaticArrayAnimation = (speed: speed) => {
+  const { focus } = useAnimation();
+  const speedRef = useRef<speed | null>(null);
+  const getSpeed = useCallback(() => {
+    if (!speedRef.current) return 0.5;
+    switch (speedRef.current) {
+      case 1:
+        return 0.7;
+      case 2:
+        return 0.5;
+      case 3:
+        return 0.3;
+      case 4:
+        return 0.15;
+      default:
+        return 0.5;
+    }
+  }, []);
 
-        ref.addEventListener("animationend", animationEvent);
-        // requestAnimation(ref, `add-node ${"1s"}`, animationEvent);
-      }
-    });
-  };
+  useEffect(() => {
+    speedRef.current = speed || speedRef.current;
+  }, [speed]);
+  const createAnimation = useCallback(
+    async (
+      node: Node<Primitive> | null,
+      onAnimationEnds: ((e: AnimationEvent) => void) | null = null
+    ): Promise<void> => {
+      if (!node || !node.ref) return;
+      await animate(node.ref, "add-node", getSpeed(), {
+        onAnimationEnds,
+        onlyOnce: true,
+      });
+    },
+    [getSpeed]
+  );
 
-  const writeAnimation = async (
-    node: Node<Primitive> | null,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
-    speed = 0.2
-  ): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      if (!node || !node.ref) {
-        reject(false);
-      } else {
-        const ref = node.ref;
-        const animationEvent = (e: AnimationEvent) => {
-          if (onAnimationEnds) {
-            onAnimationEnds(e);
-          }
-          resolve(true);
-        
-          ref.removeEventListener("animationend", animationEvent);
-        };
+  const writeAnimation = useCallback(
+    async (
+      node: Node<Primitive> | null,
+      isFilling: boolean = false,
+      onAnimationEnds: ((e: AnimationEvent) => void) | null = null
+    ): Promise<void> => {
+      if (!node || !node.ref) return;
+      focus(node.ref);
+      await animate(
+        node.ref,
+        "write-node",
+        getSpeed() * (isFilling ? 0.5 : 1),
+        { onAnimationEnds }
+      );
+    },
+    [getSpeed, focus]
+  );
 
-        requestAnimation(ref, `write-node ${speed}s`, animationEvent);
-      }
-    });
-  };
-  const accessAnimation = async (
-    node: Node<Primitive> | null,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
-  ): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      if (!node || !node.ref) {
-        reject(false);
-      } else {
-        const ref = node.ref;
-        const animationEvent = (e: AnimationEvent) => {
-          if (onAnimationEnds) {
-            onAnimationEnds(e);
-          }
-          resolve(true);
-          ref.removeEventListener("animationend", animationEvent);
-        };
-        requestAnimation(ref, `access-node ${"1s"}`, animationEvent);
-      }
-    });
-  };
-  const searchAnimation = async (
-    node: Node<Primitive> | null,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
-  ): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      if (!node || !node.ref) {
-        reject(false);
-      } else {
-        const ref = node.ref;
-        const animationEvent = (e: AnimationEvent) => {
-          if (onAnimationEnds) {
-            onAnimationEnds(e);
-          }
-          resolve(true);
-          ref.removeEventListener("animationend", animationEvent);
-        };
-        requestAnimation(ref, `search-node ${"0.2s"}`, animationEvent);
-      }
-    });
-  };
+  const accessAnimation = useCallback(
+    async (
+      node: Node<Primitive> | null,
+      onAnimationEnds: ((e: AnimationEvent) => void) | null = null
+    ): Promise<void> => {
+      if (!node || !node.ref) return;
+      focus(node.ref);
+      await animate(node.ref, "access-node", getSpeed(), { onAnimationEnds });
+    },
+    [getSpeed, focus]
+  );
+
+  const searchAnimation = useCallback(
+    async (
+      node: Node<Primitive> | null,
+      onAnimationEnds: ((e: AnimationEvent) => void) | null = null
+    ): Promise<void> => {
+      if (!node || !node.ref) return;
+      focus(node.ref);
+      await animate(node.ref, "search-node", getSpeed() * 0.7, {
+        onAnimationEnds,
+      });
+    },
+    [getSpeed, focus]
+  );
+
   return {
     createAnimation,
     writeAnimation,

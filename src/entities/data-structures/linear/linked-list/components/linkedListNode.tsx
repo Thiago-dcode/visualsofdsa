@@ -30,9 +30,9 @@ export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, ind
         if (node.isLastAdd) {
             setAnimationRunning(true)
 
-            await animate(element, 'add-node', 1, () => {
-
-            }, true)
+            await animate(element, 'add-node', 1, {
+                onlyOnce: true,
+            })
             setAnimationRunning(false)
         }
 

@@ -66,9 +66,7 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
     }
     focus(node.ref);
   
-    await animate(node.ref, `find-node`,0.8,() => {
-
-    });
+    await animate(node.ref, `find-node`,0.8);
 
     if (edge && edge.ref){
  
@@ -91,7 +89,7 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
     if (successor && successor.ref) {
       const successorRef = successor.ref;
       if (!isCaseThree) {
-        await animate(nodeRef, `remove-node`,0.8,() => {});
+        await animate(nodeRef, `remove-node`,0.8);
 
         nodeRef.style.display = "none";
       }
@@ -103,7 +101,7 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
       successorRef.style.setProperty("--left_to", `${node.position.x}px`);
       successorRef.style.setProperty("--top_to", `${node.position.y}px`);
       focus(successorRef)
-      await animate(successorRef, `move-node`,0.8,() => {});
+      await animate(successorRef, `move-node`,0.8);
       successor.position.x = node.position.x;
       successor.position.y = node.position.y;
       successorRef.style.left = `${successor.position.x}px`;
@@ -113,13 +111,15 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
         nodeRef.style.visibility = "visible";
       }
     } else {
-      await animate(nodeRef, `remove-node`,0.8,() => {});
+      await animate(nodeRef, `remove-node`,0.8);
       nodeRef.style.visibility = "hidden";
     }
   };
   const insertAnimation = async (node: K) => {
     focus(node.ref)
-    await animate(node.ref, `insert-node`,0.8,() => {}, true);
+    await animate(node.ref, `insert-node`,0.8,{
+      onlyOnce: true,
+    });
     await oppositeBranchAnimation();
     node.isLastAdd = false;
   };
@@ -133,7 +133,8 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
         node.ref,
         `${enable ? "enable" : "disable"}-node`,
         0.5,
-        (ref) => {
+       {
+        onAnimationEnds:  (e) => {
           if (node.ref) {
             if (enable) {
               node.ref.style.opacity = "1";
@@ -144,6 +145,7 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
             }
           }
         }
+       }
       );
     });
   };

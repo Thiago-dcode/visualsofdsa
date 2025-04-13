@@ -1,18 +1,21 @@
 
 @keyframes access-node {
   0% {
+   
     scale: 1;
     background: rgba(250, 204, 21, 0);
     border-color: rgba(250, 204, 21, 0);
   }
 
   50% {
+   
     transform: scale(1.2);
     background: rgba(250, 204, 21);
     border-color: rgba(250, 204, 21);
   }
 
   100% {
+   
     transform: scale(1);
     background: rgba(250, 204, 21, 0);
     border-color: rgba(250, 204, 21, 0);
@@ -20,10 +23,12 @@
 }
 @keyframes add-node {
   0% {
+    
     background-color: rgba(74, 222, 128, 0.2);
   }
 
   50% {
+    
     background-color: rgba(74, 222, 128);
   }
 

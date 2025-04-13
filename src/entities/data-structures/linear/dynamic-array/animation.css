@@ -1,0 +1,42 @@
+@keyframes insert-node-dynamic-array {
+    from {
+        left:var(--startLeft);
+        top:var(--startTop);
+        opacity: 1;
+        background:var(--app-bauhaus-orange);
+      }
+    
+      to {
+        left:var(--endLeft);
+        top:var(--endTop);
+        opacity: 1;
+       
+      }
+  }
+  
+  @keyframes delete-node-dynamic-array {
+    from {
+        left:var(--startLeft);
+        top:var(--startTop);
+        opacity: 1;
+        background:var(--app-bauhaus-red);
+      }
+    
+      to {
+        left:var(--endLeft);
+        top:var(--endTop);
+        opacity: 1;
+       
+      }
+  }
+  @keyframes pop-node {
+    from {
+        opacity: 1;
+        background: var(--app-bauhaus-red);
+      }
+    
+      to {
+        opacity: 0;
+       
+      }
+  }

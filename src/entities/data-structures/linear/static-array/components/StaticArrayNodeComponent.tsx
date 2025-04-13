@@ -8,43 +8,36 @@ import { DynamicArrayNode } from '../../dynamic-array/class/DynamicArrayNode';
 
 type props = {
   node: Node<Primitive>;
-  action?: ArrayActions;
   setAnimationRunning: (value: boolean) => void;
   isLastNode: boolean;
+
 }
-export default function StaticArrayNodeComponent({ node, action = 'create', setAnimationRunning, isLastNode }: props) {
+export default function StaticArrayNodeComponent({ node, setAnimationRunning, isLastNode }: props) {
   const { createAnimation } = UseStaticArrayAnimation();
   const setRef = useCallback(async (ele: HTMLElement | null) => {
 
     if (!ele) return;
-
     node.ref = ele;
-    if (action === 'create') {
-
-      await createAnimation(node, () => {
-        setAnimationRunning(false)
-      })
-    }
-    else if (action === 'push') {
-      if (isLastNode) {
+   if( node.isLastAdd) {
         await createAnimation(node, () => {
           setAnimationRunning(false)
+          node.isLastAdd = false;
         })
-      }
+      
     }
-    else if (action === 'insert' && node instanceof DynamicArrayNode && node.isLastInserted) {
-      await createAnimation(node, () => {
-      setAnimationRunning(false)
-        node.isLastInserted = false;
-      })
-    }
+    // else if (action === 'insert' && node instanceof DynamicArrayNode && node.isLastInserted) {
+    //   await createAnimation(node, () => {
+    //   setAnimationRunning(false)
+    //     node.isLastInserted = false;
+    //   })
+    // }
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [action])
+  }, [])
   return (
     <LinearNodeComponent key={'LinearNodeComponent-'+node.id}  ref={(e) => {
       setRef(e)
-    }} node={node} dsType='staticArray' className='h-full' />
+    }} node={node} dsType='staticArray' className='h-full relative' />
   )
 }

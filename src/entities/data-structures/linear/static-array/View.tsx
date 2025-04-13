@@ -1,120 +1,144 @@
 'use client'
-import { useState } from "react"
-import Main from "@/components/container/Main"
+import { useState, useRef, useCallback } from "react"
 import OperationsContainer from "@/components/container/OperationsContainer"
 import ButtonAction from "../_components/ButtonAction"
 import { Input } from "@/components/ui/input"
 import InputWithButtonContainer from "@/components/container/InputWithButtonContainer"
-import { prefix0 } from "@/lib/utils"
 import { PopUp } from "@/components/ui/PopUp"
 import StaticArrayNodeComponent from "./components/StaticArrayNodeComponent"
 import useStaticArray from "./hooks/useStaticArray"
-import './style.css'
-import { searchResult, ArrayActions } from "./type"
-import Info from "@/components/ui/info"
+import { searchResult } from "./type"
 import Section from "@/components/container/Section"
-import { PopOverComponent } from "@/components/ui/PopOverComponent"
-import { Button } from "@/components/ui/button"
-import { Wrench } from "lucide-react"
 import RamConteiner from "@/components/container/RamContainer"
 import MemoryAdressContainer from "../_components/MemoryAdressContainer"
 import { MemorySize } from "@/types"
-import Title from "@/components/ui/Title"
 import Properties from "@/components/app/Properties"
 import { useAnimationRunning } from "@/context/animationRunningContext"
-
-
+import SpeedComponent from "@/components/app/speedComponent"
+import { toast } from "sonner"
+import { delay } from "@/lib/utils"
+import ConfigComponent from "@/components/app/ConfigComponent"
+import { useToast } from "@/hooks/useToast"
 export default function StaticArray() {
-    const { array, create, write, access, search, error, flush, maxSize, setMaxSize } = useStaticArray();
+
+    const { array, create, write, access, search, error, flush, maxSize, setMaxSize, handleSetSpeed, speed } = useStaticArray(50);
     const { isAnimationRunning, setAnimationRunning } = useAnimationRunning()
-    const [action, setAction] = useState<ArrayActions>('create')
-    const [data, setData] = useState<string>('');
-    const [searchData, setSearchData] = useState<string>('');
-    const [size, setSize] = useState<number>(0);
-    const [index, setIndex] = useState<number>(0);
-    const [indexAccess, setIndexAccess] = useState<number>(0);
+    const { toastInfo } = useToast();
+    const refWrite = useRef<HTMLInputElement>(null);
+    const refWriteData = useRef<HTMLInputElement>(null);
+    const refAccess = useRef<HTMLInputElement>(null);
+    const refSearch = useRef<HTMLInputElement>(null);
+    const refSize = useRef<HTMLInputElement>(null);
     const [open, setOpen] = useState(false);
     const [searchResult, setSearchResult] = useState<searchResult | null>(null);
-    const [render, setRender] = useState(false)
-    const cleanUp = () => {
+    const handleToastInfo = useCallback((action: string) => {
+        toastInfo(`You must select a valid index for ${action.toUpperCase()} operation`)
+    }, [toastInfo])
+    const handleWrite = useCallback(async () => {
+        if (isAnimationRunning || !refWriteData.current || !refWrite.current) return;
+        setAnimationRunning(true)
+        const data = refWriteData.current.value;
+        const index = Number.parseInt(refWrite.current.value);
+        if (!isNaN(index)) await write(data === '' || data === undefined ? null : data, index)
+        else handleToastInfo('write')
+        refWriteData.current.value = ''
+        refWrite.current.value = ''
+        setAnimationRunning(false)
+    }, [isAnimationRunning])
+
+    const handleAccess = useCallback(async () => {
+        if (isAnimationRunning || !refAccess.current) return;
+        setAnimationRunning(true);
+        setOpen(false)
+        const index = Number.parseInt(refAccess.current.value);
+        if (!isNaN(index)) await access(index)
+        else handleToastInfo('access')
+
+
+        refAccess.current.value = ''
+        setAnimationRunning(false)
+    }, [isAnimationRunning])
+
+    const handleSearch = useCallback(async () => {
+        if (isAnimationRunning || !refSearch.current) return;
+        setAnimationRunning(true)
+        setOpen(!open)
+         const result = await search(refSearch.current.value === '' ? null : refSearch.current.value)
+         setSearchResult(result)
+        refSearch.current.value = ''
+        setAnimationRunning(false)
+    }, [isAnimationRunning])
+
+    const handleCreate = useCallback(async () => {
+        if (isAnimationRunning || !refSize.current) return;
+
+        setOpen(!open)
+        const size = Number.parseInt(refSize.current.value)
+
+        setAnimationRunning(true)
+        if (!isNaN(size) && size > 0) await create(size)
+        refSize.current.value = ''
+        setAnimationRunning(false)
+    }, [isAnimationRunning])
+
+    const handleFill = useCallback(async () => {
+        if (isAnimationRunning || !array) return;
+        setAnimationRunning(true)
+        const toastId = toast.loading('Filling array');
+        for (let i = 0; i < array.length; i++) {
+            const element = array[i];
+            if (!element || element.data) continue;
+            await write('data-' + i, i, true);
+
+        }
+        await delay(200);
+        toast.dismiss(toastId)
+        setAnimationRunning(false);
+    }, [array, isAnimationRunning])
+    const cleanUp = useCallback(() => {
         setAnimationRunning(false)
         flush();
-        setAction('create')
-        setSize(0)
-        setData('')
-        setIndex(0)
         setSearchResult(null)
+        if (refSize.current) refSize.current.value = ''
+        if (refWriteData.current) refWriteData.current.value = ''
+        if (refWrite.current) refWrite.current.value = ''
+        if (refAccess.current) refAccess.current.value = ''
+        if (refSearch.current) refSearch.current.value = ''
+    }, [])
 
-    }
     return (
         <>
             {<OperationsContainer setOpen={(value) => {
-
                 setOpen(value)
-
-
-
             }} open={open}>
                 {array && array.length ? < Section>
 
                     {/* WRITE OPERATION */}
                     <InputWithButtonContainer>
-                        <Input value={index} placeholder="index" className="text-black w-20" onChange={(e) => {
-                            const n = Number.parseInt(e.target.value);
-                            setIndex(isNaN(n) ? 0 : n)
-                        }} type="number" min={0} />
-                        <Input value={data} placeholder="data" className="text-black w-24" onChange={(e) => {
-
-                            setData(e.target.value)
-                        }} type="text" name="" id="" />
+                        <Input ref={refWrite} placeholder="index" className="text-black w-20" type="number" min={0} />
+                        <Input ref={refWriteData} placeholder="data" className="text-black w-24" type="text" name="" id="" />
 
                         <ButtonAction title="write" action="write" isLoading={isAnimationRunning} onClick={async () => {
-                            if (isAnimationRunning || index === undefined) return;
-                            setAnimationRunning(true)
-                            setOpen(false)
-                            setAction('write')
-                            console.log(data, index)
-                            await write(data === '' || data === undefined ? null : data, index, () => {
 
-
-                            })
-                            setAnimationRunning(false)
-
+                            await handleWrite()
                         }} />
                     </InputWithButtonContainer>
                     {/* ACCESS OPERATION */}
                     <InputWithButtonContainer>
-                        <Input defaultValue={indexAccess} placeholder="index" className="text-black w-20" onChange={(e) => {
-                            setIndexAccess(Number.parseInt(e.target.value))
-                        }} type="number" min={0} />
+                        <Input ref={refAccess} placeholder="index" className="text-black w-20" type="number" min={0} />
                         <ButtonAction title="access" action="read" isLoading={isAnimationRunning} onClick={async () => {
-                            if (isAnimationRunning) return;
-                            setAnimationRunning(true);
-                            setAction('access')
-                            setOpen(false)
-                            await access(indexAccess, () => {
-                                setAnimationRunning(false)
-                            })
+
+                            await handleAccess()
 
                         }} />
                     </InputWithButtonContainer>
                     {/* SEARCH OPERATION */}
                     <InputWithButtonContainer>
-                        <Input value={searchData} placeholder="data" className="text-black w-24" onChange={(e) => {
-                            setSearchData(e.target.value)
-                        }} type="text" name="" id="" />
+                        <Input ref={refSearch} placeholder="data" className="text-black w-24" type="text" name="" id="" />
 
                         <ButtonAction title="search" action="search" isLoading={isAnimationRunning} onClick={async () => {
-                            if (isAnimationRunning) return;
-                            setAnimationRunning(true)
-                            setOpen(!open)
-                            setAction('search')
-                            await search(searchData === '' ? null : searchData, (data) => {
-                                setAnimationRunning(false)
-                                setSearchData('')
-                                setSearchResult(data)
-                            })
 
+                            await handleSearch()
 
                         }} />
                     </InputWithButtonContainer>
@@ -122,25 +146,9 @@ export default function StaticArray() {
                 </Section> : null}
 
                 {(!array || !array.length) && <div className="flex  items-center gap-2 justify-center">
-                    <Input defaultValue={size} placeholder="size" className="text-black w-20" onChange={(e) => {
-                        const value = Number.parseInt(e.target.value);
-                        if (isNaN(value)) {
-                            e.target.value = 0 + '';
-                        }
-
-                        else if (value < 0) {
-                            e.target.value = 0 + '';
-                        }
-                        setSize(value)
-
-
-                    }} type="number" min={0} />
+                    <Input ref={refSize} placeholder="size" className="text-black w-20" type="number" min={0} />
                     <ButtonAction title="create" action="write" isLoading={isAnimationRunning} onClick={async () => {
-                        if (isAnimationRunning || !size) return;
-                        setOpen(!open)
-                        setAnimationRunning(true)
-                        await create(size)
-                        setAnimationRunning(false)
+                        await handleCreate()
                     }} />
                     <ButtonAction title="fill" action="fill" isLoading={isAnimationRunning} onClick={async () => {
                         if (isAnimationRunning) return;
@@ -152,25 +160,14 @@ export default function StaticArray() {
                 </div>}
 
                 {array && array.length ? <ButtonAction title="fill" action="fill" className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning} onClick={async () => {
-                    if (isAnimationRunning) return;
-                    setAnimationRunning(true)
-                    setAction('write')
-                    for (let i = 0; i < array.length; i++) {
-                        const element = array[i];
-                        if (!element || element.data) continue;
-                        await write('data-' + i, i, () => {
-                            setRender(prev => !prev)
-                        }, true);
 
-                    }
-                    setAnimationRunning(false);
+                    await handleFill()
 
                 }} /> : null}
 
                 {array && array.length ? <ButtonAction title="delete" action="delete" className='elf-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {
                     flush()
                     setAnimationRunning(false)
-                    setAction('create')
                 }} /> : null}
 
             </OperationsContainer>}
@@ -181,31 +178,30 @@ export default function StaticArray() {
 
                 <Properties properties={{
                     'ArraySize': {
-                        value: array?.length || null
+                        value: array !== null ? array.length : 'null'
                     },
                     'memorySize': {
                         value: maxSize
                     }
                 }} />
-                {!isAnimationRunning && <div>
 
-                    <PopOverComponent content={
-                        <div className='flex flex-col items-center justify-center gap-4'>
-                            <div>
-                                <label htmlFor="size">Memory size</label>
-                                <Input defaultValue={maxSize} onChange={(e) => {
-                                    setMaxSize(Number.parseInt(e.target.value))
-                                    setAction('create')
-                                    flush()
 
-                                }} name='size' type='range' min={1} max={200} />
-                            </div>
-                        </div>
+                <ConfigComponent showWhen={!isAnimationRunning}>
+                    <div>
+                        <label htmlFor="size">Memory size</label>
+                        <Input defaultValue={maxSize} onChange={(e) => {
+                            setMaxSize(Number.parseInt(e.target.value))
+                            flush()
 
-                    } trigger={<Button onClick={() => {
+                        }} name='size' type='range' min={1} max={200} />
+                    </div>
+                    <SpeedComponent speed={speed} setSpeed={handleSetSpeed} />
 
-                    }}><Wrench /></Button>} />
-                </div>}
+                </ConfigComponent>
+
+
+
+
             </div>
 
             <RamConteiner>
@@ -214,9 +210,9 @@ export default function StaticArray() {
                     [...Array(maxSize)].map((d, i) => {
                         return (
 
-                            <MemoryAdressContainer size={MemorySize.L} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i}>
+                            <MemoryAdressContainer memory={array && array[i] !== undefined ? array[i] : null} size={MemorySize.L} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i}>
 
-                                {array && array[i] ? <StaticArrayNodeComponent isLastNode={i === array.length - 1} action={action} setAnimationRunning={setAnimationRunning} node={array[i]} /> : <p className="border dark:border-white/50 border-black/50 w-full h-full"></p>}
+                                {array && array[i] ? <StaticArrayNodeComponent isLastNode={i === array.length - 1} setAnimationRunning={setAnimationRunning} node={array[i]} /> : <p className="border dark:border-white/50 border-black/50 w-full h-full"></p>}
                             </MemoryAdressContainer>
 
 
@@ -232,12 +228,12 @@ export default function StaticArray() {
 
 
 
-            {searchResult && <PopUp title={'Steps:'} buttonText="close" handleOnPopUpButton={() => {
+            {searchResult && <PopUp className="z-[102]" title={'Steps:'} buttonText="close" handleOnPopUpButton={() => {
                 setSearchResult(null)
 
             }} open={searchResult ? true : false} showTrigger={false} description={`${!searchResult.found ? `Data ${searchResult.data} not found.` : `Data ${searchResult.data} found on index: ${searchResult.steps - 1}.`} Steps taken: ${searchResult.steps}.`} />}
 
-            {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
+            {error && <PopUp className="z-[102]" title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
                 cleanUp()
 
             }} open={error ? true : false} showTrigger={false} description={error.description} />}

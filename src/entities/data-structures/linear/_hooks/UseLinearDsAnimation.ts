@@ -33,8 +33,10 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
       ref,
       `add-node-linear`,
       getSpeed(),
-      onAnimationEnds,
-      true
+      {
+        onAnimationEnds,
+        onlyOnce: true,
+      }
     );
   };
   const handleRemoveAnimation = async (
@@ -57,12 +59,14 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
       ref,
       `remove-node-linear`,
       getSpeed(),
-      (e) => {
+     {
+      onAnimationEnds: (e) => {
         if (onAnimationEnds) onAnimationEnds(e);
 
         ref.style.display = "none";
       },
-      true
+      onlyOnce: true,
+     }
     );
   };
   const handleMoveNodesAnimation = async (
@@ -77,9 +81,11 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
             (linearDs.nodeHeight + linearDs.nodeHeightSpacing);
           ref.style.setProperty("--start", `${node.position.y}px`);
           ref.style.setProperty("--end", `${end}px`);
-          return animate(ref, `move-node-linear`, getSpeed() * 0.7, (e) => {
-            ref.style.bottom = `${end}px`;
-            node.position.y = end;
+          return animate(ref, `move-node-linear`, getSpeed() * 0.7, {
+            onAnimationEnds: (e) => {
+              ref.style.bottom = `${end}px`;
+              node.position.y = end;
+            }
           });
         }
         return Promise.resolve();
@@ -91,7 +97,9 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
     node: Node<Primitive>,
     onAnimationEnds: ((e: AnimationEvent) => void) | null = null
   ): Promise<boolean> => {
-    return await animate(node.ref, `peek-node-linear`, getSpeed()*1.1, onAnimationEnds);
+    return await animate(node.ref, `peek-node-linear`, getSpeed()*1.1, {
+      onAnimationEnds
+    });
   };
   const handleFillerAnimation = async (
     nodeArrayOfFiller: Node<Primitive>[],

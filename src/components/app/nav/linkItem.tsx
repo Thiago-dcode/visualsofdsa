@@ -43,7 +43,8 @@ export default function LinkItemComponent({ link, icon, isFirstLvl, pathMatch }:
 
 
     })}><Button className={cn("px-1 py-2 h-auto w-full", {
-        'cursor-not-allowed dark:text-app-off-white/50 text-app-off-black/50 ': !link.enable
+        'cursor-not-allowed dark:text-app-off-white/50 text-app-off-black/50 ': !link.enable,
+        'cursor-default': link.enable && link.link === '#'
     })} variant={'no-style'} onClick={() => {
         if (!link.enable || link.link === '#') return;
         router.push(link.link)

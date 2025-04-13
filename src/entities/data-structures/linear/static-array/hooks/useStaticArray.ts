@@ -1,23 +1,33 @@
 import Position from "../../../../../lib/classes/position/Position";
-import { Direction, Primitive } from "@/types";
-import { useCallback, useRef, useState } from "react";
+import { Direction, Primitive, MemorySize } from "@/types";
+import { useCallback, useState } from "react";
 import Node from "../../_classes/Node";
-import "../style.css";
 import UseStaticArrayAnimation from "./UseStaticArrayAnimation";
 import { delay, random } from "@/lib/utils";
 import { searchResult } from "../type";
+import { useSpeed } from "@/hooks/useSpeed";
+import { config } from "@/config";
 
-export default function useStaticArray(size: number = 50) {
+
+export default function useStaticArray(size: number =50) { 
+  const {speed, handleSetSpeed} = useSpeed(2,config.localStorageKeys.speed.staticArray);
   const [array, setArray] = useState<(Node<Primitive> | null)[] | null>(null);
+ 
   const { writeAnimation, accessAnimation, searchAnimation } =
-    UseStaticArrayAnimation();
+    UseStaticArrayAnimation(speed);
+  const [memorySize,setMemorySize] = useState(MemorySize.L);
   const [maxSize, setMaxSize] = useState(size);
+  const [_render, setRender] = useState(false)
 
+  
   const [error, setError] = useState<{
     name: string;
     description: string;
   } | null>(null);
 
+  const render = useCallback(() => {
+    setRender(prev => !prev)
+  }, [])
   const initArray = (size: number) => {
     if (size < 0 || size > maxSize) {
       setError({
@@ -81,8 +91,8 @@ export default function useStaticArray(size: number = 50) {
   const write = async (
     data: Primitive,
     index: number,
-    callback = () => {},
     isFilling = false,
+    callback = () => {},
     customNode: Node<Primitive> = new Node(data, new Position(0, 0))
   ) => {
     if (!array) return;
@@ -95,12 +105,8 @@ export default function useStaticArray(size: number = 50) {
       node = array[index];
     }
     node.data = data;
-
-    try {
-      await writeAnimation(node, () => {}, isFilling ? 0.2 : 0.6);
-    } catch (error) {
-      //handle rejected animation
-    }
+      await writeAnimation(node, isFilling );
+      render();
     callback();
   };
 
@@ -125,11 +131,14 @@ export default function useStaticArray(size: number = 50) {
     await accessAnimation(array[index], () => {});
     callback();
   };
-  const search = async (
+  const search = useCallback(async (
     data: Primitive,
-    callback = (result: searchResult) => {}
-  ) => {
-    if (!array) return;
+     ) => {
+    if (!array) return {
+      steps: 0,
+      found: false,
+      data: null,
+    };
     let steps = 0;
     let found = false;
     for (let i = 0; i < array.length; i++) {
@@ -144,12 +153,13 @@ export default function useStaticArray(size: number = 50) {
         await searchAnimation(node);
       } catch (error) {}
     }
-    callback({
+ 
+    return {
       steps,
       found,
       data,
-    });
-  };
+    };
+  },[array,size]);
 
   const flush = () => {
     setArray(null);
@@ -168,6 +178,10 @@ export default function useStaticArray(size: number = 50) {
     setArray,
     setError,
     createUnsorted,
-    createSorted
+    createSorted,
+    memorySize,
+    setMemorySize,
+    handleSetSpeed,
+    speed
   };
 }

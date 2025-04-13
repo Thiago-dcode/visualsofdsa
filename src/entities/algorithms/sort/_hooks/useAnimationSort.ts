@@ -32,9 +32,11 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
       node.position.y = node.position.y - (maxBarSize + 1);
       ref.style.setProperty("--bottom_to", `${node.position.y}px`);
       beforeAnimation(node);
-      return animate(ref, `move-node`, speed, () => {
-        onAnimationEnds(node);
-      });
+        return animate(ref, `move-node`, speed, {
+          onAnimationEnds: () => {
+            onAnimationEnds(node);
+          }
+        });
     });
 
     await Promise.all(promises);
@@ -56,7 +58,7 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
       refB.style.setProperty("--bottom_from", `${nodeB.position.y}px`);
       nodeB.position.y = nodeA.position.y;
       refB.style.setProperty("--bottom_to", `${nodeB.position.y}px`);
-      await animate(refB, `move-node`, speed, () => {});
+      await animate(refB, `move-node`, speed);
       refB.style.left = nodeB.position.x + "px";
       refB.style.bottom = nodeB.position.y + "px";
       refB.style.backgroundColor = nodeB.color || refB.style.backgroundColor;
@@ -131,24 +133,23 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
       refA.style.setProperty("--color", `rgb(245 168 69 )`);
       refB.style.setProperty("--color", `rgb(245 168 69 )`);
       await Promise.all([
-        animate(refA, `move-node`, speed * 1.1, () => {}),
+        animate(refA, `move-node`, speed * 1.1),
         visualization == "memoryRam"
           ? animate(
               animations.getIndexRef(refA),
               `move-node`,
               speed * 1.1,
-              () => {}
+              
             )
-          : null,
-        animate(refB, `move-node`, speed * 1.1, () => {}),
+          : Promise.resolve(),
+        animate(refB, `move-node`, speed * 1.1),
         visualization == "memoryRam"
           ? animate(
               animations.getIndexRef(refB),
               `move-node`,
               speed * 1.1,
-              () => {}
             )
-          : null,
+          : Promise.resolve(),
       ]);
 
       //After animation

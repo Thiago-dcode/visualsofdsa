@@ -76,7 +76,9 @@ const _handleFillerAnimation = useCallback(async () => {
           </div>
 
           <ButtonAction action="search" title="run" className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning} onClick={async () => {
-         await handleAction('fill',fill())
+         await handleAction('fill',fill(()=>{
+         setAnimationRunning(false)
+         }))
           }} />
 
         </OperationsContainer>
@@ -107,11 +109,11 @@ const _handleFillerAnimation = useCallback(async () => {
 
         </div>
 
-        <LinearDsContainer linearDs={linearDs}>
+        <LinearDsContainer linearDs={linearDs} >
           {
             nodeArray && nodeArray.map((node, i) => {
               return (
-                <StackQueueComponent linearDsName={linearDsName} setAnimationIsRunning={setAnimationRunning} handleAddAnimation={_handleAddAnimation} handleFillerAnimation={_handleFillerAnimation} height={linearDs.nodeHeight} key={'stackNode-' + i +'-'+node.data +'-'+node.id} node={node} id={i} />
+                <StackQueueComponent linearDsName={linearDsName} setAnimationIsRunning={setAnimationRunning} handleAddAnimation={_handleAddAnimation} handleFillerAnimation={_handleFillerAnimation} height={linearDs.nodeHeight} linearDs={linearDs} key={'stackNode-' + i +'-'+node.data +'-'+node.id} node={node} id={i} />
               )
             })
 }

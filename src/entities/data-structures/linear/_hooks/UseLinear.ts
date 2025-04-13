@@ -9,100 +9,110 @@ import { config as appConfig } from "@/config";
 import { random } from "@/lib/utils";
 import LinkedListNode from "../linked-list/classes/LinkedListNode";
 function UseLinear(linearDs: LinearDs<Primitive>) {
-  const {speed,handleSetSpeed} = useSpeed(linearDs.speed,appConfig.localStorageKeys.speed.linearDs);
-  const [config,_setConfig] = useState({
-    maxSize:linearDs.maxSize,
-    width:linearDs.width,
-    speed
+  const { speed, handleSetSpeed } = useSpeed(
+    linearDs.speed,
+    appConfig.localStorageKeys.speed.linearDs
+  );
+  const [config, _setConfig] = useState({
+    maxSize: linearDs.maxSize,
+    width: linearDs.width,
+    speed,
   });
-  const {handlePeekAnimation,handleRemoveAnimation,handleAddAnimation,handleFillerAnimation,handleEmptyAnimation,handleMoveNodesAnimation} = UseLinearDsAnimation(linearDs,config.speed);
-  const [nodeArray, _setNodeArray] = useState<LinkedListNode<Primitive>[] | null>(null);
+  const {
+    handlePeekAnimation,
+    handleRemoveAnimation,
+    handleAddAnimation,
+    handleFillerAnimation,
+    handleEmptyAnimation,
+    handleMoveNodesAnimation,
+  } = UseLinearDsAnimation(linearDs, config.speed);
+  const [nodeArray, _setNodeArray] = useState<
+    LinkedListNode<Primitive>[] | null
+  >(null);
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
   const toastFillerId = useRef<string | number | null>(null);
-  const setConfig = useCallback((key: keyof typeof config, value: number) => {
-    _setConfig({...config, [key]: value})
-    if(key === 'speed') handleSetSpeed(value as speed)
-  },[config]);
-  const setNodeArray = () => {   
-    _setNodeArray(linearDs.toNodeArray)
-  }
+  const setConfig = useCallback(
+    (key: keyof typeof config, value: number) => {
+      _setConfig({ ...config, [key]: value });
+      if (key === "speed") handleSetSpeed(value as speed);
+    },
+    [config]
+  );
+  const setNodeArray = () => {
+    _setNodeArray(linearDs.toNodeArray);
+  };
   const flush = () => {
-    _setNodeArray(null)
-    setIsStackOverFlow(false)
+    _setNodeArray(null);
+    setIsStackOverFlow(false);
     linearDs.flush();
   };
-   
+
   const add = async (data: Primitive) => {
     try {
-     const node = await linearDs.add(data);
-     node.isLastAdd = true;
-    setNodeArray();
-   
+      const node = await linearDs.add(data);
+      node.isLastAdd = true;
+      setNodeArray();
     } catch (error) {
-      if(error instanceof StackOverFlowError) {
-        setIsStackOverFlow(true)
+      if (error instanceof StackOverFlowError) {
+        setIsStackOverFlow(true);
       }
     }
-
-
-
   };
   const remove = async () => {
-
-        const node =await linearDs.remove();
-        if (!node)  {
-          toast.error(`${linearDs?.name} is empty`)
-          return ;
-        }  
-        await handleRemoveAnimation(node); 
-      if(linearDs.name ==='queue') await handleMoveNodesAnimation();
-        setNodeArray();
-     
+    const node = await linearDs.remove();
+    if (!node) {
+      toast.error(`${linearDs?.name} is empty`);
+      return;
+    }
+    await handleRemoveAnimation(node);
+    if (linearDs.name === "queue") await handleMoveNodesAnimation();
+    setNodeArray();
   };
   const peek = async () => {
-    
-      const peekNode = linearDs?.peekNode()
-    if(!peekNode) {
+    const peekNode = linearDs?.peekNode();
+    if (!peekNode) {
       toast.info(`${linearDs?.name} is empty`);
       return;
     }
-    await handlePeekAnimation(peekNode)
-
-
+    await handlePeekAnimation(peekNode);
   };
 
-    const fill = async (
-    ) => {
-      const remainingSpace = linearDs.maxSize - linearDs.size;
-      if(remainingSpace <= 0) return;
-      toastFillerId.current = toast.loading(`Filling ${linearDs?.name}`);
-      for(let i = 0; i < remainingSpace; i++) {
-        const node= await linearDs.add(`data-${random(0,2464)}`);
-       if(node) {
-        node.isFiller = true;
-        if(i === remainingSpace - 1) node.isLastAdd = true;
-       }
+  const fill = async (callbackWhenFull: () => void) => {
+    const remainingSpace = linearDs.maxSize - linearDs.size;
+    if (remainingSpace <= 0) {
+      if (remainingSpace === 0) {
+        await empty();
+         callbackWhenFull();
       }
-      setNodeArray();
-      
-    };
-    const dismissFillerToast = () => {
-      if(toastFillerId.current) {
-        toast.dismiss(toastFillerId.current);
-        toastFillerId.current = null;
+      return;
+    }
+    toastFillerId.current = toast.loading(`Filling ${linearDs?.name}`);
+    for (let i = 0; i < remainingSpace; i++) {
+      const node = await linearDs.add(`data-${random(0, 2464)}`);
+      if (node) {
+        node.isFiller = true;
+        if (i === remainingSpace - 1) node.isLastAdd = true;
       }
     }
+    setNodeArray();
+  };
+  const dismissFillerToast = () => {
+    if (toastFillerId.current) {
+      toast.dismiss(toastFillerId.current);
+      toastFillerId.current = null;
+    }
+  };
   const empty = useCallback(async () => {
-    if(!nodeArray) return;
+    if (!nodeArray) return;
     const toastId = toast.loading(`Emptying ${linearDs?.name}`);
     await handleEmptyAnimation(nodeArray);
     linearDs.flush();
     setNodeArray();
     toast.dismiss(toastId);
-  },[nodeArray])
+  }, [nodeArray]);
 
   return {
-   linearDs,
+    linearDs,
     add,
     remove,
     peek,

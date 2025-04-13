@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 import React from 'react'
 import LinearDs from '../_classes/LinearDs'
 import { Primitive } from '@/types'
-function LinearDsContainer({ children, className = '', linearDs}: { linearDs: LinearDs<Primitive>, children: React.ReactNode, className?: string, dsType?: 'stack' | 'queue' }) {
+function LinearDsContainer({ children, className = '', linearDs}: { linearDs: LinearDs<Primitive>, children: React.ReactNode, className?: string }) {
 
     return (
         <div className={cn('w-full h-full flex items-center justify-center', className)}>
