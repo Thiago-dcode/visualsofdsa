@@ -27,6 +27,8 @@ export const config = {
       linearDs: "vod_linear_ds_speed",
       staticArray: "vod_static_array_speed",
       dynamicArray: "vod_dynamic_array_speed",
+      linkedList: "vod_linked_list_speed",
+      
     },
     theme: "vod_theme",
     muted: "vod_muted",

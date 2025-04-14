@@ -10,7 +10,7 @@ import Section from './Section';
 function HeapContainer({ heap, children, loading }: {
     heap: Heap,
     children: ReactNode,
-    loading: boolean
+    loading: boolean,
 
 }) {
     const [mallocSize, setMallocSize] = useState(0);
@@ -81,6 +81,7 @@ function HeapContainer({ heap, children, loading }: {
                             </section>
                         </div>
                     } />
+                 
                 </div>
                 <div className='self-end flex items-center gap-2 relative'>
                     {heapSize <= 0 ? <InputWithButtonContainer key={'linkedList-add-action'}>

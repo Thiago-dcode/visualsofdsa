@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import LinkedList from "../classes/LinkedList";
 import { Primitive } from "@/types";
 import Position from "@/lib/classes/position/Position";
@@ -8,21 +8,41 @@ import "../animation.css";
 import LinkedListNode from "../classes/LinkedListNode";
 import { animate } from "@/lib/animations";
 import { useDarkMode } from "@/context/darkModeContext";
-const ANIMATION_SPEED = 1;
+import { useSpeed } from "@/hooks/useSpeed";
+import { config } from "@/config";
+
 export default function UseLinkedList(isDoublyLinkedList = false) {
   const [linkedList] = useState(new LinkedList());
  const {isDark} = useDarkMode();
 
+ const {speed,handleSetSpeed}= useSpeed(2,config.localStorageKeys.speed.linkedList)
   const [error, setError] = useState<{
     name: string;
     description: string;
   } | null>(null);
 
+
+const getSpeed = useCallback(()=>{
+  switch (speed) {
+    case 1:
+      return 0.8;
+    case 2:
+      return 0.5;
+    case 3:
+      return 0.3;
+    case 4:
+      return 0.15;
+    default:
+      return 0.5;
+  }
+
+},[speed])
+
   const [arrayLs, setArrayLs] = useState(linkedList.toNodeArray());
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
 
   const animateEdge = (ref: HTMLElement | null) =>
-    animate(ref, `lit-node-edge`, ANIMATION_SPEED * 0.5);
+    animate(ref, `lit-node-edge`, 0.5);
   const add = async (
     data: Primitive,
     index: number,
@@ -46,7 +66,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
               await animate(
                 _node.ref,
                 `find-node-${isDark?'dark':'light'}`,
-                ANIMATION_SPEED * 0.8
+               getSpeed()
               );
 
               if (direction === "forward")
@@ -86,12 +106,13 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
           steps = _steps || 1;
           try {
             if (_node && _node.ref) {
+              const found = index === _index;
               await animate(
                 _node.ref,
-                `${index !== _index ? `find-node-${isDark?'dark':'light'}` : "del-node"}`,
-                ANIMATION_SPEED * 0.8
+                `${found ? "del-node" : `find-node-${isDark?'dark':'light'}`}`,
+                found?getSpeed() * 0.8:getSpeed()
               );
-              if (index !== _index) {
+              if (!found) {
                 if (direction === "forward")
                   await animateEdge(_node.nextEdge.ref);
                 else if (direction === "backward")
@@ -139,14 +160,15 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
             steps = _steps || 1;
             if (_node && _node.ref) {
               try {
+                const found = index === _index;
                 await animate(
                   _node.ref,
-                  index !== _index
-                    ? `find-node-${isDark?'dark':'light'}`
-                    : `get-node`,
-                    index !== _index?ANIMATION_SPEED * 0.8:ANIMATION_SPEED
+                  found
+                    ? `get-node`
+                    : `find-node-${isDark?'dark':'light'}`,
+                    found?getSpeed() * 0.8:getSpeed()
                 );
-                if (index !== _index) {
+                if (!found) {
                   if (direction === "forward")
                     await animateEdge(_node.nextEdge.ref);
                   else if (direction === "backward")
@@ -181,7 +203,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
           !(index === j && animateLast)
             ? `find-node-${isDark?'dark':'light'}`
             : `${isDel ? "del" : "get"}-node`,
-            !(index === j && animateLast)?ANIMATION_SPEED * 0.8:ANIMATION_SPEED
+            !(index === j && animateLast)?getSpeed():getSpeed() * 1.2
         );
 
       if (index === j) {
@@ -226,5 +248,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
     error,
     get,
     arrayLs,
+    speed,
+    handleSetSpeed,
   };
 }

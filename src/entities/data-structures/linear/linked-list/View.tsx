@@ -14,16 +14,17 @@ import Section from '@/components/container/Section';
 
 import { ArrowRight } from 'lucide-react';
 import { useAnimationRunning } from '@/context/animationRunningContext';
+import ConfigComponent from '@/components/app/ConfigComponent';
+import SpeedComponent from '@/components/app/speedComponent';
 
 export default function View({ isDoubly = false }: {
     isDoubly?: boolean
 }) {
-    const { linkedList, add, get, traverse, del, isStackOverFlow, clear, error, arrayLs } = UseLinkedList(isDoubly);
+    const { linkedList, add, get, traverse, del, isStackOverFlow, clear, error, arrayLs, speed, handleSetSpeed } = UseLinkedList(isDoubly);
     const heap = useHeap({
         nodeShape: linkedList,
         onFree: clear
     });
-    const [size, setSize] = useState(0);
     const [open, setOpen] = useState(false)
     const { isAnimationRunning, setAnimationRunning } = useAnimationRunning()
     const [addIndex, setAddIndex] = useState(0);
@@ -165,18 +166,21 @@ export default function View({ isDoubly = false }: {
 
 
         <div className='flex items-center justify-between w-full'>
-            <Properties className='w-full' properties={{
-                'heapSize': {
-                    value: heap.size
-                },
-                'heapFreeSpace': {
-                    value: heap.freeSpace
-                },
-                'linkedlistSize': {
-                    value: linkedList.size
-                },
+            <div>
+                <Properties className='w-full' properties={{
+                    'heapSize': {
+                        value: heap.size
+                    },
+                    'heapFreeSpace': {
+                        value: heap.freeSpace
+                    },
+                    'linkedlistSize': {
+                        value: linkedList.size
+                    },
 
-            }} />
+                }} />
+            </div>
+
             {linkedList.size > 1 ? <div className='flex items-center '>
                 <div className='flex items-start justify-start gap-1'>
                     <ArrowRight size={30} className='text-app-bauhaus-green' />
@@ -188,11 +192,15 @@ export default function View({ isDoubly = false }: {
                 </div>}
 
             </div> : null}
+            <ConfigComponent showWhen={!isBlocked} >
+
+                <SpeedComponent speed={speed} setSpeed={handleSetSpeed} />
+            </ConfigComponent>
         </div>
 
         {/* HEAP SECTION */}
 
-        <HeapContainer loading={isBlocked} heap={heap}>
+        <HeapContainer loading={isBlocked} heap={heap} >
             {
                 arrayLs.map((node, i) => {
 
