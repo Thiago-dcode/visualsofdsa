@@ -6,10 +6,11 @@ import {
   OnTraversal,
   OnRemove,
   OnFindSuccessor,
+  Sortable
 } from "../../../non-linear/tree/types";
 import { Edge } from "@/lib/classes/Edge";
 
-export class BinarySearchTree<T extends number> extends BinaryTree<T> {
+export class BinarySearchTree<T extends number> extends BinaryTree<T> implements Sortable<T,BinaryTreeNode<T>>{
   async insert(
     data: T,
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
@@ -339,4 +340,10 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> {
 
     return successor;
   }
+get min(){
+return this.leftMostNode()
+}
+get max(){
+  return this.rightMostNode()
+}
 }

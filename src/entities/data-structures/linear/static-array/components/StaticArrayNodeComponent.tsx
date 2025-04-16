@@ -13,7 +13,7 @@ type props = {
 
 }
 export default function StaticArrayNodeComponent({ node, setAnimationRunning, isLastNode }: props) {
-  const { createAnimation } = UseStaticArrayAnimation();
+  const { createAnimation } = UseStaticArrayAnimation(2);
   const setRef = useCallback(async (ele: HTMLElement | null) => {
 
     if (!ele) return;

@@ -31,5 +31,8 @@ export const useToast = () => {
     toastInfo,
     toastSuccess,
     toastError,
+    toastInfoId:toastInfoId.current,
+    toastSuccessId:toastSuccessId.current,
+    toastErrorId:toastErrorId.current
   };
 };  

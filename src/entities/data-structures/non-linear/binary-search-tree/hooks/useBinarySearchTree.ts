@@ -6,8 +6,11 @@ import TreeLayout from "../../tree/_classes/TreeLayout";
 import { TraversalType } from "../../tree/types";
 import { speed } from "@/types";
 import { toast } from "sonner";
-
-export const useBinarySearchTree = (speed:speed) => {
+import { createRandomUniqueArrayOfNumbers } from "@/lib/utils";
+const MAX_TREE_SIZE = 200;
+const MIN_INPUT_VALUE = -1000;
+const MAX_INPUT_VALUE = 1000;
+export const useBinarySearchTree = (speed: speed) => {
   const { current: binarySearchTree } = useRef(new BinarySearchTree<number>());
   const [treeLayout, setTreeLayout] = useState(
     () => new TreeLayout<number, BinaryTreeNode<number>>(binarySearchTree)
@@ -20,21 +23,32 @@ export const useBinarySearchTree = (speed:speed) => {
     findSuccessor,
     onTraversal,
     animateEdge
-  } = useAnimationBts<number, BinaryTreeNode<number>>(treeLayout.tree,speed);
+  } = useAnimationBts<number, BinaryTreeNode<number>>(treeLayout.tree, speed);
 
   const render = () => {
-    setTreeLayout(
-      (prev) => new TreeLayout<number, BinaryTreeNode<number>>(prev.tree)
-    );
+    setTreeLayout(new TreeLayout<number, BinaryTreeNode<number>>(binarySearchTree));
+
   };
-
+  const clear = () => {
+    binarySearchTree.clear();
+    render();
+  }
   const mock = async (arr: number[]) => {
-    arr.forEach(async (n) => await binarySearchTree.insert(n));
-
+    binarySearchTree.clear();
+    for (let i = 0; i < arr.length; i++) {
+      await binarySearchTree.insert(arr[i]);
+    }
     render();
   };
+  const createRandomTree = async (size: number) => {
+    if (size > MAX_TREE_SIZE) {
+      toast.error(`Tree size must be less than ${MAX_TREE_SIZE}`);
+      return;
+    };
 
-  const insert = async (data: number, onEnd = () => {}) => {
+    await mock(createRandomUniqueArrayOfNumbers(size, [MIN_INPUT_VALUE, MAX_INPUT_VALUE]))
+  }
+  const insert = async (data: number, onEnd = () => { }) => {
     const node = await binarySearchTree.insert(data, onCompareAnimation);
     if (node) {
       node.isLastAdd = true;
@@ -60,11 +74,11 @@ export const useBinarySearchTree = (speed:speed) => {
     render();
   };
   const traverse = async (traverseType: TraversalType) => {
-    const id = toast.loading(`Traversing: ${traverseType}`,{
-      duration:Infinity
+    const id = toast.loading(`Traversing: ${traverseType}`, {
+      duration: Infinity
     })
-   await binarySearchTree.traverse(traverseType,binarySearchTree.root,onTraversal);
-   toast.dismiss(id);
+    await binarySearchTree.traverse(traverseType, binarySearchTree.root, onTraversal);
+    toast.dismiss(id);
   };
 
   return {
@@ -73,8 +87,13 @@ export const useBinarySearchTree = (speed:speed) => {
     insertAnimation,
     search,
     mock,
+    createRandomTree,
     remove,
     traverse,
-    animateEdge
+    animateEdge,
+    clear,
+    maxTreeSize: MAX_TREE_SIZE,
+    minInputValue: MIN_INPUT_VALUE,
+    maxInputValue: MAX_INPUT_VALUE
   };
 };

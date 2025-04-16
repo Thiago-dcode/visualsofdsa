@@ -14,7 +14,7 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
     tree: Tree<T, K>, 
     lvlHeight: number = 100,  
     paddingX: number = 10,
-    minSeparation: number = tree.nodeWidth / 2
+    minSeparation: number = tree.nodeWidth
   ) {
     this._tree = tree;
     this._lvlHeight = lvlHeight;
@@ -227,8 +227,8 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
     ref.style.removeProperty('--left_to');
     ref.style.removeProperty('--top_from');
     ref.style.removeProperty('--top_to');
+    }
   }
- }
   private getLeftContour(
     node: TreeNode<T>,
     modSum: number,

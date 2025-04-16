@@ -1,6 +1,8 @@
 import { Primitive } from "@/types";
 import Node from "../../linear/_classes/Node";
 import { Edge } from "@/lib/classes/Edge";
+import TreeNode from "./_classes/TreeNode";
+import Tree from "./_classes/Tree";
 
 export type TraversalType = 'inOrder'| 'postOrder'| 'lvlOrder'| 'preOrder'
 
@@ -29,7 +31,6 @@ export type OnRemove<T extends Primitive, K extends Node<T>> = (
 ) => Promise<void>;
 
 
-
 export type OnLevelInOrderTraversal<T extends Primitive, K extends Node<T>> = (
   node: K,
   level: number
@@ -48,3 +49,10 @@ export type TreeObj<T extends Node<Primitive>> = {
 };
 
 
+export interface Sortable<T extends Primitive, K extends TreeNode<T>> {
+  min: K | null;
+  max: K | null;
+}
+export const isSortable = (tree: unknown): tree is Sortable<Primitive, TreeNode<Primitive>> => {
+  return typeof tree === 'object' && tree !== null && 'min' in tree && 'max' in tree;
+}

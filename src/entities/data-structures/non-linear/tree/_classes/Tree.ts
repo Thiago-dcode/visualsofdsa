@@ -46,4 +46,7 @@ export default abstract class Tree<
   get size() {
     return this._size;
   }
+  set size(size: number) {
+    this._size = size;
+  }
 }

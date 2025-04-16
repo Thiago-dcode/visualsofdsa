@@ -27,12 +27,12 @@ describe("StaticArrayNodeComponent", () => {
     expect(node.ref).toBeTruthy()
     if (node.ref) {
       expect(node.ref.textContent).toBe(node.data + '')
-      expect(node.ref.id).toBe('staticArray-node-' + node.id)
+      expect(node.ref.id).toBe(`${'staticArray'}-node-${node.id}-${node.data}`)
     }
     const paragraph = screen.getByRole('paragraph')
     expect(paragraph).toBeInTheDocument()
     expect(paragraph.parentElement).toBeInTheDocument()
-    expect(paragraph.parentElement?.id).toBe('staticArray-node-' + node.id)
+    expect(paragraph.parentElement?.id).toBe(`${'staticArray'}-node-${node.id}-${node.data}`)
     expect(paragraph.textContent).toBe(node.data + '')
   });
   it("Should Render many nodes and set ref", async () => {

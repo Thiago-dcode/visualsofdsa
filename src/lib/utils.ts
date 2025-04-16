@@ -56,7 +56,7 @@ export const createArrayOfNodes = (array: Primitive[]) => {
   }
   return arrayNodes;
 };
-export const createRandomUniqueArrayOfNodes = (
+export const createRandomUniqueArrayOfNumbers = (
   size: number,
   range = [-5000, 5000]
 ) => {
@@ -75,12 +75,16 @@ export const createRandomUniqueArrayOfNodes = (
       return num;
     }
   };
-  const arrayNodes: Node<number>[] = [];
+  const array: number[] = [];
   for (let i = 0; i < size; i++) {
-    arrayNodes.push(new Node(getUnique(), new PositionClass(0, 0), null));
+    array.push(getUnique());
   }
-  return arrayNodes;
+  return array;
 };
+export const createRandomUniqueArrayOfNodes = (
+  size: number,
+  range = [-5000, 5000]
+) => createRandomUniqueArrayOfNumbers(size,range).map(num=>new Node(num,new PositionClass(0,0),null));
 export const createRandomArrayOfNodes = (size: number, range = [-500, 500]) => {
   const arrayNodes: Node<number>[] = [];
   for (let i = 0; i < size; i++) {
@@ -200,7 +204,13 @@ export const getValueNormalized = (
   minX: number,
   maxX: number,
   range: [number, number] = [0, 1]
-) => lerp(range[0], range[1], (x - minX) / (maxX - minX));
+) => {
+  if (minX === maxX) {
+    // If all values are the same, return the midpoint of the range
+    return (range[0] + range[1]) / 2;
+  }
+  return lerp(range[0], range[1], (x - minX) / (maxX - minX));
+};
 //range[0] + (range[1] - range[0]) * ((x - minX) / (maxX - minX))
 export function getAngle(position1: Position, position2: Position) {
   // Calculate the differences in the x and y coordinates
