@@ -5,7 +5,9 @@ import { animate } from "@/lib/animations";
 import Node from "../_classes/Node";
 import "../animation.css";
 import LinkedListNode from "../linked-list/classes/LinkedListNode";
+import useAnimation from "@/hooks/useAnimation";
 const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
+  const { focus } = useAnimation()
   const getSpeed = () => {
     switch (speed) {
       case 1:
@@ -26,14 +28,16 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
   ): Promise<boolean> => {
     const ref = node.ref;
     if (!ref) return false;
-
-    ref.style.setProperty("--start", `${linearDs?.beginner}px`);
-    ref.style.setProperty("--end", `${node.position.y}px`);
+    focus(ref)
     return await animate(
       ref,
       `add-node-linear`,
       getSpeed(),
       {
+        properties: {
+          start: `${linearDs?.beginner}px`,
+          end: `${node.position.y}px`,
+        },
         onAnimationEnds,
         onlyOnce: true,
       }
@@ -50,23 +54,26 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
     const end =
       linearDs.name === "queue"
         ? linearDs.maxSize *
-            (linearDs.nodeHeightSpacing + linearDs.nodeHeight) +
-          50
+        (linearDs.nodeHeightSpacing + linearDs.nodeHeight) +
+        50
         : linearDs.beginner;
-    ref.style.setProperty("--start", `${node.position.y}px`);
-    ref.style.setProperty("--end", `${end}px`);
+    focus(ref)
     return await animate(
       ref,
       `remove-node-linear`,
       getSpeed(),
-     {
-      onAnimationEnds: (e) => {
-        if (onAnimationEnds) onAnimationEnds(e);
+      {
+        properties: {
+          start: `${node.position.y}px`,
+          end: `${end}px`,
+        },
+        onAnimationEnds: (e) => {
+          if (onAnimationEnds) onAnimationEnds(e);
 
-        ref.style.display = "none";
-      },
-      onlyOnce: true,
-     }
+          ref.style.display = "none";
+        },
+        onlyOnce: true,
+      }
     );
   };
   const handleMoveNodesAnimation = async (
@@ -79,13 +86,17 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
           const end =
             node.position.y +
             (linearDs.nodeHeight + linearDs.nodeHeightSpacing);
-          ref.style.setProperty("--start", `${node.position.y}px`);
-          ref.style.setProperty("--end", `${end}px`);
           return animate(ref, `move-node-linear`, getSpeed() * 0.7, {
+            properties:{
+              start: `${node.position.y}px`,
+              end: `${end}px`,
+            },
             onAnimationEnds: (e) => {
+              
               ref.style.bottom = `${end}px`;
               node.position.y = end;
-            }
+            },
+         
           });
         }
         return Promise.resolve();
@@ -97,7 +108,8 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
     node: Node<Primitive>,
     onAnimationEnds: ((e: AnimationEvent) => void) | null = null
   ): Promise<boolean> => {
-    return await animate(node.ref, `peek-node-linear`, getSpeed()*1.1, {
+    focus(node.ref)
+    return await animate(node.ref, `peek-node-linear`, getSpeed() * 1.1, {
       onAnimationEnds
     });
   };

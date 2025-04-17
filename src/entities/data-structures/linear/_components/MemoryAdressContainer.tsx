@@ -20,7 +20,7 @@ function MemoryAdressContainer({ memory, index, showIndex = false, size = Memory
         memory.indexRef = element;
     },[memory])
     return (
-        <div className='z-[49]'>
+        <div >
             <div style={{
                 width: size + 'px',
             }} title={"Memory address: " + memoryAdress} className={`${MemorySize.S === size ? 'text-xs' : MemorySize.M === size ? 'text-sm' : 'text-lg'} flex items-center justify-center py-2 border dark:border-app-off-white border-app-off-black h-[15px]`}>

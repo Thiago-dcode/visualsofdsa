@@ -9,10 +9,9 @@ import { DynamicArrayNode } from '../../dynamic-array/class/DynamicArrayNode';
 type props = {
   node: Node<Primitive>;
   setAnimationRunning: (value: boolean) => void;
-  isLastNode: boolean;
 
 }
-export default function StaticArrayNodeComponent({ node, setAnimationRunning, isLastNode }: props) {
+export default function StaticArrayNodeComponent({ node, setAnimationRunning }: props) {
   const { createAnimation } = UseStaticArrayAnimation(2);
   const setRef = useCallback(async (ele: HTMLElement | null) => {
 
@@ -25,15 +24,6 @@ export default function StaticArrayNodeComponent({ node, setAnimationRunning, is
         })
       
     }
-    // else if (action === 'insert' && node instanceof DynamicArrayNode && node.isLastInserted) {
-    //   await createAnimation(node, () => {
-    //   setAnimationRunning(false)
-    //     node.isLastInserted = false;
-    //   })
-    // }
-
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
     <LinearNodeComponent key={'LinearNodeComponent-'+node.id}  ref={(e) => {

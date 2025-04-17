@@ -18,7 +18,7 @@ export default function MemoryRamVisualization({array,setAnimationRunning}:{
 
           <MemoryAdressContainer memory={d} size={MemorySize.M} index={i} showIndex={false} key={'MemoryAdressContainer-' + i + d?.data + d?.id}>
 
-            {array && array[i] ? <StaticArrayNodeComponent index={i} action={''} isLastNode={i === array.length - 1} setAnimationRunning={setAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
+            {array && array[i] ? <StaticArrayNodeComponent setAnimationRunning={setAnimationRunning} node={array[i]} /> : <p className="border border-white/50 w-full h-full"></p>}
           </MemoryAdressContainer>
 
 

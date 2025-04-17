@@ -31,21 +31,25 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
   >(null);
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
   const toastFillerId = useRef<string | number | null>(null);
+  const flush = () => {
+    _setNodeArray(null);
+    setIsStackOverFlow(false);
+    linearDs.flush();
+  };
   const setConfig = useCallback(
     (key: keyof typeof config, value: number) => {
       _setConfig({ ...config, [key]: value });
       if (key === "speed") handleSetSpeed(value as speed);
+      if (key === "maxSize") {
+        flush();
+        linearDs.maxSize = value};
     },
     [config]
   );
   const setNodeArray = () => {
     _setNodeArray(linearDs.toNodeArray);
   };
-  const flush = () => {
-    _setNodeArray(null);
-    setIsStackOverFlow(false);
-    linearDs.flush();
-  };
+
 
   const add = async (data: Primitive) => {
     try {

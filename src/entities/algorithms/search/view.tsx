@@ -28,6 +28,7 @@ import { useAnimationRunning } from '@/context/animationRunningContext'
 import SpeedComponent from '@/components/app/speedComponent'
 import { config } from '@/config'
 import { useSpeed } from '@/hooks/useSpeed'
+import ConfigComponent from '@/components/app/ConfigComponent'
 
 export default function SearchView({ type }: {
   type?: AlgoSearchType
@@ -172,10 +173,9 @@ export default function SearchView({ type }: {
 
         }} />
         {array && !isAnimationRunning && <VisualizationTypes setVisualization={handleSetVisualizationMode} visualizationSelected={visualizationMode} />}
-        {array && !isAnimationRunning ? <PopOverComponent content={
+        <ConfigComponent available={!!array && !isAnimationRunning} messageWhenNotAvailable="Array is not created yet or animation is running">
           <SpeedComponent setSpeed={handleSetSpeed} speed={speed} />
-        } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} /> : <div></div>}
-
+        </ConfigComponent>
       </div>
       {array ? <RenderVisualization direction={direction} sorted={type === 'binary' ? true : sorted} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} /> : null}
       {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
