@@ -192,7 +192,7 @@ export default function View({ isDoubly = false }: {
                 </div>}
 
             </div> : null}
-            <ConfigComponent showWhen={!isBlocked} >
+            <ConfigComponent available={!isBlocked} >
 
                 <SpeedComponent speed={speed} setSpeed={handleSetSpeed} />
             </ConfigComponent>

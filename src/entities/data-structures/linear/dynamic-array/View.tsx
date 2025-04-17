@@ -227,7 +227,7 @@ export default function DynamicArray() {
                     }
                 }} />
 
-                <ConfigComponent showWhen={!isAnimationRunning}>
+                <ConfigComponent available={!isAnimationRunning}>
 
                     <SpeedComponent speed={speed} setSpeed={handleSetSpeed} />
 

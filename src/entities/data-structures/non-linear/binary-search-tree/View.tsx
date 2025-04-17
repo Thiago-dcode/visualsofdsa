@@ -18,13 +18,16 @@ import { config } from '@/config'
 import SpeedComponent from '@/components/app/speedComponent'
 import ConfigComponent from '@/components/app/ConfigComponent'
 import { useToast } from '@/hooks/useToast'
-
+import { PopOverComponent } from '@/components/ui/PopOverComponent'
+import { Button } from '@/components/ui/button'
+import { TriangleAlert } from 'lucide-react'
+import WarningComponent from '@/components/app/WarningComponent'
 function BinarySearchTreeView() {
 
-  const {toastInfo } = useToast();
+  const { toastInfo } = useToast();
   const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
   const { speed, handleSetSpeed } = useSpeed(3, config.localStorageKeys.speed.binarySearchTree)
-  const { treeLayout, insert, search, insertAnimation, mock, remove, traverse, animateEdge, createRandomTree, clear,maxTreeSize,minInputValue,maxInputValue } = useBinarySearchTree(speed);
+  const { treeLayout, insert, search, insertAnimation, mock, remove, traverse, animateEdge, createRandomTree, clear, maxTreeSize, minInputValue, maxInputValue } = useBinarySearchTree(speed);
   const [nodeSize, setNodeSize] = useState<number>(35);
 
   const insertInputRef = useRef<HTMLInputElement>(null);
@@ -35,14 +38,14 @@ function BinarySearchTreeView() {
 
     if (!input || isAnimationRunning) return;
     const num = parseFloat(input.value);
-    if (isNaN(num) || (action !== 'createRandomTree' && (num < minInputValue || num > maxInputValue))||(action === 'createRandomTree' && (num < 1 || num > maxTreeSize))) {
-    toastInfo(`Input must be a number between ${action !== 'createRandomTree' ? `${minInputValue} and ${maxInputValue}` : `${0} and ${maxTreeSize}`}`);
+    if (isNaN(num) || (action !== 'createRandomTree' && (num < minInputValue || num > maxInputValue)) || (action === 'createRandomTree' && (num < 1 || num > maxTreeSize))) {
+      toastInfo(`Input must be a number between ${action !== 'createRandomTree' ? `${minInputValue} and ${maxInputValue}` : `${0} and ${maxTreeSize}`}`);
       return;
     };
     setAnimationRunning(true);
     switch (action) {
       case 'insert':
-        await insert(num,()=>{
+        await insert(num, () => {
           setAnimationRunning(false);
         });
         break;
@@ -137,7 +140,7 @@ function BinarySearchTreeView() {
             <Input ref={randomTreeInputRef} placeholder="number" max={maxTreeSize} min={1} className="text-black w-32 text-center" type="number" />
             <ButtonAction title="Create Random Tree" action='fill' isLoading={isAnimationRunning} onClick={async () => {
               await handleAction('createRandomTree', randomTreeInputRef.current)
-          }} />
+            }} />
           </InputWithButtonContainer>
 
           {treeLayout.tree.root && <ButtonAction title="Delete" action='delete' isLoading={isAnimationRunning} onClick={async () => {
@@ -153,7 +156,7 @@ function BinarySearchTreeView() {
           maxTreeSize: {
             value: maxTreeSize,
           },
-        
+
           TreeSize: {
             value: `${treeLayout.tree.size} nodes`,
           },
@@ -176,16 +179,26 @@ function BinarySearchTreeView() {
 
 
         }} />
-        
-        <ConfigComponent showWhen={!!treeLayout.tree.root && !isAnimationRunning}>
-          <div className='flex flex-col items-start justify-start'>
-            <p>Tree Size</p>
-            <Input type="range" min={25} max={70} value={nodeSize} onChange={(e) => setNodeSize(parseInt(e.target.value))} />
-            <SpeedComponent title="Animation Speed" speed={speed} setSpeed={handleSetSpeed} />
+        <div className='flex items-center justify-center'>
 
-          </div>
-        </ConfigComponent>
+          <ConfigComponent available={!!treeLayout.tree.root && !isAnimationRunning} messageWhenNotAvailable="Tree is not created yet or animation is running">
+            <div className='flex flex-col items-start justify-start'>
+              <p>Tree Size</p>
+              <Input type="range" min={25} max={70} value={nodeSize} onChange={(e) => setNodeSize(parseInt(e.target.value))} />
+              <SpeedComponent title="Animation Speed" speed={speed} setSpeed={handleSetSpeed} />
 
+            </div>
+          </ConfigComponent>
+
+
+          <WarningComponent title="Tree Balance Warning" warning={{
+            message: "Highly unbalanced trees may cause:",
+            warnings: ["Overlapping nodes in visualization", "Reduced search efficiency", "Poor performance in operations"]
+          }} solution={{
+            message: "Possible solution:",
+            solutions: ["Use AVL Trees (coming soon on visualsofdsa)"]
+          }} />
+        </div>
       </div>
 
       {treeLayout ? <TreeVisualization<number, BinaryTreeNode<number>> onInsertAnimation={onInsertAnimation} onCreateEdgeAnimation={onCreateEdgeAnimation} treeLayout={treeLayout} nodeSize={nodeSize} /> : null}

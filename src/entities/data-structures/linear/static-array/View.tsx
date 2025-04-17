@@ -186,7 +186,7 @@ export default function StaticArray() {
                 }} />
 
 
-                <ConfigComponent showWhen={!isAnimationRunning}>
+                <ConfigComponent available={!isAnimationRunning}>
                     <div>
                         <label htmlFor="size">Memory size</label>
                         <Input defaultValue={maxSize} onChange={(e) => {
