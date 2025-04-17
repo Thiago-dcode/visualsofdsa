@@ -120,6 +120,7 @@ export const useSortAlgorithms = (
       for (let i = start; i < end; i++) {
         const element = array[i];
         if (!element || !element.ref) continue;
+       if(visualization == 'memoryRam') element.ref.style.backgroundColor = '';
         animationPromises.push(animateNode(element.ref, 'search', getSpeed(speed)))
       }
       await Promise.all(animationPromises);
@@ -127,6 +128,7 @@ export const useSortAlgorithms = (
     const onSwap: ClosureCompare = async (nodeA, nodeB) => {
       animateSound(nodeA.data, minArrayValue, maxArrayValue);
       animateSound(nodeB.data, minArrayValue, maxArrayValue);
+   
       await animateOnSwap(nodeA, nodeB, getSpeed(speed));
     }
     onSortEnds(await SortAlgorithms.quick(array as Node<number>[], direction, onPivot, onSwap, onCompare));

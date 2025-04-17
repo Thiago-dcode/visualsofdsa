@@ -6,7 +6,7 @@ import React from 'react'
 
 export default function VisualizationTypes({ visualizationSelected, setVisualization }: {
     visualizationSelected: VisualizationArrays,
-    setVisualization: (v: VisualizationArrays) => void
+    setVisualization: (v: VisualizationArrays) => Promise<void>
 }) {
 
     const visualizationTypes: {
@@ -31,8 +31,8 @@ export default function VisualizationTypes({ visualizationSelected, setVisualiza
                 {
             visualizationTypes.map((vt, i) => {
 
-                return <Button variant={'no-style'} onClick={() => {
-                    setVisualization(vt.mode)
+                return <Button variant={'no-style'} onClick={async () => {
+                    await  setVisualization(vt.mode)
                 }} className={cn('dark:border-app-off-white border-app-off-black border-2 dark:hover:bg-app-off-white hover:bg-app-bg-black dark:hover:text-app-off-black hover:text-app-off-white dark:text-app-off-white text-app-off-black',{
                     'bg-app-bauhaus-blue text-whitehover:text-app-off-white dark:hover:text-app-off-white dark:hover:bg-app-bauhaus-blue hover:bg-app-bauhaus-blue': visualizationSelected === vt.mode
                 })} key={`visualizationMode-${vt.mode}-${i}`}>{vt.name}</Button>

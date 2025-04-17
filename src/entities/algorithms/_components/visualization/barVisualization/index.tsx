@@ -79,6 +79,7 @@ export default function BarsVisualizationSorted({
                 bottom={node.position.y}
                 width={barWidth}
                 key={`bar-component-${node?.data}-${node?.id}-${i}`}
+                maxBarSize={maxBarSize}
                 height={calculateHeight(node.data)}
                 node={node}
                 className={`border-0 border-r-[1px]  dark:border-r-app-bg-black border-r-app-off-white`}

@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 export const useToast = () => {
     const toastInfoId = useRef<string|number|null>(null);
+    const toastWarningId = useRef<string|number|null>(null);
     const toastSuccessId = useRef<string|number|null>(null);
     const toastErrorId = useRef<string|number|null>(null);
     const toastInfo  = (message:string) => {
@@ -12,7 +13,12 @@ export const useToast = () => {
           position: "top-center",
         });
       }
-
+      const toastWarning  = (message:string) => {
+        if(toastWarningId.current) toast.dismiss(toastWarningId.current);
+        toastWarningId.current = toast.warning(message,{
+          position: "top-center",
+        });
+      }
       const toastSuccess  = (message:string) => {
         if(toastSuccessId.current) toast.dismiss(toastSuccessId.current);
         toastSuccessId.current = toast.success(message,{
@@ -33,6 +39,8 @@ export const useToast = () => {
     toastError,
     toastInfoId:toastInfoId.current,
     toastSuccessId:toastSuccessId.current,
-    toastErrorId:toastErrorId.current
+    toastErrorId:toastErrorId.current,  
+    toastWarning,
+    toastWarningId:toastWarningId.current
   };
 };  

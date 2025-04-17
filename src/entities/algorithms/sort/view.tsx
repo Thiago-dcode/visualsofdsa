@@ -25,7 +25,7 @@ import { useAnimationRunning } from '@/context/animationRunningContext'
 import { useVisualizationArray } from '@/hooks/useVisualizationArray'
 import SpeedComponent from '@/components/app/speedComponent'
 import { useSpeed } from '@/hooks/useSpeed'
-
+import { useToast } from '@/hooks/useToast'
 export default function SortView({ type }: {
   type: AlgoSortType
 }) {
@@ -35,15 +35,30 @@ export default function SortView({ type }: {
   const [direction, setDirection] = useState<Direction>('ascending')
   const [open, setOpen] = useState(false);
   const { speed, handleSetSpeed } = useSpeed(1, config.localStorageKeys.speed.sort)
-  const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray('bars');
+  const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray('bars', async (vimValue) => {
+    await handleResetAction(false,type === 'merge')
+  });
   const { bubble, selection, insertion, merge, quick, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const {toastInfo} = useToast();
   useResponsive(() => {
     //Every time the screen size is updated, will reset the array
     reset();
   })
+  const handleResetAction = async (showToast: boolean = true,skip: boolean = false) => {
+    if (!skip && !isSorted) {
+      if (showToast) toastInfo('Array does not need to be reset, sort it first');
+      return;
+    }
+    if (tempValue.current) {
 
+      setAnimationRunning(true);
+      await createUnsorted(tempValue.current)
+      setUnsorted()
+      setAnimationRunning(false);
+    }
+  }
   const handleSort = async () => {
     setOpen(false);
     setAnimationRunning(true);
@@ -90,7 +105,7 @@ export default function SortView({ type }: {
     if (!inputRef.current) return null;
     inputRef.current.value = ''
   }
-  const handleCreate = async () => {
+  const handleCreateAction = async () => {
 
     setAnimationRunning(true);
     const arraySize = getValue();
@@ -123,7 +138,9 @@ export default function SortView({ type }: {
           <InputWithButtonContainer key={'linkedList-add-action'}>
             <Input ref={inputRef} placeholder="size" className="text-black w-32 text-center" type="number" min={0} />
 
-            <ButtonAction title="create array" action='write' isLoading={isAnimationRunning} onClick={handleCreate} />
+            <ButtonAction title="create array" action='write' isLoading={isAnimationRunning} onClick={async () => {
+              await handleCreateAction()
+            }} />
 
           </InputWithButtonContainer>
 
@@ -143,14 +160,7 @@ export default function SortView({ type }: {
         }
         <Section className='justify-end'>
           {array && array.length && isSorted ? <ButtonAction title="reset" action='fill' className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={async () => {
-            if (tempValue.current) {
-
-              setAnimationRunning(true);
-              await createUnsorted(tempValue.current)
-              setUnsorted()
-              setAnimationRunning(false);
-            }
-            ;
+            await handleResetAction()
 
           }} /> : null}
           {array && array.length ? <ButtonAction title="delete" action='delete' className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={false} onClick={() => {

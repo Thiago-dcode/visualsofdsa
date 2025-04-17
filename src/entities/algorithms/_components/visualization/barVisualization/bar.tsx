@@ -1,9 +1,11 @@
+import HoverNodeCardContent from '@/components/container/CardContainer';
 import { HoverCardTrigger, HoverCardContent, HoverCard } from '@/components/ui/hover-card';
 import Node from '@/entities/data-structures/linear/_classes/Node'
 import { cn, copyToClipboard } from '@/lib/utils';
+import { Dot } from 'lucide-react';
 import React, { useCallback } from 'react'
 
-export default function Bar({ height, bottom, width = 20, node, className, left, bgColor }: {
+export default function Bar({ height, bottom, width = 20, node, className, left, bgColor, maxBarSize }: {
   left: number,
   bottom: number,
   height: number,
@@ -11,6 +13,7 @@ export default function Bar({ height, bottom, width = 20, node, className, left,
   node: Node<number>,
   className?: string,
   bgColor: string,
+  maxBarSize: number
 
 }) {
   const setRef = useCallback(async (ref: HTMLElement | HTMLDivElement | null) => {
@@ -41,9 +44,21 @@ export default function Bar({ height, bottom, width = 20, node, className, left,
           setRef(e)
         }} className={cn('border  dark:border-app-off-white border-app-off-black absolute', className)}></div>
       </HoverCardTrigger>
-      <HoverCardContent className='font-bold dark:bg-app-off-white bg-app-bg-black dark:text-app-bg-black text-app-off-white'>
-        <div>{node.data}</div>
-      </HoverCardContent>
+      <HoverNodeCardContent color={'green'}  
+      style={{
+        position: 'relative',
+       top: `${maxBarSize - height}px`,
+        left: `${left}px`,
+    
+      }}>
+        <p className='text-sm font-bold w-full text-center'>Node Info</p>
+        <ul className='flex flex-col items-start justify-between w-full'>
+          <li className='flex flex-row items-center justify-start gap-1'>
+            <Dot size={16} />
+            <p>Data: {node.data !== null ? typeof node.data === 'number' ? node.data : `"${node.data}"` : 'NULL'}</p>
+          </li>
+        </ul>
+      </HoverNodeCardContent>
     </HoverCard>
 
   )

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
+import { useAnimationRunning } from "@/context/animationRunningContext";
 
 export default function LinkItemComponent({ link, icon, isFirstLvl, pathMatch }: {
     link: LinkItem,
@@ -13,6 +14,7 @@ export default function LinkItemComponent({ link, icon, isFirstLvl, pathMatch }:
     pathMatch: boolean
 }) {
 
+    const {isAnimationRunning,setAnimationRunning} = useAnimationRunning()
     const getIcon = () => {
         if (!icon) return null;
         switch (icon) {
@@ -37,7 +39,6 @@ export default function LinkItemComponent({ link, icon, isFirstLvl, pathMatch }:
 
     const router = useRouter();
 
-    // console.log(arrOfPaths);
     return (<div className={cn(' flex items-center justify-between  w-full', {
         'border-b-2 dark:border-b-app-off-white border-b-app-off-black  rounded-none': isFirstLvl && pathMatch,
 
@@ -47,6 +48,7 @@ export default function LinkItemComponent({ link, icon, isFirstLvl, pathMatch }:
         'cursor-default': link.enable && link.link === '#'
     })} variant={'no-style'} onClick={() => {
         if (!link.enable || link.link === '#') return;
+        if (isAnimationRunning) {setAnimationRunning(false)};
         router.push(link.link)
     }} >
             <span className={cn('flex items-center justify-between w-full gap-1', {

@@ -29,6 +29,7 @@ import SpeedComponent from '@/components/app/speedComponent'
 import { config } from '@/config'
 import { useSpeed } from '@/hooks/useSpeed'
 import ConfigComponent from '@/components/app/ConfigComponent'
+import { useToast } from '@/hooks/useToast'
 
 export default function SearchView({ type }: {
   type?: AlgoSearchType
@@ -41,7 +42,7 @@ export default function SearchView({ type }: {
   const [sorted, setSorted] = useState(type === 'binary');
   const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray('bars');
   const { binary, linear, message, clearMessage } = useSearchAlgorithm(array as Node<number>[] | null, sorted, direction, speed, visualizationMode);
-
+  const {toastWarning} = useToast()
   const inputRef = useRef<HTMLInputElement | null>(null);
   const toggleSorted = () => {
     setSorted(prev => !prev)
@@ -52,7 +53,7 @@ export default function SearchView({ type }: {
   }
   const handleSearch = async () => {
     const searchValue = getValue();
-    if (searchValue === null) return;
+    if (searchValue === null || isAnimationRunning) return;
     setAnimationRunning(true);
     switch (type) {
       case 'linear':
@@ -75,9 +76,7 @@ export default function SearchView({ type }: {
     const value = parseInt(inputRef.current.value);
 
     if (!value || isNaN(value)) {
-      toast.warning('You must select a value', {
-        position: 'top-center'
-      })
+      toastWarning('You must select a value')
       return null;
     }
     return value;
@@ -88,12 +87,12 @@ export default function SearchView({ type }: {
   }
   const handleCreate = async () => {
 
-    setAnimationRunning(true);
     const arraySize = getValue();
-    if (arraySize === null) return;
+    if (arraySize === null || isAnimationRunning) return;
+    setAnimationRunning(true);
     switch (type) {
       case 'linear':
-        await !sorted ? createUnsorted(arraySize) : createSorted(arraySize, direction);
+         !sorted ? await createUnsorted(arraySize) : await createSorted(arraySize, direction);
         break;
       case 'binary':
         await createSorted(arraySize, direction)
@@ -131,7 +130,11 @@ export default function SearchView({ type }: {
           <InputWithButtonContainer key={'linkedList-add-action'}>
             <Input ref={inputRef} placeholder="size" className="text-black w-32 text-center" type="number" min={0} />
 
-            <ButtonAction title="create array" action='write' isLoading={isAnimationRunning} onClick={handleCreate} />
+            <ButtonAction title="create array" action='write' isLoading={isAnimationRunning} onClick={
+              async () => {
+                await handleCreate()
+              }
+            } />
 
           </InputWithButtonContainer>
 
@@ -142,7 +145,6 @@ export default function SearchView({ type }: {
             <Input ref={inputRef} placeholder="value" className="text-black w-32 text-center" type="number" />
 
             <ButtonAction title="Search" action='read' isLoading={isAnimationRunning} onClick={async () => {
-              if (isAnimationRunning) return;
               await handleSearch()
             }} />
 
