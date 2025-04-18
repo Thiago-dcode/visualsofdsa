@@ -1,5 +1,5 @@
 
-import PageComponent from "@/components/app/PageComponent";
+import PageComponent from "@/components/app/page/PageComponent";
 import DataStructureService from "@/entities/data-structures/__classes/DataStructureService";
 import { appMetadata } from "@/lib/metadata";
 import { EntityType } from "@/types";

@@ -44,12 +44,22 @@
 
     /* Bauhaus Colors */
     --app-bauhaus-red: #d94527;
+    --app-bauhaus-red-50: #d9452780;
     --app-bauhaus-green: #24a482;
+    --app-bauhaus-green-50: #24a48280;
     --app-bauhaus-yellow: #f5a845;
+    --app-bauhaus-yellow-50: #f5a84580;
     --app-bauhaus-bone: #d6c2af;
+    --app-bauhaus-bone-50: #d6c2af80;
     --app-bauhaus-blue: #458ff5;
+    --app-bauhaus-blue-50: #458ff580;
     --app-bauhaus-orange: #c57634;
+    --app-bauhaus-orange-50: #c5763480;
     --app-bauhaus-indigo: #5a45f5;
+    --app-bauhaus-indigo-50: #5a45f580;
+
+ 
+
   }
 
   .dark {
@@ -92,6 +102,9 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
 body {
   width: 100vw;
   height: 100vh;

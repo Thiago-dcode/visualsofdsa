@@ -1,5 +1,5 @@
 
-import PageHeaderTitle from "@/components/pageHeaderTitle";
+import PageHeaderTitle from "@/components/app/page/pageHeaderTitle";
 import AlgorithmService from "@/entities/algorithms/__classes/AlgorithmService";
 import { AlgoSearchType, AlgoSortType } from "@/entities/algorithms/types";
 import { appMetadata } from "@/lib/metadata";

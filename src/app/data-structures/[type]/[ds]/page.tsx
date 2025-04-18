@@ -1,5 +1,5 @@
 ;
-import PageHeaderTitle from "@/components/pageHeaderTitle";
+import PageHeaderTitle from "@/components/app/page/pageHeaderTitle";
 import Loader from "@/components/ui/Loader";
 import DataStructureService from "@/entities/data-structures/__classes/DataStructureService";
 import { appMetadata } from "@/lib/metadata";

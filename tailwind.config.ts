@@ -42,6 +42,7 @@ const config = {
             orange: "var(--app-bauhaus-orange)",
             indigo: "var(--app-bauhaus-indigo)",
           },
+          
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

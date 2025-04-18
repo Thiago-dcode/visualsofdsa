@@ -1,0 +1,59 @@
+
+.module-description{
+    width: 100%;
+    overflow-x: auto;
+
+}
+.module-description .arrow-right{
+    content: "\00BB";
+}
+.module-description .arrow-left{
+    content: "\00AB";
+}
+.module-description .arrow-right::before{
+    content: "\00BB";
+}
+.module-description .arrow-left::before{
+    content: "\00AB";
+}
+
+.module-description .dot{
+    content: "\2022";
+}
+.module-description .dot::before{
+    content: "\2022";
+}
+
+
+.module-description .bigO{
+    background-color: var(--app-bauhaus-indigo-50);
+    border-color: var(--app-bauhaus-indigo);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 0.1rem 0.3rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.operations-section .indigo{
+    color: var(--app-bauhaus-indigo);
+}
+.operations-section .green{
+    color: var(--app-bauhaus-green);
+}
+.operations-section .yellow{
+    color: var(--app-bauhaus-yellow);
+}   
+.operations-section .red{
+    color: var(--app-bauhaus-red);
+}
+.operations-section .blue{
+    color: var(--app-bauhaus-blue);
+}   
+.operations-section .orange{
+    color: var(--app-bauhaus-orange);
+}   
+
+

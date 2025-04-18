@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react'
-import Main from '../container/Main'
-import Title from '../ui/Title'
+import Main from '../../container/Main'
+import Title from '../../ui/Title'
 
 import { ChevronsRight } from 'lucide-react'
-import LinksComponent from './nav/linksComponent'
-import ImageComponent from './imageComponent'
+import LinksComponent from '../nav/linksComponent'
+import ImageComponent from '../imageComponent'
 import { Entities, EntityType } from '@/types'
 import { buildLinkFromArgs } from '@/lib/utils'
 
