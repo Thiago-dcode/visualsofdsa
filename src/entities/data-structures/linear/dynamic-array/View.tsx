@@ -240,7 +240,7 @@ export default function DynamicArray() {
                         return (
                             <MemoryAdressContainer size={memorySize} memory={node} index={i} showIndex={node !== null} key={'memoryAdressContainer-' + `${node ? node.id : 'null-' + i}`}>
                                 {node !== null ?
-                                    <StaticArrayNodeComponent isLastNode={i === size - 1} node={node} setAnimationRunning={setAnimationRunning} /> :
+                                    <StaticArrayNodeComponent node={node} setAnimationRunning={setAnimationRunning} /> :
                                     <p className="border flex items-center justify-center dark:border-white/50 border-black/50 w-full h-full"></p>
                                 }
                             </MemoryAdressContainer>

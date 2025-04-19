@@ -208,7 +208,7 @@ export default function StaticArray() {
 
                             <MemoryAdressContainer memory={array && array[i] !== undefined ? array[i] : null} size={MemorySize.L} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i}>
 
-                                {array && array[i] ? <StaticArrayNodeComponent isLastNode={i === array.length - 1} setAnimationRunning={setAnimationRunning} node={array[i]} /> : <p className="border dark:border-white/50 border-black/50 w-full h-full"></p>}
+                                {array && array[i] ? <StaticArrayNodeComponent  setAnimationRunning={setAnimationRunning} node={array[i]} /> : <p className="border dark:border-white/50 border-black/50 w-full h-full"></p>}
                             </MemoryAdressContainer>
 
 
