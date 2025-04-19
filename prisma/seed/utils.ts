@@ -22,7 +22,10 @@ export const getComplexity = (bigO: BigOType) => {
       return bigO
   }
 }
+export const linkBuilder = (title: string, link: string) => {
 
+  return `<a href="${link}" target="_blank" class="text-app-bauhaus-blue">${title}</a>`
+}
 
 export const buildDescription = ({ description,
   coreCharacteristics,
@@ -33,7 +36,7 @@ export const buildDescription = ({ description,
   description: string,
   coreCharacteristics?: string[],
   keyOperations?: {
-    operation: string
+    operation: string,
     color: 'green' | 'yellow' | 'red' | 'blue' | 'indigo' | 'orange',
     description: string,
     bigO: BigOType
@@ -69,8 +72,8 @@ export const buildDescription = ({ description,
     <ul class="ml-4 flex flex-col gap-2 items-start justify-start">
     ${keyOperations.map(kp => {
     const complexity = getComplexity(kp.bigO)
-    return `<li class="mb-4">
-        <b class="font-semibold ${kp.color} capitalize">${kp.operation}:</b> This operation ${kp.description}. <span class="bigO"><b>Time complexity: O(${kp.bigO})</b> - ${complexity}</span>
+    return `<li class="mb-4 operation-item">
+        <b class="font-semibold ${kp.color} capitalize  operation-title">${kp.operation}:</b> This operation ${kp.description}. <span class="bigO"><b>Time complexity: O(${kp.bigO})</b> - ${complexity}</span>
       </li>`
   }).join('')}
     </ul>

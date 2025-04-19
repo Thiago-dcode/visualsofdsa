@@ -29,31 +29,49 @@
     background-color: var(--app-bauhaus-indigo-50);
     border-color: var(--app-bauhaus-indigo);
     border-width: 1px;
-    border-style: solid;
+    border-style: solid; 
+    /* border-bottom: 1px solid ; */
     border-radius: 5px;
     padding: 0.1rem 0.3rem;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     font-weight: 500;
     white-space: nowrap;
 }
 
+.operations-section .operation-item .operation-title{
+  
+    padding:0 0.2rem;
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 1.1rem;
+    color: var(--app-off-white) !important; 
+
+}
+
 .operations-section .indigo{
-    color: var(--app-bauhaus-indigo);
+    background-color: var(--app-bauhaus-indigo);
+    border-color: var(--app-bauhaus-indigo);
 }
 .operations-section .green{
-    color: var(--app-bauhaus-green);
+    background-color: var(--app-bauhaus-green);
+    border-color: var(--app-bauhaus-green);
 }
 .operations-section .yellow{
-    color: var(--app-bauhaus-yellow);
+    background-color: var(--app-bauhaus-yellow);
+    border-color: var(--app-bauhaus-yellow);
 }   
 .operations-section .red{
-    color: var(--app-bauhaus-red);
+    background-color: var(--app-bauhaus-red);
+    border-color: var(--app-bauhaus-red);
 }
 .operations-section .blue{
-    color: var(--app-bauhaus-blue);
+    background-color: var(--app-bauhaus-blue);
+    border-color: var(--app-bauhaus-blue);
 }   
 .operations-section .orange{
-    color: var(--app-bauhaus-orange);
+    background-color: var(--app-bauhaus-orange);
+    border-color: var(--app-bauhaus-orange);
 }   
 
 

@@ -3,7 +3,7 @@ import useResponsive from '@/hooks/useResponsive'
 import { cn } from '@/lib/utils'
 import React, { Dispatch, SetStateAction, useEffect, useState, useRef } from 'react'
 import { PopOverComponent } from '../ui/PopOverComponent'
-import { ArrowDown, Menu } from 'lucide-react'
+import { ArrowDown, Menu, Triangle } from 'lucide-react'
 import useOnScreen from '@/hooks/useOnScreen';
 export default function OperationsContainer({ children, makeResponsive = false, className = '', open = false, setOpen = () => { } }: { children: React.ReactNode, makeResponsive?: boolean, className?: string, open?: boolean, setOpen?: (value: SetStateAction<boolean>) => void }) {
     const device = useResponsive(() => {
@@ -14,7 +14,7 @@ export default function OperationsContainer({ children, makeResponsive = false, 
 
     return (
         <>
-         {!isIntersecting && <a href='#operations-container' className='scroll-mt-20 fixed top-30 right-10 rounded-full bg-app-off-black dark:bg-app-off-white text-app-off-white dark:text-app-off-black p-1'><ArrowDown/></a>}
+         {!isIntersecting && <a href='#operations-container' className='scroll-mt-20 fixed top-30 right-10 '><Triangle className='rotate-180 text-app-off-black dark:text-app-off-white' fill='var(--app-bauhaus-green)'/></a>}
             {((device.isDesktop || device.isTv) && !makeResponsive) ? < div id='operations-container' ref={setRef} className={cn("border-b-2 border-b-app-off-gray w-full wrap flex items-start justify-between gap-1 p-2", className)} >
                 {children}
             </div > :

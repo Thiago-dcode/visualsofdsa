@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import React, { ReactNode } from 'react'
 
-export default function Title({ title, xls, h, uppercase = true, bold }: { uppercase?: boolean, title: string|ReactNode, xls?: 1 | 2 | 3 | 4 | 5, h?: 1 | 2 | 3 | 4 | 5 | 6, bold?: 1 | 2 | 3 | 4 | 5 }) {
+export default function Title({ title, xls, h, uppercase = true, bold, className }: {className?:string, uppercase?: boolean, title: string|ReactNode, xls?: 1 | 2 | 3 | 4 | 5, h?: 1 | 2 | 3 | 4 | 5 | 6, bold?: 1 | 2 | 3 | 4 | 5 }) {
 
   const fontSize = () => {
     switch (xls) {
@@ -37,7 +37,7 @@ export default function Title({ title, xls, h, uppercase = true, bold }: { upper
   }
   const render = () => {
 
-    const _cn = cn(`font-bold tracking-wide ${uppercase ? 'uppercase' : ''}`, boldLevel(), fontSize());
+    const _cn = cn(`font-bold tracking-wide ${uppercase ? 'uppercase' : ''}`, boldLevel(), fontSize(), className);
     switch (h) {
       case 1:
         return <h1 className={_cn}>{title}</h1>

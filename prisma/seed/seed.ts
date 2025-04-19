@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { buildDescription, BigOType } from "./utils";
+import { buildDescription, BigOType, linkBuilder } from "./utils";
 
 const dataStructureTypes: Prisma.DataStructureTypeCreateInput[] = [
   {
@@ -39,6 +39,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
   await prisma.dataStructureType.deleteMany({});
   await prisma.dataStructure.deleteMany({});
 
+  const dataStrusture = 'data-structures'
   for (const type of dataStructureTypes) {
     const result = await prisma.dataStructureType.create({ data: type });
 
@@ -176,7 +177,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               name: "Dynamic Array",
               link: "dynamic-array",
               description: buildDescription({
-                description: 'A <b>Dynamic Array</b> is a versatile <b>linear data structure</b> similar to static arrays, but it can dynamically resize itself to accommodate more elements. This flexibility makes dynamic arrays ideal for applications where the number of elements is not known in advance.',
+                description: `A <b>Dynamic Array</b> is a versatile <b>linear data structure</b> that shares the same characteristics as ${linkBuilder('Static Arrays', `static-array`)}, but it can dynamically resize itself to accommodate more elements. This flexibility makes dynamic arrays ideal for applications where the number of elements is not known in advance.`,
                 coreCharacteristics: [
                   'Can dynamically resize to accommodate more elements',
                   'Elements stored in contiguous memory locations',
@@ -266,7 +267,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               name: "Doubly Linked List",
               link: "doubly-linked-list",
               description: buildDescription({
-                description: 'A <b>Doubly Linked List</b> is a versatile <b>linear data structure</b> consisting of nodes, where each node contains a value and two pointers (or references): one pointing to the <b>next</b> node and another pointing to the <b>previous</b> node in the sequence. This bidirectional navigation allows more efficient operations, especially for traversal in both directions. Doubly linked lists are particularly useful when frequent insertions and deletions are required at both ends of the list.',
+                description: `A <b>Doubly Linked List</b> is a normal ${linkBuilder('Linked List', `linked-list`)} but with <b>two pointers</b> (or references): one pointing to the <b>next</b> node and another pointing to the <b>previous</b> node in the sequence. This bidirectional navigation allows more efficient operations, especially for traversal in both directions. Doubly linked lists are particularly useful when frequent insertions and deletions are required at both ends of the list.`,
                 coreCharacteristics: [
                   'Nodes contain pointers to both the next and previous nodes, enabling bidirectional traversal',
                   'Does not require contiguous memory locations',
@@ -341,27 +342,21 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     bigO: 'log n'
                   },
                   {
-                    operation: 'In-order Traversal',
+                    operation: 'Depth-First Search (DFS)',
                     color: 'orange',
-                    description: '<b>visits all nodes in the binary search tree</b> in in-order sequence: left, root, right. This traversal method is commonly used to retrieve the nodes of a BST in non-decreasing order.',
+                    description: `
+                      <b>visits all nodes in the binary search tree</b> by exploring as far as possible along each branch before backtracking. 
+                      This includes:
+                      - <b>In-order Traversal</b>: Visits nodes in the order of left, root, right. Commonly used to retrieve nodes in non-decreasing order.
+                      - <b>Pre-order Traversal</b>: Visits nodes in the order of root, left, right. Useful for creating a copy of the tree.
+                      - <b>Post-order Traversal</b>: Visits nodes in the order of left, right, root. Often used to delete the tree.
+                    `,
                     bigO: 'n'
                   },
                   {
-                    operation: 'Pre-order Traversal',
+                    operation: 'Breadth-First Search (BFS)',
                     color: 'orange',
-                    description: '<b>visits all nodes in the binary search tree</b> in pre-order sequence: root, left, right. This traversal method is useful for creating a copy of the tree.',
-                    bigO: 'n'
-                  },
-                  {
-                    operation: 'Post-order Traversal',
-                    color: 'orange',
-                    description: '<b>visits all nodes in the binary search tree</b> in post-order sequence: left, right, root. This traversal method is often used to delete the tree.',
-                    bigO: 'n'
-                  },
-                  {
-                    operation: 'Level-order Traversal',
-                    color: 'orange',
-                    description: '<b>visits all nodes in the binary search tree</b> in level-order sequence: root, left, right. This traversal method is often used to create a level-order traversal of the tree.',
+                    description: '<b>visits all nodes in the binary search tree</b> level by level, starting from the root. This traversal method is useful for creating a level-order traversal of the tree and is often used in scenarios where the shortest path is required.',
                     bigO: 'n'
                   }
                 ],

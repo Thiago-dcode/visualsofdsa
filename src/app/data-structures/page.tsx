@@ -10,7 +10,7 @@ export const metadata = appMetadata({title:'Data structures',description:'Displa
 export default async function DataStructurePage() {
     const dataStructureTypes = await DataStructureService.getAllTypes();
     return (
-
+        
         <PageComponent entityParent="data-structures" title="Data Structures" description={<>
             <p> <b>A data structure is a way of organizing and storing data in a computer</b> to enable efficient access and use. It encompasses both the logical or mathematical representation of data and its implementation in a computer program. </p>
 
