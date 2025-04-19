@@ -62,8 +62,9 @@ export default function RootLayout({
                 {children}
                 </Suspense>
                 </Main>
-                <footer>
-                  
+                <footer className="flex items-center justify-center gap-2">
+                  <p>© 2025 visualsofdsa</p>
+                  <p>All rights reserved</p>
                 </footer>
               </div>
             </MuteProvider>
@@ -74,10 +75,10 @@ export default function RootLayout({
           toastOptions={{
 
             classNames: {
-              error: 'bg-red-500 text-white font-bold text-md',
-              success: 'bg-green-500 text-white font-bold text-md ',
-              warning: 'bg-yellow-500 text-white font-bold text-md',
-              info: 'bg-blue-500 text-white font-bold text-md',
+              error: 'bg-app-bauhaus-red text-white font-bold text-md',
+              success: 'bg-app-bauhaus-green text-white font-bold text-md ',
+              warning: 'bg-app-bauhaus-yellow text-white font-bold text-md',
+              info: 'bg-app-bauhaus-blue text-white font-bold text-md',
             },
           }}
           icons={{

@@ -5,7 +5,7 @@ import { LINKS } from "@/lib/links";
 import { appMetadata } from "@/lib/metadata";
 import { ChevronsRight } from "lucide-react";
 
-export const metadata = appMetadata({title:'Home'});
+export const metadata = appMetadata({title:'Learn data structures and algorithms with interactive visualizations'});
 
 const ARTICLES = [
   {
