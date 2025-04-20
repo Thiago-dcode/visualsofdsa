@@ -28,7 +28,8 @@ async function Nav() {
     _LINKS[0].children = formatToLinkItem('data-structures', dsTypes)
     _LINKS[1].children = formatToLinkItem('algorithms', algoTypes)
     return (
-        <div className='flex items-center justify-center gap-4 p-2'>
+      <>
+        <div className='hidden md:flex flex-row items-center justify-center gap-4 p-2'>
 
 
             {_LINKS.map((link, i) => {
@@ -42,6 +43,8 @@ async function Nav() {
 
 
         </div>
+        
+      </>
     )
 }
 
