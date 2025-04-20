@@ -18,9 +18,10 @@ type Props = {
     const { type,ds } = await params;
     return appMetadata({title:` ${ds} ${type} data structure`, description:`Display info about ${ds} ${type} data structure`})
   }
-export default async function DsPage({ params }: { params: { type: string, ds: string } }) {
-    const typeParam = params.type.toLocaleLowerCase();
-    const dsParam = params.ds.toLocaleLowerCase()
+export default async function DsPage({ params }:Props) {
+  const _params = await params;
+    const typeParam = _params.type.toLocaleLowerCase();
+    const dsParam = _params.ds.toLocaleLowerCase()
     const ds = await DataStructureService.getOneByLink(dsParam);
     if (!ds) notFound();
     if (!ds.enable) redirect('/data-structures');

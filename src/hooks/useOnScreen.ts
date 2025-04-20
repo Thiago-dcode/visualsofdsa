@@ -1,24 +1,27 @@
+'use client'
 import { Ref } from "@/types"
-import { RefObject, useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 
 export default function useOnScreen() {
 
     const [isIntersecting, setIntersecting] = useState(false)
     const [ref, setRef] = useState<Ref>(null)
+    const [observer, setObserver] = useState<IntersectionObserver | null>(null)
   
-
-    const observer = useMemo(() => new IntersectionObserver(
-      ([entry]) => setIntersecting(entry.isIntersecting)
-    ), [ref])
-  
+    useEffect(()=>{
+      const observer = new IntersectionObserver(
+        ([entry]) => setIntersecting(entry.isIntersecting)
+      )
+      setObserver(observer)
+    },[ref])
     useEffect(() => {
-        if(ref){
-            observer.observe(ref)
-        }
+      console.log('observer',observer)
+      if(!observer || !ref) return
+        observer.observe(ref)
 
         return () => observer.disconnect()
-    }, [ref,observer])
+    }, [observer,ref])
   
     return {isIntersecting,setRef}
   }

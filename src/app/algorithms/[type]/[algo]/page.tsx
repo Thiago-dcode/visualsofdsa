@@ -18,10 +18,11 @@ type Props = {
     const { type,algo } = await params;
     return appMetadata({title:` ${algo} ${type} algorithm`, description:`Display info about ${algo} ${type} data structure`})
   }
-export default async function AlgorithmsPage({ params }: { params: { type: string, algo: string } }) {
+export default async function AlgorithmsPage({ params }: { params:Promise<{ type: string,algo:string }> }) {
 
-    const typeParam = params.type.toLocaleLowerCase();
-    const algoParam = params.algo.toLocaleLowerCase()
+    const _params = await params;
+    const typeParam = _params.type.toLocaleLowerCase();
+    const algoParam = _params.algo.toLocaleLowerCase()
     const algo = await AlgorithmService.getOneByLink(algoParam);
 
     if (!algo) notFound();
@@ -31,7 +32,6 @@ export default async function AlgorithmsPage({ params }: { params: { type: strin
 
         switch (typeParam) {
             case 'search':
-
                 {
                     const View = dynamic(() => import(`@/entities/algorithms/search/View`), {
                         ssr: true,
