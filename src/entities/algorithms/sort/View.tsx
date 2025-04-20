@@ -39,7 +39,7 @@ export default function SortView({ type }: {
     await handleResetAction(false,type === 'merge')
   });
   const { bubble, selection, insertion, merge, quick, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
-  const tempValue = useRef<number>();
+  const tempValue = useRef<number>(undefined);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const {toastInfo} = useToast();
   useResponsive(() => {
