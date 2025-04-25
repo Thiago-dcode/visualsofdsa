@@ -11,3 +11,17 @@
 
   
 }
+@keyframes animate-property-menu {
+  0% {
+    
+  }
+
+  50% {
+    color: rgba(255, 120, 120);
+    transform: rotate(180deg);
+  
+   
+  }
+
+  
+}

@@ -90,7 +90,9 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
       }
       return;
     }
-    toastFillerId.current = toast.loading(`Filling ${linearDs?.name}`);
+    toastFillerId.current = toast.loading(`Filling ${linearDs?.name}`,{
+      position: "top-center",
+    });
     for (let i = 0; i < remainingSpace; i++) {
       const node = await linearDs.add(`data-${random(0, 2464)}`);
       if (node) {
@@ -108,7 +110,10 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
   };
   const empty = useCallback(async () => {
     if (!nodeArray) return;
-    const toastId = toast.loading(`Emptying ${linearDs?.name}`);
+    const toastId = toast.loading(`Emptying ${linearDs?.name}`,{
+      position: "top-center",
+      
+    },);
     await handleEmptyAnimation(nodeArray);
     linearDs.flush();
     setNodeArray();

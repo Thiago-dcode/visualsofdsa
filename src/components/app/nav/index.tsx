@@ -6,7 +6,7 @@ import { LinkItem } from './type';
 import { LINKS } from '@/lib/links'
 import { Entities, EntityTypeSimple } from '@/types';
 import { buildLinkFromArgs } from '@/lib/utils';
-
+import MobileNav from './MobileNav';        
 
 async function Nav() {
 
@@ -29,7 +29,7 @@ async function Nav() {
     _LINKS[1].children = formatToLinkItem('algorithms', algoTypes)
     return (
       <>
-        <div className='hidden md:flex flex-row items-center justify-center gap-4 p-2'>
+        <div className='hidden phone:flex flex-row items-center justify-center gap-4 p-2'>
 
 
             {_LINKS.map((link, i) => {
@@ -38,11 +38,13 @@ async function Nav() {
                 return <LinkList isFirstLvl={true} key={`${link.link}-${i}`} link={link} />
 
 
-
             })}
 
 
         </div>
+
+        <MobileNav links={_LINKS} />
+   
         
       </>
     )

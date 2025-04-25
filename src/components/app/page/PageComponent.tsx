@@ -16,26 +16,24 @@ export default function PageComponent({ entityTypes, entityParent, title, descri
 }) {
 
     return (
-        <section>
-            <div className="flex flex-col items-center justify-center gap-4 my-10 w-full">
-                <Title h={1} xls={5} title={title} />
-
-
+        <section className='w-full flex flex-col items-center justify-center  gap-4'>
+            <div className="flex flex-col items-center justify-center w-full text-center">
+                <Title h={1} xls={4} title={title} />
             </div>
 
             <div className="flex flex-col gap-14 items-center justify-center max-w-[1400px]">
-                <div className="text-2xl flex flex-col gap-2 text-justify">
+                <div className="text-xl phone:text-2xl flex flex-col gap-2 tablet:text-center text-left">
 
                     {description}
 
                 </div>
 
                 <ImageComponent image={image} />
-                <div className="self-start flex flex-col items-start justify-start gap-4 w-full">
+                <div className="self-start flex flex-col items-start justify-start gap-2 w-full">
 
-                    <div className=" flex items-center justify-start gap-2">
+                    <div className=" flex items-center justify-center laptop:justify-start">
 
-                        <Title xls={2} h={2} uppercase={false} title={`${entityListTitle} can be divided in:`} /></div>
+                        <Title xls={3} h={3} uppercase={false} title={`${entityListTitle}`} /></div>
                  
                     <EntitiesListComponent entityTypes={entityTypes} entityParent={entityParent} />
                 </div>

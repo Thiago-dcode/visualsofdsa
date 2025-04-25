@@ -21,7 +21,8 @@ const config = {
       screens: {
         phone: "480px",
         tablet: "860px",
-        desktop: "1200px",
+        laptop: "1024px",
+        desktop: "1440px",
       },
       colors: {
         app: {
@@ -35,12 +36,18 @@ const config = {
           },
           bauhaus: {
             red: "var(--app-bauhaus-red)",
+            "red-50": "var(--app-bauhaus-red-50)",
             green: "var(--app-bauhaus-green)",
+            "green-50": "var(--app-bauhaus-green-50)",
             yellow: "var(--app-bauhaus-yellow)",
+            "yellow-50": "var(--app-bauhaus-yellow-50)",
             bone: "var(--app-bauhaus-bone)",
             blue: "var(--app-bauhaus-blue)",
+            "blue-50": "var(--app-bauhaus-blue-50)",
             orange: "var(--app-bauhaus-orange)",
+            "orange-50": "var(--app-bauhaus-orange-50)",
             indigo: "var(--app-bauhaus-indigo)",
+            "indigo-50": "var(--app-bauhaus-indigo-50)",
           },
           
         },

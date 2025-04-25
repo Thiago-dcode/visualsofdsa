@@ -1,22 +1,22 @@
 import { cn } from '@/lib/utils'
 import React, { ReactNode } from 'react'
 
-export default function Title({ title, xls, h, uppercase = true, bold, className }: {className?:string, uppercase?: boolean, title: string|ReactNode, xls?: 1 | 2 | 3 | 4 | 5, h?: 1 | 2 | 3 | 4 | 5 | 6, bold?: 1 | 2 | 3 | 4 | 5 }) {
+export default function Title({ title, xls, h,uppercase = true, italic = false, bold, className }: {className?:string, uppercase?: boolean,italic?: boolean, title: string|ReactNode, xls?: 1 | 2 | 3 | 4 | 5, h?: 1 | 2 | 3 | 4 | 5 | 6, bold?: 1 | 2 | 3 | 4 | 5 }) {
 
   const fontSize = () => {
     switch (xls) {
       case 1:
-        return 'text-xl'
+        return 'text-lg phone:text-xl'
       case 2:
-        return 'text-2xl'
+        return 'text-xl phone:text-2xl'
       case 3:
-        return 'text-3xl'
+        return 'text-2xl phone:text-3xl'
       case 4:
-        return 'text-4xl'
+        return 'text-3xl phone:text-4xl'
       case 5:
-        return 'text-5xl'
+        return 'text-4xl phone:text-5xl'
       default:
-        return 'text-2xl';
+        return 'text-lg phone:text-2xl';
     }
   }
   const boldLevel = () => {
@@ -37,7 +37,10 @@ export default function Title({ title, xls, h, uppercase = true, bold, className
   }
   const render = () => {
 
-    const _cn = cn(`font-bold tracking-wide ${uppercase ? 'uppercase' : ''}`, boldLevel(), fontSize(), className);
+    const _cn = cn(`font-bold tracking-wide`, {
+      'italic': italic,
+      'uppercase':uppercase
+    },boldLevel(), fontSize(), className);
     switch (h) {
       case 1:
         return <h1 className={_cn}>{title}</h1>

@@ -11,7 +11,7 @@ export default abstract class LinearDs<T extends Primitive> extends List {
     super(_name);
     this.linkedList = new LinkedList<T>(data);
     this._speed = 2;
-    this._width = 350;
+    this._width = 300;
   }
 
   get width() {

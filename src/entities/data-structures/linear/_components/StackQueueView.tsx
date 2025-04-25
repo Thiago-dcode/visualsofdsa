@@ -1,9 +1,6 @@
 'use client'
-import { Button } from "@/components/ui/button";
 import { useCallback, useRef, useState } from "react";
 import { PopUp } from "@/components/ui/PopUp";
-import { Wrench } from "lucide-react";
-import { PopOverComponent } from "@/components/ui/PopOverComponent";
 import LinearDsConfig from "./LinearDsConfig";
 import OperationsContainer from "@/components/container/OperationsContainer";
 import PushData from "./ButtonWithInput";
@@ -20,13 +17,17 @@ import Properties from "@/components/app/Properties";
 import Stack from "../stack/classes/Stack";
 import { random } from "@/lib/utils";
 import ConfigComponent from "@/components/app/ConfigComponent";
+import useResponsive from "@/hooks/useResponsive";
+const MAX_WIDTH = 600
 const StackQueueView = ({ linearDsName }: { linearDsName: 'stack' | 'queue' }) => {
+  const { width } = useResponsive((e, device) => {
+      setConfig('width',device.width < MAX_WIDTH ? device.width - 50: MAX_WIDTH/1.5)
+
+  })
   const { current: StackOrQueue } = useRef(linearDsName === 'stack' ? new Stack() : new Queue())
   const { isAnimationRunning, setAnimationRunning } = useAnimationRunning()
   const { linearDs, add, remove, peek, nodeArray, isStackOverFlow, flush, config, setConfig, handleAddAnimation, handleFillerAnimation, fill, dismissFillerToast, empty } = UseLinear(StackOrQueue)
   const [nodeData, setNodeData] = useState('');
-  const [open, setOpen] = useState(false);
-
   const _handleAddAnimation = useCallback(async (node: Node<Primitive>) => {
     await handleAddAnimation(node)
     setAnimationRunning(false)
@@ -57,8 +58,8 @@ const StackQueueView = ({ linearDsName }: { linearDsName: 'stack' | 'queue' }) =
     <>
 
       {/* //ACTION BUTTONS: */}
-      {<OperationsContainer open={open} setOpen={setOpen}>
-        <div className="flex  items-center gap-2 justify-center">
+      {<OperationsContainer enabled={!isAnimationRunning}>
+        <div className="flex items-start justify-center gap-1">
           <PushData title={linearDsName === 'stack' ? 'push' : 'enqueue'} action="write" data={nodeData} setData={setNodeData} onClick={async () => {
             if (isAnimationRunning) return;
             await handleAction('add', add(nodeData || `data-${random(0, 2345)}`))
@@ -76,7 +77,7 @@ const StackQueueView = ({ linearDsName }: { linearDsName: 'stack' | 'queue' }) =
           }
         </div>
 
-        <ButtonAction action="search" title="run" className='bg-blue-400 hover:bg-blue-600 self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning} onClick={async () => {
+        <ButtonAction action="search" title="run" className='bg-blue-400 hover:bg-blue-600 self-end' isLoading={isAnimationRunning} onClick={async () => {
           await handleAction('fill', fill(() => {
             setAnimationRunning(false)
           }))
@@ -85,7 +86,7 @@ const StackQueueView = ({ linearDsName }: { linearDsName: 'stack' | 'queue' }) =
       </OperationsContainer>
       }
       {/* //STATIC PROPERTIES AND CONFIG: */}
-      <div className="flex  justify-between w-full px-4">
+      <div className="flex  justify-between w-full px-0 phone:px-2 py-2 tablet:py-0">
         <Properties properties={{
           'size': {
             value: linearDs.size,
@@ -104,12 +105,12 @@ const StackQueueView = ({ linearDsName }: { linearDsName: 'stack' | 'queue' }) =
         }} />
 
         <ConfigComponent available={!isStackOverFlow && !isAnimationRunning} messageWhenNotAvailable="Animation is running or isStackOverFlow ">
-          <LinearDsConfig config={config} setConfig={setConfig} stack={linearDs} />
+          <LinearDsConfig maxWidth={Math.min(width - 50, MAX_WIDTH)} config={config} setConfig={setConfig} stack={linearDs} />
         </ConfigComponent>
 
       </div>
 
-      <LinearDsContainer linearDs={linearDs} >
+      <LinearDsContainer width={config.width} linearDs={linearDs} >
         {
           nodeArray && nodeArray.map((node, i) => {
             return (

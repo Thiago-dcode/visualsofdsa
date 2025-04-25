@@ -3,7 +3,7 @@
 import Title from "@/components/ui/Title";
 import { LINKS } from "@/lib/links";
 import { appMetadata } from "@/lib/metadata";
-import { ChevronsRight } from "lucide-react";
+
 
 export const metadata = appMetadata({title:'Learn data structures and algorithms with interactive visualizations'});
 
@@ -35,28 +35,28 @@ const ARTICLES = [
 export default function Home() {
   return (
 
-    <section className="flex flex-col w-full gap-10 items-center justify-center  mb-10">
-      <header className="flex flex-col items-center justify-center gap-4 mt-10">
+    <section className="flex flex-col w-full phone:gap-10 gap-6 items-center justify-center">
+      <header className="flex flex-col items-center justify-center gap-2">
         <Title xls={5} h={1} title={<>VISUALS OF <span className="text-app-bauhaus-red">D</span><span className="text-app-bauhaus-green">S</span><span className="text-app-bauhaus-yellow">A</span></>} />
-        <div className="p-1 px-2 italic">
-          <Title xls={2} h={2} bold={1} uppercase={false} title="A visual representation of data structures and algorithms " />
+        <div className=" px-2 italic text-center">
+          <Title xls={3} h={2} bold={1} uppercase={false} title="A visual representation of data structures and algorithms " />
         </div>
 
       </header>
 
-      <LinksComponent title='' links={LINKS} containerClassname="items-center justify-center" linksContainerClassname="items-center justify-center"/>
+      <LinksComponent title='' links={LINKS} containerClassname="items-center justify-center" linksContainerClassname="items-center tablet:justify-center gap-4"/>
 
-      <section className="max-w-[1200px] flex flex-col gap-16 items-center justify-start">
+      <section className="max-w-screen-desktop flex flex-col phone:gap-8 gap-4 items-center justify-start">
    
       
         {ARTICLES.map((article, i) => {
 
           return (
-            <article key={`${article.title}-${i}`} >
+            <article key={`${article.title}-${i}`} className= 'w-full flex flex-col items-start justify-start' >
 
-              <div className="flex items-center justify-start gap-2"> <ChevronsRight size={25} /> <Title xls={3} h={3} uppercase={false} title={article.title} /></div>
+              <div className="flex items-center justify-center gap-2 "><Title xls={3} h={3} uppercase={false} title={article.title} /></div>
 
-              <div className="text-xl pt-2">{article.description}</div>
+              <div className="text-lg pt-2">{article.description}</div>
             </article>)
         })}
 

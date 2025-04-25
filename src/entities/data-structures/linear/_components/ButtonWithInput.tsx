@@ -14,7 +14,7 @@ function ButtonWithInput({ data, setData, isLoading, onClick, title = "push", cl
 }) {
   return (
 
-    <div className="flex max-w-sm items-center space-x-2">
+    <div className="flex max-w-sm items-center gap-1">
       <Input defaultValue={data} placeholder="let x = 50"  onChange={(e) => {
         setData(e.target.value)
       }} type="text" name="" id="" />

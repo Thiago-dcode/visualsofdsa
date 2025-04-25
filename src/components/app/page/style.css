@@ -33,7 +33,7 @@
     /* border-bottom: 1px solid ; */
     border-radius: 5px;
     padding: 0.1rem 0.3rem;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 500;
     white-space: nowrap;
 }
@@ -44,7 +44,7 @@
     border-radius: 5px;
     border-width: 1px;
     border-style: solid;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--app-off-white) !important; 
 
 }

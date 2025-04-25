@@ -47,7 +47,7 @@ export const buildDescription = ({ description,
 
   const sectionClass = 'flex flex-col gap-1 items-start justify-start'
   const buildTtitleSection = (title: string) => {
-    return `<h4 class="text-xl font-semibold flex items-center justify-start gap-2"><i class="arrow-right"></i>${title}</h4>`
+    return `<h4 class="text-xl font-semibold flex items-center justify-start gap-2">${title}</h4>`
   }
   const buildSection = (title: string, content: string[]) => {
 

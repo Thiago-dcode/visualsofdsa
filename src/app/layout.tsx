@@ -46,11 +46,11 @@ export default function RootLayout({
               <div id="root">
 
                 <header className=' top-0 right-0 z-50 py-2  border-b-2 dark:border-b-app-off-white border-b-app-off-black dark:bg-app-off-black/80 bg-app-off-white/70 w-full'>
-                  <div className=" flex items-center justify-between px-2 md:px-[30px] w-full ">
+                  <div className=" flex items-center justify-between px-3 phone:px-[30px] w-full ">
 
-                    <LogoComponent />
+                  <div className='hidden phone:block'> <LogoComponent /></div>
                     <Nav />
-
+                   <div className='phone:hidden'> <LogoComponent /></div>
                     <ConfigSection />
 
                   </div>

@@ -12,7 +12,7 @@ const ConfigComponent = ({ children, available, messageWhenNotAvailable }: { chi
                    <div className='flex flex-col items-center justify-center gap-4 z-[101] cursor-pointer'>
                         {children}
                     </div>
-                } trigger={<Button variant={'ghost'} className={cn({
+                } trigger={<Button variant={'ghost'} size={'fit'} className={cn(' hover:bg-transparent ',{
                     'cursor-wait opacity-50': !available,
                 })} onClick={() => {
 

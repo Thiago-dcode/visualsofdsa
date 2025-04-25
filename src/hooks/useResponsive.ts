@@ -1,4 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
+
+function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
+  let timeout: ReturnType<typeof setTimeout>;
+  return function executedFunction(...args: Parameters<T>) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 type Device = {
   isPhone: boolean;
   isTablet: boolean;
@@ -7,7 +20,8 @@ type Device = {
   width: number;
   height: number;
 };
-function useResponsive(onResize = (e:UIEvent)=>{}) {
+
+function useResponsive(onResize = (e: UIEvent, device: Device) => { }) {
   const checkDevice = useCallback(
     (width: number, height: number) => ({
       isPhone: width <= 480,
@@ -28,17 +42,21 @@ function useResponsive(onResize = (e:UIEvent)=>{}) {
     width: 0,
   });
 
-  const handleResize = useCallback((e:UIEvent) => {
-    onResize(e)
-    setDevice(checkDevice(window.innerWidth, window.innerHeight));
-  }, []);
+  const handleResize = useCallback(
+    debounce((e: UIEvent) => {
+      const device = checkDevice(window.innerWidth, window.innerHeight);
+      onResize(e, device);
+      setDevice(device);
+    }, 100),
+    []
+  );
 
   useEffect(() => {
-    if (!window) return;
+    if (typeof window === "undefined") return;
     setDevice(checkDevice(window.innerWidth, window.innerHeight));
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [handleResize]);
 
   return device;
 }

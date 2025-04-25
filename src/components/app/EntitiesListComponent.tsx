@@ -10,17 +10,16 @@ type EntitiesListComponentProps ={
 }
 export const EntitiesListComponent = ({entityTypes,entityParent}:EntitiesListComponentProps) => {
   return (
-    <div className="flex flex-col items-start just start gap-10 w-full">
+    <div className="flex flex-col items-start justify-center laptop:justify-start w-full gap-10">
                         {entityTypes &&
                             entityTypes.map((entityType) => {
 
-                                return (<div key={`${entityType.link}`} className="flex flex-col w-full ">
+                                return (<div key={`${entityType.link}`} className="flex flex-col w-full">
                                     <div className="flex items-center justify-start">
-                                        <ChevronsRight /><Title uppercase={false} title={`${entityType.name} `} xls={3} h={4} />
+                                       <Title uppercase={false} title={`${entityType.name}`} xls={2} h={4}  bold={2} className='capitalize'/>
                                     </div>
-
-                                    <div className=" flex flex-col items-start justify-start gap-2 border-t border-t-app-off-black ark:border-t-white p-4 w-full">
-                                        <p className="text-xl">{entityType.description}</p>
+                                    <div className=" flex flex-col items-start justify-center laptop:justify-start w-full gap-3">
+                                        <p className="">{entityType.description}</p>
                                         <div className='w-full'>
 
                                             {entityType.children &&

@@ -15,18 +15,17 @@ export default function LinksComponent({ title, links, containerClassname, links
 }) {
   return (<div className={cn("flex flex-col  items-start justify-start gap-4 w-full", containerClassname)}>
     {title && <Title h={3} xls={2} uppercase={false} title={title} />}
-    <div className={cn("flex  items-start justify-start gap-5 flex-wrap w-full", linksContainerClassname)}>
+    <div className={cn("flex  items-start justify-center tablet:justify-start gap-5 flex-wrap w-full", linksContainerClassname)}>
       {links.map((entity, i) => {
 
-        return (<>
-          <Link href={entity.enable ? entity.link : '#'} key={entity.name} className={cn("text-center  h-20 border-4 dark:border-app-off-white border-app-bg-black dark:text-app-off-white text-black hover:bg-app-bauhaus-blue flex items-center justify-center w-52 p-1  rounded-md", {
+        return (<div key={`${entity.name}-${i}`} className=' phone:px-0'>
+          <Link href={entity.enable ? entity.link : '#'} className={cn("  bg-app-bauhaus-indigo-50  text-center  phone:h-16 h-14 border-4  border-app-bauhaus-indigo text-app-off-white dark:hover:border-app-bauhaus-yellow hover:border-app-bauhaus-yellow flex items-center justify-center phone:w-52 p-1 w-40 rounded-md ", {
             'cursor-pointer': entity.link != '#',
-            'cursor-default': entity.link === '#',
-            'opacity-50 hover:bg-transparent cursor-default': !entity.enable,
+            'opacity-50 hover:bg-transparent cursor-default pointer-events-none': !entity.enable || entity.link === '#',
 
-          })}><Title bold={1} uppercase={false} xls={2} h={5} title={entity.name} /></Link>
+          })}><p className='tablet:text-lg font-semibold capitalize'>{entity.name}</p></Link>
           {/* {LINKS.length - 2 === i && <p className="font-bold text-2xl">&</p>} */}
-        </>)
+        </div>)
       })}
 
     </div>
