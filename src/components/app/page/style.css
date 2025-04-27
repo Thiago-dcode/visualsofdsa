@@ -24,6 +24,10 @@
     content: "\2022";
 }
 
+.module-description .description-text::first-letter{
+   
+    font-size: 1.5rem;
+ }
 
 .module-description .bigO{
     background-color: var(--app-bauhaus-indigo-50);
@@ -41,37 +45,38 @@
 .operations-section .operation-item .operation-title{
   
     padding:0 0.2rem;
-    border-radius: 5px;
+    /* border-radius: 5px;
     border-width: 1px;
-    border-style: solid;
-    font-size: 1rem;
-    color: var(--app-off-white) !important; 
+    border-style: solid; */
+    font-size: 1.1rem;
+    /* color: var(--app-off-white) !important;  */
+    font-weight: bolder;
 
 }
 
-.operations-section .indigo{
+.operations-section .operation-title.indigo{
     background-color: var(--app-bauhaus-indigo);
     border-color: var(--app-bauhaus-indigo);
 }
-.operations-section .green{
-    background-color: var(--app-bauhaus-green);
-    border-color: var(--app-bauhaus-green);
+.operations-section .operation-title.green{
+    color: var(--app-bauhaus-green);
+    /* border-color: var(--app-bauhaus-green); */
 }
 .operations-section .yellow{
-    background-color: var(--app-bauhaus-yellow);
-    border-color: var(--app-bauhaus-yellow);
+    color: var(--app-bauhaus-yellow);
+   
 }   
 .operations-section .red{
-    background-color: var(--app-bauhaus-red);
-    border-color: var(--app-bauhaus-red);
+    color: var(--app-bauhaus-red);
+   
 }
 .operations-section .blue{
-    background-color: var(--app-bauhaus-blue);
-    border-color: var(--app-bauhaus-blue);
+    color: var(--app-bauhaus-blue);
+   
 }   
 .operations-section .orange{
-    background-color: var(--app-bauhaus-orange);
-    border-color: var(--app-bauhaus-orange);
+    color: var(--app-bauhaus-orange);
+   
 }   
 
 

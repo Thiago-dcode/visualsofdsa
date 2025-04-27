@@ -1,12 +1,11 @@
 import SearchAlgorithm from "../_classes/SearchAlgorithm";
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import { Direction, Primitive, speed, VisualizationArrays } from "@/types";
+import { Direction, speed, VisualizationArrays } from "@/types";
 import { animate } from "@/lib/animations";
 import { toast } from "sonner";
 import {
   delay,
-  getMaxInAnArrayOfNodes,
-  getMinInAnArrayOfNodes,
+ 
   getMinMaxFromArrayOfNodes,
 } from "@/lib/utils";
 import { useAnimation } from "../../_hooks/useAnimations";

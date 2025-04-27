@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { buildDescription, BigOType, linkBuilder } from "./utils";
+import { buildDescription, linkBuilder } from "./utils";
 
 const dataStructureTypes: Prisma.DataStructureTypeCreateInput[] = [
   {

@@ -39,8 +39,11 @@
 
     /* Off Colors */
     --app-off-white: #f2f0ef;
+    --app-off-white-50: #f2f0ef80;
     --app-off-black: #1a1918;
+    --app-off-black-50: #1a191880;
     --app-off-gray: #c9c8c7;
+    --app-off-gray-50: #c9c8c780;
 
     /* Bauhaus Colors */
     --app-bauhaus-red: #d94527;

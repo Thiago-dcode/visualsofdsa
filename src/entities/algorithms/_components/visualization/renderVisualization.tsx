@@ -4,20 +4,20 @@ import { Direction, VisualizationArrays } from '@/types'
 import MemoryRamVisualization from './memoryRamVisualization'
 import BarVisualization from './barVisualization'
 
-export default function RenderVisualization({array,setAnimationRunning,visualizationMode,sorted,direction,maxBarSize = 650}:{
+export default function RenderVisualization({array,setAnimationRunning,visualizationMode,sorted,direction,maxBarSize}:{
     array: (Node<number>)[] ,
     setAnimationRunning: (e:boolean)=>void,
     visualizationMode: VisualizationArrays,
     sorted:boolean,
     direction?:Direction,
-    maxBarSize?:number
+    maxBarSize?:number,
 }) {
     const render = ()=>{
         switch (visualizationMode) {
             case 'memoryRam':  
               return <MemoryRamVisualization array={array}setAnimationRunning={setAnimationRunning}/>
               case 'bars':
-                return  <BarVisualization maxBarSize={maxBarSize} arrayIsSorted={sorted} direction={direction} array={array}setAnimationRunning={setAnimationRunning} />
+                return  <BarVisualization maxBarSize={maxBarSize} arrayIsSorted={sorted} direction={direction} array={array} />
             default:
                 return null;
         }

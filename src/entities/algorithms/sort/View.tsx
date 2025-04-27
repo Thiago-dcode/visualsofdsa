@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch'
 import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAction'
 import useStaticArray from '@/entities/data-structures/linear/static-array/hooks/useStaticArray'
 import { Direction, } from '@/types'
-import React, {useRef, useState } from 'react'
+import React, {useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import Node from '@/entities/data-structures/linear/_classes/Node'
 import { PopOverComponent } from '@/components/ui/PopOverComponent'
@@ -29,7 +29,7 @@ import { useToast } from '@/hooks/useToast'
 export default function SortView({ type }: {
   type: AlgoSortType
 }) {
-  const maxBarSize = useRef(type !== 'merge' ? 650 : 300);
+  
   const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500)
   const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
   const [direction, setDirection] = useState<Direction>('ascending')
@@ -42,10 +42,17 @@ export default function SortView({ type }: {
   const tempValue = useRef<number>(undefined);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const {toastInfo} = useToast();
-  useResponsive(() => {
-    //Every time the screen size is updated, will reset the array
-    reset();
+
+  const device = useResponsive((e,device,sizeChanged) => {
+    // //Every time the screen size is updated, will reset the array
+    // if(sizeChanged.width){
+    //   reset();
+    // }
   })
+  const maxBarSize = useMemo(() => {
+    return device.twResponsive.phone ? 400 : 650
+  }, [device])
+
   const handleResetAction = async (showToast: boolean = true,skip: boolean = false) => {
     if (!skip && !isSorted) {
       if (showToast) toastInfo('Array does not need to be reset, sort it first');
@@ -77,7 +84,7 @@ export default function SortView({ type }: {
           await insertion();
           break;
         case 'merge':
-          await merge(maxBarSize.current);
+          await merge(maxBarSize);
           break;
         case 'quick':
           await quick();
@@ -191,7 +198,7 @@ export default function SortView({ type }: {
         } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} /> : <div></div>}
 
       </div>
-      {array ? <RenderVisualization direction={direction} maxBarSize={maxBarSize.current} sorted={false} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} /> : null}
+      {array ? <RenderVisualization direction={direction} maxBarSize={maxBarSize} sorted={false} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} /> : null}
       {error && <PopUp title={error.name} buttonText="dismiss" handleOnPopUpButton={() => {
         reset()
 

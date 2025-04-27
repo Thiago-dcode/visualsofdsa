@@ -66,7 +66,7 @@ export default function View({ isDoubly = false }: {
             return;
         };
         await handleAdd(addIndex)
-        inputAddIndexRef.current.value = ''
+        if (inputAddIndexRef.current) inputAddIndexRef.current.value = ''
 
 
     }
@@ -97,7 +97,7 @@ export default function View({ isDoubly = false }: {
             return;
         }
         await handleDelete(deleteIndex)
-        inputDeleteIndexRef.current.value = ''
+        if (inputDeleteIndexRef.current) inputDeleteIndexRef.current.value = ''
     }
     const handleGet = async (index: number) => {
         if (isBlocked) return;
@@ -115,7 +115,7 @@ export default function View({ isDoubly = false }: {
             return;
         }
         await handleGet(getIndex)
-        inputGetIndexRef.current.value = ''
+        if (inputGetIndexRef.current) inputGetIndexRef.current.value = ''
     }
     const setUpLinkedList = useCallback(() => {
         linkedList.nodeWidth = isDoubly ? 180 : 120;

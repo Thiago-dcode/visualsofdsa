@@ -1,10 +1,14 @@
 import { cn } from '@/lib/utils'
 import React, { ReactNode } from 'react'
 
-export default function Title({ title, xls, h,uppercase = true, italic = false, bold, className }: {className?:string, uppercase?: boolean,italic?: boolean, title: string|ReactNode, xls?: 1 | 2 | 3 | 4 | 5, h?: 1 | 2 | 3 | 4 | 5 | 6, bold?: 1 | 2 | 3 | 4 | 5 }) {
+export default function Title({ title, xls, h,uppercase = true, italic = false, bold, className }: {className?:string, uppercase?: boolean,italic?: boolean, title: string|ReactNode, xls?: -1|0 | 1 | 2 | 3 | 4 | 5, h?: 0 | 1 | 2 | 3 | 4 | 5 | 6, bold?: 0 | 1 | 2 | 3 | 4 | 5 }) {
 
   const fontSize = () => {
     switch (xls) {
+      case -1:
+        return 'text-sm phone:text-base'
+      case 0:
+        return 'text-base phone:text-lg'
       case 1:
         return 'text-lg phone:text-xl'
       case 2:
@@ -42,6 +46,8 @@ export default function Title({ title, xls, h,uppercase = true, italic = false, 
       'uppercase':uppercase
     },boldLevel(), fontSize(), className);
     switch (h) {
+      case 0:
+        return <p className={_cn}>{title}</p>
       case 1:
         return <h1 className={_cn}>{title}</h1>
       case 2:

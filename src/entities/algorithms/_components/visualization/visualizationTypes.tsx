@@ -25,7 +25,7 @@ export default function VisualizationTypes({ visualizationSelected, setVisualiza
         ]
     return (
         <div className='flex flex-col  items-start justify-start'>
-             <Title xls={1}  bold={2} uppercase={false} title='Visualization mode:'/>
+             <Title xls={-1} h={6} bold={2} uppercase={false} title='Visualization mode:'/>
             <div className='flex  items-center justify-start gap-2'>
            
                 {
@@ -33,8 +33,8 @@ export default function VisualizationTypes({ visualizationSelected, setVisualiza
 
                 return <Button variant={'no-style'} onClick={async () => {
                     await  setVisualization(vt.mode)
-                }} className={cn('dark:border-app-off-white border-app-off-black border-2 dark:hover:bg-app-off-white hover:bg-app-bg-black dark:hover:text-app-off-black hover:text-app-off-white dark:text-app-off-white text-app-off-black',{
-                    'bg-app-bauhaus-blue text-whitehover:text-app-off-white dark:hover:text-app-off-white dark:hover:bg-app-bauhaus-blue hover:bg-app-bauhaus-blue': visualizationSelected === vt.mode
+                }} className={cn('p-0 px-2 h-fit py-1 border dark:border-app-off-white border-app-off-black',{
+                    'bg-app-bauhaus-indigo-50 border-2 border-app-bauhaus-indigo dark:border-app-bauhaus-indigo': visualizationSelected === vt.mode
                 })} key={`visualizationMode-${vt.mode}-${i}`}>{vt.name}</Button>
             })
         }</div>

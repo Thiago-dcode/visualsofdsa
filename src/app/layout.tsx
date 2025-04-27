@@ -6,19 +6,16 @@ import { Toaster } from 'sonner';
 import { Check, CircleAlert, CircleX } from "lucide-react";
 import Nav from "@/components/app/nav";
 
-import Image from "next/image";
-
 import { config } from "@/config";
-import DarkModeTogglerComponent from "@/components/app/DarkModeTogglerComponent";
 import { DarkModeProvider } from "@/context/darkModeContext";
 import LogoComponent from "@/components/app/logoComponent";
 import { MuteProvider } from "@/context/muteContext";
-import MuteComponent from "@/components/app/MuteTogglerComponent";
 import { AnimationRunningProvider } from "@/context/animationRunningContext";
 import ConfigSection from "@/components/app/ConfigSection";
 import { Suspense } from "react";
 import Loader from "@/components/ui/Loader";
 import Main from "@/components/container/Main";
+import Footer from "@/components/app/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -43,29 +40,26 @@ export default function RootLayout({
         <AnimationRunningProvider>
           <DarkModeProvider>
             <MuteProvider>
-              <div id="root">
+              <div id="root" className="h-screen">
 
                 <header className=' top-0 right-0 z-50 py-2  border-b-2 dark:border-b-app-off-white border-b-app-off-black dark:bg-app-off-black/80 bg-app-off-white/70 w-full'>
                   <div className=" flex items-center justify-between px-3 phone:px-[30px] w-full ">
 
-                  <div className='hidden phone:block'> <LogoComponent /></div>
+                    <div className='hidden phone:block'> <LogoComponent /></div>
                     <Nav />
-                   <div className='phone:hidden'> <LogoComponent /></div>
+                    <div className='phone:hidden'> <LogoComponent /></div>
                     <ConfigSection />
 
                   </div>
 
                 </header>
 
-                  <Main>
-                <Suspense fallback={<Loader/>}>
-                {children}
-                </Suspense>
+                <Main>
+                  <Suspense fallback={<Loader />}>
+                    {children}
+                  </Suspense>
                 </Main>
-                <footer className="flex items-center justify-center gap-2">
-                  <p>© 2025 visualsofdsa</p>
-                  <p>All rights reserved</p>
-                </footer>
+                <Footer />
               </div>
             </MuteProvider>
           </DarkModeProvider>

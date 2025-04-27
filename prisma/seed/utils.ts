@@ -54,15 +54,15 @@ export const buildDescription = ({ description,
     return `<section class="${sectionClass}">
       ${buildTtitleSection(title)}
       <ul class="ml-4 ">
-        ${content.map(item => `<li class="flex items-center justify-start gap-2"> <i class="dot"></i><span>${item}</span></li>`).join('')}
+        ${content.map(item => `<li class="flex items-start justify-start gap-2"> <i class="dot"></i><span>${item}</span></li>`).join('')}
       </ul>
   </section>`
 
   }
 
   return `<article class="flex flex-col gap-4 items-start justify-start module-description">
-  <header class=">
-      <p class="leading-relaxed">${description}</p>
+  <header class="w-full">
+      <p class="leading-relaxed description-text">${description}</p>
   </header>
 
   ${coreCharacteristics ? buildSection('Core Characteristics', coreCharacteristics) : ''}
@@ -73,7 +73,7 @@ export const buildDescription = ({ description,
     ${keyOperations.map(kp => {
     const complexity = getComplexity(kp.bigO)
     return `<li class="mb-4 operation-item">
-        <b class="font-semibold ${kp.color} capitalize  operation-title">${kp.operation}:</b> This operation ${kp.description}. <span class="bigO"><b>Time complexity: O(${kp.bigO})</b> - ${complexity}</span>
+        <b class="font-semibold ${kp.color} capitalize  operation-title">${kp.operation}()</b> This operation ${kp.description}. <span class="bigO"><b>Time complexity: O(${kp.bigO})</b> - ${complexity}</span>
       </li>`
   }).join('')}
     </ul>

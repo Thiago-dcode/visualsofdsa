@@ -8,6 +8,6 @@ import { useDarkMode } from '@/context/darkModeContext'
 export default function LogoComponent() {
     const {isDark} = useDarkMode()
   return (
-    <Link href={'/'} className=""><Image priority alt="visuals of dsa logo" height={50} width={50} src={isDark?logodark:logolight} /></Link>
+    <Link href={'/'} className=""><Image className='phone:w-[50px] phone:h-[50px] w-[40px] h-[40px] object-contain' priority alt="visuals of dsa logo"height={0} width={0} src={isDark?logodark:logolight} /></Link>
   )
 }

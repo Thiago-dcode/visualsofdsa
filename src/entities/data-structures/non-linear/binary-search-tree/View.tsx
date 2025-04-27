@@ -18,9 +18,6 @@ import { config } from '@/config'
 import SpeedComponent from '@/components/app/speedComponent'
 import ConfigComponent from '@/components/app/ConfigComponent'
 import { useToast } from '@/hooks/useToast'
-import { PopOverComponent } from '@/components/ui/PopOverComponent'
-import { Button } from '@/components/ui/button'
-import { TriangleAlert } from 'lucide-react'
 import WarningComponent from '@/components/app/WarningComponent'
 function BinarySearchTreeView() {
 

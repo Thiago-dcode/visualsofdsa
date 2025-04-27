@@ -32,8 +32,11 @@ const config = {
           },
           off: {
             white: "var(--app-off-white)",
+            "white-50": "var(--app-off-white-50)",
             black: "var(--app-off-black)",
+            "black-50": "var(--app-off-black-50)",
             gray: "var(--app-off-gray)",
+            "gray-50": "var(--app-off-gray-50)",
           },
           bauhaus: {
             red: "var(--app-bauhaus-red)",

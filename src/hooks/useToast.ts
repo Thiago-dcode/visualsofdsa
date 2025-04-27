@@ -1,46 +1,43 @@
 import { useRef } from "react";
-import { toast } from "sonner";
+import { toast, ToastT } from "sonner";
 
-
+type ToastType = "info" | "warning" | "success" | "error" | "loading";
 export const useToast = () => {
-    const toastInfoId = useRef<string|number|null>(null);
-    const toastWarningId = useRef<string|number|null>(null);
-    const toastSuccessId = useRef<string|number|null>(null);
-    const toastErrorId = useRef<string|number|null>(null);
-    const toastInfo  = (message:string) => {
-        if(toastInfoId.current) toast.dismiss(toastInfoId.current);
-        toastInfoId.current = toast.info(message,{
-          position: "top-center",
-        });
-      }
-      const toastWarning  = (message:string) => {
-        if(toastWarningId.current) toast.dismiss(toastWarningId.current);
-        toastWarningId.current = toast.warning(message,{
-          position: "top-center",
-        });
-      }
-      const toastSuccess  = (message:string) => {
-        if(toastSuccessId.current) toast.dismiss(toastSuccessId.current);
-        toastSuccessId.current = toast.success(message,{
-          position: "bottom-right",
-        });
-      }
+  const toastId = useRef<string | number | null>(null);
 
-      const toastError  = (message:string) => {
-        if(toastErrorId.current) toast.dismiss(toastErrorId.current);
-        toastErrorId.current = toast.error(message,{
-          position: "bottom-left",
-        });
-      }
 
+  const makeToast = (message: string, type: ToastType) => {
+
+    if (toastId.current) toast.dismiss(toastId.current);
+    toastId.current = toast[type](message, {
+      position: "top-center",
+
+    });
+
+  }
+  const toastInfo = (message: string) => {
+    makeToast(message, "info");
+  }
+  const toastWarning = (message: string) => {
+    makeToast(message, "warning");
+  }
+  const toastSuccess = (message: string) => {
+    makeToast(message, "success");
+  }
+
+  const toastError = (message: string) => {
+    makeToast(message, "error");
+  }
+
+  const toastLoading = (message: string) => {
+    makeToast(message, "loading");
+  }
   return {
     toastInfo,
     toastSuccess,
     toastError,
-    toastInfoId:toastInfoId.current,
-    toastSuccessId:toastSuccessId.current,
-    toastErrorId:toastErrorId.current,  
+    toastLoading,
     toastWarning,
-    toastWarningId:toastWarningId.current
+    toastId: toastId.current
   };
 };  
