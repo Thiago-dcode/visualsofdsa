@@ -84,7 +84,7 @@ export const createRandomUniqueArrayOfNumbers = (
 export const createRandomUniqueArrayOfNodes = (
   size: number,
   range = [-5000, 5000]
-) => createRandomUniqueArrayOfNumbers(size,range).map(num=>new Node(num,new PositionClass(0,0),null));
+) => createRandomUniqueArrayOfNumbers(size, range).map(num => new Node(num, new PositionClass(0, 0), null));
 export const createRandomArrayOfNodes = (size: number, range = [-500, 500]) => {
   const arrayNodes: Node<number>[] = [];
   for (let i = 0; i < size; i++) {
@@ -125,7 +125,7 @@ export function removePx(value: string): number {
 export function getEuclideanDistance(position1: Position, position2: Position) {
   return Math.sqrt(
     Math.pow(position1.x - position2.x, 2) +
-      Math.pow(position1.y - position2.y, 2)
+    Math.pow(position1.y - position2.y, 2)
   );
 }
 export const copyToClipboard = async (
@@ -242,3 +242,10 @@ export const generateAudioFrequency = (
   osc.connect(node);
   node.connect(audioCtx.destination);
 };
+export const clearRefs = (...refs: (HTMLInputElement | null | undefined)[]) => {
+  refs.forEach(ref => {
+    if (ref) {
+      ref.value = '';
+    }
+  });
+}

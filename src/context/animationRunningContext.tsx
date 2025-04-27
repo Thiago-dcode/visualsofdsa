@@ -1,5 +1,5 @@
 'use client'
-import { createContext, ReactElement, useContext, useEffect, useState } from "react";
+import { createContext, ReactElement, useCallback, useContext, useEffect, useState } from "react";
 
 type AnimationRunningType = {
     isAnimationRunning: boolean,
@@ -15,9 +15,9 @@ export function AnimationRunningProvider({ children }: {
     children: ReactElement
 }) {
     const [isAnimationRunning, setisAnimationRunning] = useState<boolean>(false);
-    const setAnimationRunning = (value: boolean) => {
+    const setAnimationRunning = useCallback((value: boolean) => {
         setisAnimationRunning(value)
-    }
+    }, [setisAnimationRunning])
     useEffect(() => {
         setisAnimationRunning(false)
     }, [])

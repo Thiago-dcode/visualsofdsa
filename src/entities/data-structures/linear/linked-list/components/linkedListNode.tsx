@@ -7,6 +7,7 @@ import Arrow from '@/components/ui/arrow'
 import { animate } from '@/lib/animations'
 import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card'
 import { ArrowRight, ArrowLeft, Dot } from 'lucide-react'
+import useAnimation from '@/hooks/useAnimation'
 type LinkedListNodeProps = {
     node: LinkedListNode<Primitive>,
     nodeShape: NodeShape,
@@ -19,7 +20,7 @@ type LinkedListNodeProps = {
 
 export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, index, isHead = false, isTail = false, setAnimationRunning }: LinkedListNodeProps) {
     const [isOver, setIsOver] = useState(false);
-
+    const { focus } = useAnimation()
     const handleRef = useCallback(async (element: HTMLElement | HTMLDivElement | null) => {
 
         if (!element) return
@@ -30,7 +31,7 @@ export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, ind
         }
         if (node.isLastAdd) {
             setAnimationRunning(true)
-
+            focus(element)
             await animate(element, 'add-node', 1, {
                 onlyOnce: true,
             });
@@ -139,7 +140,7 @@ export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, ind
                 {
                     'border-app-bauhaus-green': isHead && !isTail || isHead && isTail,
                     'border-app-bauhaus-yellow': isTail && !isHead,
-                   
+
                 }
             )} style={{
                 position: 'absolute',
@@ -151,13 +152,13 @@ export default function LinkedListNodeComponent({ isDoubly, node, nodeShape, ind
                 <ul className='flex flex-col items-start justify-between w-full'>
 
 
-                    <li className='flex flex-row items-center justify-start'> <Dot  size={16} />  <p >Memory: {node.memoryAddress}</p></li>
-                    <li className='flex flex-row items-center justify-start'> <Dot  size={16} />  <p >Index: {index}{isHead ? ' (head)' : isTail ? ' (tail)' : ''}</p></li>
-                    <li className='flex flex-row items-center justify-start'> <Dot  size={16} />  <p >Position: ({node.position.x}, {node.position.y})</p></li>
-                    <li className='flex flex-row items-center justify-start'> <Dot  size={16} />  <p >Data: &quot;{node.data}&quot;</p></li>
-                    <li className='flex flex-row items-center justify-start'> <Dot  size={16} />  <p className='w-full flex items-center justify-start'>Next data <ArrowRight className='text-app-bauhaus-green' size={16} />: {isTail ? 'NULL' :`"${node.next?.data}"`}</p></li>
+                    <li className='flex flex-row items-center justify-start'> <Dot size={16} />  <p >Memory: {node.memoryAddress}</p></li>
+                    <li className='flex flex-row items-center justify-start'> <Dot size={16} />  <p >Index: {index}{isHead ? ' (head)' : isTail ? ' (tail)' : ''}</p></li>
+                    <li className='flex flex-row items-center justify-start'> <Dot size={16} />  <p >Position: ({node.position.x}, {node.position.y})</p></li>
+                    <li className='flex flex-row items-center justify-start'> <Dot size={16} />  <p >Data: &quot;{node.data}&quot;</p></li>
+                    <li className='flex flex-row items-center justify-start'> <Dot size={16} />  <p className='w-full flex items-center justify-start'>Next data <ArrowRight className='text-app-bauhaus-green' size={16} />: {isTail ? 'NULL' : `"${node.next?.data}"`}</p></li>
                     {isDoubly && <li className='w-full flex items-center justify-start'>
-                        <Dot  size={16} />  <p className='w-full flex items-center justify-start'>Prev data <ArrowLeft className='text-app-bauhaus-red' size={16} />: {isHead ? 'NULL' :`"${node.prev?.data}"`}</p></li>}
+                        <Dot size={16} />  <p className='w-full flex items-center justify-start'>Prev data <ArrowLeft className='text-app-bauhaus-red' size={16} />: {isHead ? 'NULL' : `"${node.prev?.data}"`}</p></li>}
                 </ul>
             </HoverCardContent>
         </HoverCard>

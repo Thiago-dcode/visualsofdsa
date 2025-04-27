@@ -15,7 +15,6 @@ export default function useStaticArray(size: number =50) {
  
   const { writeAnimation, accessAnimation, searchAnimation } =
     UseStaticArrayAnimation(speed);
-  const [memorySize,setMemorySize] = useState(MemorySize.L);
   const [maxSize, setMaxSize] = useState(size);
   const [_render, setRender] = useState(false)
 
@@ -179,8 +178,6 @@ export default function useStaticArray(size: number =50) {
     setError,
     createUnsorted,
     createSorted,
-    memorySize,
-    setMemorySize,
     handleSetSpeed,
     speed
   };

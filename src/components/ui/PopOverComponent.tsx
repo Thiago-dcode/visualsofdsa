@@ -7,7 +7,7 @@ import {
 import { cn } from "@/lib/utils";
 import React, { useState } from "react"
 import { TriangleAlert } from "lucide-react"
-
+import { config } from "@/config"
 export function PopOverComponent({
   trigger,
   content,
@@ -52,7 +52,7 @@ export function PopOverComponent({
       }} asChild>
         {trigger}
       </PopoverTrigger>
-      <PopoverContent id="pop-over" className={cn('w-80 dark:bg-app-off-white dark:text-app-off-black bg-app-off-black text-app-off-white', className)}>
+      <PopoverContent id="pop-over" className={cn(config.darkModeModal, 'w-50', className)}>
         { available ?
           content
         : <div className="p-2 flex items-center gap-2">

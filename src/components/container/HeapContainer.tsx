@@ -6,7 +6,7 @@ import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAc
 import { Input } from '../ui/input';
 import InputWithButtonContainer from './InputWithButtonContainer';
 import Section from './Section';
-
+import { cn } from '@/lib/utils';
 function HeapContainer({ heap, children, loading }: {
     heap: Heap,
     children: ReactNode,
@@ -15,19 +15,21 @@ function HeapContainer({ heap, children, loading }: {
 }) {
     const [mallocSize, setMallocSize] = useState(0);
     const [rellocSize, setRellocSize] = useState(0);
-    const { width, height, size: heapSize, malloc, relloc ,free} = heap;
+    const { width, height, size: heapSize, malloc, relloc, free } = heap;
     useEffect(() => {
         setRellocSize(0)
         setMallocSize(heapSize)
     }, [heapSize])
     return (
-        <section className=''>
+        <section >
 
-            <Section style={{
-                width: !heapSize?'100%': width + 'px',
-            }} className='self-start flex-row flex items-start justify-between gap-5   mb-2'>
+            <Section  style={{
+                width: !heapSize ? '100%' : width + 'px',
+            }} className={cn('self-start flex-row flex items-start justify-between gap-5   mb-2',{
+                'opacity-25': loading
+            })}>
                 <div className=' flex items-center gap-2'>
-                    <h4 className='text-4xl'>Heap</h4>
+                    <h4 className='text-xl'>Heap</h4>
                     <Info size={30} title='Heap' text={
                         <div className='flex flex-col items-start justify-start gap-3'>
                             <section className='flex flex-col items-start justify-start gap-2'>
@@ -81,12 +83,15 @@ function HeapContainer({ heap, children, loading }: {
                             </section>
                         </div>
                     } />
-                 
+
                 </div>
                 <div className='self-end flex items-center gap-2 relative'>
                     {heapSize <= 0 ? <InputWithButtonContainer key={'linkedList-add-action'}>
-                        <Input value={mallocSize} placeholder="index"  onChange={(e) => {
+                        <Input value={mallocSize} placeholder="index" onChange={(e) => {
                             const n = Number.parseInt(e.target.value);
+                            if (isNaN(n) || n < 0 || n > 100) {
+                                return;
+                            };
                             setMallocSize(n)
 
                         }} type="number" min={0} max={100} />
@@ -96,9 +101,12 @@ function HeapContainer({ heap, children, loading }: {
                         }} />
 
                     </InputWithButtonContainer> : <Section className='relative  self-end'><InputWithButtonContainer key={'linkedList-add-action'}>
-                        <Input value={rellocSize} placeholder="index"  onChange={(e) => {
+                        <Input value={rellocSize} placeholder="index" onChange={(e) => {
                             if (loading) return;
                             const n = Number.parseInt(e.target.value);
+                            if (isNaN(n) || n < 0 || n > 100) {
+                                return;
+                            };
                             setRellocSize(n)
 
                         }} type="number" min={0} max={100} />
@@ -109,16 +117,16 @@ function HeapContainer({ heap, children, loading }: {
                         }} />
 
                     </InputWithButtonContainer>
-                    <ButtonAction title="Free" action='delete' isLoading={loading} onClick={() => {
+                        <ButtonAction title="Free" action='delete' isLoading={loading} onClick={() => {
                             if (loading) return;
-                           free()
+                            free()
                         }} />
-                    
+
                     </Section>}
                 </div>
             </Section>
 
-            {heapSize > 0 ? <div className='p-4 dark:border-app-off-white border-app-off-black border-2 rounded-sm'>
+            {heapSize > 0 ? <div className='p-1 phone:p-4 dark:border-app-off-white border-app-off-black border-2 rounded-sm'>
                 <div className='relative' style={{
                     width: width + 'px',
                     height: height + 'px'

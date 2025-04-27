@@ -19,10 +19,11 @@ const config = {
     },
     extend: {
       screens: {
-        phone: "480px",
-        tablet: "860px",
-        laptop: "1024px",
-        desktop: "1440px",
+          phone: "480px",
+          tablet: "860px",
+          laptop: "1024px",
+          desktop: "1440px",
+          tv: "1800px",
       },
       colors: {
         app: {

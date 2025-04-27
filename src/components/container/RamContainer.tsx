@@ -5,7 +5,7 @@ function RamContainer({ children }: {
 }) {
     return (
         <div className=" md:w-full flex items-center justify-center ">
-            <div className="w-full flex-wrap gap-y-[15px] flex items-center justify-start">
+            <div className="w-full flex-wrap tablet:gap-y-[15px] gap-y-[10px] flex items-center tablet:justify-start justify-center">
                 {children}
             </div></div>
     )

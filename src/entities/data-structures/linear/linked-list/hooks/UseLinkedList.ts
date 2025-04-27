@@ -10,34 +10,36 @@ import { animate } from "@/lib/animations";
 import { useDarkMode } from "@/context/darkModeContext";
 import { useSpeed } from "@/hooks/useSpeed";
 import { config } from "@/config";
+import useAnimation from "@/hooks/useAnimation";
 
 export default function UseLinkedList(isDoublyLinkedList = false) {
   const [linkedList] = useState(new LinkedList());
- const {isDark} = useDarkMode();
+  const { isDark } = useDarkMode();
 
- const {speed,handleSetSpeed}= useSpeed(2,config.localStorageKeys.speed.linkedList)
+  const { speed, handleSetSpeed } = useSpeed(2, config.localStorageKeys.speed.linkedList)
   const [error, setError] = useState<{
     name: string;
     description: string;
   } | null>(null);
 
 
-const getSpeed = useCallback(()=>{
-  switch (speed) {
-    case 1:
-      return 0.8;
-    case 2:
-      return 0.5;
-    case 3:
-      return 0.3;
-    case 4:
-      return 0.15;
-    default:
-      return 0.5;
-  }
+  const getSpeed = useCallback(() => {
+    switch (speed) {
+      case 1:
+        return 0.8;
+      case 2:
+        return 0.5;
+      case 3:
+        return 0.3;
+      case 4:
+        return 0.15;
+      default:
+        return 0.5;
+    }
 
-},[speed])
+  }, [speed])
 
+  const { focus } = useAnimation()
   const [arrayLs, setArrayLs] = useState(linkedList.toNodeArray());
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
 
@@ -63,10 +65,11 @@ const getSpeed = useCallback(()=>{
           steps = _steps || 1;
           try {
             if (_node && _node.ref) {
+              focus(_node.ref)
               await animate(
                 _node.ref,
-                `find-node-${isDark?'dark':'light'}`,
-               getSpeed()
+                `find-node-${isDark ? 'dark' : 'light'}`,
+                getSpeed()
               );
 
               if (direction === "forward")
@@ -74,7 +77,7 @@ const getSpeed = useCallback(()=>{
               else if (direction === "backward")
                 await animateEdge(_node.prevEdge.ref);
             }
-          } catch (error) {}
+          } catch (error) { }
         }
       );
 
@@ -107,10 +110,11 @@ const getSpeed = useCallback(()=>{
           try {
             if (_node && _node.ref) {
               const found = index === _index;
+              focus(_node.ref)
               await animate(
                 _node.ref,
-                `${found ? "del-node" : `find-node-${isDark?'dark':'light'}`}`,
-                found?getSpeed() * 0.8:getSpeed()
+                `${found ? "del-node" : `find-node-${isDark ? 'dark' : 'light'}`}`,
+                found ? getSpeed() * 0.8 : getSpeed()
               );
               if (!found) {
                 if (direction === "forward")
@@ -120,7 +124,7 @@ const getSpeed = useCallback(()=>{
               }
             }
           } catch (error) {
-           
+
           }
         }
       );
@@ -161,12 +165,13 @@ const getSpeed = useCallback(()=>{
             if (_node && _node.ref) {
               try {
                 const found = index === _index;
+                focus(_node.ref)
                 await animate(
                   _node.ref,
                   found
                     ? `get-node`
-                    : `find-node-${isDark?'dark':'light'}`,
-                    found?getSpeed() * 0.8:getSpeed()
+                    : `find-node-${isDark ? 'dark' : 'light'}`,
+                  found ? getSpeed() * 0.8 : getSpeed()
                 );
                 if (!found) {
                   if (direction === "forward")
@@ -174,7 +179,7 @@ const getSpeed = useCallback(()=>{
                   else if (direction === "backward")
                     await animateEdge(_node.prevEdge.ref);
                 }
-              } catch (error) {}
+              } catch (error) { }
             }
           }
         );
@@ -201,9 +206,9 @@ const getSpeed = useCallback(()=>{
         await animate(
           node.ref,
           !(index === j && animateLast)
-            ? `find-node-${isDark?'dark':'light'}`
+            ? `find-node-${isDark ? 'dark' : 'light'}`
             : `${isDel ? "del" : "get"}-node`,
-            !(index === j && animateLast)?getSpeed():getSpeed() * 1.2
+          !(index === j && animateLast) ? getSpeed() : getSpeed() * 1.2
         );
 
       if (index === j) {
@@ -229,15 +234,7 @@ const getSpeed = useCallback(()=>{
     setArrayLs([]);
     setError(null);
   };
-  const setUpLinkedList = () => {
-    linkedList.nodeWidth = isDoublyLinkedList ? 180 : 120;
-    linkedList.nodeHeightSpacing = 40;
-    linkedList.nodeWidthSpacing = 70;
-    linkedList.nodeHeight = 80;
-  };
-  useEffect(() => {
-    setUpLinkedList();
-  }, []);
+
   return {
     linkedList,
     add,

@@ -18,8 +18,6 @@ export default function useDynamicArray() {
     error,
     access: _access,
     setError,
-    memorySize,
-    setMemorySize,
   } = useStaticArray();
 
   const { speed, handleSetSpeed } = useSpeed(2,config.localStorageKeys.speed.dynamicArray);
@@ -230,8 +228,6 @@ const maxSizeException = (newSize:number) => {
     fill,
     maxSize,
     delete: del,
-    memorySize,
-    setMemorySize,
     speed,
     handleSetSpeed
   };

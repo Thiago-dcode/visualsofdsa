@@ -6,7 +6,7 @@ import { PopUp } from "@/components/ui/PopUp"
 import InputWithButtonContainer from "@/components/container/InputWithButtonContainer"
 import OperationsContainer from "@/components/container/OperationsContainer"
 import ButtonAction from "../_components/ButtonAction"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import { Input } from "@/components/ui/input"
 import Section from "@/components/container/Section"
 import StaticArrayNodeComponent from "../static-array/components/StaticArrayNodeComponent"
@@ -16,10 +16,14 @@ import { useAnimationRunning } from "@/context/animationRunningContext"
 import { useToast } from "@/hooks/useToast"
 import SpeedComponent from "@/components/app/speedComponent"
 import ConfigComponent from "@/components/app/ConfigComponent"
+import useResponsive from "@/hooks/useResponsive"
+import { MemorySize } from "@/types"
+import { clearRefs } from "@/lib/utils"
 export default function DynamicArray() {
     const { toastInfo } = useToast();
-    const { array, write, insert, fill, access, error, maxSize, capacity, size, cleanUp, delete: del, push, pop, search, memorySize, setMemorySize, speed, handleSetSpeed } = useDynamicArray();
+    const { array, write, insert, fill, access, error, maxSize, capacity, size, cleanUp, delete: del, push, pop, search, speed, handleSetSpeed } = useDynamicArray();
     const [open, setOpen] = useState(false);
+    const device = useResponsive()
     const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
     const [searchResult, setSearchResult] = useState<searchResult | null>(null);
     const refWriteIndex = useRef<HTMLInputElement>(null);
@@ -32,13 +36,7 @@ export default function DynamicArray() {
     const refIndexDelete = useRef<HTMLInputElement>(null);
     const refFillAmount = useRef<HTMLInputElement>(null);
 
-    const clearRefs = useCallback((...refs: HTMLInputElement[]) => {
-        refs.forEach(ref => {
-            if (ref) {
-                ref.value = '';
-            }
-        });
-    }, []);
+
 
     const initAction = useCallback(() => {
         if (!array) return false;
@@ -126,9 +124,11 @@ export default function DynamicArray() {
         clearRefs(refFillAmount.current)
     }, [isAnimationRunning, initAction])
 
+    const makeResponsive = useMemo(() => device.twResponsive.desktop, [device])
     return (
         <>
-            {<OperationsContainer setOpen={(value) => {
+            {/* OPERATIONS CONTAINER WIDTH HIGHER THAN DESKTOP */}
+            {!makeResponsive && <OperationsContainer makeResponsive={makeResponsive} setOpen={(value) => {
                 setOpen(value)
             }} open={open}>
                 {array && array.length ? <Section>
@@ -215,7 +215,7 @@ export default function DynamicArray() {
 
             {/* PROPERTIES AND CONFIG: */}
             <div className="flex justify-between w-full px-4">
-                <Properties properties={{
+                <Properties className={makeResponsive ? 'hidden tablet:hidden desktop:flex' : ''} classNameMobile={makeResponsive ? '  tablet:block desktop:hidden' : ''} properties={{
                     size: {
                         value: size,
                     },
@@ -226,7 +226,91 @@ export default function DynamicArray() {
                         value: maxSize
                     }
                 }} />
+                {/* OPERATIONS CONTAINER WIDTH LOWER THAN DESKTOP */}
+                {makeResponsive && <OperationsContainer makeResponsive={makeResponsive} setOpen={(value) => {
+                    setOpen(value)
+                }} open={open}>
+                    {array && array.length ? <Section makeResponsive={makeResponsive}>
+                        {/* WRITE OPERATION */}
+                        <InputWithButtonContainer makeResponsive={makeResponsive}>
+                            <Input ref={refWriteIndex} placeholder="index" className="text-black  max-w-24" type="number" min={0} />
+                            <Input ref={refWriteData} placeholder="data" className="text-black max-w-24" type="text" name="" id="" />
+                            <ButtonAction title="write" action="write" isLoading={isAnimationRunning} onClick={async () => {
+                                await handleWrite()
+                            }} />
+                        </InputWithButtonContainer>
 
+                        {/* PUSH OPERATION */}
+                        <InputWithButtonContainer makeResponsive={makeResponsive}>
+                            <Input ref={refPushData} placeholder="data" className="text-black max-w-24" type="text" name="" id="" />
+                            <ButtonAction title="push" action="write" isLoading={isAnimationRunning} onClick={async () => {
+                                await handlePush()
+                            }} />
+                        </InputWithButtonContainer>
+
+                        {/* INSERT OPERATION */}
+                        <InputWithButtonContainer makeResponsive={makeResponsive}>
+                            <Input ref={refIndexInsert} placeholder="index" className="text-black max-w-24" type="number" min={0} />
+                            <Input ref={refInsertData} placeholder="insertData" className="text-black max-w-24" type="text" name="" id="" />
+                            <ButtonAction title="insert" action="insert" isLoading={isAnimationRunning} onClick={async () => {
+                                await handleInsert()
+                            }} />
+                        </InputWithButtonContainer>
+
+                        {/* ACCESS OPERATION */}
+                        <InputWithButtonContainer makeResponsive={makeResponsive}>
+                            <Input ref={refIndexAccess} placeholder="index" className="text-black max-w-24" type="number" min={0} />
+                            <ButtonAction title="access" action="read" isLoading={isAnimationRunning} onClick={async () => {
+                                await handleAccess()
+                            }} />
+                        </InputWithButtonContainer>
+
+                        {/* SEARCH OPERATION */}
+                        <InputWithButtonContainer makeResponsive={makeResponsive}>
+                            <Input ref={refSearchData} placeholder="data" className="text-black max-w-24" type="text" name="" id="" />
+                            <ButtonAction title="search" action="search" isLoading={isAnimationRunning} onClick={async () => {
+                                await handleSearch()
+                            }} />
+                        </InputWithButtonContainer>
+
+                        {/* FILL OPERATION */}
+                        <InputWithButtonContainer makeResponsive={makeResponsive}>
+                            <Input ref={refFillAmount} placeholder="fillAmount" className="text-black max-w-24" type="number" min={0} />
+                            <ButtonAction title="fill" action="fill" isLoading={isAnimationRunning} onClick={async () => {
+                                await handleFill()
+                            }} />
+                        </InputWithButtonContainer>
+
+                        {/* DELETE OPERATIONS */}
+                        {!size || !array ? null :
+                            <>
+                                <ButtonAction title="pop" action="delete" isLoading={isAnimationRunning} onClick={async () => {
+                                    if (isAnimationRunning) return;
+                                    setAnimationRunning(true)
+                                    setOpen(!open)
+                                    await pop()
+                                    setAnimationRunning(false)
+                                }} />
+
+                                {/* DELETE OPERATION */}
+                                <InputWithButtonContainer makeResponsive={makeResponsive}>
+                                    <Input ref={refIndexDelete} placeholder="index" className="text-black max-w-25" type="number" min={0} />
+                                    <ButtonAction title="delete" action="delete" isLoading={isAnimationRunning} onClick={async () => {
+                                        await handleDelete()
+                                    }} />
+                                </InputWithButtonContainer>
+
+                                <ButtonAction title="reset" action="delete" isLoading={isAnimationRunning} onClick={async () => {
+                                    if (isAnimationRunning) return;
+                                    setAnimationRunning(true)
+                                    setOpen(!open)
+                                    cleanUp()
+                                    setAnimationRunning(false)
+                                }} />
+                            </>
+                        }
+                    </Section> : null}
+                </OperationsContainer>}
                 <ConfigComponent available={!isAnimationRunning}>
 
                     <SpeedComponent speed={speed} setSpeed={handleSetSpeed} />
@@ -238,7 +322,7 @@ export default function DynamicArray() {
                 {array &&
                     array.map((node, i) => {
                         return (
-                            <MemoryAdressContainer size={memorySize} memory={node} index={i} showIndex={node !== null} key={'memoryAdressContainer-' + `${node ? node.id : 'null-' + i}`}>
+                            <MemoryAdressContainer size={device.twResponsive.tablet ? MemorySize.M : MemorySize.L} memory={node} index={i} showIndex={node !== null} key={'memoryAdressContainer-' + `${node ? node.id : 'null-' + i}`}>
                                 {node !== null ?
                                     <StaticArrayNodeComponent node={node} setAnimationRunning={setAnimationRunning} /> :
                                     <p className="border flex items-center justify-center dark:border-white/50 border-black/50 w-full h-full"></p>

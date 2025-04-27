@@ -2,7 +2,6 @@ import { Input } from '@/components/ui/input'
 import { Primitive, speed } from '@/types';
 import LinearDs from '../_classes/LinearDs';
 import SpeedComponent from '@/components/app/speedComponent';
-import useResponsive from '@/hooks/useResponsive';
 const MAX_WIDTH = 600
 export default function LinearDsConfig({
     stack,

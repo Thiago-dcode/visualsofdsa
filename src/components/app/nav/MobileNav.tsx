@@ -11,6 +11,7 @@ import { ChevronsRight, SquareMenu } from 'lucide-react'
 import Link from 'next/link';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { LinkItem } from './type';
+import { config } from '@/config'
 export default function MobileNav({links}:{
     links: LinkItem[]
 }) {
@@ -18,11 +19,11 @@ export default function MobileNav({links}:{
   return (
     <div className='phone:hidden'>
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
+      <SheetTrigger asChild className='cursor-pointer'>
         <SquareMenu className='w-7 h-7' />
       </SheetTrigger>
    
-      <SheetContent side={'left'} className='dark:bg-app-bg-black bg-app-off-white text-app-text-black dark:text-app-off-white border border-app-bg-black dark:border-app-off-white'>
+      <SheetContent side={'left'} className={config.darkModeModal}>
       <SheetTitle>Menu</SheetTitle>
             <div className='flex flex-col gap-4 mt-2 w-full items-start justify-start'>
           

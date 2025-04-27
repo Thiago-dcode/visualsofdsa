@@ -9,7 +9,7 @@ import StaticArrayNodeComponent from "./components/StaticArrayNodeComponent"
 import useStaticArray from "./hooks/useStaticArray"
 import { searchResult } from "./type"
 import Section from "@/components/container/Section"
-import RamConteiner from "@/components/container/RamContainer"
+import RamContainer from "@/components/container/RamContainer"
 import MemoryAdressContainer from "../_components/MemoryAdressContainer"
 import { MemorySize } from "@/types"
 import Properties from "@/components/app/Properties"
@@ -19,9 +19,10 @@ import { toast } from "sonner"
 import { delay } from "@/lib/utils"
 import ConfigComponent from "@/components/app/ConfigComponent"
 import { useToast } from "@/hooks/useToast"
+import useResponsive from "@/hooks/useResponsive"
 export default function StaticArray() {
-
     const { array, create, write, access, search, error, flush, maxSize, setMaxSize, handleSetSpeed, speed } = useStaticArray(50);
+    const device = useResponsive()
     const { isAnimationRunning, setAnimationRunning } = useAnimationRunning()
     const { toastInfo } = useToast();
     const refWrite = useRef<HTMLInputElement>(null);
@@ -34,84 +35,89 @@ export default function StaticArray() {
     const handleToastInfo = useCallback((action: string) => {
         toastInfo(`You must select a valid index for ${action.toUpperCase()} operation`)
     }, [toastInfo])
+
+    const onOperationEnds = useCallback((ref: (HTMLInputElement | null)[] = []) => {
+        setAnimationRunning(false)
+        ref.forEach(r => {
+            if (r) r.value = ''
+        })
+    }, [setAnimationRunning])
+    const onOperationStarts = useCallback(() => {
+        setOpen(false)
+        setAnimationRunning(true)
+    }, [setOpen, setAnimationRunning])
     const handleWrite = useCallback(async () => {
         if (isAnimationRunning || !refWriteData.current || !refWrite.current) return;
-        setAnimationRunning(true)
+
         const data = refWriteData.current.value;
         const index = Number.parseInt(refWrite.current.value);
-        if (!isNaN(index)) await write(data === '' || data === undefined ? null : data, index)
+        if (!isNaN(index)) {
+            onOperationStarts()
+            await write(data === '' || data === undefined ? null : data, index)
+            onOperationEnds([refWriteData.current, refWrite.current])
+        }
         else handleToastInfo('write')
-        refWriteData.current.value = ''
-        refWrite.current.value = ''
-        setAnimationRunning(false)
+
     }, [isAnimationRunning])
 
     const handleAccess = useCallback(async () => {
         if (isAnimationRunning || !refAccess.current) return;
-        setAnimationRunning(true);
-        setOpen(false)
         const index = Number.parseInt(refAccess.current.value);
-        if (!isNaN(index)) await access(index)
+        if (!isNaN(index)) {
+            onOperationStarts()
+            await access(index)
+            onOperationEnds([refAccess.current])
+        }
         else handleToastInfo('access')
 
 
-        refAccess.current.value = ''
-        setAnimationRunning(false)
     }, [isAnimationRunning])
 
     const handleSearch = useCallback(async () => {
         if (isAnimationRunning || !refSearch.current) return;
-        setAnimationRunning(true)
-        setOpen(!open)
+        onOperationStarts()
         const result = await search(refSearch.current.value === '' ? null : refSearch.current.value)
         setSearchResult(result)
-        refSearch.current.value = ''
-        setAnimationRunning(false)
+        onOperationEnds([refSearch.current])
     }, [isAnimationRunning])
 
     const handleCreate = useCallback(async () => {
         if (isAnimationRunning || !refSize.current) return;
-
-        setOpen(!open)
         const size = Number.parseInt(refSize.current.value)
-
-        setAnimationRunning(true)
-        if (!isNaN(size) && size > 0) await create(size)
-        refSize.current.value = ''
-        setAnimationRunning(false)
+        if (!isNaN(size) && size > 0) {
+            onOperationStarts()
+            await create(size)
+            onOperationEnds([refSize.current])
+        }
     }, [isAnimationRunning])
 
     const handleFill = useCallback(async () => {
         if (isAnimationRunning || !array) return;
-        setAnimationRunning(true)
         const toastId = toast.loading('Filling array');
+        onOperationStarts()
         for (let i = 0; i < array.length; i++) {
             const element = array[i];
             if (!element || element.data) continue;
             await write('data-' + i, i, true);
-
         }
         await delay(200);
         toast.dismiss(toastId)
-        setAnimationRunning(false);
+        onOperationEnds()
     }, [array, isAnimationRunning])
     const cleanUp = useCallback(() => {
-        setAnimationRunning(false)
         flush();
         setSearchResult(null)
-        if (refSize.current) refSize.current.value = ''
-        if (refWriteData.current) refWriteData.current.value = ''
-        if (refWrite.current) refWrite.current.value = ''
-        if (refAccess.current) refAccess.current.value = ''
-        if (refSearch.current) refSearch.current.value = ''
+        setOpen(false)
+        onOperationEnds([refSize.current, refWriteData.current, refWrite.current, refAccess.current, refSearch.current])
     }, [])
-
+    const makeResponsive = !array || !array.length ? false : device.twResponsive.tablet
     return (
         <>
-            {<OperationsContainer setOpen={(value) => {
+           {/* ABOVE TABLET OPERATIONS CONTAINER */}
+            {!makeResponsive && <OperationsContainer makeResponsive={makeResponsive} setOpen={(value) => {
                 setOpen(value)
             }} open={open}>
-                {array && array.length ? < Section>
+                {array && array.length ? < Section makeResponsive={makeResponsive}>
 
                     {/* WRITE OPERATION */}
                     <InputWithButtonContainer>
@@ -159,7 +165,7 @@ export default function StaticArray() {
                     }} />
                 </div>}
 
-                {array && array.length ? <ButtonAction title="fill" action="fill" className='self-end desktop:mt-0 tablet:mt-0 mt-5' isLoading={isAnimationRunning} onClick={async () => {
+                {array && array.length ? <ButtonAction title="fill" action="fill" className='self-end' isLoading={isAnimationRunning} onClick={async () => {
 
                     await handleFill()
 
@@ -185,6 +191,70 @@ export default function StaticArray() {
                     }
                 }} />
 
+                {/* BELOW TABLET OPERATIONS CONTAINER */}
+                {makeResponsive && <OperationsContainer makeResponsive={makeResponsive} setOpen={(value) => {
+                    setOpen(value)
+                }} open={open}>
+                    {array && array.length ? < Section makeResponsive={makeResponsive}>
+
+                        {/* WRITE OPERATION */}
+                        <InputWithButtonContainer makeResponsive={makeResponsive}>
+                            <Input ref={refWrite} placeholder="index" className="text-black max-w-24 " type="number" min={0} />
+                            <Input ref={refWriteData} placeholder="data" className="text-black max-w-24" type="text" name="" id="" />
+
+                            <ButtonAction title="write" action="write" isLoading={isAnimationRunning} onClick={async () => {
+
+                                await handleWrite()
+                            }} />
+                        </InputWithButtonContainer>
+                        {/* ACCESS OPERATION */}
+                        <InputWithButtonContainer makeResponsive={makeResponsive}>
+                            <Input ref={refAccess} placeholder="index" className="text-black max-w-24" type="number" min={0} />
+                            <ButtonAction title="access" action="read" isLoading={isAnimationRunning} onClick={async () => {
+
+                                await handleAccess()
+
+                            }} />
+                        </InputWithButtonContainer>
+                        {/* SEARCH OPERATION */}
+                        <InputWithButtonContainer makeResponsive={makeResponsive}>
+                            <Input ref={refSearch} placeholder="data" className="text-black max-w-24" type="text" name="" id="" />
+
+                            <ButtonAction title="search" action="search" isLoading={isAnimationRunning} onClick={async () => {
+
+                                await handleSearch()
+
+                            }} />
+                        </InputWithButtonContainer>
+
+                    </Section> : null}
+                    <div className="flex gap-2 items-center justify-between mt-4">     {array && array.length ? <ButtonAction title="fill" action="fill" className='self-end' isLoading={isAnimationRunning} onClick={async () => {
+
+                        await handleFill()
+
+                    }} /> : null}
+
+                        {array && array.length ? <ButtonAction title="delete" action="delete" className='' isLoading={false} onClick={() => {
+                            cleanUp()
+                        }} /> : null}
+                    </div>
+                    {(!array || !array.length) && <div className="flex  items-center gap-2 justify-center">
+                        <Input ref={refSize} placeholder="size" className="text-black w-20" type="number" min={0} />
+                        <ButtonAction title="create" action="write" isLoading={isAnimationRunning} onClick={async () => {
+                            await handleCreate()
+                        }} />
+                        <ButtonAction title="fill" action="fill" isLoading={isAnimationRunning} onClick={async () => {
+                            if (isAnimationRunning) return;
+                            setOpen(!open)
+                            setAnimationRunning(true)
+                            await create(maxSize)
+                            setAnimationRunning(false)
+                        }} />
+                    </div>}
+
+
+
+                </OperationsContainer>}
 
                 <ConfigComponent available={!isAnimationRunning}>
                     <div>
@@ -200,15 +270,15 @@ export default function StaticArray() {
                 </ConfigComponent>
             </div>
 
-            <RamConteiner>
+            <RamContainer>
 
                 {
                     [...Array(maxSize)].map((d, i) => {
                         return (
 
-                            <MemoryAdressContainer memory={array && array[i] !== undefined ? array[i] : null} size={MemorySize.L} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i}>
+                            <MemoryAdressContainer memory={array && array[i] !== undefined ? array[i] : null} size={ device.twResponsive.phone ? MemorySize.M : MemorySize.L} index={i} showIndex={array && array[i] !== undefined ? true : false} key={'MemoryAdressContainer-' + i}>
 
-                                {array && array[i] ? <StaticArrayNodeComponent  setAnimationRunning={setAnimationRunning} node={array[i]} /> : <p className="border dark:border-white/50 border-black/50 w-full h-full"></p>}
+                                {array && array[i] ? <StaticArrayNodeComponent setAnimationRunning={setAnimationRunning} node={array[i]} /> : <p className="border dark:border-white/50 border-black/50 w-full h-full"></p>}
                             </MemoryAdressContainer>
 
 
@@ -219,7 +289,7 @@ export default function StaticArray() {
 
                 }
 
-            </RamConteiner>
+            </RamContainer>
 
 
 
