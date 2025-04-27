@@ -401,7 +401,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                 keyOperations: [
                   {
                     operation: 'Search',
-                    color: 'blue',
+                    color: 'yellow',
                     description: '<b>sequentially checks each element</b> in the data structure until the target element is found or the end is reached. This operation is straightforward but can be time-consuming for large datasets.',
                     bigO: 'n'
                   }
@@ -426,7 +426,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                 keyOperations: [
                   {
                     operation: 'Search',
-                    color: 'blue',
+                    color: 'yellow',
                     description: '<b>divides the search interval in half</b> and compares the target element with the middle element. If the target is equal to the middle element, the search is complete. Otherwise, the search continues in the left or right half, depending on the comparison.',
                     bigO: 'log n'
                   }
@@ -460,7 +460,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                 keyOperations: [
                   {
                     operation: 'Sort',
-                    color: 'blue',
+                    color: 'yellow',
                     description: '<b>compares and swaps adjacent elements</b> to sort the list. This operation is repeated until no more swaps are needed, indicating that the list is sorted.',
                     bigO: 'n^2'
                   }
@@ -487,7 +487,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                 keyOperations: [
                   {
                     operation: 'Sort',
-                    color: 'blue',
+                    color: 'yellow',
                     description: '<b>selects the smallest element</b> from the unsorted region and swaps it with the first element in the unsorted region. This process continues until the entire list is sorted.',
                     bigO: 'n^2'
                   }
@@ -515,7 +515,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                 keyOperations: [
                   {
                     operation: 'Sort',
-                    color: 'blue',
+                    color: 'yellow',
                     description: '<b>inserts each element</b> into its correct position within the sorted region. This operation is repeated until the entire list is sorted.',
                     bigO: 'n^2'
                   }
@@ -542,7 +542,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                 keyOperations: [
                   {
                     operation: 'Sort',
-                    color: 'blue',
+                    color: 'yellow',
                     description: '<b>divides the array</b> into two halves, sorts each half, and then merges them back together in sorted order. This process is repeated until the entire array is sorted.',
                     bigO: 'n log n'
                   }
@@ -569,7 +569,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                 keyOperations: [
                   {
                     operation: 'Sort',
-                    color: 'blue',
+                    color: 'yellow',
                     description: '<b>selects a pivot element</b> and partitions the array so that all elements smaller than the pivot are placed on its left, and all elements greater than the pivot are placed on its right. This process is repeated until the entire array is sorted.',
                     bigO: 'n log n'
                   }

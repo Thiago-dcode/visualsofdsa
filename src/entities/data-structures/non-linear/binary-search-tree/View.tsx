@@ -1,6 +1,6 @@
 'use client'
 import OperationsContainer from '@/components/container/OperationsContainer'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ButtonAction from '../../linear/_components/ButtonAction'
 import { Input } from '@/components/ui/input'
 import InputWithButtonContainer from '@/components/container/InputWithButtonContainer'
@@ -19,18 +19,23 @@ import SpeedComponent from '@/components/app/speedComponent'
 import ConfigComponent from '@/components/app/ConfigComponent'
 import { useToast } from '@/hooks/useToast'
 import WarningComponent from '@/components/app/WarningComponent'
+import { DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { DropdownMenu } from '@/components/ui/dropdown-menu'
+import useResponsive from '@/hooks/useResponsive'
 function BinarySearchTreeView() {
 
   const { toastInfo } = useToast();
   const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
+  const [open, setOpen] = useState<boolean>(false);
   const { speed, handleSetSpeed } = useSpeed(3, config.localStorageKeys.speed.binarySearchTree)
   const { treeLayout, insert, search, insertAnimation, mock, remove, traverse, animateEdge, createRandomTree, clear, maxTreeSize, minInputValue, maxInputValue } = useBinarySearchTree(speed);
   const [nodeSize, setNodeSize] = useState<number>(35);
-
+  const device = useResponsive()
   const insertInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const removeInputRef = useRef<HTMLInputElement>(null);
   const randomTreeInputRef = useRef<HTMLInputElement>(null);
+  const traverseActions = useRef<TraversalType[]>(['preOrder', 'postOrder', 'inOrder', 'lvlOrder']);
   const handleAction = useCallback(async (action: 'insert' | 'search' | 'remove' | 'createRandomTree', input: HTMLInputElement | null) => {
 
     if (!input || isAnimationRunning) return;
@@ -39,6 +44,7 @@ function BinarySearchTreeView() {
       toastInfo(`Input must be a number between ${action !== 'createRandomTree' ? `${minInputValue} and ${maxInputValue}` : `${0} and ${maxTreeSize}`}`);
       return;
     };
+    setOpen(false);
     setAnimationRunning(true);
     switch (action) {
       case 'insert':
@@ -64,9 +70,12 @@ function BinarySearchTreeView() {
   const handleTraverse = useCallback(
     async (traverseType: TraversalType) => {
       if (!treeLayout.tree.root) return;
+     
+      setOpen(false);
       setAnimationRunning(true)
       await traverse(traverseType);
       setAnimationRunning(false)
+      
     }
     , [treeLayout])
   const onInsertAnimation = async (node: BinaryTreeNode<number>) => {
@@ -78,15 +87,14 @@ function BinarySearchTreeView() {
     await animateEdge(edge, 0.5, true);
   }
 
-  useEffect(() => {
-    // mock([50, 25, 75, 12, 37, 62, 87, 6, 18, 31, 43, 56, 68, 81, 93, 3, 9, 15, 21, 28, 34, 40, 46, 53, 59, 65, 71, 78, 84, 90, 96, 34, 6623, 456, 42, 345, 23, 5, 4, 6, 7, 8, 9, 43, 2, 345, 799, 44, 33456, 95, 3457, 345, 56, 747, 8, 5, 3455, 8, 41, 42, 43, 43, 45, 46, 48, 1, 0, 1.5])
 
-  }, [])
-
+const makeResponsive = useMemo(()=>{
+  return treeLayout.tree.root&& device.twResponsive.laptop
+},[device,treeLayout])
 
   return (
     <>
-      <OperationsContainer>
+     {!makeResponsive && <OperationsContainer >
 
         <Section>
           <InputWithButtonContainer key={'insert-action-bts'}>
@@ -113,23 +121,18 @@ function BinarySearchTreeView() {
               }} />
             </InputWithButtonContainer>
 
-            <ButtonAction title="PreOrderTraversal" action='read' isLoading={isAnimationRunning} onClick={async () => {
-              await handleTraverse('preOrder')
-
-            }} />
-            <ButtonAction title="PostOrderTraversal" action='read' isLoading={isAnimationRunning} onClick={async () => {
-              await handleTraverse('postOrder')
-
-            }} />
-            <ButtonAction title="InOrderTraversal" action='read' isLoading={isAnimationRunning} onClick={async () => {
-              await handleTraverse('inOrder')
-
-            }} />
-            <ButtonAction title="LevelOrderTraversal" action='read' isLoading={isAnimationRunning} onClick={async () => {
-              await handleTraverse('lvlOrder')
-
-            }} />
-
+            {treeLayout.tree.root && <DropdownMenu>
+            <DropdownMenuTrigger className='cursor-pointer bg-app-bauhaus-yellow text-app-off-black rounded-md px-2 py-1 font-semibold'>
+              <p>Traverse</p>
+            </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {traverseActions.current.map((action,i) => (
+                    <DropdownMenuItem className='cursor-pointer' key={'traverse-action-' + action + i} onClick={async () => {
+                      await handleTraverse(action)
+                    }}>{action}</DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>}
           </>
           }
 
@@ -139,17 +142,17 @@ function BinarySearchTreeView() {
               await handleAction('createRandomTree', randomTreeInputRef.current)
             }} />
           </InputWithButtonContainer>
-
+          
           {treeLayout.tree.root && <ButtonAction title="Delete" action='delete' isLoading={isAnimationRunning} onClick={async () => {
             clear()
 
           }} />}
         </Section>
-      </OperationsContainer>
+      </OperationsContainer>}
 
       <div className='w-full items-end justify-between flex'>
 
-        <Properties properties={{
+        <Properties className={makeResponsive ? 'hidden tablet:hidden laptop:flex' : ''} classNameMobile={makeResponsive ? 'block tablet:block laptop:hidden' : ''} properties={{
           maxTreeSize: {
             value: maxTreeSize,
           },
@@ -176,12 +179,67 @@ function BinarySearchTreeView() {
 
 
         }} />
-        <div className='flex items-center justify-center'>
+        {makeResponsive && <OperationsContainer  enabled={!isAnimationRunning} className='z-[104]' open={open} setOpen={setOpen} makeResponsive={makeResponsive}>
+
+<Section makeResponsive={makeResponsive} className='z-[104]'>
+  <InputWithButtonContainer key={'insert-action-bts'} makeResponsive={makeResponsive}>
+    <Input ref={insertInputRef} placeholder="number" min={minInputValue} max={maxInputValue} className="text-black w-24 text-center" type="number" />
+    <ButtonAction title="Insert" action='insert' isLoading={isAnimationRunning} onClick={async () => {
+      await handleAction('insert', insertInputRef.current)
+
+    }} />
+  </InputWithButtonContainer>
+
+  {treeLayout.tree.root && <>
+    <InputWithButtonContainer key={'search-action-bts'} makeResponsive={makeResponsive}>
+      <Input ref={searchInputRef} placeholder="number" min={minInputValue} max={maxInputValue} className="text-black w-24 text-center" type="number" />
+      <ButtonAction title="search" action='search' isLoading={isAnimationRunning} onClick={async () => {
+        await handleAction('search', searchInputRef.current)
+
+      }} />
+    </InputWithButtonContainer>
+    <InputWithButtonContainer key={'remove-action-bts'} makeResponsive={makeResponsive}>
+      <Input ref={removeInputRef} placeholder="number" min={minInputValue} max={maxInputValue} className="text-black w-24 text-center" type="number" />
+      <ButtonAction title="remove" action='delete' isLoading={isAnimationRunning} onClick={async () => {
+        await handleAction('remove', removeInputRef.current)
+
+      }} />
+    </InputWithButtonContainer>
+
+    {treeLayout.tree.root &&<div className='flex items-start flex-col justify-start gap-2'>
+      <h6 className='text-lg font-semibold'>Traversals:</h6>
+      <div className='z-[105] flex items-center justify-center gap-1 flex-wrap'>
+        
+          {traverseActions.current.map((action,i) => (
+            <ButtonAction className='cursor-pointer text-sm px-1' key={'traverse-action-' + action + i} onClick={async () => {
+              await handleTraverse(action)
+            }} title={action} action='read' isLoading={isAnimationRunning}/>
+          ))}
+        </div></div>}
+  </>
+  }
+
+  <InputWithButtonContainer key={'create-random-tree-action-bts'} makeResponsive={makeResponsive}>
+    <Input ref={randomTreeInputRef} placeholder="number" max={maxTreeSize} min={1} className="text-black w-24 text-center" type="number" />
+    <ButtonAction title="Create Random Tree" action='fill' isLoading={isAnimationRunning} onClick={async () => {
+      await handleAction('createRandomTree', randomTreeInputRef.current)
+    }} />
+  </InputWithButtonContainer>
+  
+  {treeLayout.tree.root && <ButtonAction title="Delete" action='delete' isLoading={isAnimationRunning} onClick={async () => {
+    clear()
+
+  }} />}
+</Section>
+</OperationsContainer>}
+        <div className='flex items-center justify-center gap-4'>
 
           <ConfigComponent available={!!treeLayout.tree.root && !isAnimationRunning} messageWhenNotAvailable="Tree is not created yet or animation is running">
             <div className='flex flex-col items-start justify-start'>
+              <div className='hidden tablet:block'>
               <p>Tree Size</p>
               <Input type="range" min={25} max={70} value={nodeSize} onChange={(e) => setNodeSize(parseInt(e.target.value))} />
+              </div>
               <SpeedComponent title="Animation Speed" speed={speed} setSpeed={handleSetSpeed} />
 
             </div>

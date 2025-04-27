@@ -20,16 +20,16 @@ function ButtonAction({ isLoading, onClick, title, className = '',action }: {
         }
     }, [isLoading])
     return (
-        <Button style={style} onClick={async () => {
+        <Button  style={style} onClick={async () => {
             onClick();
-        }} type="submit" className={cn("text-app-off-white font-bold tracking-wider text-xs tablet:text-sm p-0 px-3 py-1 min-w-12", className,{
+        }} type="submit" className={cn("text-app-off-white font-bold tracking-wider text-xs tablet:text-sm p-0 px-3 h-8 min-w-12", className,{
            'bg-app-bauhaus-green hover:bg-app-bauhaus-green/80': action ==='write',
            'bg-app-bauhaus-red hover:bg-app-bauhaus-red/80': action ==='delete',
-           'bg-app-bauhaus-yellow hover:bg-app-bauhaus-yellow/80': action ==='read',
+           'bg-app-bauhaus-yellow hover:bg-app-bauhaus-yellow/80 text-app-off-black': action ==='read',
            'bg-app-bauhaus-blue hover:bg-app-bauhaus-blue/80': action ==='search',
            'bg-app-bauhaus-orange hover:bg-app-bauhaus-orange/80': action ==='insert',
            'bg-app-bauhaus-indigo hover:bg-app-bauhaus-indigo/80': action ==='fill',
-        })} variant={"default"}>{title}</Button>
+        })} variant={"no-style"} size={"fit"}>{title}</Button>
     )
 }
 

@@ -32,7 +32,7 @@ export function PopOverComponent({
 
   const [_open, _setOpen] = useState(false);
   return (
-    <Popover onOpenChange={(e) => {
+    <Popover  onOpenChange={(e) => {
       if (!setOpen) {
         _setOpen(e)
         return;

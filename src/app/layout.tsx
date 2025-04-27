@@ -67,6 +67,7 @@ export default function RootLayout({
         <Toaster
 
           toastOptions={{
+            
 
             classNames: {
               error: 'bg-app-bauhaus-red text-white font-bold text-md',

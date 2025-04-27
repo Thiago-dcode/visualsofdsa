@@ -7,17 +7,21 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/h
 import TreeNode from '../../_classes/TreeNode'
 import { animate } from '@/lib/animations'
 import '@/entities/data-structures/non-linear/tree/animation.css'
+import useAnimation from '@/hooks/useAnimation'
 type Props<T extends TreeNode<Primitive>> = {
     node: T
     nodeShape: NodeShape,
     onInsertAnimation?: (node: T) => Promise<void>
 }
 function TreeNodeComponent<K extends TreeNode<Primitive>>({ node, nodeShape, onInsertAnimation }: Props<K>) {
+    const { focus } = useAnimation()
     const setRef = async (element: Ref) => {
 
         if (!element) return;
         node.ref = element
         if (onInsertAnimation && node.isLastAdd) await onInsertAnimation(node)
+
+        if (node.isRoot) focus(node.ref)
     }
 
     return (
@@ -28,9 +32,9 @@ function TreeNodeComponent<K extends TreeNode<Primitive>>({ node, nodeShape, onI
                 }} onMouseEnter={async () => {
 
                     if (node.ref) {
-                        
-                        await animate(node.ref, 'hover-node',0.5);
-                       
+
+                        await animate(node.ref, 'hover-node', 0.5);
+
                     }
                 }} ref={(ref) => {
                     setRef(ref)
@@ -39,7 +43,7 @@ function TreeNodeComponent<K extends TreeNode<Primitive>>({ node, nodeShape, onI
                     height: nodeShape.nodeHeight + 'px',
                     left: node.position.x + 'px',
                     top: node.position.y + 'px',
-                    zIndex: 1999
+                    zIndex: 95
                 }} className={cn('absolute border-2 dark:border-app-off-white border-app-off-black rounded-full dark:text-app-off-white text-app-off-black flex items-center justify-center font-semibold text-sm overflow-auto dark:bg-app-off-black bg-app-off-white', {
                     'text-xs': nodeShape.nodeWidth < 40,
                     'text-sm': nodeShape.nodeWidth >= 40 && nodeShape.nodeWidth <= 70,
@@ -48,7 +52,7 @@ function TreeNodeComponent<K extends TreeNode<Primitive>>({ node, nodeShape, onI
             </HoverCardTrigger>
             <HoverCardContent style={{
                 position: 'absolute',
-                zIndex: 2000,
+                zIndex: 96,
                 left: node.position.x + 'px',
                 top: (node.position.y + nodeShape.nodeHeight) + 'px',
             }} className="space-y-2">
