@@ -1,7 +1,0 @@
-Add steps taken to all data-structures and algorithms
-
-Implment implementation code on INFO.
-
-Fix responsive addin scroll actionContainer
-
-Custom http error page.

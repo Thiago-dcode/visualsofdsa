@@ -7,32 +7,7 @@ import { Primitive } from "@/types";
 import { useRef, useState } from "react";
 import useResponsive from "./useResponsive";
 const MAX_SIZE = 100;
-type Error = {
-  name: string;
-  description: string;
-};
-type Table = {
-  row: number;
-  col: number;
-};
-// export type Heap = {
-//   width: number;
-//   height: number;
-//   getNextFreePosition: () => {
-//     position: Position;
-//     memoryAddress: string;
-//   } | null;
-//   setNextFreePosition: (node: LinkedListNode<Primitive>) => void;
-//   freePositions: Queue<Primitive>;
-//   error: Error | null;
-//   free: () => void;
-//   size: number;
-//   freeSpace: number;
-//   malloc: (heapSize: number) => void;
-//   relloc: (size: number) => void;
-//   table: Table;
-//   device: ReturnType<typeof useResponsive>;
-// };
+
 
 export default function useHeap({
   nodeShape,

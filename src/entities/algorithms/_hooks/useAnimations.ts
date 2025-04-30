@@ -1,11 +1,11 @@
 import { animate } from "@/lib/animations";
 import { VisualizationArrays } from "@/types";
 import "../animation.css";
-import { useSoundAnimation} from "../../../hooks/useSoundAnimation";
+import { useSoundAnimation } from "../../../hooks/useSoundAnimation";
 import useBaseAnimation from "../../../hooks/useAnimation";
 export const useAnimation = (visualizationMode: VisualizationArrays) => {
-  const {animateSound} = useSoundAnimation();
-  const {focus} = useBaseAnimation()
+  const { animateSound } = useSoundAnimation();
+  const { focus } = useBaseAnimation()
   const getIndexRef = (ref: HTMLElement) =>
     ref.parentElement?.parentElement?.children[2] as HTMLElement;
 
@@ -19,14 +19,13 @@ export const useAnimation = (visualizationMode: VisualizationArrays) => {
     if (indexRef && visualizationMode === "memoryRam") {
       indexRef.style.visibility = "visible";
     }
-    focus(ref)
-    console.log(speed)
+    if (visualizationMode === 'memoryRam') focus(ref)
     await animate(
       ref,
       `${animation}-node`,
       speed,
       {
-        onAnimationEnds:  () => {
+        onAnimationEnds: () => {
           if (indexRef && visualizationMode === "memoryRam") {
             indexRef.style.visibility = "hidden";
           }
@@ -38,6 +37,6 @@ export const useAnimation = (visualizationMode: VisualizationArrays) => {
   return {
     animateNode,
     animateSound,
-    getIndexRef, 
+    getIndexRef,
   };
 };

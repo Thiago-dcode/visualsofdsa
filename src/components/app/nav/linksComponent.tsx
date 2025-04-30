@@ -23,7 +23,7 @@ export default function LinksComponent({ title, links, containerClassname, links
             'cursor-pointer': entity.link != '#',
             'opacity-50 hover:bg-transparent cursor-default pointer-events-none': !entity.enable || entity.link === '#',
 
-          })}><p className='tablet:text-lg font-semibold capitalize'>{entity.name}</p></Link>
+          })}><p className='tablet:text-lg font-semibold capitalize flex flex-col items-center justify-center'>{entity.name} {!entity.enable ? <span className='text-xs text-gray-400 italic'> (Coming Soon)</span> : null}</p></Link>
           {/* {LINKS.length - 2 === i && <p className="font-bold text-2xl">&</p>} */}
         </div>)
       })}

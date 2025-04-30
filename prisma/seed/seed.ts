@@ -1,5 +1,5 @@
-import { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
+import { Prisma } from "../app/generated/prisma/client";
+import { prisma as prismaClient } from "@/lib/prisma";
 import { buildDescription, linkBuilder } from "./utils";
 
 const dataStructureTypes: Prisma.DataStructureTypeCreateInput[] = [
@@ -9,6 +9,7 @@ const dataStructureTypes: Prisma.DataStructureTypeCreateInput[] = [
       "Linear Data Structures organize elements sequentially with direct predecessor-successor relationships, enabling efficient O(1) ACCESS patterns. Ideal for memory-efficient storage and real-world applications like queue operations, stack management, and array implementations. Common examples are linked lists where elements follow strict insertion order.",
     enable: true,
     link: "linear",
+    metaDescription: 'Linear Data Structures organize elements sequentially for efficient access and storage.',
   },
   {
     name: "non linear",
@@ -16,6 +17,7 @@ const dataStructureTypes: Prisma.DataStructureTypeCreateInput[] = [
       "Non-linear data structures manage complex hierarchical relationships through multi-dimensional connections, essential for graph algorithms and tree traversal systems. These network-based organizations enable efficient representation of social networks, file systems, and neural networks through structures like binary search trees and adjacency matrices, optimizing pathfinding and parent-child node operations.",
     enable: true,
     link: "non-linear",
+    metaDescription: 'Non-linear data structures manage complex hierarchical relationships for optimized operations.',
   }
 ];
 
@@ -26,6 +28,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
       "Search algorithms are methods used to find specific items within a data structure, such as an array, list, or tree. They are fundamental in computer science and are used in a wide range of applications, from databases to artificial intelligence.",
     enable: true,
     link: "search",
+    metaDescription: 'Search algorithms efficiently find specific items within data structures.',
   },
   {
     name: "sort",
@@ -33,19 +36,20 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
       "Sorting algorithms are methods used to arrange elements in a specific order (e.g., ascending or descending). They are essential for organizing data, improving search efficiency, and solving problems like finding duplicates or computing statistics.",
     enable: true,
     link: "sort",
+    metaDescription: 'Sorting algorithms arrange elements to improve data organization and search efficiency.',
   },
 ];
 (async () => {
-  await prisma.dataStructureType.deleteMany({});
-  await prisma.dataStructure.deleteMany({});
+    await prismaClient.dataStructureType.deleteMany({});
+    await prismaClient.dataStructure.deleteMany({});
 
-  const dataStrusture = 'data-structures'
+    const dataStrusture = 'data-structures'
   for (const type of dataStructureTypes) {
-    const result = await prisma.dataStructureType.create({ data: type });
+    const result = await prismaClient.dataStructureType.create({ data: type });
 
     switch (result.name) {
       case "linear":
-        await prisma.dataStructure.createMany({
+        await prismaClient.dataStructure.createMany({
           data: [
             {
               name: "stack",
@@ -88,6 +92,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                   'Memory management in operating systems'
                 ]
               }),
+              metaDescription: 'A Stack is a LIFO data structure used for managing nested operations and recursive algorithms.',
             },
             {
               name: "queue",
@@ -130,6 +135,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               }),
               enable: true,
               dataStructureTypeId: result.id,
+              metaDescription: 'A Queue is a FIFO data structure essential for managing ordered processes.',
             },
             {
               name: "static array",
@@ -172,6 +178,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               }),
               enable: true,
               dataStructureTypeId: result.id,
+              metaDescription: 'Static Arrays store elements in contiguous memory locations with fixed size for efficient access.',
             },
             {
               name: "Dynamic Array",
@@ -220,6 +227,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               }),
               enable: true,
               dataStructureTypeId: result.id,
+              metaDescription: 'Dynamic Arrays resize to accommodate more elements, ideal for variable-sized collections.',
             },
             {
               name: "Linked List",
@@ -262,6 +270,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               }),
               enable: true,
               dataStructureTypeId: result.id,
+              metaDescription: 'Linked Lists are dynamic data structures ideal for frequent insertions and deletions.',
             },
             {
               name: "Doubly Linked List",
@@ -304,12 +313,13 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               }),
               enable: true,
               dataStructureTypeId: result.id,
+              metaDescription: 'Doubly Linked Lists allow bidirectional traversal, enhancing efficiency for complex operations.',
             },
           ],
         });
         break;
       case "non linear":
-        await prisma.dataStructure.createMany({
+        await prismaClient.dataStructure.createMany({
           data: [
             {
               name: "binary search tree",
@@ -369,7 +379,27 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               }),
               enable: true,
               dataStructureTypeId: result.id,
+              metaDescription: 'Binary Search Trees enable efficient search, insertion, and deletion operations.',
             },
+            {
+              name: "AVL Tree",
+              link: "avl-tree",
+              metaDescription: 'An AVL Tree is a self-balancing binary search tree where the difference between heights of left and right subtrees cannot be more than one for all nodes.',
+              description: buildDescription({
+                description: 'An <b>AVL Tree</b> is a self-balancing binary search tree where the difference between heights of left and right subtrees cannot be more than one for all nodes.',
+              }),
+              enable: false,
+              dataStructureTypeId: result.id,
+            },
+            {
+              name: "Binary Heap",
+              link: "binary-heap",  
+              description: buildDescription({
+                description: 'A <b>Binary Heap</b> is a specialized tree-based data structure that satisfies the heap property: for any given node i, the parent node is greater than or equal to its children nodes (in a max heap) or less than or equal to its children nodes (in a min heap).',
+              }),
+              enable: false,
+              dataStructureTypeId: result.id,
+            }
           ],
         });
         break;
@@ -377,14 +407,14 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
         break;
     }
   }
-  await prisma.algorithmType.deleteMany({});
-  await prisma.algorithm.deleteMany({});
+  await prismaClient.algorithmType.deleteMany({});
+  await prismaClient.algorithm.deleteMany({});
   for (const type of algorithmsTypes) {
-    const result = await prisma.algorithmType.create({ data: type });
+    const result = await prismaClient.algorithmType.create({ data: type });
 
     switch (result.name) {
       case "search":
-        await prisma.algorithm.createMany({
+        await prismaClient.algorithm.createMany({
           data: [
             {
               name: "linear",
@@ -412,6 +442,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                   'Applicable in educational contexts to demonstrate basic search principles'
                 ]
               }),
+              metaDescription: 'Linear search is a straightforward method for finding elements in data structures.',
             },
             {
               name: "binary",
@@ -439,12 +470,13 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               }),
               enable: true,
               algorithmTypeId: result.id,
+              metaDescription: 'Binary search efficiently finds elements in sorted arrays by dividing the search interval.',
             },
           ],
         });
         break;
       case "sort":
-        await prisma.algorithm.createMany({
+        await prismaClient.algorithm.createMany({
           data: [
             {
               name: "bubble",
@@ -472,6 +504,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                 ]
               }),
               algorithmTypeId: result.id,
+              metaDescription: 'Bubble Sort is a simple algorithm that repeatedly swaps adjacent elements to sort a list.',
             },
             {
               name: "selection",
@@ -499,6 +532,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                 ]
               }),
               enable: true,
+              metaDescription: 'Selection Sort repeatedly selects the smallest element and swaps it to sort a list.',
             },
             {
               name: "insertion",
@@ -526,6 +560,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                   'Applicable in scenarios where simplicity and adaptability are preferred'
                 ]
               }),
+              metaDescription: 'Insertion Sort builds a sorted array one element at a time, ideal for small datasets.',
             },
             {
               name: "merge",
@@ -553,6 +588,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                   'Applicable in parallel processing and external sorting'
                 ]
               }),
+              metaDescription: 'Merge Sort divides and conquers to efficiently sort large datasets.',
             },
             {
               name: "quick",
@@ -580,7 +616,44 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                   'Applicable in systems where in-place sorting is required'
                 ]
               }),
+              metaDescription: 'Quick Sort partitions arrays around a pivot for efficient in-place sorting.',
             },
+            {
+              name:'Counting',
+              link: 'counting',
+              algorithmTypeId: result.id,
+              enable: false,
+              description: buildDescription({
+                description: 'Counting Sort is a <b>non-comparison-based sorting algorithm</b> that works by counting the number of occurrences of each element in the input array and then using this information to determine the positions of the elements in the sorted array.',
+              }),
+            },
+            {
+              name: 'Radix',
+              link: 'radix',
+              algorithmTypeId: result.id,
+              enable: false,
+              description: buildDescription({
+                description: 'Radix Sort is a <b>non-comparison-based sorting algorithm</b> that works by sorting the input array based on the digits of the elements. It uses a stable sorting algorithm to sort the elements based on each digit, starting from the least significant digit to the most significant digit.',
+              }),
+            },
+            {
+              name: 'Bucket',
+              link: 'bucket',
+              algorithmTypeId: result.id,
+              enable: false,
+              description: buildDescription({
+                description: 'Bucket Sort is a <b>non-comparison-based sorting algorithm</b> that works by dividing the input array into a number of buckets, sorting each bucket individually, and then concatenating the sorted buckets.',
+              }),
+            },
+            {
+              name:'Bogo',
+              link: 'bogo',
+              algorithmTypeId: result.id,
+              enable: false,
+              description: buildDescription({
+                description: 'Bogo Sort is a <b>non-comparison-based sorting algorithm</b> that works by sorting the input array in a way that the smallest elements are placed at the beginning of the array and the largest elements are placed at the end of the array.',
+              }), 
+            }
           ],
         });
         break;

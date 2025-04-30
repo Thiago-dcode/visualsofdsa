@@ -22,7 +22,7 @@ function ButtonAction({ isLoading, onClick, title, className = '',action }: {
     return (
         <Button  style={style} onClick={async () => {
             onClick();
-        }} type="submit" className={cn("text-app-off-white font-bold tracking-wider text-xs tablet:text-sm p-0 px-3 h-8 min-w-12", className,{
+        }} type="submit" className={cn("text-app-off-white font-bold tracking-wider text-xs tablet:text-sm p-0 px-3 h-8 ", className,{
            'bg-app-bauhaus-green hover:bg-app-bauhaus-green/80': action ==='write',
            'bg-app-bauhaus-red hover:bg-app-bauhaus-red/80': action ==='delete',
            'bg-app-bauhaus-yellow hover:bg-app-bauhaus-yellow/80 text-app-off-black': action ==='read',

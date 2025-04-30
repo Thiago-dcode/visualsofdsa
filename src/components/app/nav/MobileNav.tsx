@@ -37,7 +37,7 @@ export default function MobileNav({ links }: {
                   <AccordionTrigger iconSide='left' className={cn('gap-2 p-0 m-0 pb-1 border-b border-app-bg-black dark:border-app-off-white text-xl w-full font-semibold', {
                     'border-b-2 dark:border-app-bauhaus-blue border-app-bauhaus-blue': link.link === '/' + mainPage,
                   })}>
-                    <Link onClick={() => setOpen(false)} href={link.link} className='text-app-text-black dark:text-app-off-white'>{link.name}</Link>
+                    <Link onNavigate={() => setOpen(false)} href={link.link} className='text-app-text-black dark:text-app-off-white'>{link.name}</Link>
                   </AccordionTrigger>
                   <AccordionContent className='m-0 capitalize w-full p-1'>
                     {link.children?.map((child, i) => {
@@ -47,11 +47,14 @@ export default function MobileNav({ links }: {
                           {child.children?.map((child, i) => {
                             const childPage = child.link.split('/')[3]
                             return <li key={`${child.link}-${i}`} className='w-full flex items-center gap-1 justify-start '>
-                              <Dot className='w-6 h-6' />   <Link onClick={() => setOpen(false)} href={child.link} className={cn(
+                              <Dot className='w-6 h-6' />   <Link onNavigate={() => {
+                                if (child.enable || childPage !== entityPage) setOpen(false)
+                              }} href={child.enable  ? child.link : '#'} className={cn(
                                 'text-app-text-black dark:text-app-off-white  w-full font-semibold text-sm', {
                                 'dark:text-app-bauhaus-blue text-app-bauhaus-blue': childPage === entityPage,
+                                'cursor-not-allowed pointer-events-none opacity-50': !child.enable
                               }
-                              )}>{child.name}</Link>
+                              )}>{child.name}{!child.enable ? <span className='text-xs text-gray-400 italic'> (Coming Soon)</span> : null}</Link>
                             </li>
                           })}
                         </ul>

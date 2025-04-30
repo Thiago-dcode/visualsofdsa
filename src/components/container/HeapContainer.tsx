@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useRef } from 'react'
 import { Heap } from '@/hooks/useHeap'
 import Info from '../ui/info';
 import { Dot } from 'lucide-react';
@@ -7,25 +7,50 @@ import { Input } from '../ui/input';
 import InputWithButtonContainer from './InputWithButtonContainer';
 import Section from './Section';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/useToast';
+
 function HeapContainer({ heap, children, loading }: {
     heap: Heap,
     children: ReactNode,
     loading: boolean,
 
 }) {
-    const [mallocSize, setMallocSize] = useState(0);
-    const [rellocSize, setRellocSize] = useState(0);
+    const { toastInfo } = useToast()
+    const inputRef = useRef<HTMLInputElement>(null);
+
     const { width, height, size: heapSize, malloc, relloc, free } = heap;
-    useEffect(() => {
-        setRellocSize(0)
-        setMallocSize(heapSize)
-    }, [heapSize])
+
+    const getInputValue = () => {
+        if (!inputRef.current) return 0;
+        const n = Number.parseInt(inputRef.current.value);
+        if (isNaN(n) || n < 0 || n > 100) {
+            toastInfo('Please enter a valid number between 0 and 100')
+            return null;
+        };
+        return n;
+    }
+    const clearInput = () => {
+        if (!inputRef.current) return;
+        inputRef.current.value = '';
+    }
+    const handleMalloc = () => {
+        const value = getInputValue();
+        if (value === null) return;
+        malloc(value)
+        clearInput()
+    }
+    const handleRelloc = () => {
+        const value = getInputValue();
+        if (value === null) return;
+        relloc(value)
+        clearInput()
+    }
     return (
         <section >
 
-            <Section  style={{
+            <Section style={{
                 width: !heapSize ? '100%' : width + 'px',
-            }} className={cn('self-start flex-row flex items-start justify-between gap-5   mb-2',{
+            }} className={cn('self-start flex-row flex items-start justify-between gap-5   mb-2', {
                 'opacity-25': loading
             })}>
                 <div className=' flex items-center gap-2'>
@@ -87,34 +112,14 @@ function HeapContainer({ heap, children, loading }: {
                 </div>
                 <div className='self-end flex items-center gap-2 relative'>
                     {heapSize <= 0 ? <InputWithButtonContainer key={'linkedList-add-action'}>
-                        <Input value={mallocSize} placeholder="index" onChange={(e) => {
-                            const n = Number.parseInt(e.target.value);
-                            if (isNaN(n) || n < 0 || n > 100) {
-                                return;
-                            };
-                            setMallocSize(n)
+                        <Input className='phone:w-24 w-20' ref={inputRef} placeholder="index" type="number" min={0} max={100} />
 
-                        }} type="number" min={0} max={100} />
-
-                        <ButtonAction title="malloc" action='write' isLoading={loading} onClick={() => {
-                            malloc(mallocSize)
-                        }} />
+                        <ButtonAction title="malloc" action='write' isLoading={loading} onClick={handleMalloc} />
 
                     </InputWithButtonContainer> : <Section className='relative  self-end'><InputWithButtonContainer key={'linkedList-add-action'}>
-                        <Input value={rellocSize} placeholder="index" onChange={(e) => {
-                            if (loading) return;
-                            const n = Number.parseInt(e.target.value);
-                            if (isNaN(n) || n < 0 || n > 100) {
-                                return;
-                            };
-                            setRellocSize(n)
+                        <Input className='phone:w-24 w-20' ref={inputRef} placeholder="index" type="number" min={0} max={100} />
 
-                        }} type="number" min={0} max={100} />
-
-                        <ButtonAction title="Relloc" action='fill' isLoading={loading} onClick={() => {
-                            if (loading) return;
-                            relloc(rellocSize)
-                        }} />
+                        <ButtonAction title="Relloc" action='fill' isLoading={loading} onClick={handleRelloc} />
 
                     </InputWithButtonContainer>
                         <ButtonAction title="Free" action='delete' isLoading={loading} onClick={() => {

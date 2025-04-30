@@ -42,9 +42,8 @@ export default function LinkItemComponent({ link, icon, isFirstLvl, pathMatch }:
     return (<div className={cn(' flex items-center justify-between  w-full', {
         'border-b-2 dark:border-b-app-off-white border-b-app-off-black  rounded-none': isFirstLvl && pathMatch,
 
-
     })}><Button className={cn("px-1 py-2 h-auto w-full", {
-        'cursor-not-allowed dark:text-app-off-white/50 text-app-off-black/50 ': !link.enable,
+        'cursor-not-allowed dark:text-app-off-white-50 text-app-off-black-50 ': !link.enable,
         'cursor-default': link.enable && link.link === '#'
     })} variant={'no-style'} onClick={() => {
         if (!link.enable || link.link === '#') return;
@@ -55,7 +54,7 @@ export default function LinkItemComponent({ link, icon, isFirstLvl, pathMatch }:
                 'uppercase': isFirstLvl,
                 'capitalize': !isFirstLvl
 
-            })}> {link.name}  {getIcon()} </span>
+            })}> {link.name} {!link.enable ? <span className='text-xs text-gray-400 italic'> (Coming Soon)</span> : getIcon()} </span>
         </Button>
 
 

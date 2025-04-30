@@ -16,6 +16,13 @@ class AlgorithmService extends BaseService {
       },
     });
   }
+  async getMetaDescription(link: string) {
+    const algorithm = await this.client.algorithm.findUnique({
+      where: { link },
+      select: { metaDescription: true },
+    });
+    return algorithm?.metaDescription ?? null;
+  }
   async getAllTypesSimple() {
     return await this.client.algorithmType.findMany({
       select: {

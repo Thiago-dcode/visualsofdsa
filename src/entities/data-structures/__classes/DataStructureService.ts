@@ -8,6 +8,13 @@ class DataStructureService extends BaseService {
       },
     });
   }
+  async getMetaDescription(link: string) {
+    const dataStructure = await this.client.dataStructure.findUnique({
+      where: { link },
+      select: { metaDescription: true },
+    });
+    return dataStructure?.metaDescription ?? null;
+  }
   async getAllTypes() {
     return await this.client.dataStructureType.findMany({
       include: {

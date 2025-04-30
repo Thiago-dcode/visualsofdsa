@@ -6,4 +6,5 @@ export default abstract class BaseService {
   abstract getOneByLink(link: string): Promise<EntityBase | null>;
   abstract getAllTypes(): Promise<EntityType[]>;
   abstract getAllTypesSimple(): Promise<EntityTypeSimple[]>;
+  abstract getMetaDescription(link: string): Promise<string | null>;
 }

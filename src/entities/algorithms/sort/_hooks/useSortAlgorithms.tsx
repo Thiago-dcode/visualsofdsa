@@ -2,7 +2,7 @@ import Node from "@/entities/data-structures/linear/_classes/Node";
 import { Direction, speed, VisualizationArrays } from "@/types";
 import { SortAlgorithms } from "../_classes/SortAlgorithms";
 import { ClosureCompare, ClosureSlice } from "../types";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useState } from "react";
 import { getMaxInAnArrayOfNodes, getMinInAnArrayOfNodes } from "@/lib/utils";
 import { useAnimationSort } from "./useAnimationSort";
 import { AlgoSortType } from "../../types";

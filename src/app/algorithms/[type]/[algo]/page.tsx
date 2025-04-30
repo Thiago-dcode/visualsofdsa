@@ -3,22 +3,24 @@ import PageHeaderTitle from "@/components/app/page/pageHeaderTitle";
 import AlgorithmService from "@/entities/algorithms/__classes/AlgorithmService";
 import { AlgoSearchType, AlgoSortType } from "@/entities/algorithms/types";
 import { appMetadata } from "@/lib/metadata";
+import { capitalize } from "@/lib/utils";
 import { Metadata, } from "next";
 import dynamic from "next/dynamic";
 import { notFound, redirect } from "next/navigation";
 
 type Props = {
-    params: Promise<{ type: string,algo:string }>
-  }
-   
-  export async function generateMetadata(
+    params: Promise<{ type: string, algo: string }>
+}
+
+export async function generateMetadata(
     { params }: Props
-  ): Promise<Metadata> {
+): Promise<Metadata> {
     // read route params
-    const { type,algo } = await params;
-    return appMetadata({title:` ${algo} ${type} algorithm`, description:`Display info about ${algo} ${type} data structure`})
-  }
-export default async function AlgorithmsPage({ params }: { params:Promise<{ type: string,algo:string }> }) {
+    const { type, algo } = await params;
+    const metaDescription = await AlgorithmService.getMetaDescription(algo);
+    return appMetadata({ title: `${capitalize(algo)} ${capitalize(type)} algorithm visualizer`, description: metaDescription ?? `Display info about ${algo} ${type} algorithm` })
+}
+export default async function AlgorithmsPage({ params }: { params: Promise<{ type: string, algo: string }> }) {
 
     const _params = await params;
     const typeParam = _params.type.toLocaleLowerCase();
@@ -65,7 +67,7 @@ export default async function AlgorithmsPage({ params }: { params:Promise<{ type
     return (
 
         <>
-            <PageHeaderTitle info={algo.description || ''} title={algo.name + ' ' + typeParam } />
+            <PageHeaderTitle info={algo.description || ''} title={algo.name + ' ' + typeParam} />
             {view}
         </>
     );

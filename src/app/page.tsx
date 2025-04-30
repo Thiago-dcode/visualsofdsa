@@ -5,7 +5,7 @@ import { LINKS } from "@/lib/links";
 import { appMetadata } from "@/lib/metadata";
 
 
-export const metadata = appMetadata({title:'Learn data structures and algorithms with interactive visualizations'});
+export const metadata = appMetadata({title:'Visuals of DSA - Learn data structures and algorithms with interactive visualizations'});
 
 const ARTICLES = [
   {
