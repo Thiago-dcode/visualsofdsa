@@ -154,7 +154,7 @@ export default function SortView({ type }: {
 
 
         </Section> : <Section className='gap-2 w-full'>
-          {!isSorted && <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'ascending' ? false : true} onCheckedChange={() => {
+          {!isSorted && <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch checked={direction === 'ascending' ? false : true} onCheckedChange={() => {
             toggleDirection()
           }} /></div>}
           <ButtonAction title="Sort" action='read' isLoading={isAnimationRunning} onClick={async () => {

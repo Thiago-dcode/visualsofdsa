@@ -38,10 +38,12 @@ export default function SearchView({ type }: {
   const { toastWarning } = useToast()
   const inputRef = useRef<HTMLInputElement | null>(null);
   const toggleSorted = () => {
+    if (isAnimationRunning) return;
     setSorted(prev => !prev)
   }
 
   const toggleDirection = () => {
+    if (isAnimationRunning) return;
     setDirection(prev => prev === 'ascending' ? 'descending' : 'ascending')
   }
   const handleSearch = async () => {
@@ -112,10 +114,10 @@ export default function SearchView({ type }: {
       <OperationsContainer>
         {!array ? <Section>
           <div className='self-center flex items-center gap-3'>
-            {type === 'linear' && <div className='flex self-center gap-2 items-center'>   <p>Sorted?</p><Switch defaultChecked={sorted} onCheckedChange={() => {
+            {type === 'linear' && <div className='flex self-center gap-2 items-center'>   <p>Sorted?</p><Switch checked={sorted} onCheckedChange={() => {
               toggleSorted()
             }} /></div>}
-            {sorted && <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch defaultChecked={direction === 'ascending' ? false : true} onCheckedChange={() => {
+            {sorted && <div className='flex self-center gap-2 items-center'> <p>Direction?</p><Switch checked={direction === 'ascending' ? false : true} onCheckedChange={() => {
               toggleDirection()
             }} /></div>}
           </div>
