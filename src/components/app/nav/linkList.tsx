@@ -49,7 +49,7 @@ export default function LinkList({ link, isFirstLvl, isLast = false }: {
                         }}>
                             <div className="text-nowrap flex items-center justify-between w-full  gap-2 tablet:gap-4">
                                 <LinkItemComponent onNavigate={onNavigate} isLast={isLast} pathMatch={pathMatch} isFirstLvl={isFirstLvl} icon={icon} link={link} />
-                                <HoverCardTrigger className="cursor-pointer">
+                                <HoverCardTrigger href="#" className="cursor-pointer">
                                     {icon}
                                 </HoverCardTrigger>
                             </div>

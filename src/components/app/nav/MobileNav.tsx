@@ -22,7 +22,7 @@ export default function MobileNav({ links }: {
   return (
     <div className='phone:hidden'>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild className='cursor-pointer'>
+        <SheetTrigger  asChild className='cursor-pointer'>
           <SquareMenu className='w-7 h-7' />
         </SheetTrigger>
 
