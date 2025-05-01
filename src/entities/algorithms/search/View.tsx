@@ -35,7 +35,7 @@ export default function SearchView({ type }: {
   const [sorted, setSorted] = useState(type === 'binary');
   const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray('bars');
   const { binary, linear, message, clearMessage } = useSearchAlgorithm(array as Node<number>[] | null, sorted, direction, speed, visualizationMode);
-  const {toastWarning} = useToast()
+  const { toastWarning } = useToast()
   const inputRef = useRef<HTMLInputElement | null>(null);
   const toggleSorted = () => {
     setSorted(prev => !prev)
@@ -46,7 +46,7 @@ export default function SearchView({ type }: {
   }
   const handleSearch = async () => {
     const searchValue = getValue();
-    if (searchValue === null || isAnimationRunning) return;
+    if (searchValue === null) return;
     setAnimationRunning(true);
     switch (type) {
       case 'linear':
@@ -65,7 +65,7 @@ export default function SearchView({ type }: {
 
   }
   const getValue = () => {
-    if (!inputRef.current) return null;
+    if (!inputRef.current || isAnimationRunning) return null;
     const value = parseInt(inputRef.current.value);
 
     if (!value || isNaN(value)) {
@@ -85,7 +85,7 @@ export default function SearchView({ type }: {
     setAnimationRunning(true);
     switch (type) {
       case 'linear':
-         !sorted ? await createUnsorted(arraySize) : await createSorted(arraySize, direction);
+        !sorted ? await createUnsorted(arraySize) : await createSorted(arraySize, direction);
         break;
       case 'binary':
         await createSorted(arraySize, direction)

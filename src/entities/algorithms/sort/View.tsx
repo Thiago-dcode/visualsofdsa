@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch'
 import ButtonAction from '@/entities/data-structures/linear/_components/ButtonAction'
 import useStaticArray from '@/entities/data-structures/linear/static-array/hooks/useStaticArray'
 import { Direction, } from '@/types'
-import React, {useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import Node from '@/entities/data-structures/linear/_classes/Node'
 import { PopOverComponent } from '@/components/ui/PopOverComponent'
@@ -29,21 +29,21 @@ import { useToast } from '@/hooks/useToast'
 export default function SortView({ type }: {
   type: AlgoSortType
 }) {
-  
+
   const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500)
   const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
   const [direction, setDirection] = useState<Direction>('ascending')
   const [open, setOpen] = useState(false);
   const { speed, handleSetSpeed } = useSpeed(1, config.localStorageKeys.speed.sort)
   const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray('bars', async (vimValue) => {
-    await handleResetAction(false,type === 'merge')
+    await handleResetAction(false, type === 'merge')
   });
   const { bubble, selection, insertion, merge, quick, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>(undefined);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const {toastInfo} = useToast();
+  const { toastInfo } = useToast();
 
-  const device = useResponsive((e,device,sizeChanged) => {
+  const device = useResponsive((e, device, sizeChanged) => {
     // //Every time the screen size is updated, will reset the array
     // if(sizeChanged.width){
     //   reset();
@@ -53,7 +53,7 @@ export default function SortView({ type }: {
     return device.twResponsive.phone ? 400 : 650
   }, [device])
 
-  const handleResetAction = async (showToast: boolean = true,skip: boolean = false) => {
+  const handleResetAction = async (showToast: boolean = true, skip: boolean = false) => {
     if (!skip && !isSorted) {
       if (showToast) toastInfo('Array does not need to be reset, sort it first');
       return;
@@ -67,6 +67,7 @@ export default function SortView({ type }: {
     }
   }
   const handleSort = async () => {
+    if (isAnimationRunning) return;
     setOpen(false);
     setAnimationRunning(true);
     if (isSorted) {
@@ -96,7 +97,7 @@ export default function SortView({ type }: {
 
   }
   const getValue = () => {
-    if (!inputRef.current) return null;
+    if (!inputRef.current || isAnimationRunning) return null;
     const value = parseInt(inputRef.current.value);
 
     if (!value || isNaN(value)) {
@@ -114,16 +115,15 @@ export default function SortView({ type }: {
   }
   const handleCreateAction = async () => {
 
-    setAnimationRunning(true);
     const arraySize = getValue();
+    setAnimationRunning(true);
     if (arraySize !== null) createUnsorted(arraySize);
-
-
     setAnimationRunning(false)
     resetValue();
 
   }
   const toggleDirection = () => {
+    if (isAnimationRunning) return;
     setDirection(prev => prev === 'ascending' ? 'descending' : 'ascending');
   }
   const reset = () => {
