@@ -15,7 +15,7 @@ function PageHeaderTitle({ title, info }: Props) {
     const { isAnimationRunning } = useAnimationRunning()
 
     return (
-        <div className={cn('flex flex-col w-full items-start justify-start ', {
+        <div className={cn('flex flex-col w-full items-start justify-start py-2 ', {
             'opacity-25': isAnimationRunning
         })}>
 

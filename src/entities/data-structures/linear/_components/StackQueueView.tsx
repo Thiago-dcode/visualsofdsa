@@ -17,16 +17,13 @@ import Properties from "@/components/app/Properties";
 import Stack from "../stack/classes/Stack";
 import { random } from "@/lib/utils";
 import ConfigComponent from "@/components/app/ConfigComponent";
-import useResponsive from "@/hooks/useResponsive";
-const MAX_WIDTH = 600
-const StackQueueView = ({ linearDsName }: { linearDsName: 'stack' | 'queue' }) => {
-  const { width } = useResponsive((e, device) => {
-      setConfig('width',device.width < MAX_WIDTH ? device.width - 50: MAX_WIDTH/1.5)
 
-  })
+
+const StackQueueView = ({ linearDsName }: { linearDsName: 'stack' | 'queue' }) => {
+ 
   const { current: StackOrQueue } = useRef(linearDsName === 'stack' ? new Stack() : new Queue())
   const { isAnimationRunning, setAnimationRunning } = useAnimationRunning()
-  const { linearDs, add, remove, peek, nodeArray, isStackOverFlow, flush, config, setConfig, handleAddAnimation, handleFillerAnimation, fill, dismissFillerToast, empty } = UseLinear(StackOrQueue)
+  const { linearDs, add, remove, peek, nodeArray, isStackOverFlow, flush, config, setConfig, handleAddAnimation, handleFillerAnimation, fill, dismissFillerToast, empty, maxWidth } = UseLinear(StackOrQueue)
   const [nodeData, setNodeData] = useState('');
   const _handleAddAnimation = useCallback(async (node: Node<Primitive>) => {
     await handleAddAnimation(node)
@@ -105,16 +102,16 @@ const StackQueueView = ({ linearDsName }: { linearDsName: 'stack' | 'queue' }) =
         }} />
 
         <ConfigComponent available={!isStackOverFlow && !isAnimationRunning} messageWhenNotAvailable="Animation is running or isStackOverFlow ">
-          <LinearDsConfig maxWidth={Math.min(width - 50, MAX_WIDTH)} config={config} setConfig={setConfig} stack={linearDs} />
+          <LinearDsConfig maxWidth={maxWidth} config={config} setConfig={setConfig} stack={linearDs} />
         </ConfigComponent>
 
       </div>
 
-      <LinearDsContainer width={config.width} linearDs={linearDs} >
+      <LinearDsContainer width={config.width} height={config.height} listName={linearDs.name} >
         {
           nodeArray && nodeArray.map((node, i) => {
-            return (
-              <StackQueueComponent linearDsName={linearDsName} handleAddAnimation={_handleAddAnimation} handleFillerAnimation={_handleFillerAnimation} height={linearDs.nodeHeight} linearDs={linearDs} key={'stackNode-' + i + '-' + node.data + '-' + node.id} node={node} id={i} />
+              return (
+                <StackQueueComponent linearDsName={linearDsName} handleAddAnimation={_handleAddAnimation} handleFillerAnimation={_handleFillerAnimation} height={linearDs.nodeHeight} linearDs={linearDs} key={'stackNode-' + i + '-' + node.data + '-' + node.id} node={node} id={i} />
             )
           })
         }

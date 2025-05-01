@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import LinearDs from "../_classes/LinearDs";
 import { Primitive, speed } from "@/types";
 import UseLinearDsAnimation from "./UseLinearDsAnimation";
@@ -8,6 +8,8 @@ import { useSpeed } from "@/hooks/useSpeed";
 import { config as appConfig } from "@/config";
 import { random } from "@/lib/utils";
 import LinkedListNode from "../linked-list/classes/LinkedListNode";
+import useResponsive from "@/hooks/useResponsive";
+const MAX_WIDTH = 600
 function UseLinear(linearDs: LinearDs<Primitive>) {
   const { speed, handleSetSpeed } = useSpeed(
     linearDs.speed,
@@ -16,8 +18,13 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
   const [config, _setConfig] = useState({
     maxSize: linearDs.maxSize,
     width: linearDs.width,
+    height: (linearDs.nodeHeight + linearDs.nodeHeightSpacing) * linearDs.maxSize,
     speed,
   });
+  const { width, height } = useResponsive((e, device, sizeChanged) => {
+    if (sizeChanged.width) setConfig('width', device.width < MAX_WIDTH ? device.width - 50 : MAX_WIDTH / 1.5)
+
+  })
   const {
     handlePeekAnimation,
     handleRemoveAnimation,
@@ -25,7 +32,7 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
     handleFillerAnimation,
     handleEmptyAnimation,
     handleMoveNodesAnimation,
-  } = UseLinearDsAnimation(linearDs, config.speed);
+  } = UseLinearDsAnimation(linearDs, config.speed, config.height > height);
   const [nodeArray, _setNodeArray] = useState<
     LinkedListNode<Primitive>[] | null
   >(null);
@@ -38,12 +45,17 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
   };
   const setConfig = useCallback(
     (key: keyof typeof config, value: number) => {
-      _setConfig({ ...config, [key]: value });
+      const _config = { ...config, [key]: value };
+
       if (key === "speed") handleSetSpeed(value as speed);
       if (key === "maxSize") {
         flush();
-        linearDs.maxSize = value};
+        linearDs.maxSize = value
+        _config.height = (linearDs.nodeHeight + linearDs.nodeHeightSpacing) * linearDs.maxSize
+      };
+      _setConfig(_config);
     },
+
     [config]
   );
   const setNodeArray = () => {
@@ -86,11 +98,11 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
     if (remainingSpace <= 0) {
       if (remainingSpace === 0) {
         await empty();
-         callbackWhenFull();
+        callbackWhenFull();
       }
       return;
     }
-    toastFillerId.current = toast.loading(`Filling ${linearDs?.name}`,{
+    toastFillerId.current = toast.loading(`Filling ${linearDs?.name}`, {
       position: "top-center",
     });
     for (let i = 0; i < remainingSpace; i++) {
@@ -110,9 +122,9 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
   };
   const empty = useCallback(async () => {
     if (!nodeArray) return;
-    const toastId = toast.loading(`Emptying ${linearDs?.name}`,{
+    const toastId = toast.loading(`Emptying ${linearDs?.name}`, {
       position: "top-center",
-      
+
     },);
     await handleEmptyAnimation(nodeArray);
     linearDs.flush();
@@ -135,6 +147,8 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
     config,
     setConfig,
     dismissFillerToast,
+    maxWidth: Math.min(width - 50, MAX_WIDTH),
+
   };
 }
 

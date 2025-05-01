@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import React, { ReactNode } from 'react'
 
-export default function Title({ title, xls, h,uppercase = true, italic = false, bold, className }: {className?:string, uppercase?: boolean,italic?: boolean, title: string|ReactNode, xls?: -1|0 | 1 | 2 | 3 | 4 | 5, h?: 0 | 1 | 2 | 3 | 4 | 5 | 6, bold?: 0 | 1 | 2 | 3 | 4 | 5 }) {
+export default function Title({ title, xls, h,uppercase = true, italic = false, bold, className }: {className?:string, uppercase?: boolean,italic?: boolean, title: string|ReactNode, xls?: -1|0 | 1 | 2 | 3 | 4 | 5 | 6 |7, h?: 0 | 1 | 2 | 3 | 4 | 5 | 6, bold?: 0 | 1 | 2 | 3 | 4 | 5 }) {
 
   const fontSize = () => {
     switch (xls) {
@@ -19,6 +19,10 @@ export default function Title({ title, xls, h,uppercase = true, italic = false, 
         return 'text-3xl phone:text-4xl'
       case 5:
         return 'text-4xl phone:text-5xl'
+      case 6:
+        return 'text-5xl phone:text-6xl'
+      case 7:
+        return 'text-6xl phone:text-7xl'
       default:
         return 'text-lg phone:text-2xl';
     }

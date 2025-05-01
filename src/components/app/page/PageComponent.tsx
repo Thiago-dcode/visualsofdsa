@@ -16,9 +16,9 @@ export default function PageComponent({ entityTypes, entityParent, title, descri
 }) {
 
     return (
-        <section className='w-full flex flex-col items-center justify-center  gap-4'>
+        <section className='w-full flex flex-col items-center justify-center  gap-8 phone:pt-8 pt-6'>
             <div className="flex flex-col items-center justify-center w-full text-center">
-                <Title h={1} xls={4} title={title} />
+                <Title h={1} xls={5} title={title} />
             </div>
 
             <div className="flex flex-col gap-14 items-center justify-center max-w-[1400px]">

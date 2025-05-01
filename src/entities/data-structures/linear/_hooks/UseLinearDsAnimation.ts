@@ -6,7 +6,7 @@ import Node from "../_classes/Node";
 import "../animation.css";
 import LinkedListNode from "../linked-list/classes/LinkedListNode";
 import useAnimation from "@/hooks/useAnimation";
-const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
+const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed, isOverflow=false) => {
   const { focus } = useAnimation()
   const getSpeed = () => {
     switch (speed) {
@@ -28,7 +28,7 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
   ): Promise<boolean> => {
     const ref = node.ref;
     if (!ref) return false;
-    focus(ref)
+    if(isOverflow)focus(ref)
     return await animate(
       ref,
       `add-node-linear`,
@@ -57,7 +57,7 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
         (linearDs.nodeHeightSpacing + linearDs.nodeHeight) +
         50
         : linearDs.beginner;
-    focus(ref)
+    if(isOverflow)focus(ref)
     return await animate(
       ref,
       `remove-node-linear`,
@@ -108,7 +108,7 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed) => {
     node: Node<Primitive>,
     onAnimationEnds: ((e: AnimationEvent) => void) | null = null
   ): Promise<boolean> => {
-    focus(node.ref)
+    if(isOverflow)focus(node.ref)
     return await animate(node.ref, `peek-node-linear`, getSpeed() * 1.1, {
       onAnimationEnds
     });
