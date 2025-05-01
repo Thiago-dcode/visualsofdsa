@@ -11,23 +11,23 @@ const ARTICLES = [
   {
     title: 'Why You Should Learn Data Structures and Algorithms',
     description: <p>
-      Mastering Data Structures and Algorithms (DSA) is <b className="font-bold text-xl text-app-bauhaus-red dark:text-app-bauhaus-yellow">essential for writing efficient code and acing technical interviews</b>. Just like understanding car mechanics helps drivers handle emergencies, DSA knowledge empowers developers to optimize performance and solve complex problems. With<b className="font-bold text-xl text-app-bauhaus-green"> 75% of FAANG interviews focusing on DSA concepts</b> , these fundamentals are your key to unlocking high-paying software engineering roles and building scalable applications.
+      Mastering Data Structures and Algorithms (DSA) is <b className="font-bold text-xl text-app-bauhaus-blue">essential for writing efficient code and acing technical interviews</b>. Just like understanding car mechanics helps drivers handle emergencies, DSA knowledge empowers developers to optimize performance and solve complex problems. With<b className="font-bold text-xl text-app-bauhaus-blue"> 75% of FAANG interviews focusing on DSA concepts</b> , these fundamentals are your key to unlocking high-paying software engineering roles and building scalable applications.
     </p>
   },
   {
     title: 'Why Computer Science Concepts Are Hard to Learn',
     description: <p>
-      Computer science challenges learners because <b className="font-bold text-xl text-app-bauhaus-red dark:text-app-bauhaus-yellow">critical processes occur at the binary level</b> - invisible to the naked eye. Imagine learning automotive engineering without ever seeing an engine&apos;s internal workings. DSA concepts like memory allocation and algorithmic complexity become abstract theoretical concepts rather than tangible systems. This visualization gap creates a steep <b className="font-bold text-xl text-app-bauhaus-green">learning curve for 68% of CS students </b>  according to ACM research.
+      Computer science challenges learners because <b className="font-bold text-xl text-app-bauhaus-blue">critical processes occur at the binary level</b> - invisible to the naked eye. Imagine learning automotive engineering without ever seeing an engine&apos;s internal workings. DSA concepts like memory allocation and algorithmic complexity become abstract theoretical concepts rather than tangible systems. This visualization gap creates a steep <b className="font-bold text-xl text-app-bauhaus-blue">learning curve for 68% of CS students </b>  according to ACM research.
     </p>
   },
   {
     title: "How to Master DSA Effectively",
     description: <div className="flex flex-col items-start justify-start gap-2">
       <p>
-        Effective DSA learning requires <b className="font-bold text-xl text-app-bauhaus-red dark:text-app-bauhaus-yellow">both conceptual understanding and practical implementation</b>. Just as mechanics need blueprints before repairing engines, developers must visualize data flows before coding. Our interactive platform acts as an X-ray machine for algorithms, revealing the hidden machinery of stacks, queues, and traversal methods.
+          Effective DSA learning requires <b className="font-bold text-xl text-app-bauhaus-blue">both conceptual understanding and practical implementation</b>. Just as mechanics need blueprints before repairing engines, developers must visualize data flows before coding. Our interactive platform acts as an X-ray machine for algorithms, revealing the hidden machinery of stacks, queues, and traversal methods.
       </p>
       <p>
-        <b>VISUALS OF DSA</b> transforms abstract concepts into engaging visual simulations,<b className="font-bold text-xl text-app-bauhaus-green"> helping 82% of users grasp complex topics faster</b> (2023 user survey). Through hands-on exploration of sorting algorithms and graph traversals, you&apos;ll build the problem-solving muscle memory needed for coding interviews and real-world software development.
+        <b>VISUALS OF DSA</b> transforms abstract concepts into engaging visual simulations,<b className="font-bold text-xl text-app-bauhaus-blue"> helping 82% of users grasp complex topics faster</b> (2023 user survey). Through hands-on exploration of sorting algorithms and graph traversals, you&apos;ll build the problem-solving muscle memory needed for coding interviews and real-world software development.
       </p>
     </div>
   }
@@ -37,7 +37,7 @@ export default function Home() {
 
     <section className="flex flex-col w-full phone:gap-10 gap-6 items-center justify-center">
       <header className="flex flex-col items-center justify-center gap-2">
-        <Title xls={5} h={1} title={<>VISUALS OF <span className="text-app-bauhaus-red">D</span><span className="text-app-bauhaus-green">S</span><span className="text-app-bauhaus-yellow">A</span></>} />
+        <Title xls={5} h={1} title={<>VISUALS OF <span className="text-app-bauhaus-red">D</span><span className="text-app-bauhaus-blue">S</span><span className="text-app-bauhaus-yellow">A</span></>} />
         <div className=" px-2 italic text-center">
           <Title xls={3} h={2} bold={1} uppercase={false} title="A visual representation of data structures and algorithms " />
         </div>
