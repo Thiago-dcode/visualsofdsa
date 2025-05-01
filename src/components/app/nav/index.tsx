@@ -29,7 +29,7 @@ async function Nav() {
     _LINKS[1].children = formatToLinkItem('algorithms', algoTypes)
     return (
       <>
-        <div className='hidden phone:flex flex-row items-center justify-center gap-4 p-2'>
+        <div className='hidden phone:flex flex-row items-center justify-center gap-4 tablet:gap-8 p-2'>
 
 
             {_LINKS.map((link, i) => {

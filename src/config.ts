@@ -33,7 +33,7 @@ export const config = {
     theme: "vod_theme",
     muted: "vod_muted",
   },
-  darkModeModal: 'dark:bg-black/75 bg-white/75 text-app-text-black dark:text-app-off-white border-2 border-app-bg-black dark:border-app-off-white',
+  darkModeModal: 'dark:bg-app-off-black bg-app-off-white text-app-text-black dark:text-app-off-white border-2 border-app-bg-black dark:border-app-off-white',
   darkModeTailwind:
     "text-app-off-black bg-app-off-white  dark:text-app-off-white dark:bg-app-off-black dark:border-app-off-white border-app-off-black",
 };
