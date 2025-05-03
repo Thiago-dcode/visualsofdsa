@@ -50,6 +50,7 @@ model DataStructure {
   name                          String                       @unique
   enable                        Boolean                      @default(false)
   link                          String                       @unique
+  order                         Int?                         @default(0)
   metaDescription               String?
   description                   String?
   dataStructureTypeId           Int
@@ -60,12 +61,12 @@ model DataStructure {
 }
 
 model DataStructureType {
-  id          Int             @id @default(autoincrement())
-  name        String          @unique
-  description String
-  enable      Boolean         @default(false)
-  link        String          @unique
-  children    DataStructure[]
+  id              Int             @id @default(autoincrement())
+  name            String          @unique
+  description     String
+  enable          Boolean         @default(false)
+  link            String          @unique
+  children        DataStructure[]
   metaDescription String?
 }
 
@@ -81,6 +82,7 @@ model Algorithm {
   name                      String                   @unique
   enable                    Boolean                  @default(false)
   link                      String                   @unique
+  order                     Int?                     @default(0)
   metaDescription           String?
   description               String?
   algorithmTypeId           Int
@@ -91,12 +93,12 @@ model Algorithm {
 }
 
 model AlgorithmType {
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-  description String
-  link        String      @unique
-  enable      Boolean     @default(false)
-  children    Algorithm[]
+  id              Int         @id @default(autoincrement())
+  name            String      @unique
+  description     String
+  link            String      @unique
+  enable          Boolean     @default(false)
+  children        Algorithm[]
   metaDescription String?
 }
 

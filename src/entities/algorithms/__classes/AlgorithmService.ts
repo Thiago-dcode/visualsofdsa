@@ -12,8 +12,12 @@ class AlgorithmService extends BaseService {
       include: {
         children: {
           include: { type: true },
+          orderBy: {
+            order: 'asc',
+          },
         },
       },
+
     });
   }
   async getMetaDescription(link: string) {
@@ -35,8 +39,13 @@ class AlgorithmService extends BaseService {
             link: true,
             enable: true,
           },
+          orderBy: {
+            order: 'asc',
+          },
         },
+
       },
+
     });
   }
 }

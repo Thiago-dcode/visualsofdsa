@@ -1,6 +1,7 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { ClosureCompare, ClosureSlice } from "../types";
 import { Direction } from "@/types";
+import { random } from "@/lib/utils";
 
 export class SortAlgorithms {
   public static async bubble(
@@ -172,7 +173,7 @@ export class SortAlgorithms {
     if (array.length <= 1) return 1;
 
     const quick = async (startIndex: number, endIndex: number) => {
-      steps++; 
+      steps++;
       if (endIndex <= startIndex) return;
 
       let i = startIndex - 1;
@@ -181,7 +182,7 @@ export class SortAlgorithms {
       if (onCompare) await onCompare(startIndex, endIndex);
 
       for (let j = startIndex; j < endIndex; j++) {
-        steps++; 
+        steps++;
         if (
           (direction === "ascending" && array[j].data < pivot.data) ||
           (direction === "descending" && array[j].data > pivot.data)
@@ -206,4 +207,34 @@ export class SortAlgorithms {
     await quick(0, array.length - 1);
     return steps;
   }
+  public static async bogo(
+    array: Node<number>[],
+    direction: Direction = "ascending",
+    onShuffle?: ClosureCompare
+  ) {
+
+    let steps = 0;
+    const shuffle = async () => {
+      for (let i = 0; i < array.length; i++) {
+        steps++;
+        const randomN = random(0, array.length - 1);
+        if (onShuffle) await onShuffle(array[i], array[randomN]);
+        const temp = array[i];
+        array[i] = array[randomN];
+        array[randomN] = temp;
+      }
+    }
+    const isSorted = () => {
+      for (let i = 0; i < array.length - 1; i++) {
+        if (direction === "ascending" && array[i].data > array[i + 1].data) return false;
+        if (direction === "descending" && array[i].data < array[i + 1].data) return false;
+      }
+      return true;
+    }
+    while (!isSorted()) {
+      await shuffle();
+    }
+    return steps;
+  }
+
 }

@@ -5,7 +5,7 @@ import { useSoundAnimation } from "../../../hooks/useSoundAnimation";
 import useBaseAnimation from "../../../hooks/useAnimation";
 export const useAnimation = (visualizationMode: VisualizationArrays) => {
   const { animateSound } = useSoundAnimation();
-  const { focus } = useBaseAnimation()
+  const { focus,isAnimationEnabled } = useBaseAnimation()
   const getIndexRef = (ref: HTMLElement) =>
     ref.parentElement?.parentElement?.children[2] as HTMLElement;
 
@@ -15,6 +15,7 @@ export const useAnimation = (visualizationMode: VisualizationArrays) => {
     animation: string,
     speed: number
   ) => {
+    if(!isAnimationEnabled) return;
     const indexRef = getIndexRef(ref);
     if (indexRef && visualizationMode === "memoryRam") {
       indexRef.style.visibility = "visible";

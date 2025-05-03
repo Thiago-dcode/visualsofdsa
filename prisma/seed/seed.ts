@@ -40,10 +40,10 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
   },
 ];
 (async () => {
-    await prismaClient.dataStructureType.deleteMany({});
-    await prismaClient.dataStructure.deleteMany({});
+  await prismaClient.dataStructureType.deleteMany({});
+  await prismaClient.dataStructure.deleteMany({});
 
-    const dataStrusture = 'data-structures'
+  const dataStrusture = 'data-structures'
   for (const type of dataStructureTypes) {
     const result = await prismaClient.dataStructureType.create({ data: type });
 
@@ -52,6 +52,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
         await prismaClient.dataStructure.createMany({
           data: [
             {
+              order: 0,
               name: "stack",
               link: "stack",
               enable: true,
@@ -69,19 +70,22 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Push',
                     color: 'green',
                     description: '<b>adds a new element to the top of the stack</b>. The newly added element becomes the new top, while the previous top element moves down one position. This operation is crucial for building the stack and maintaining its LIFO property',
-                    bigO: '1' 
+                    averageCase: '1',
+                    worstCase: '1'
                   },
                   {
                     operation: 'Pop',
                     color: 'red',
                     description: '<b>removes and returns the top element of the stack</b>. Following the LIFO principle, it always removes the most recently added element. This operation is essential for processing elements in reverse order of their addition',
-                    bigO: '1'
+                    averageCase: '1',
+                    worstCase: '1'
                   },
                   {
                     operation: 'Peek',
                     color: 'yellow',
                     description: '<b>inspects the top element without removing it</b>. It\'s particularly useful for checking the current state of the stack without modifying its contents, making it ideal for conditional operations and stack state validation',
-                    bigO: '1'
+                    averageCase: '1',
+                    worstCase: '1'
                   }
                 ],
                 commonApplications: [
@@ -95,6 +99,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'A Stack is a LIFO data structure used for managing nested operations and recursive algorithms.',
             },
             {
+              order: 1,
               name: "queue",
               link: "queue",
               description: buildDescription({
@@ -110,19 +115,22 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Enqueue',
                     color: 'green',
                     description: '<b>adds a new element to the rear of the queue</b>. The newly added element becomes the new rear, while maintaining the order of previously added elements. This operation is crucial for building the queue and maintaining its FIFO property',
-                    bigO: '1'
+                    averageCase: '1',
+                    worstCase: '1'
                   },
                   {
                     operation: 'Dequeue',
                     color: 'red',
                     description: '<b>removes and returns the front element of the queue</b>. Following the FIFO principle, it always removes the oldest element in the queue. This operation is essential for processing elements in the order they were added',
-                    bigO: '1'
+                    averageCase: '1',
+                    worstCase: '1'
                   },
                   {
                     operation: 'Front',
                     color: 'yellow',
                     description: '<b>inspects the front element without removing it</b>. It\'s particularly useful for checking the next element to be processed without modifying the queue\'s contents, making it ideal for queue state validation and conditional operations',
-                    bigO: '1'
+                    averageCase: '1',
+                    worstCase: '1'
                   }
                 ],
                 commonApplications: [
@@ -138,6 +146,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'A Queue is a FIFO data structure essential for managing ordered processes.',
             },
             {
+              order: 2,
               name: "static array",
               link: "static-array",
               description: buildDescription({
@@ -153,19 +162,22 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Access',
                     color: 'yellow',
                     description: '<b>retrieves an element at a specified index</b>. Arrays provide direct access to any element via its index, making this operation extremely efficient regardless of array size',
-                    bigO: '1'
+                    averageCase: '1',
+                    worstCase: '1'
                   },
                   {
                     operation: 'Write',
                     color: 'green',
                     description: '<b>sets the value of an element at a specified index</b>. Since the array size is fixed, writing to an existing position is straightforward and efficient, requiring only a single memory operation',
-                    bigO: '1'
+                    averageCase: '1',
+                    worstCase: '1'
                   },
                   {
                     operation: 'Search',
                     color: 'blue',
                     description: '<b>finds the position of a specific value</b> in the array. Since arrays don\'t maintain any particular order by default, searching requires checking each element sequentially from the beginning',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   }
                 ],
                 commonApplications: [
@@ -181,6 +193,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'Static Arrays store elements in contiguous memory locations with fixed size for efficient access.',
             },
             {
+              order: 3,
               name: "Dynamic Array",
               link: "dynamic-array",
               description: buildDescription({
@@ -196,25 +209,29 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Push',
                     color: 'green',
                     description: '<b>adds a new element to the end of the array</b>. If the array is full, it resizes by allocating a new array with double the capacity and copying existing elements',
-                    bigO: '1'
+                    averageCase: '1',
+                    worstCase: '1'
                   },
                   {
                     operation: 'Pop',
                     color: 'red',
                     description: '<b>removes the last element of the array</b>. This operation is straightforward and efficient, requiring only a single memory operation',
-                    bigO: '1'
+                    averageCase: '1',
+                    worstCase: '1'
                   },
                   {
                     operation: 'Insert',
                     color: 'orange',
                     description: '<b>adds an element at a specific position by a given index</b>. To accomplish this, elements on the right side of the desired position must be shifted to the right before the new element is inserted',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   },
                   {
                     operation: 'Delete',
                     color: 'red',
                     description: '<b>removes an element from a specific position by a given index</b>. This requires shifting elements on the right side to the left to fill the gap',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   }
                 ],
                 commonApplications: [
@@ -230,6 +247,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'Dynamic Arrays resize to accommodate more elements, ideal for variable-sized collections.',
             },
             {
+              order: 4,
               name: "Linked List",
               link: "linked-list",
               description: buildDescription({
@@ -245,19 +263,22 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Add',
                     color: 'green',
                     description: '<b>adds a new node to the linked list</b>. The new node can be inserted at the head, tail, or a specific position. The pointer of the previous node needs to be updated to maintain the structure. If is add at the head, the time complexity is O(1).',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   },
                   {
                     operation: 'Delete',
                     color: 'red',
                     description: '<b>removes a node from the linked list</b>. The node to be deleted could be anywhere in the list, and the pointer of the previous node must be adjusted to skip over the deleted node. If is delete at the head, the time complexity is O(1).',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   },
                   {
                     operation: 'Get',
                     color: 'yellow',
                     description: '<b>finds and returns the first node that contains the desired value</b>. The list must be traversed from the head until the value is found or the end is reached. If is get at the head, the time complexity is O(1).',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   }
                 ],
                 commonApplications: [
@@ -273,6 +294,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'Linked Lists are dynamic data structures ideal for frequent insertions and deletions.',
             },
             {
+              order: 5,
               name: "Doubly Linked List",
               link: "doubly-linked-list",
               description: buildDescription({
@@ -283,24 +305,27 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                   'Efficient for frequent insertions and deletions at both ends',
                   'Ideal for implementing complex data structures'
                 ],
-                keyOperations:  [
+                keyOperations: [
                   {
                     operation: 'Add',
                     color: 'green',
                     description: '<b>adds a new node to the doubly linked list</b>. The new node can be inserted at the head, tail, or a specific position. The previous and next pointers need to be updated to maintain the structure. If added at the head or tail, the time complexity is O(1).',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   },
                   {
                     operation: 'Delete',
                     color: 'red',
                     description: '<b>removes a node from the doubly linked list</b>. The node to be deleted could be anywhere in the list, and both the previous and next pointers of neighboring nodes need to be adjusted. If deleted at the head or tail, the time complexity is O(1).',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   },
                   {
                     operation: 'Get',
                     color: 'yellow',
                     description: '<b>finds and returns the first node that contains the desired value</b>. Since a doubly linked list can be traversed from both the head and the tail, searching can be done in either direction. If the node is at the head or tail, the time complexity is O(1).',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   }
                 ],
                 commonApplications: [
@@ -322,6 +347,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
         await prismaClient.dataStructure.createMany({
           data: [
             {
+              order: 0,
               name: "binary search tree",
               link: "binary-search-tree",
               description: buildDescription({
@@ -337,19 +363,22 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Insert',
                     color: 'green',
                     description: '<b>adds a new node to the binary search tree</b>. The node is placed in the correct position based on its value, ensuring the BST property is maintained',
-                    bigO: 'log n'
+                    averageCase: 'log n',
+                    worstCase: 'log n'
                   },
                   {
                     operation: 'Delete',
                     color: 'red',
                     description: '<b>removes a node from the binary search tree</b>. There are three cases: deleting a leaf node, deleting a node with one child, and deleting a node with two children. The BST property must be preserved after deletion',
-                    bigO: 'log n'
+                    averageCase: 'log n',
+                    worstCase: 'log n'
                   },
                   {
                     operation: 'Search',
                     color: 'blue',
                     description: '<b>finds a node with a specific value in the binary search tree</b>. It starts at the root and recursively compares the target value with the current node, moving left or right based on the comparison',
-                    bigO: 'log n'
+                    averageCase: 'log n',
+                    worstCase: 'log n'
                   },
                   {
                     operation: 'Depth-First Search (DFS)',
@@ -361,13 +390,15 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                       - <b>Pre-order Traversal</b>: Visits nodes in the order of root, left, right. Useful for creating a copy of the tree.
                       - <b>Post-order Traversal</b>: Visits nodes in the order of left, right, root. Often used to delete the tree.
                     `,
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   },
                   {
                     operation: 'Breadth-First Search (BFS)',
                     color: 'orange',
                     description: '<b>visits all nodes in the binary search tree</b> level by level, starting from the root. This traversal method is useful for creating a level-order traversal of the tree and is often used in scenarios where the shortest path is required.',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   }
                 ],
                 commonApplications: [
@@ -382,6 +413,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'Binary Search Trees enable efficient search, insertion, and deletion operations.',
             },
             {
+              order: 1,
               name: "AVL Tree",
               link: "avl-tree",
               metaDescription: 'An AVL Tree is a self-balancing binary search tree where the difference between heights of left and right subtrees cannot be more than one for all nodes.',
@@ -392,8 +424,9 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               dataStructureTypeId: result.id,
             },
             {
+              order: 2,
               name: "Binary Heap",
-              link: "binary-heap",  
+              link: "binary-heap",
               description: buildDescription({
                 description: 'A <b>Binary Heap</b> is a specialized tree-based data structure that satisfies the heap property: for any given node i, the parent node is greater than or equal to its children nodes (in a max heap) or less than or equal to its children nodes (in a min heap).',
               }),
@@ -417,6 +450,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
         await prismaClient.algorithm.createMany({
           data: [
             {
+              order: 0,
               name: "linear",
               link: "linear",
               enable: true,
@@ -433,7 +467,8 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Search',
                     color: 'yellow',
                     description: '<b>sequentially checks each element</b> in the data structure until the target element is found or the end is reached. This operation is straightforward but can be time-consuming for large datasets.',
-                    bigO: 'n'
+                    averageCase: 'n',
+                    worstCase: 'n'
                   }
                 ],
                 commonApplications: [
@@ -445,6 +480,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'Linear search is a straightforward method for finding elements in data structures.',
             },
             {
+              order: 1,
               name: "binary",
               link: "binary",
               description: buildDescription({
@@ -459,7 +495,8 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Search',
                     color: 'yellow',
                     description: '<b>divides the search interval in half</b> and compares the target element with the middle element. If the target is equal to the middle element, the search is complete. Otherwise, the search continues in the left or right half, depending on the comparison.',
-                    bigO: 'log n'
+                    averageCase: 'log n',
+                    worstCase: 'log n'
                   }
                 ],
                 commonApplications: [
@@ -479,6 +516,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
         await prismaClient.algorithm.createMany({
           data: [
             {
+              order: 0,
               name: "bubble",
               link: "bubble",
               enable: true,
@@ -494,7 +532,8 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Sort',
                     color: 'yellow',
                     description: '<b>compares and swaps adjacent elements</b> to sort the list. This operation is repeated until no more swaps are needed, indicating that the list is sorted.',
-                    bigO: 'n^2'
+                    averageCase: 'n^2',
+                    worstCase: 'n^2'
                   }
                 ],
                 commonApplications: [
@@ -507,6 +546,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'Bubble Sort is a simple algorithm that repeatedly swaps adjacent elements to sort a list.',
             },
             {
+              order: 1,
               name: "selection",
               link: "selection",
               algorithmTypeId: result.id,
@@ -522,7 +562,8 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Sort',
                     color: 'yellow',
                     description: '<b>selects the smallest element</b> from the unsorted region and swaps it with the first element in the unsorted region. This process continues until the entire list is sorted.',
-                    bigO: 'n^2'
+                    averageCase: 'n^2',
+                    worstCase: 'n^2'
                   }
                 ],
                 commonApplications: [
@@ -535,6 +576,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'Selection Sort repeatedly selects the smallest element and swaps it to sort a list.',
             },
             {
+              order: 2,
               name: "insertion",
               link: "insertion",
               enable: true,
@@ -551,7 +593,8 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Sort',
                     color: 'yellow',
                     description: '<b>inserts each element</b> into its correct position within the sorted region. This operation is repeated until the entire list is sorted.',
-                    bigO: 'n^2'
+                    averageCase: 'n^2',
+                    worstCase: 'n^2'
                   }
                 ],
                 commonApplications: [
@@ -563,6 +606,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'Insertion Sort builds a sorted array one element at a time, ideal for small datasets.',
             },
             {
+              order: 3,
               name: "merge",
               link: "merge",
               algorithmTypeId: result.id,
@@ -579,7 +623,8 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Sort',
                     color: 'yellow',
                     description: '<b>divides the array</b> into two halves, sorts each half, and then merges them back together in sorted order. This process is repeated until the entire array is sorted.',
-                    bigO: 'n log n'
+                    averageCase: 'n log n',
+                    worstCase: 'n log n'
                   }
                 ],
                 commonApplications: [
@@ -591,6 +636,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'Merge Sort divides and conquers to efficiently sort large datasets.',
             },
             {
+              order: 4,
               name: "quick",
               link: "quick",
               algorithmTypeId: result.id,
@@ -607,7 +653,8 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                     operation: 'Sort',
                     color: 'yellow',
                     description: '<b>selects a pivot element</b> and partitions the array so that all elements smaller than the pivot are placed on its left, and all elements greater than the pivot are placed on its right. This process is repeated until the entire array is sorted.',
-                    bigO: 'n log n'
+                    averageCase: 'n log n',
+                    worstCase: 'n^2'
                   }
                 ],
                 commonApplications: [
@@ -619,7 +666,40 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               metaDescription: 'Quick Sort partitions arrays around a pivot for efficient in-place sorting.',
             },
             {
-              name:'Counting',
+              order: 5,
+              name: 'Bogo',
+              link: 'bogo',
+              algorithmTypeId: result.id,
+              enable: true,
+              description: buildDescription({
+                description: 'Bogo Sort is a <b>meme highly inefficient sorting algorithm</b> based on the generate and test paradigm. It repeatedly shuffles the array until it finds a permutation where the array is sorted.',
+                coreCharacteristics: [
+                  'Simple to understand but impractical',
+                  'Relies on random shuffling to achieve a sorted array',
+                  'Has a factorial time complexity, making it extremely inefficient',
+                  'It could take forever to sort an array 💀'
+                ],
+                keyOperations: [
+                  {
+                    operation: 'Sort',
+                    color: 'yellow',
+                    description: '<b>randomly rearranges the elements</b> of the array. This operation is repeated until the array is sorted.(It\'s so slow)',
+                    averageCase: 'n*n!',
+                    worstCase: '∞'
+                  },
+
+                ],
+                commonApplications: [
+                  'Primarily used for educational purposes to illustrate the concept of sorting',
+                  'Serves as a humorous example of an inefficient algorithm',
+                  'Rarely(never) used in practical applications due to its inefficiency'
+                ]
+              }),
+              metaDescription: 'Bogo Sort is a highly inefficient sorting algorithm that randomly shuffles the array until it is sorted.',
+            },
+            {
+              order: 6,
+              name: 'Counting',
               link: 'counting',
               algorithmTypeId: result.id,
               enable: false,
@@ -628,6 +708,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               }),
             },
             {
+              order: 7,
               name: 'Radix',
               link: 'radix',
               algorithmTypeId: result.id,
@@ -637,6 +718,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               }),
             },
             {
+              order: 8,
               name: 'Bucket',
               link: 'bucket',
               algorithmTypeId: result.id,
@@ -645,15 +727,7 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
                 description: 'Bucket Sort is a <b>non-comparison-based sorting algorithm</b> that works by dividing the input array into a number of buckets, sorting each bucket individually, and then concatenating the sorted buckets.',
               }),
             },
-            {
-              name:'Bogo',
-              link: 'bogo',
-              algorithmTypeId: result.id,
-              enable: false,
-              description: buildDescription({
-                description: 'Bogo Sort is a <b>non-comparison-based sorting algorithm</b> that works by sorting the input array in a way that the smallest elements are placed at the beginning of the array and the largest elements are placed at the end of the array.',
-              }), 
-            }
+
           ],
         });
         break;

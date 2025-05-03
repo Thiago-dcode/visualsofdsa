@@ -1,4 +1,4 @@
-export type BigOType = '1' | 'n' | 'n^2' | 'log n' | 'n log n' | 'n^3' | '2^n' | 'n!'
+export type BigOType = '1' | 'n' | 'n^2' | 'log n' | 'n log n' | 'n^3' | '2^n' | 'n!' | 'n*n!' | '∞'
 
 export const getComplexity = (bigO: BigOType) => {
   switch (bigO) {
@@ -18,6 +18,10 @@ export const getComplexity = (bigO: BigOType) => {
       return 'Exponential time operation'
     case 'n!':
       return 'Factorial time operation'
+    case 'n*n!':
+      return 'n * factorial time operation'
+    case '∞':
+      return 'Infinite time operation'
     default:
       return bigO
   }
@@ -39,7 +43,9 @@ export const buildDescription = ({ description,
     operation: string,
     color: 'green' | 'yellow' | 'red' | 'blue' | 'indigo' | 'orange',
     description: string,
-    bigO: BigOType
+
+    averageCase: BigOType,
+    worstCase: BigOType,
   }[],
   commonApplications?: string[],
   extraInfo?: string
@@ -49,6 +55,7 @@ export const buildDescription = ({ description,
   const buildTtitleSection = (title: string) => {
     return `<h4 class="text-xl font-semibold flex items-center justify-start gap-2">${title}</h4>`
   }
+  const buildBigO = (bigO: BigOType, complexity?: 'average' | 'worst',) => `<span class="bigO ${complexity}"><b>${complexity ? `<span class="capitalize">${complexity} case:</span>` : 'Complexity:'} O(${bigO})</b> - ${getComplexity(bigO)}</span>`
   const buildSection = (title: string, content: string[]) => {
 
     return `<section class="${sectionClass}">
@@ -71,9 +78,9 @@ export const buildDescription = ({ description,
     ${buildTtitleSection('Key Operations')}
     <ul class="ml-4 flex flex-col gap-2 items-start justify-start">
     ${keyOperations.map(kp => {
-    const complexity = getComplexity(kp.bigO)
+
     return `<li class="mb-4 operation-item">
-        <b class="font-semibold ${kp.color} capitalize  operation-title">${kp.operation}()</b> This operation ${kp.description}. <span class="bigO"><b>Time complexity: O(${kp.bigO})</b> - ${complexity}</span>
+       <p> <span><b class="font-semibold ${kp.color} capitalize  operation-title">${kp.operation}()</b> This operation ${kp.description}. </span> ${kp.averageCase === kp.worstCase ? buildBigO(kp.averageCase) : buildBigO(kp.averageCase, 'average') + buildBigO(kp.worstCase, 'worst')}</p>
       </li>`
   }).join('')}
     </ul>

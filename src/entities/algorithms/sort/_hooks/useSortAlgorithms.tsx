@@ -24,6 +24,7 @@ export const useSortAlgorithms = (
   speed: speed = 1,
   direction: Direction,
   visualization: VisualizationArrays = "memoryRam",
+  isAnimationEnabled: boolean = true
 ) => {
   let minArrayValue = 0;
   let maxArrayValue = 0;
@@ -41,10 +42,12 @@ export const useSortAlgorithms = (
 
 
   const comparisionBased = async (type: AlgoSortType) => {
-    const allowedTypes: AlgoSortType[] = ['bubble', 'insertion', 'selection'];
-    if (!allowedTypes.includes(type)) return;
+    const allowedTypes: AlgoSortType[] = ['bubble', 'insertion', 'selection', 'bogo'];
+    if (!allowedTypes.includes(type)) {
+      throw new Error("Not compatible with this algorithm");
+    };
     const onCompare: ClosureCompare = async (nodeA, nodeB) => {
-
+      
       try {
         if (nodeA.ref && nodeB.ref) {
           animateSound(nodeA.data, minArrayValue, maxArrayValue);
@@ -71,7 +74,7 @@ export const useSortAlgorithms = (
         console.error("ERROR ANIMATING BUBBLE SORT ALGORITHM", error);
       }
     };
-    onSortEnds(await SortAlgorithms[type as 'bubble' | 'insertion' | 'selection'](array, direction, onCompare, onSwap));
+    onSortEnds(type === 'bogo' ? await SortAlgorithms.bogo(array, direction, onSwap) : await SortAlgorithms[type as 'bubble' | 'insertion' | 'selection'](array, direction, onCompare, onSwap));
   }
 
   const bubble = async () => {
@@ -120,7 +123,7 @@ export const useSortAlgorithms = (
       for (let i = start; i < end; i++) {
         const element = array[i];
         if (!element || !element.ref) continue;
-       if(visualization == 'memoryRam') element.ref.style.backgroundColor = '';
+        if (visualization == 'memoryRam') element.ref.style.backgroundColor = '';
         animationPromises.push(animateNode(element.ref, 'search', getSpeed(speed)))
       }
       await Promise.all(animationPromises);
@@ -128,10 +131,13 @@ export const useSortAlgorithms = (
     const onSwap: ClosureCompare = async (nodeA, nodeB) => {
       animateSound(nodeA.data, minArrayValue, maxArrayValue);
       animateSound(nodeB.data, minArrayValue, maxArrayValue);
-   
+
       await animateOnSwap(nodeA, nodeB, getSpeed(speed));
     }
     onSortEnds(await SortAlgorithms.quick(array as Node<number>[], direction, onPivot, onSwap, onCompare));
+  }
+  const bogo = async () => {
+    await comparisionBased('bogo');
   }
   const onSortEnds = (steps: number) => {
     setMessage({
@@ -152,6 +158,7 @@ export const useSortAlgorithms = (
     selection,
     merge,
     quick,
+    bogo,
     insertion,
     message,
     isSorted,

@@ -29,18 +29,6 @@
     font-size: 1.5rem;
  }
 
-.module-description .bigO{
-    background-color: var(--app-bauhaus-indigo-50);
-    border-color: var(--app-bauhaus-indigo);
-    border-width: 1px;
-    border-style: solid; 
-    /* border-bottom: 1px solid ; */
-    border-radius: 5px;
-    padding: 0.1rem 0.3rem;
-    font-size: 0.7rem;
-    font-weight: 500;
-    white-space: nowrap;
-}
 
 .operations-section .operation-item .operation-title{
   
@@ -52,6 +40,32 @@
     /* color: var(--app-off-white) !important;  */
     font-weight: bolder;
 
+}
+.operations-section .operation-item p {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+.module-description .bigO{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--app-bauhaus-indigo-50);
+    border-color: var(--app-bauhaus-indigo);
+    border-width: 1px;
+    border-style: solid; 
+    /* border-bottom: 1px solid ; */
+    border-radius: 5px;
+    padding: 0.1rem 0.3rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    height: 1.5rem;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .operations-section .operation-title.indigo{

@@ -4,6 +4,7 @@ import DarkModeTogglerComponent from './DarkModeTogglerComponent'
 import MuteComponent from './MuteTogglerComponent'
 import { useAnimationRunning } from '@/context/animationRunningContext'
 import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import TogglePauseAnimationComponent from './TogglePauseAnimationComponent'
 export default function ConfigSection() {
     const { isAnimationRunning } = useAnimationRunning()
     return (
@@ -13,6 +14,7 @@ export default function ConfigSection() {
                 <>
                     <DarkModeTogglerComponent />
                     <MuteComponent />
+                    <TogglePauseAnimationComponent />
                 </> : <div></div>}
         </div>
 

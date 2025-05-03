@@ -12,9 +12,7 @@ import { Direction, } from '@/types'
 import React, { useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import Node from '@/entities/data-structures/linear/_classes/Node'
-import { PopOverComponent } from '@/components/ui/PopOverComponent'
-import { Button } from '@/components/ui/button'
-import { Wrench } from 'lucide-react'
+
 import RenderVisualization from '../_components/visualization/renderVisualization'
 import VisualizationTypes from '../_components/visualization/visualizationTypes'
 import { config } from '@/config'
@@ -26,19 +24,21 @@ import { useVisualizationArray } from '@/hooks/useVisualizationArray'
 import SpeedComponent from '@/components/app/speedComponent'
 import { useSpeed } from '@/hooks/useSpeed'
 import { useToast } from '@/hooks/useToast'
+import ConfigComponent from '@/components/app/ConfigComponent'
+import WarningComponent from '@/components/app/WarningComponent'
 export default function SortView({ type }: {
   type: AlgoSortType
 }) {
 
-  const { array, maxSize, createUnsorted, flush, error } = useStaticArray(500)
-  const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
+  const { array, maxSize, createUnsorted, flush, error } = useStaticArray(type === 'bogo' ? 10 : 500)
+  const { isAnimationRunning, isAnimationEnabled, setAnimationRunning } = useAnimationRunning();
   const [direction, setDirection] = useState<Direction>('ascending')
   const [open, setOpen] = useState(false);
   const { speed, handleSetSpeed } = useSpeed(1, config.localStorageKeys.speed.sort)
   const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray('bars', async (vimValue) => {
     await handleResetAction(false, type === 'merge')
   });
-  const { bubble, selection, insertion, merge, quick, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
+  const { bubble, selection, insertion, merge, quick, bogo, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode, isAnimationEnabled);
   const tempValue = useRef<number>(undefined);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { toastInfo } = useToast();
@@ -89,6 +89,9 @@ export default function SortView({ type }: {
           break;
         case 'quick':
           await quick();
+          break;
+        case 'bogo':
+          await bogo();
           break;
       }
     }
@@ -177,7 +180,7 @@ export default function SortView({ type }: {
         </Section>
       </OperationsContainer>
 
-      <div className='w-full items-end justify-between flex'>
+      <div className='w-full items-end justify-between flex px-2'>
 
         <Properties properties={{
           DirectionToSort: {
@@ -193,9 +196,22 @@ export default function SortView({ type }: {
 
         }} />
         {array && !isAnimationRunning && <VisualizationTypes setVisualization={handleSetVisualizationMode} visualizationSelected={visualizationMode} />}
-        {array && !isAnimationRunning ? <PopOverComponent content={
-          <SpeedComponent setSpeed={handleSetSpeed} speed={speed} />
-        } trigger={<Button size={'icon'} variant={'ghost'} ><Wrench /></Button>} /> : <div></div>}
+        <div className='flex gap-2 items-center justify-end'>
+          {<ConfigComponent available={!isAnimationRunning} >
+            <SpeedComponent setSpeed={handleSetSpeed} speed={speed} />
+          </ConfigComponent>}
+
+          {type === 'bogo' && <WarningComponent title='Bogo sort algorithm detected' warning={
+            {
+              message: 'Bogo sort is not suitable for large arrays',
+              warnings: ['It could take forever to sort the array 😱']
+            }
+          } solution={{
+            message: 'Solutions:',
+            solutions: ['Don\'t use bogo sort, are you crazy?', 'Use a different algorithm', 'Use a different array size']
+          }} />}
+
+        </div>
 
       </div>
       {array ? <RenderVisualization direction={direction} maxBarSize={maxBarSize} sorted={false} visualizationMode={visualizationMode} array={array as Node<number>[]} setAnimationRunning={setAnimationRunning} /> : null}
