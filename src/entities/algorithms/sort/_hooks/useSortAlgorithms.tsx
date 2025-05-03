@@ -24,7 +24,6 @@ export const useSortAlgorithms = (
   speed: speed = 1,
   direction: Direction,
   visualization: VisualizationArrays = "memoryRam",
-  isAnimationEnabled: boolean = true
 ) => {
   let minArrayValue = 0;
   let maxArrayValue = 0;

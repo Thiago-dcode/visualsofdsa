@@ -2,8 +2,14 @@ import Node from "@/entities/data-structures/linear/_classes/Node";
 import { ClosureCompare, ClosureSlice } from "../types";
 import { Direction } from "@/types";
 import { random } from "@/lib/utils";
-
+import MaxStepsError from "@/lib/errors/MaxStepsError";
 export class SortAlgorithms {
+  private static MAX_STEPS = 70000;
+  private static throwMaxStepsError = (steps: number) => {
+    if (steps > this.MAX_STEPS) {
+      throw new MaxStepsError(`We detected a very inefficient algorithm, Max steps exceeded: ${this.MAX_STEPS}`);
+    }
+  }
   public static async bubble(
     array: Node<number>[],
     direction: Direction = "ascending",
@@ -17,7 +23,7 @@ export class SortAlgorithms {
     for (let i = 0; i < array.length; i++) {
       swapped = false;
       for (let j = 0; j < end; j++) {
-        steps++;
+        this.throwMaxStepsError(++steps);
         const temp = array[j + 1];
         if (onCompare) await onCompare(array[j], array[j + 1]);
         if (
@@ -49,7 +55,7 @@ export class SortAlgorithms {
     for (let i = 0; i < array.length; i++) {
       let indexToCompare = i;
       for (let j = i + 1; j < array.length; j++) {
-        steps++;
+        this.throwMaxStepsError(++steps);
         if (onCompare) await onCompare(array[j], array[indexToCompare]);
         if (
           (direction === "ascending" &&
@@ -80,7 +86,7 @@ export class SortAlgorithms {
     let steps = 0;
     for (let i = 0; i < array.length - 1; i++) {
       for (let j = i; j >= 0; j--) {
-        steps++;
+        this.throwMaxStepsError(++steps);
         const temp = array[j + 1];
         const left = array[j];
         if (onCompare) await onCompare(array[j], array[j + 1]);
@@ -122,7 +128,7 @@ export class SortAlgorithms {
         let r = 0;
 
         while (l < leftArray.length || r < rightArray.length) {
-          steps++;
+          this.throwMaxStepsError(++steps);
           const leftNode = leftArray[l];
           const rightNode = rightArray[r];
           if (
@@ -146,7 +152,7 @@ export class SortAlgorithms {
       const rightArray: Node<number>[] = [];
       const middle = Math.floor(array.length / 2);
       for (let i = 0; i < array.length; i++) {
-        steps++;
+        this.throwMaxStepsError(++steps);
         if (i < middle) {
           leftArray.push(array[i].clone(true));
         } else {
@@ -173,7 +179,7 @@ export class SortAlgorithms {
     if (array.length <= 1) return 1;
 
     const quick = async (startIndex: number, endIndex: number) => {
-      steps++;
+      this.throwMaxStepsError(++steps);
       if (endIndex <= startIndex) return;
 
       let i = startIndex - 1;
@@ -182,7 +188,7 @@ export class SortAlgorithms {
       if (onCompare) await onCompare(startIndex, endIndex);
 
       for (let j = startIndex; j < endIndex; j++) {
-        steps++;
+        this.throwMaxStepsError(++steps);
         if (
           (direction === "ascending" && array[j].data < pivot.data) ||
           (direction === "descending" && array[j].data > pivot.data)
@@ -216,7 +222,7 @@ export class SortAlgorithms {
     let steps = 0;
     const shuffle = async () => {
       for (let i = 0; i < array.length; i++) {
-        steps++;
+        this.throwMaxStepsError(++steps);
         const randomN = random(0, array.length - 1);
         if (onShuffle) await onShuffle(array[i], array[randomN]);
         const temp = array[i];

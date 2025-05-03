@@ -13,6 +13,7 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
     speed: number,
     beforeAnimation = async (node: Node<number>) => {}
   ) => {
+    if(!animations.isAnimationEnabled) return;
     const onAnimationEnds = (node: Node<number>) => {
       if (!node.ref) return;
       node.ref.style.bottom = node.position.y + "px";
@@ -52,6 +53,7 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
     nodeB: Node<number>,
     speed: number
   ) => {
+    if(!animations.isAnimationEnabled) return;
     if (nodeA.ref && nodeB.ref) {
       const refA = nodeA.ref;
       const refB = nodeB.ref;
@@ -75,6 +77,7 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
     nodeB: Node<number>,
     speed: number
   ) => {
+    if(!animations.isAnimationEnabled) return;
     if (nodeA.ref && nodeB.ref) {
       const refA = nodeA.ref;
       const refB = nodeB.ref;

@@ -26,19 +26,20 @@ import { useSpeed } from '@/hooks/useSpeed'
 import { useToast } from '@/hooks/useToast'
 import ConfigComponent from '@/components/app/ConfigComponent'
 import WarningComponent from '@/components/app/WarningComponent'
+import MaxStepsError from '@/lib/errors/MaxStepsError'
 export default function SortView({ type }: {
   type: AlgoSortType
 }) {
 
-  const { array, maxSize, createUnsorted, flush, error } = useStaticArray(type === 'bogo' ? 10 : 500)
-  const { isAnimationRunning, isAnimationEnabled, setAnimationRunning } = useAnimationRunning();
+  const { array, maxSize, createUnsorted, flush, error, setError } = useStaticArray(type === 'bogo' ? 10 : 500)
+  const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
   const [direction, setDirection] = useState<Direction>('ascending')
   const [open, setOpen] = useState(false);
   const { speed, handleSetSpeed } = useSpeed(1, config.localStorageKeys.speed.sort)
   const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray('bars', async (vimValue) => {
     await handleResetAction(false, type === 'merge')
   });
-  const { bubble, selection, insertion, merge, quick, bogo, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode, isAnimationEnabled);
+  const { bubble, selection, insertion, merge, quick, bogo, message, clearMessage, isSorted, setUnsorted } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
   const tempValue = useRef<number>(undefined);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { toastInfo } = useToast();
@@ -74,25 +75,35 @@ export default function SortView({ type }: {
       toast.info('Array is already sorted');
 
     } else {
-      switch (type) {
-        case 'bubble':
-          await bubble();
-          break;
-        case 'selection':
-          await selection();
-          break;
-        case 'insertion':
-          await insertion();
-          break;
-        case 'merge':
-          await merge(maxBarSize);
-          break;
-        case 'quick':
-          await quick();
-          break;
-        case 'bogo':
-          await bogo();
-          break;
+      try {
+        switch (type) {
+          case 'bubble':
+            await bubble();
+            break;
+          case 'selection':
+            await selection();
+            break;
+          case 'insertion':
+            await insertion();
+            break;
+          case 'merge':
+            await merge(maxBarSize);
+            break;
+          case 'quick':
+            await quick();
+            break;
+          case 'bogo':
+            await bogo();
+            break;
+        }
+      } catch (error) {
+        if (error instanceof MaxStepsError) {
+          setError({
+            name: 'MAX STEPS EXCEEDED',
+            description: error.message
+          })
+        }
+
       }
     }
     setAnimationRunning(false);
@@ -133,7 +144,8 @@ export default function SortView({ type }: {
     flush();
     setUnsorted();
     resetValue();
-    setAnimationRunning(false)
+    setAnimationRunning(false);
+    clearMessage();
   }
 
 
@@ -219,6 +231,7 @@ export default function SortView({ type }: {
         reset()
 
       }} open={!!error} showTrigger={false} description={error.description} />}
+
       {message && <PopUp title={message.title} buttonText="x" handleOnPopUpButton={() => {
         clearMessage()
       }} open={!!message} showTrigger={false} description={message.description} />}

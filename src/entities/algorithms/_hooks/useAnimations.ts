@@ -39,5 +39,6 @@ export const useAnimation = (visualizationMode: VisualizationArrays) => {
     animateNode,
     animateSound,
     getIndexRef,
+    isAnimationEnabled
   };
 };
