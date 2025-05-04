@@ -1,8 +1,10 @@
 "use client"
 import { Input } from '../ui/input'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { speed } from '@/types'
+import { useAnimationRunning } from '@/context/animationRunningContext'
+import { cn } from '@/lib/utils'
 
 
 type SpeedProps = {
@@ -14,10 +16,15 @@ type SpeedProps = {
 }
 function SpeedComponent({ title = "Animation Speed", speed, setSpeed }: SpeedProps) {
 
+    const { isAnimationEnabled } = useAnimationRunning()
+
     return (
-        <div className='flex flex-col items-start justify-start'>
+        <div className={cn('flex flex-col items-start justify-start', {
+            'opacity-50': !isAnimationEnabled
+        })}>
             <p>{title}</p>
             <Input value={speed} onChange={(e) => {
+                if (!isAnimationEnabled) return;
                 const speed = parseInt(e.target.value)
                 if (speed == 1 || speed == 2 || speed == 3 || speed == 4) {
                     setSpeed(speed)

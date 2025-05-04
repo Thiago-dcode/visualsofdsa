@@ -45,15 +45,17 @@ export const useSortAlgorithms = (
     if (!allowedTypes.includes(type)) {
       throw new Error("Not compatible with this algorithm");
     };
+    let speedAnimation = getSpeed(speed)
+    if (type === 'bogo') speedAnimation *= 0.1
     const onCompare: ClosureCompare = async (nodeA, nodeB) => {
-      
+
       try {
         if (nodeA.ref && nodeB.ref) {
           animateSound(nodeA.data, minArrayValue, maxArrayValue);
           animateSound(nodeB.data, minArrayValue, maxArrayValue);
           await Promise.all([
-            animateNode(nodeA.ref, 'search', getSpeed(speed)),
-            animateNode(nodeB.ref, type !== 'selection' ? "search" : 'select', getSpeed(speed)),
+            animateNode(nodeA.ref, 'search', speedAnimation),
+            animateNode(nodeB.ref, type !== 'selection' ? "search" : 'select', speedAnimation),
           ]);
         }
       } catch (error) {
@@ -67,7 +69,7 @@ export const useSortAlgorithms = (
         await animateOnSwap(
           nodeA,
           nodeB,
-          getSpeed(speed)
+          speedAnimation
         );
       } catch (error) {
         console.error("ERROR ANIMATING BUBBLE SORT ALGORITHM", error);
