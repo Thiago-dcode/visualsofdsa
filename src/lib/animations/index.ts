@@ -22,13 +22,13 @@ import './style.css'
         resolve(false);
       } else {
         const {properties,onAnimationEnds,onlyOnce} = settings || {};
-        const animationEvent = (e: AnimationEvent) => {
+        const onAnimationEventEnds = (e: AnimationEvent) => {
           if (onAnimationEnds) {
             onAnimationEnds(e,ref);
           }
   
           if (ref)
-           ref.removeEventListener("animationend", animationEvent);
+           ref.removeEventListener("animationend", onAnimationEventEnds);
   
           resolve(true);
         };
@@ -38,7 +38,7 @@ import './style.css'
           });
     
         }
-        requestAnimation(ref, `${animation} ${speed}s`, animationEvent,onlyOnce);
+        requestAnimation(ref, `${animation} ${speed}s`, onAnimationEventEnds,onlyOnce);
       }
     });
   };
