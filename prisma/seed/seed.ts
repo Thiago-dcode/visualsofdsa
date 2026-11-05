@@ -1,8 +1,10 @@
-import { Prisma } from "../app/generated/prisma/client";
-import { prisma as prismaClient } from "@/lib/prisma";
+import 'dotenv/config';
+type DataStructureTypeInput = { name: string; description: string; enable: boolean; link: string; metaDescription?: string | null };
+type AlgorithmTypeInput = DataStructureTypeInput;
+import { db } from "@/prisma/db";
 import { buildDescription, linkBuilder } from "./utils";
 
-const dataStructureTypes: Prisma.DataStructureTypeCreateInput[] = [
+const dataStructureTypes: DataStructureTypeInput[] = [
   {
     name: "linear",
     description:
@@ -21,7 +23,7 @@ const dataStructureTypes: Prisma.DataStructureTypeCreateInput[] = [
   }
 ];
 
-const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
+const algorithmsTypes: AlgorithmTypeInput[] = [
   {
     name: "search",
     description:
@@ -40,17 +42,16 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
   },
 ];
 (async () => {
-  await prismaClient.dataStructureType.deleteMany({});
-  await prismaClient.dataStructure.deleteMany({});
+  await db.orm.public.DataStructureType.where((r) => r.id.isNotNull()).deleteAll();
+  await db.orm.public.DataStructure.where((r) => r.id.isNotNull()).deleteAll();
 
   const dataStrusture = 'data-structures'
   for (const type of dataStructureTypes) {
-    const result = await prismaClient.dataStructureType.create({ data: type });
+    const result = await db.orm.public.DataStructureType.create(type);
 
     switch (result.name) {
       case "linear":
-        await prismaClient.dataStructure.createMany({
-          data: [
+        await db.orm.public.DataStructure.createAll([
             {
               order: 0,
               name: "stack",
@@ -340,12 +341,10 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               dataStructureTypeId: result.id,
               metaDescription: 'Doubly Linked Lists allow bidirectional traversal, enhancing efficiency for complex operations.',
             },
-          ],
-        });
+          ]);
         break;
       case "non linear":
-        await prismaClient.dataStructure.createMany({
-          data: [
+        await db.orm.public.DataStructure.createAll([
             {
               order: 0,
               name: "binary search tree",
@@ -433,22 +432,20 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               enable: false,
               dataStructureTypeId: result.id,
             }
-          ],
-        });
+          ]);
         break;
       default:
         break;
     }
   }
-  await prismaClient.algorithmType.deleteMany({});
-  await prismaClient.algorithm.deleteMany({});
+  await db.orm.public.AlgorithmType.where((r) => r.id.isNotNull()).deleteAll();
+  await db.orm.public.Algorithm.where((r) => r.id.isNotNull()).deleteAll();
   for (const type of algorithmsTypes) {
-    const result = await prismaClient.algorithmType.create({ data: type });
+    const result = await db.orm.public.AlgorithmType.create(type);
 
     switch (result.name) {
       case "search":
-        await prismaClient.algorithm.createMany({
-          data: [
+        await db.orm.public.Algorithm.createAll([
             {
               order: 0,
               name: "linear",
@@ -509,12 +506,10 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               algorithmTypeId: result.id,
               metaDescription: 'Binary search efficiently finds elements in sorted arrays by dividing the search interval.',
             },
-          ],
-        });
+          ]);
         break;
       case "sort":
-        await prismaClient.algorithm.createMany({
-          data: [
+        await db.orm.public.Algorithm.createAll([
             {
               order: 0,
               name: "bubble",
@@ -728,11 +723,10 @@ const algorithmsTypes: Prisma.AlgorithmTypeCreateInput[] = [
               }),
             },
 
-          ],
-        });
+          ]);
         break;
       default:
         break;
     }
   }
-})();
+})().finally(() => db.close());

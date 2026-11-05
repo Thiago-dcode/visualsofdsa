@@ -1,13 +1,4 @@
-generator client {
-  provider = "prisma-client-js"
-  output   = "app/generated/prisma/client"
-}
-
-datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-}
+// use prisma-8
 
 enum UserRole {
   ADMIN
@@ -15,17 +6,17 @@ enum UserRole {
 }
 
 model User {
-  id                     Int             @id @default(autoincrement())
-  email                  String          @unique
+  id                     Int                          @id @default(autoincrement())
+  email                  String                       @unique
   password               String?
   name                   String?
   avatar                 String?
-  favoriteDataStructures DataStructure[]
-  favoriteAlgorithms     Algorithm[]
+  favoriteDataStructures UserFavoriteDataStructure[]
+  favoriteAlgorithms     UserFavoriteAlgorithm[]
   settingsId             Int?
-  settings               UserSetting?    @relation(fields: [settingsId], references: [id], onDelete: Cascade)
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
+  settings               UserSetting?                 @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+  createdAt              DateTime                     @default(now())
+  updatedAt              DateTime                     @default(now()) @onUpdate(now())
 }
 
 model UserSetting {
@@ -34,7 +25,7 @@ model UserSetting {
   allowNotifications Boolean  @default(false)
   user               User[]
   createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  updatedAt          DateTime @default(now()) @onUpdate(now())
 }
 
 model Newsletter {
@@ -42,7 +33,7 @@ model Newsletter {
   email     String   @unique
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @onUpdate(now())
 }
 
 model DataStructure {
@@ -57,7 +48,17 @@ model DataStructure {
   dataStructureImplementationId Int?
   implementation                DataStructureImplementation? @relation(fields: [dataStructureImplementationId], references: [id], onDelete: Cascade)
   type                          DataStructureType            @relation(fields: [dataStructureTypeId], references: [id], onDelete: Cascade)
-  favoriteUsers                 User[]
+  favoriteUsers                 UserFavoriteDataStructure[]
+}
+
+model UserFavoriteDataStructure {
+  userId          Int
+  dataStructureId Int
+  createdAt       DateTime      @default(now())
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dataStructure   DataStructure @relation(fields: [dataStructureId], references: [id], onDelete: Cascade)
+
+  @@id([userId, dataStructureId])
 }
 
 model DataStructureType {
@@ -89,7 +90,17 @@ model Algorithm {
   algorithmImplementationId Int?
   implementation            AlgorithmImplementation? @relation(fields: [algorithmImplementationId], references: [id], onDelete: Cascade)
   type                      AlgorithmType            @relation(fields: [algorithmTypeId], references: [id], onDelete: Cascade)
-  favoriteUsers             User[]
+  favoriteUsers             UserFavoriteAlgorithm[]
+}
+
+model UserFavoriteAlgorithm {
+  userId      Int
+  algorithmId Int
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  algorithm   Algorithm @relation(fields: [algorithmId], references: [id], onDelete: Cascade)
+
+  @@id([userId, algorithmId])
 }
 
 model AlgorithmType {

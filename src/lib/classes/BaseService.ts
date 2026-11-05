@@ -1,7 +1,7 @@
 import { EntityBase, EntityType, EntityTypeSimple } from "@/types";
-import { prisma } from "../prisma";
+import { db } from "../prisma";
 export default abstract class BaseService {
-  protected client = prisma;
+  protected client = db;
 
   abstract getOneByLink(link: string): Promise<EntityBase | null>;
   abstract getAllTypes(): Promise<EntityType[]>;

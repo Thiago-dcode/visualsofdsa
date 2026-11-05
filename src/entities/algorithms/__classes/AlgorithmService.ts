@@ -1,52 +1,33 @@
 import BaseService from "@/lib/classes/BaseService";
 class AlgorithmService extends BaseService {
   async getOneByLink(link: string) {
-    return await this.client.algorithm.findUnique({
-      where: {
-        link,
-      },
-    });
+    return await this.client.orm.public.Algorithm.where({ link }).first();
   }
   async getAllTypes() {
-    return await this.client.algorithmType.findMany({
-      include: {
-        children: {
-          include: { type: true },
-          orderBy: {
-            order: 'asc',
-          },
-        },
-      },
-
-    });
+    return await this.client.orm.public.AlgorithmType
+      .include('children', (children) =>
+        children
+          .include('type')
+          .orderBy((c) => c.order.asc()),
+      )
+      .all();
   }
   async getMetaDescription(link: string) {
-    const algorithm = await this.client.algorithm.findUnique({
-      where: { link },
-      select: { metaDescription: true },
-    });
+    const algorithm = await this.client.orm.public.Algorithm
+      .where({ link })
+      .select('metaDescription')
+      .first();
     return algorithm?.metaDescription ?? null;
   }
   async getAllTypesSimple() {
-    return await this.client.algorithmType.findMany({
-      select: {
-        name: true,
-        enable: true,
-        link: true,
-        children: {
-          select: {
-            name: true,
-            link: true,
-            enable: true,
-          },
-          orderBy: {
-            order: 'asc',
-          },
-        },
-
-      },
-
-    });
+    return await this.client.orm.public.AlgorithmType
+      .select('name', 'enable', 'link')
+      .include('children', (children) =>
+        children
+          .select('name', 'link', 'enable')
+          .orderBy((c) => c.order.asc()),
+      )
+      .all();
   }
 }
 

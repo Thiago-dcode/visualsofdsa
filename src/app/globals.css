@@ -1,6 +1,89 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+/* Tailwind v4 is CSS-first: this replaces the old tailwind.config.ts. */
+
+/* Class-based dark mode (v3 `darkMode: ["class"]`). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  /* App palette (v3 colors.app.*) */
+  --color-app-bg-black: var(--app-bg-black);
+  --color-app-off-white: var(--app-off-white);
+  --color-app-off-white-50: var(--app-off-white-50);
+  --color-app-off-black: var(--app-off-black);
+  --color-app-off-black-50: var(--app-off-black-50);
+  --color-app-off-gray: var(--app-off-gray);
+  --color-app-off-gray-50: var(--app-off-gray-50);
+  --color-app-bauhaus-red: var(--app-bauhaus-red);
+  --color-app-bauhaus-red-50: var(--app-bauhaus-red-50);
+  --color-app-bauhaus-green: var(--app-bauhaus-green);
+  --color-app-bauhaus-green-50: var(--app-bauhaus-green-50);
+  --color-app-bauhaus-yellow: var(--app-bauhaus-yellow);
+  --color-app-bauhaus-yellow-50: var(--app-bauhaus-yellow-50);
+  --color-app-bauhaus-bone: var(--app-bauhaus-bone);
+  --color-app-bauhaus-blue: var(--app-bauhaus-blue);
+  --color-app-bauhaus-blue-50: var(--app-bauhaus-blue-50);
+  --color-app-bauhaus-orange: var(--app-bauhaus-orange);
+  --color-app-bauhaus-orange-50: var(--app-bauhaus-orange-50);
+  --color-app-bauhaus-indigo: var(--app-bauhaus-indigo);
+  --color-app-bauhaus-indigo-50: var(--app-bauhaus-indigo-50);
+
+  /* shadcn semantic colors (HSL channels live in :root / .dark below) */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@theme {
+  /* Custom breakpoints (v3 screens.extend) */
+  --breakpoint-phone: 480px;
+  --breakpoint-tablet: 860px;
+  --breakpoint-laptop: 1024px;
+  --breakpoint-desktop: 1440px;
+  --breakpoint-tv: 1800px;
+
+  /* Accordion animations (v3 keyframes + animation) */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
 
 @layer base {
   :root {
@@ -128,4 +211,4 @@ body {
 @keyframes l1 {
   33% {border-radius: 0;background: var(--app-bauhaus-blue) ;clip-path: polygon(0 0,100% 0,100% 100%,0 100%)}
   66% {border-radius: 0;background: var(--app-bauhaus-yellow) ;clip-path: polygon(50% 0,50% 0,100% 100%,0 100%)}
-}
+}

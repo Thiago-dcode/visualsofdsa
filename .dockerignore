@@ -1,0 +1,27 @@
+# Dependencies are installed inside the image (host node_modules are OS-specific).
+node_modules
+
+# Build output and caches — regenerated inside the image.
+.next
+out
+coverage
+*.tsbuildinfo
+
+# Secrets and local env files — never bake these into the image.
+.env
+.env.*
+
+# Git and tooling metadata.
+.git
+.gitignore
+.vscode
+.idea
+
+# Docker and compose files are not needed in the build context.
+Dockerfile
+.dockerignore
+compose*.yml
+
+# Logs and OS junk.
+*.log
+.DS_Store

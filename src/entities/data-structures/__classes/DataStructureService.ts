@@ -2,43 +2,25 @@ import BaseService from "@/lib/classes/BaseService";
 
 class DataStructureService extends BaseService {
   async getOneByLink(link: string) {
-    return await this.client.dataStructure.findUnique({
-      where: {
-        link,
-      },
-    });
+    return await this.client.orm.public.DataStructure.where({ link }).first();
   }
   async getMetaDescription(link: string) {
-    const dataStructure = await this.client.dataStructure.findUnique({
-      where: { link },
-      select: { metaDescription: true },
-    });
+    const dataStructure = await this.client.orm.public.DataStructure
+      .where({ link })
+      .select('metaDescription')
+      .first();
     return dataStructure?.metaDescription ?? null;
   }
   async getAllTypes() {
-    return await this.client.dataStructureType.findMany({
-      include: {
-        children: {
-          include: { type: true },
-        },
-      },
-    });
+    return await this.client.orm.public.DataStructureType
+      .include('children', (children) => children.include('type'))
+      .all();
   }
   async getAllTypesSimple() {
-    return await this.client.dataStructureType.findMany({
-      select: {
-        name: true,
-        enable: true,
-        link: true,
-        children: {
-          select: {
-            name: true,
-            link: true,
-            enable: true,
-          },
-        },
-      },
-    });
+    return await this.client.orm.public.DataStructureType
+      .select('name', 'enable', 'link')
+      .include('children', (children) => children.select('name', 'link', 'enable'))
+      .all();
   }
 }
 
