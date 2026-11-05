@@ -6,7 +6,7 @@ type CallbackLinear<T extends Primitive> = (
   index: number,
   found: boolean,
 ) => Promise<void>;
-type CallbackBinary<T extends Primitive> = (
+type CallbackBinary<_T extends Primitive> = (
   middle: number,
   start: number,
   end: number,
@@ -40,7 +40,7 @@ export default class SearchAlgorithm {
       if (node.data === search) return node;
       if (isSorted) {
         const next = array[i + 1];
-        if (next && next.data) {
+        if (next?.data) {
           const nextData = next.data;
           if (
             (direction === "ascending" && nextData > search) ||

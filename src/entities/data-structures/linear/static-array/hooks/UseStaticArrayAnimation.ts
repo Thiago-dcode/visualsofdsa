@@ -32,7 +32,7 @@ const UseStaticArrayAnimation = (speed: speed) => {
       node: Node<Primitive> | null,
       onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
     ): Promise<void> => {
-      if (!node || !node.ref) return;
+      if (!node?.ref) return;
       await animate(node.ref, "add-node", getSpeed(), {
         onAnimationEnds,
         onlyOnce: true,
@@ -47,7 +47,7 @@ const UseStaticArrayAnimation = (speed: speed) => {
       isFilling: boolean = false,
       onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
     ): Promise<void> => {
-      if (!node || !node.ref) return;
+      if (!node?.ref) return;
       focus(node.ref);
       await animate(node.ref, "write-node", getSpeed() * (isFilling ? 0.5 : 1), {
         onAnimationEnds,
@@ -61,7 +61,7 @@ const UseStaticArrayAnimation = (speed: speed) => {
       node: Node<Primitive> | null,
       onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
     ): Promise<void> => {
-      if (!node || !node.ref) return;
+      if (!node?.ref) return;
       focus(node.ref);
       await animate(node.ref, "access-node", getSpeed(), { onAnimationEnds });
     },
@@ -73,7 +73,7 @@ const UseStaticArrayAnimation = (speed: speed) => {
       node: Node<Primitive> | null,
       onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
     ): Promise<void> => {
-      if (!node || !node.ref) return;
+      if (!node?.ref) return;
       focus(node.ref);
       await animate(node.ref, "search-node", getSpeed() * 0.7, {
         onAnimationEnds,

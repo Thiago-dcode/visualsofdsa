@@ -56,7 +56,7 @@ const algorithmsTypes: AlgorithmTypeInput[] = [
   await db.orm.public.DataStructureType.where((r) => r.id.isNotNull()).deleteAll();
   await db.orm.public.DataStructure.where((r) => r.id.isNotNull()).deleteAll();
 
-  const dataStrusture = "data-structures";
+  const _dataStrusture = "data-structures";
   for (const type of dataStructureTypes) {
     const result = await db.orm.public.DataStructureType.create(type);
 

@@ -13,7 +13,7 @@ export const animate = async (
     onlyOnce?: boolean;
   },
 ): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     if (ref === null) {
       resolve(false);
     } else {

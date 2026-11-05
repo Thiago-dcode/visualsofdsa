@@ -69,9 +69,9 @@ export default function DynamicArray() {
   const handleWrite = useCallback(async () => {
     if (isAnimationRunning || !refWriteIndex.current || !refWriteData.current || !initAction())
       return;
-    const index = Number.parseInt(refWriteIndex.current.value);
+    const index = Number.parseInt(refWriteIndex.current.value, 10);
     const data = refWriteData.current.value;
-    if (!isNaN(index)) await write(data, index);
+    if (!Number.isNaN(index)) await write(data, index);
     else handleToastInfo("write");
     setAnimationRunning(false);
     clearRefs(refWriteIndex.current, refWriteData.current);
@@ -89,9 +89,9 @@ export default function DynamicArray() {
   const handleInsert = useCallback(async () => {
     if (isAnimationRunning || !refIndexInsert.current || !refInsertData.current || !initAction())
       return;
-    const index = Number.parseInt(refIndexInsert.current.value);
+    const index = Number.parseInt(refIndexInsert.current.value, 10);
     const data = refInsertData.current.value || null;
-    if (isNaN(index)) {
+    if (Number.isNaN(index)) {
       handleToastInfo("insert");
       setAnimationRunning(false);
       return;
@@ -105,8 +105,8 @@ export default function DynamicArray() {
 
   const handleAccess = useCallback(async () => {
     if (isAnimationRunning || !refIndexAccess.current || !initAction()) return;
-    const index = Number.parseInt(refIndexAccess.current.value);
-    if (!isNaN(index)) await access(index);
+    const index = Number.parseInt(refIndexAccess.current.value, 10);
+    if (!Number.isNaN(index)) await access(index);
     else handleToastInfo("access");
     clearRefs(refIndexAccess.current);
     setAnimationRunning(false);
@@ -123,16 +123,16 @@ export default function DynamicArray() {
   const handleDelete = useCallback(async () => {
     if (isAnimationRunning || !refIndexDelete.current || !initAction()) return;
 
-    const index = Number.parseInt(refIndexDelete.current.value);
-    if (!isNaN(index)) await del(index);
+    const index = Number.parseInt(refIndexDelete.current.value, 10);
+    if (!Number.isNaN(index)) await del(index);
     clearRefs(refIndexDelete.current);
     setAnimationRunning(false);
   }, [isAnimationRunning, initAction]);
 
   const handleFill = useCallback(async () => {
     if (isAnimationRunning || !refFillAmount.current || !initAction()) return;
-    const amount = Number.parseInt(refFillAmount.current.value);
-    if (isNaN(amount)) {
+    const amount = Number.parseInt(refFillAmount.current.value, 10);
+    if (Number.isNaN(amount)) {
       handleToastInfo("fill");
       setAnimationRunning(false);
       return;
@@ -156,7 +156,7 @@ export default function DynamicArray() {
           }}
           open={open}
         >
-          {array && array.length ? (
+          {array?.length ? (
             <Section>
               {/* WRITE OPERATION */}
               <InputWithButtonContainer>
@@ -370,7 +370,7 @@ export default function DynamicArray() {
             }}
             open={open}
           >
-            {array && array.length ? (
+            {array?.length ? (
               <Section makeResponsive={makeResponsive}>
                 {/* WRITE OPERATION */}
                 <InputWithButtonContainer makeResponsive={makeResponsive}>
@@ -563,24 +563,23 @@ export default function DynamicArray() {
       </div>
 
       <RamContainer>
-        {array &&
-          array.map((node, i) => {
-            return (
-              <MemoryAdressContainer
-                size={device.twResponsive.tablet ? MemorySize.M : MemorySize.L}
-                memory={node}
-                index={i}
-                showIndex={node !== null}
-                key={"memoryAdressContainer-" + `${node ? node.id : "null-" + i}`}
-              >
-                {node !== null ? (
-                  <StaticArrayNodeComponent node={node} setAnimationRunning={setAnimationRunning} />
-                ) : (
-                  <p className="border flex items-center justify-center dark:border-white/50 border-black/50 w-full h-full"></p>
-                )}
-              </MemoryAdressContainer>
-            );
-          })}
+        {array?.map((node, i) => {
+          return (
+            <MemoryAdressContainer
+              size={device.twResponsive.tablet ? MemorySize.M : MemorySize.L}
+              memory={node}
+              index={i}
+              showIndex={node !== null}
+              key={"memoryAdressContainer-" + `${node ? node.id : "null-" + i}`}
+            >
+              {node !== null ? (
+                <StaticArrayNodeComponent node={node} setAnimationRunning={setAnimationRunning} />
+              ) : (
+                <p className="border flex items-center justify-center dark:border-white/50 border-black/50 w-full h-full"></p>
+              )}
+            </MemoryAdressContainer>
+          );
+        })}
 
         {searchResult && (
           <PopUp
@@ -589,21 +588,19 @@ export default function DynamicArray() {
             handleOnPopUpButton={() => {
               setSearchResult(null);
             }}
-            open={searchResult ? true : false}
+            open={!!searchResult}
             showTrigger={false}
             description={
-              <>
-                {!searchResult.found ? (
-                  <>
-                    Data <b>{searchResult.data}</b> not found.
-                  </>
-                ) : (
-                  <>
-                    Data <b>{searchResult.data}</b> found on index: <b>{searchResult.steps - 1}</b>.
-                    Steps taken: <b>{searchResult.steps}</b>.
-                  </>
-                )}
-              </>
+              !searchResult.found ? (
+                <>
+                  Data <b>{searchResult.data}</b> not found.
+                </>
+              ) : (
+                <>
+                  Data <b>{searchResult.data}</b> found on index: <b>{searchResult.steps - 1}</b>.
+                  Steps taken: <b>{searchResult.steps}</b>.
+                </>
+              )
             }
           />
         )}
@@ -616,7 +613,7 @@ export default function DynamicArray() {
               cleanUp();
               setAnimationRunning(false);
             }}
-            open={error ? true : false}
+            open={!!error}
             showTrigger={false}
             description={error.description}
           />

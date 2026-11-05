@@ -28,8 +28,7 @@ export function DarkModeProvider({ children }: { children: ReactElement }) {
       }
       setIsDark(
         document.documentElement.classList.contains("dark") &&
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches,
+          window.matchMedia?.("(prefers-color-scheme: dark)").matches,
       );
     }
   }, []);

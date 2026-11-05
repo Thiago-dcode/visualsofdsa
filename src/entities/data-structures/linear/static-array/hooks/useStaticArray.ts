@@ -2,10 +2,9 @@ import { useCallback, useState } from "react";
 import { config } from "@/config";
 import { useSpeed } from "@/hooks/useSpeed";
 import { delay, random } from "@/lib/utils";
-import { Direction, MemorySize, Primitive } from "@/types";
+import { Direction, Primitive } from "@/types";
 import Position from "../../../../../lib/classes/position/Position";
 import Node from "../../_classes/Node";
-import { searchResult } from "../type";
 import UseStaticArrayAnimation from "./UseStaticArrayAnimation";
 
 export default function useStaticArray(size: number = 50) {
@@ -144,7 +143,7 @@ export default function useStaticArray(size: number = 50) {
         }
         try {
           await searchAnimation(node);
-        } catch (error) {}
+        } catch (_error) {}
       }
 
       return {

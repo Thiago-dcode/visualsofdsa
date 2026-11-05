@@ -21,7 +21,7 @@ export default function useHeap({
     description: string;
   } | null>(null);
   const freePositions = useRef(new Queue());
-  const device = useResponsive((e, d, sizeChanged) => {
+  const device = useResponsive((_e, _d, sizeChanged) => {
     if (sizeChanged.width) {
       free();
     }

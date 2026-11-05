@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import ConfigComponent from "@/components/app/ConfigComponent";
 import Properties from "@/components/app/Properties";
@@ -36,7 +36,7 @@ export default function SortView({ type }: { type: AlgoSortType }) {
   const { speed, handleSetSpeed } = useSpeed(1, config.localStorageKeys.speed.sort);
   const { visualizationMode, handleSetVisualizationMode } = useVisualizationArray(
     "bars",
-    async (vimValue) => {
+    async (_vimValue) => {
       await handleResetAction(false, type === "merge");
     },
   );
@@ -56,7 +56,7 @@ export default function SortView({ type }: { type: AlgoSortType }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { toastInfo } = useToast();
 
-  const device = useResponsive((e, device, sizeChanged) => {
+  const device = useResponsive((_e, _device, _sizeChanged) => {
     // //Every time the screen size is updated, will reset the array
     // if(sizeChanged.width){
     //   reset();
@@ -119,9 +119,9 @@ export default function SortView({ type }: { type: AlgoSortType }) {
   };
   const getValue = () => {
     if (!inputRef.current || isAnimationRunning) return null;
-    const value = parseInt(inputRef.current.value);
+    const value = parseInt(inputRef.current.value, 10);
 
-    if (!value || isNaN(value)) {
+    if (!value || Number.isNaN(value)) {
       toast.warning("You must select a value", {
         position: "top-center",
       });
@@ -184,7 +184,7 @@ export default function SortView({ type }: { type: AlgoSortType }) {
                 {" "}
                 <p>Direction?</p>
                 <Switch
-                  checked={direction === "ascending" ? false : true}
+                  checked={direction !== "ascending"}
                   onCheckedChange={() => {
                     toggleDirection();
                   }}
@@ -202,7 +202,7 @@ export default function SortView({ type }: { type: AlgoSortType }) {
           </Section>
         )}
         <Section className="justify-end">
-          {array && array.length && isSorted ? (
+          {array?.length && isSorted ? (
             <ButtonAction
               title="reset"
               action="fill"
@@ -213,7 +213,7 @@ export default function SortView({ type }: { type: AlgoSortType }) {
               }}
             />
           ) : null}
-          {array && array.length ? (
+          {array?.length ? (
             <ButtonAction
               title="delete"
               action="delete"

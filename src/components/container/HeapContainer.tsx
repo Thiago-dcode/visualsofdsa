@@ -1,5 +1,5 @@
 import { Dot } from "lucide-react";
-import React, { ReactNode, useRef } from "react";
+import { ReactNode, useRef } from "react";
 import ButtonAction from "@/entities/data-structures/linear/_components/ButtonAction";
 import { Heap } from "@/hooks/useHeap";
 import { useToast } from "@/hooks/useToast";
@@ -25,8 +25,8 @@ function HeapContainer({
 
   const getInputValue = () => {
     if (!inputRef.current) return 0;
-    const n = Number.parseInt(inputRef.current.value);
-    if (isNaN(n) || n < 0 || n > 100) {
+    const n = Number.parseInt(inputRef.current.value, 10);
+    if (Number.isNaN(n) || n < 0 || n > 100) {
       toastInfo("Please enter a valid number between 0 and 100");
       return null;
     }

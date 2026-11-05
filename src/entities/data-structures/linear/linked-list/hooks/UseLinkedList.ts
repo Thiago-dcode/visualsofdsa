@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import Position from "@/lib/classes/position/Position";
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
@@ -61,14 +61,14 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
 
           steps = _steps || 1;
           try {
-            if (_node && _node.ref) {
+            if (_node?.ref) {
               focus(_node.ref);
               await animate(_node.ref, `find-node-${isDark ? "dark" : "light"}`, getSpeed());
 
               if (direction === "forward") await animateEdge(_node.nextEdge.ref);
               else if (direction === "backward") await animateEdge(_node.prevEdge.ref);
             }
-          } catch (error) {}
+          } catch (_error) {}
         },
       );
 
@@ -97,7 +97,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
 
         steps = _steps || 1;
         try {
-          if (_node && _node.ref) {
+          if (_node?.ref) {
             const found = index === _index;
             focus(_node.ref);
             await animate(
@@ -110,7 +110,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
               else if (direction === "backward") await animateEdge(_node.prevEdge.ref);
             }
           }
-        } catch (error) {}
+        } catch (_error) {}
       });
 
       setArrayLs(linkedList.toNodeArray());
@@ -144,7 +144,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       } else {
         node = await linkedList.getNode(index, async (_node, _index, direction, _steps) => {
           steps = _steps || 1;
-          if (_node && _node.ref) {
+          if (_node?.ref) {
             try {
               const found = index === _index;
               focus(_node.ref);
@@ -157,7 +157,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
                 if (direction === "forward") await animateEdge(_node.nextEdge.ref);
                 else if (direction === "backward") await animateEdge(_node.prevEdge.ref);
               }
-            } catch (error) {}
+            } catch (_error) {}
           }
         });
       }
@@ -201,7 +201,7 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
   };
 
   const traverse = async (direction: "forward" | "backward" = "forward") => {
-    linkedList.traverse(direction, async (node, i) => {
+    linkedList.traverse(direction, async (_node, _i) => {
       //handle animation
     });
   };

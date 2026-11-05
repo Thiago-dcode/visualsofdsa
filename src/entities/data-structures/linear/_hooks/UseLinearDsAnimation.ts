@@ -75,7 +75,7 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed, isOve
               start: `${node.position.y}px`,
               end: `${end}px`,
             },
-            onAnimationEnds: (e) => {
+            onAnimationEnds: (_e) => {
               ref.style.bottom = `${end}px`;
               node.position.y = end;
             },

@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type props = HTMLAttributes<HTMLDivElement> & {

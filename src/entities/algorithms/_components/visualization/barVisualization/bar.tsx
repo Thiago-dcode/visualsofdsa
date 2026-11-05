@@ -1,7 +1,7 @@
 import { Dot } from "lucide-react";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import HoverNodeCardContent from "@/components/container/CardContainer";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { cn, copyToClipboard } from "@/lib/utils";
 

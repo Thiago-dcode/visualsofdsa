@@ -3,7 +3,7 @@
 import { Dot } from "lucide-react";
 import { forwardRef } from "react";
 import HoverNodeCardContent from "@/components/container/CardContainer";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
 import { config } from "@/config";
 import { Primitive } from "@/types";
 import { cn, copyToClipboard } from "../../../../lib/utils";
@@ -21,34 +21,40 @@ const LinearNodeComponent = forwardRef<HTMLDivElement, props>(
     return (
       <HoverCard openDelay={100}>
         <HoverCardTrigger>
-          <>
-            {node && (
-              <div
-                onClick={async () => {
-                  if (node.data) await copyToClipboard(node.data + "");
-                }}
-                ref={ref}
-                id={`${dsType}-node-${node.id}-${node.data}`}
-                style={style}
-                className={cn(
-                  "relative border-2  text-center flex items-center justify-center overflow-auto",
-                  config.darkModeTailwind,
-                  className,
-                  {
-                    "text-[rgb(226, 232, 240)]": node.data === null,
-                  },
-                )}
+          {node && (
+            // biome-ignore lint/a11y/useSemanticElements: a <button> cannot contain the <p> content rendered here
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={async () => {
+                if (node.data) await copyToClipboard(node.data + "");
+              }}
+              onKeyDown={async (e) => {
+                if (e.key !== "Enter" && e.key !== " ") return;
+                e.preventDefault();
+                if (node.data) await copyToClipboard(node.data + "");
+              }}
+              ref={ref}
+              id={`${dsType}-node-${node.id}-${node.data}`}
+              style={style}
+              className={cn(
+                "relative border-2  text-center flex items-center justify-center overflow-auto",
+                config.darkModeTailwind,
+                className,
+                {
+                  "text-[rgb(226, 232, 240)]": node.data === null,
+                },
+              )}
+            >
+              <p
+                className={cn({
+                  "text-app-bauhaus-blue font-semibold": node.data === null,
+                })}
               >
-                <p
-                  className={cn({
-                    "text-app-bauhaus-blue font-semibold": node.data === null,
-                  })}
-                >
-                  {node.data !== null ? node.data : "NULL"}
-                </p>
-              </div>
-            )}
-          </>
+                {node.data !== null ? node.data : "NULL"}
+              </p>
+            </div>
+          )}
         </HoverCardTrigger>
         <HoverNodeCardContent
           color={

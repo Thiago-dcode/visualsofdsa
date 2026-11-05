@@ -1,11 +1,11 @@
 import { ArrowLeft, ArrowRight, Dot } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Arrow from "@/components/ui/arrow";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import useAnimation from "@/hooks/useAnimation";
 import { animate } from "@/lib/animations";
 import NodeShape from "@/lib/classes/NodeShape";
-import { cn, getAngle, getEuclideanDistance, getMemoryAddress } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Primitive } from "@/types";
 import LinkedListNode from "../classes/LinkedListNode";
 
@@ -33,7 +33,7 @@ export default function LinkedListNodeComponent({
   const handleRef = useCallback(async (element: HTMLElement | HTMLDivElement | null) => {
     if (!element) return;
     node.ref = element;
-    if (node.next && node.next.isLastAdd && node.nextEdge) {
+    if (node.next?.isLastAdd && node.nextEdge) {
       setAnimationRunning(true);
       await animate(node.nextEdge.ref, "lit-node-edge", 1);
     }
@@ -50,11 +50,11 @@ export default function LinkedListNodeComponent({
   }, []);
 
   useEffect(() => {
-    if (node.next && node.next.ref) {
+    if (node.next?.ref) {
       node.next.ref.style.outline = isOver ? "rgb(22,163,74,0.8) solid 5px" : "none";
       node.next.ref.style.borderRadius = isOver ? "5px" : "none";
     }
-    if (node.prev && node.prev.ref && isDoubly) {
+    if (node.prev?.ref && isDoubly) {
       node.prev.ref.style.outline = isOver ? "rgb(220,38,38,0.8) solid 5px" : "none";
       node.prev.ref.style.borderRadius = isOver ? "5px" : "none";
     }
@@ -64,7 +64,9 @@ export default function LinkedListNodeComponent({
   return (
     <HoverCard openDelay={100}>
       <HoverCardTrigger>
+        {/* biome-ignore lint/a11y/useSemanticElements: a fieldset would add form semantics; this is a plain hover container */}
         <div
+          role="group"
           onMouseLeave={(e) => {
             e.stopPropagation();
             setIsOver(false);

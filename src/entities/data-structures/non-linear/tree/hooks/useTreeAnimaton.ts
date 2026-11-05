@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect } from "react";
 import { toast } from "sonner";
 import useAnimation from "@/hooks/useAnimation";
 import { useSoundAnimation } from "@/hooks/useSoundAnimation";
@@ -7,7 +7,17 @@ import { Primitive, speed } from "@/types";
 import { BinarySearchTree } from "../../binary-search-tree/classes/BinarySearchTree";
 import Tree from "../_classes/Tree";
 import TreeNode from "../_classes/TreeNode";
-import { isSortable, OnCompare, OnFindSuccessor, OnRemove, OnTraversal } from "../types";
+import { OnCompare, OnFindSuccessor, OnRemove, OnTraversal } from "../types";
+
+type TreeAction = "traverse" | "compare" | "insert" | "remove" | "move" | "successor";
+
+const SPEED_SCALED_DURATION: Record<speed, number> = {
+  1: 0.8,
+  2: 0.5,
+  3: 0.3,
+  4: 0.2,
+};
+const FIXED_DURATION = 0.8;
 
 const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
   tree: Tree<T, K>,
@@ -33,39 +43,43 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
     },
     [getMinMax],
   );
-  const getSpeed = useCallback(() => {
-    switch (speed) {
-      case 1:
-        return 0.8;
-      case 2:
-        return 0.5;
-      case 3:
-        return 0.3;
-      case 4:
-        return 0.2;
-    }
-  }, [speed]);
+  const getSpeed = useCallback(
+    (action: TreeAction): number => {
+      switch (action) {
+        case "traverse":
+        case "compare":
+          return SPEED_SCALED_DURATION[speed] ?? SPEED_SCALED_DURATION[1];
+        case "insert":
+        case "remove":
+        case "move":
+        case "successor":
+          return FIXED_DURATION;
+      }
+    },
+    [speed],
+  );
   const { animateEdge, focus } = useAnimation();
   const onTraversal: OnTraversal<T, K> = async (node, edge) => {
     if (!node.ref) return;
     focus(node.ref);
     handleSound(node);
-    await animate(node.ref, `find-node`, getSpeed());
-    if (edge && edge.ref) await animateEdge(edge, 0.5, false);
+    await animate(node.ref, `find-node`, getSpeed("traverse"));
+    if (edge?.ref) await animateEdge(edge, 0.5, false);
   };
 
   const onCompareAnimation: OnCompare<T, K> = async (node, edge, data, oppositeNode) => {
     if (oppositeNode) await oppositeBranchAnimation(oppositeNode, false);
-    if (edge && edge.ref) {
-      await animate(edge.ref, `lit-node-edge`, 0.5);
+    if (edge?.ref) {
+      await animate(edge.ref, `lit-node-edge`, getSpeed("compare"));
     }
     if (node.ref) {
+      const foundNode = node.data === data;
       focus(node.ref);
       handleSound(node);
       await animate(
         node.ref,
-        `${node.data === data ? `find-node` : `compare-node`}`,
-        node.data === data ? 0.8 : 0.5,
+        `${foundNode ? `find-node` : `compare-node`}`,
+        getSpeed("compare") * (foundNode ? 0.5 : 1),
       );
     }
   };
@@ -78,9 +92,9 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
     }
     focus(node.ref);
     handleSound(node);
-    await animate(node.ref, `find-node`, 0.8);
+    await animate(node.ref, `find-node`, getSpeed("successor"));
 
-    if (edge && edge.ref) {
+    if (edge?.ref) {
       await animateEdge(edge, 0.5);
     }
 
@@ -92,16 +106,16 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
     const nodeRef = node.ref;
 
     if (!nodeRef) return;
-    if (successor && successor.ref) {
+    if (successor?.ref) {
       const successorRef = successor.ref;
       if (!isCaseThree) {
         handleSound(node);
-        await animate(nodeRef, `remove-node`, 0.8);
+        await animate(nodeRef, `remove-node`, getSpeed("remove"));
         nodeRef.style.display = "none";
       }
       focus(successorRef);
       handleSound(successor);
-      await animate(successorRef, `move-node`, 0.8, {
+      await animate(successorRef, `move-node`, getSpeed("move"), {
         properties: {
           top_from: `${successor.position.y}px`,
           left_from: `${successor.position.x}px`,
@@ -119,24 +133,27 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
       }
     } else {
       handleSound(node);
-      await animate(nodeRef, `remove-node`, 0.8);
+      await animate(nodeRef, `remove-node`, getSpeed("remove"));
       nodeRef.style.visibility = "hidden";
     }
   };
   const insertAnimation = async (node: K) => {
     focus(node.ref);
     handleSound(node);
-    await animate(node.ref, `insert-node`, 0.8, {
+    await animate(node.ref, `insert-node`, getSpeed("insert"), {
       onlyOnce: true,
     });
     await oppositeBranchAnimation();
     node.isLastAdd = false;
   };
 
+  useEffect(() => {
+    console.log("SPEED CHANGED", speed);
+  }, [speed]);
   const oppositeBranchAnimation = async (branch: K | null = null, enable = true) => {
     await tree.inOrderTraversal(branch || tree.root, async (node) => {
       animate(node.ref, `${enable ? "enable" : "disable"}-node`, 0.5, {
-        onAnimationEnds: (e) => {
+        onAnimationEnds: (_e) => {
           if (node.ref) {
             if (enable) {
               node.ref.style.opacity = "1";

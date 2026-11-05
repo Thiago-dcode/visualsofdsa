@@ -1,6 +1,6 @@
 "use client";
 import { Eye, EyeOff } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion";
 import Title from "../../ui/Title";
 import "./style.css";
@@ -30,7 +30,7 @@ function PageHeaderTitle({ title, info }: Props) {
         type="single"
         collapsible
       >
-        <AccordionItem onSelect={(e) => {}} className="flex flex-col w-full gap-2" value="item-1">
+        <AccordionItem onSelect={(_e) => {}} className="flex flex-col w-full gap-2" value="item-1">
           <AccordionTrigger
             showIcon={false}
             className={cn("flex items-center justify-center gap-2 p-0")}

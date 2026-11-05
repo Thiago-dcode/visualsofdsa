@@ -34,9 +34,9 @@ type Device = {
 
 function useResponsive(
   onResize = (
-    e: UIEvent,
-    device: Device,
-    sizeChanged: {
+    _e: UIEvent,
+    _device: Device,
+    _sizeChanged: {
       width: boolean;
       height: boolean;
     },

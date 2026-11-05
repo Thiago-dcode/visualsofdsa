@@ -2,12 +2,7 @@
 import { SquareChevronDown, SquareChevronUp } from "lucide-react";
 import React, { SetStateAction } from "react";
 import { cn } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 type OperationsContainerProps = {
   children: React.ReactNode;

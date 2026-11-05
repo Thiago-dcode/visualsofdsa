@@ -1,4 +1,3 @@
-import { waitFor } from "@testing-library/dom";
 import { renderHook } from "@testing-library/react";
 import { act } from "react";
 import Node from "../../../_classes/Node";
@@ -441,7 +440,7 @@ describe("UseDynamicArray HOOK", () => {
       });
     }
     expect(result.current.size).toBe(100);
-    if (result.current.array && result.current.array[0]) {
+    if (result.current.array?.[0]) {
       expect(result.current.array[0].data).toBe("hello-0");
       expect(result.current.array[0]).toBeInstanceOf(DynamicArrayNode);
     }
@@ -449,7 +448,7 @@ describe("UseDynamicArray HOOK", () => {
       await result.current.delete(0);
     });
     expect(result.current.size).toBe(99);
-    if (result.current.array && result.current.array[0]) {
+    if (result.current.array?.[0]) {
       expect(result.current.array[0].data).toBe("hello-1");
       expect(result.current.array[99]).toBeNull();
     }

@@ -52,7 +52,7 @@ const useDynamicArrayAnimation = (speed: speed) => {
     };
     if (indexRef) {
       indexRef.textContent = indexRef.textContent
-        ? parseInt(indexRef.textContent) + (direction === "right" ? 1 : -1) + ""
+        ? parseInt(indexRef.textContent, 10) + (direction === "right" ? 1 : -1) + ""
         : indexRef.textContent;
     }
     const animation = `${direction === "right" ? "insert" : "delete"}-node-dynamic-array`;
@@ -73,7 +73,7 @@ const useDynamicArrayAnimation = (speed: speed) => {
     if (indexRef) afterAnimation(indexRef);
   };
   const popAnimation = async (node: Node<Primitive> | null): Promise<void> => {
-    if (!node || !node.ref) {
+    if (!node?.ref) {
       return;
     }
     focus(node.ref);

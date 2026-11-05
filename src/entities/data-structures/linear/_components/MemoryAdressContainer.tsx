@@ -1,6 +1,6 @@
-import React, { ReactNode, useCallback, useMemo } from "react";
+import { ReactNode, useCallback, useMemo } from "react";
 import Memory from "@/lib/classes/Memory";
-import { generateKey, prefix0 } from "@/lib/utils";
+import { prefix0 } from "@/lib/utils";
 import { MemorySize } from "@/types";
 
 type props = {

@@ -23,7 +23,7 @@ export function MuteProvider({ children }: { children: ReactElement }) {
     if (document) {
       const muted = localStorage.getItem(config.localStorageKeys.muted);
       if (muted === null) localStorage.setItem(config.localStorageKeys.muted, "0");
-      setIsMuted(muted == "1");
+      setIsMuted(muted === "1");
     }
   }, []);
   useEffect(() => {

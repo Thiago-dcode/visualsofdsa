@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import Properties, { PropertiesType } from "@/components/app/Properties";
-import { Primitive } from "@/types";
 import List from "../_classes/List";
 
 export default function PropertiesList({ list, trigger }: { list: List; trigger: any[] }) {

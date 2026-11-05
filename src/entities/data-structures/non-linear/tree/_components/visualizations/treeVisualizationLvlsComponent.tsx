@@ -73,7 +73,7 @@ function TreeVisualizationLvlsComponent<T extends Primitive, K extends TreeNode<
           shape="line"
         />
       ) : null}
-      {children && children.length
+      {children?.length
         ? children.map((treeObjChild) => (
             <TreeVisualizationLvlsComponent<T, K>
               key={`tree-visualization-lvls-component-${treeObjChild.node.id}`}

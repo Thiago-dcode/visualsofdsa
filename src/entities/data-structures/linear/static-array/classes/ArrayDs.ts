@@ -1,6 +1,4 @@
 import { Primitive } from "@/types";
-import Position from "../../../../../lib/classes/position/Position";
-import List from "../../_classes/List";
 import Node from "../../_classes/Node";
 
 export default class FixedArray<T extends Primitive> {

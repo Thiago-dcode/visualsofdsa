@@ -1,6 +1,6 @@
 "use client";
 import { ArrowRight } from "lucide-react";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ConfigComponent from "@/components/app/ConfigComponent";
 import Properties from "@/components/app/Properties";
 import SpeedComponent from "@/components/app/speedComponent";
@@ -75,8 +75,8 @@ export default function View({ isDoubly = false }: { isDoubly?: boolean }) {
   };
   const handleAddByInput = async () => {
     if (!inputAddIndexRef.current || isBlocked) return;
-    const addIndex = Number.parseInt(inputAddIndexRef.current.value);
-    if (isNaN(addIndex)) {
+    const addIndex = Number.parseInt(inputAddIndexRef.current.value, 10);
+    if (Number.isNaN(addIndex)) {
       inputAddIndexRef.current.value = "";
       toastError("Invalid index");
       return;
@@ -103,8 +103,8 @@ export default function View({ isDoubly = false }: { isDoubly?: boolean }) {
   };
   const handleDeleteByInput = async () => {
     if (isBlocked || !inputDeleteIndexRef.current) return;
-    const deleteIndex = Number.parseInt(inputDeleteIndexRef.current.value);
-    if (isNaN(deleteIndex)) {
+    const deleteIndex = Number.parseInt(inputDeleteIndexRef.current.value, 10);
+    if (Number.isNaN(deleteIndex)) {
       inputDeleteIndexRef.current.value = "";
       toastError("Invalid index");
       return;
@@ -121,8 +121,8 @@ export default function View({ isDoubly = false }: { isDoubly?: boolean }) {
   };
   const handleGetByInput = async () => {
     if (isBlocked || !inputGetIndexRef.current) return;
-    const getIndex = Number.parseInt(inputGetIndexRef.current.value);
-    if (isNaN(getIndex)) {
+    const getIndex = Number.parseInt(inputGetIndexRef.current.value, 10);
+    if (Number.isNaN(getIndex)) {
       inputGetIndexRef.current.value = "";
       toastError("Invalid index");
       return;
@@ -158,7 +158,7 @@ export default function View({ isDoubly = false }: { isDoubly?: boolean }) {
                   ref={inputAddIndexRef}
                   placeholder="index"
                   className="text-black w-24"
-                  onChange={(e) => {}}
+                  onChange={(_e) => {}}
                   type="number"
                   min={0}
                 />
@@ -166,7 +166,7 @@ export default function View({ isDoubly = false }: { isDoubly?: boolean }) {
                   ref={inputAddDataRef}
                   placeholder="data"
                   className="text-black w-24"
-                  onChange={(e) => {}}
+                  onChange={(_e) => {}}
                 />
                 <ButtonAction
                   title="add"
@@ -522,8 +522,8 @@ export default function View({ isDoubly = false }: { isDoubly?: boolean }) {
           <LinkedListNodeComponent
             isDoubly={isDoubly}
             setAnimationRunning={setAnimationRunning}
-            isHead={linkedList.head && linkedList.head.id === node.id ? true : false}
-            isTail={linkedList.tail && linkedList.tail.id === node.id ? true : false}
+            isHead={!!(linkedList.head && linkedList.head.id === node.id)}
+            isTail={!!(linkedList.tail && linkedList.tail.id === node.id)}
             key={`linkedListNodeComponent-${node.data}-${node.id}-(${node.position.x},${node.position.y})`}
             index={i}
             node={node}

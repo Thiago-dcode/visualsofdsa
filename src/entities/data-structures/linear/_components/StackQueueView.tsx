@@ -161,21 +161,20 @@ const StackQueueView = ({ linearDsName }: { linearDsName: "stack" | "queue" }) =
       </div>
 
       <LinearDsContainer width={config.width} height={config.height} listName={linearDs.name}>
-        {nodeArray &&
-          nodeArray.map((node, i) => {
-            return (
-              <StackQueueComponent
-                linearDsName={linearDsName}
-                handleAddAnimation={_handleAddAnimation}
-                handleFillerAnimation={_handleFillerAnimation}
-                height={linearDs.nodeHeight}
-                linearDs={linearDs}
-                key={"stackNode-" + i + "-" + node.data + "-" + node.id}
-                node={node}
-                id={i}
-              />
-            );
-          })}
+        {nodeArray?.map((node, i) => {
+          return (
+            <StackQueueComponent
+              linearDsName={linearDsName}
+              handleAddAnimation={_handleAddAnimation}
+              handleFillerAnimation={_handleFillerAnimation}
+              height={linearDs.nodeHeight}
+              linearDs={linearDs}
+              key={"stackNode-" + i + "-" + node.data + "-" + node.id}
+              node={node}
+              id={i}
+            />
+          );
+        })}
       </LinearDsContainer>
 
       <PopUp

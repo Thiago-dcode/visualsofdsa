@@ -242,7 +242,7 @@ export class BinarySearchTree<T extends number>
 
     // Find the minimum value in the right subtree
     let isFirstCall = true;
-    const isPreviousSuccessor = false;
+    const _isPreviousSuccessor = false;
     while (successor.left) {
       if (onFindSuccessor) await onFindSuccessor(successor, successor.leftEdge, isFirstCall, false);
       pSuccessor = successor;

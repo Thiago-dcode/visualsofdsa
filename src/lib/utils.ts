@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { v4 as uuid4 } from "uuid";
 import { Link } from "@/components/app/nav/type";
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import { Direction, Entities, EntityWithType, Position, Primitive, speed } from "@/types";
+import { Direction, Position, Primitive, speed } from "@/types";
 import PositionClass from "./classes/position/Position";
 
 export function cn(...inputs: ClassValue[]) {
@@ -105,7 +105,7 @@ export const generateKey = (pre: Primitive = "") => {
 export function removePx(value: string): number {
   if (!value) return 0;
   const result = parseFloat(value.replace(/px$/, ""));
-  return isNaN(result) ? 0 : result;
+  return Number.isNaN(result) ? 0 : result;
 }
 export function getEuclideanDistance(position1: Position, position2: Position) {
   return Math.sqrt((position1.x - position2.x) ** 2 + (position1.y - position2.y) ** 2);

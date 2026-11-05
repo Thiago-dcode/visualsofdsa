@@ -1,10 +1,8 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { Primitive } from "@/types";
 import Node from "../../_classes/Node";
 import LinearNodeComponent from "../../_components/LinearNodeComponent";
-import { DynamicArrayNode } from "../../dynamic-array/class/DynamicArrayNode";
 import UseStaticArrayAnimation from "../hooks/UseStaticArrayAnimation";
-import { ArrayActions } from "../type";
 
 type props = {
   node: Node<Primitive>;

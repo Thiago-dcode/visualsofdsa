@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useDarkMode } from "@/context/darkModeContext";
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import useResponsive from "@/hooks/useResponsive";
@@ -41,7 +41,7 @@ export default function BarsVisualizationSorted({
     if (newWidth > MAXBARWIDTH) setBarWidth(MAXBARWIDTH);
     else setBarWidth(newWidth);
   };
-  const device = useResponsive((e, device, sizeChanged) => {
+  const device = useResponsive((_e, _device, sizeChanged) => {
     if (sizeChanged.width) {
       if (!containerRef.current) return;
       handleSetBarWidth(containerRef.current.offsetWidth / array.length);

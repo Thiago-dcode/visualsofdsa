@@ -15,7 +15,7 @@ export const useSpeed = (defaultSpeed: speed, localStorageKey: string) => {
   useEffect(() => {
     const storedSpeed = localStorage.getItem(localStorageKey);
     if (storedSpeed) {
-      const parsedSpeed = parseInt(storedSpeed) as speed;
+      const parsedSpeed = parseInt(storedSpeed, 10) as speed;
       setSpeed(parsedSpeed);
     }
   }, [localStorageKey]);

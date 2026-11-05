@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Primitive, speed } from "@/types";
 import LinearDs from "../_classes/LinearDs";
 
-const MAX_WIDTH = 600;
+const _MAX_WIDTH = 600;
 export default function LinearDsConfig({
   stack,
   maxWidth,
@@ -26,8 +26,8 @@ export default function LinearDsConfig({
         <Input
           defaultValue={stack.maxSize}
           onChange={(e) => {
-            stack.maxSize = parseInt(e.target.value);
-            setConfig("maxSize", parseInt(e.target.value));
+            stack.maxSize = parseInt(e.target.value, 10);
+            setConfig("maxSize", parseInt(e.target.value, 10));
           }}
           name="size"
           type="range"
@@ -40,8 +40,8 @@ export default function LinearDsConfig({
         <Input
           defaultValue={stack.width}
           onChange={(e) => {
-            stack.width = parseInt(e.target.value);
-            setConfig("width", parseInt(e.target.value));
+            stack.width = parseInt(e.target.value, 10);
+            setConfig("width", parseInt(e.target.value, 10));
           }}
           name="width"
           type="range"

@@ -1,5 +1,5 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import { createRandomArrayOfNodes, createRandomUniqueArrayOfNodes } from "@/lib/utils";
+import { createRandomUniqueArrayOfNodes } from "@/lib/utils";
 import { Direction } from "@/types";
 import { SortAlgorithms } from "./SortAlgorithms";
 

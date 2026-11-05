@@ -1,7 +1,6 @@
 import { Edge } from "@/lib/classes/Edge";
 import { Primitive } from "@/types";
 import Node from "../../linear/_classes/Node";
-import Tree from "./_classes/Tree";
 import TreeNode from "./_classes/TreeNode";
 
 export type TraversalType = "inOrder" | "postOrder" | "lvlOrder" | "preOrder";

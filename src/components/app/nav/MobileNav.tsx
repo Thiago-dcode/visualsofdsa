@@ -1,8 +1,8 @@
 "use client";
-import { ChevronsRight, Dot, SquareMenu } from "lucide-react";
+import { Dot, SquareMenu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Accordion,
   AccordionContent,

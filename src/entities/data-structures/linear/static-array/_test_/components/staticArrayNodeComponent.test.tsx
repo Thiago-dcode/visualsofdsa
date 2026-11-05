@@ -7,12 +7,9 @@ import StaticArrayNodeComponent from "../../components/StaticArrayNodeComponent"
 const nodeElements = (array: Node<Primitive>[] | null) => {
   return (
     <>
-      {array &&
-        array.map((node, i) => {
-          return (
-            <StaticArrayNodeComponent node={node} setAnimationRunning={() => {}} key={i + ""} />
-          );
-        })}
+      {array?.map((node, i) => {
+        return <StaticArrayNodeComponent node={node} setAnimationRunning={() => {}} key={i + ""} />;
+      })}
     </>
   );
 };
@@ -21,7 +18,7 @@ describe("StaticArrayNodeComponent", () => {
   it("Should Render a single node and set ref", async () => {
     const node: Node<Primitive> = new Node(1, new Position(0, 0));
     expect(node.ref).toBeNull();
-    const ui = render(<StaticArrayNodeComponent node={node} setAnimationRunning={() => {}} />);
+    const _ui = render(<StaticArrayNodeComponent node={node} setAnimationRunning={() => {}} />);
     expect(node.ref).toBeTruthy();
     if (node.ref) {
       expect(node.ref.textContent).toBe(node.data + "");
@@ -40,7 +37,7 @@ describe("StaticArrayNodeComponent", () => {
       nodes[i].data = i;
       expect(nodes[i].ref).toBeNull();
     }
-    const ui = render(nodeElements(nodes));
+    const _ui = render(nodeElements(nodes));
     const paragraphs = screen.getAllByRole("paragraph");
     expect(paragraphs.length).toBe(nodes.length);
     for (let i = 0; i < nodes.length; i++) {

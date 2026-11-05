@@ -59,12 +59,12 @@ export const useBinarySearchTree = (speed: speed) => {
     }
   };
   const search = async (data: number) => {
-    const node = await binarySearchTree.search(data, onCompareAnimation);
+    const _node = await binarySearchTree.search(data, onCompareAnimation);
 
     await oppositeBranchAnimation();
   };
   const remove = async (data: number) => {
-    const result = await binarySearchTree.remove(
+    const _result = await binarySearchTree.remove(
       data,
       onCompareAnimation,
       findSuccessor,

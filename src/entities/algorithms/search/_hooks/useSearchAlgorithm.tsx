@@ -105,7 +105,7 @@ export default function useSearchAlgorithm(
         steps++;
         const middleNode = array[middle];
 
-        if (middleNode && middleNode.ref) {
+        if (middleNode?.ref) {
           if (visualization === "bars")
             animateSound(middleNode.data as number, minArrayValue, maxArrayValue);
           const found = middleNode.data === search;
@@ -123,14 +123,14 @@ export default function useSearchAlgorithm(
             ) {
               for (let i = middle; i <= end; i++) {
                 const node = array[i];
-                if (!node || !node.ref) continue;
+                if (!node?.ref) continue;
                 toggleEnableNodeAnimation(node.ref, false);
               }
             } else {
               //disable nodes from left side
               for (let i = start; i <= middle; i++) {
                 const node = array[i];
-                if (!node || !node.ref) continue;
+                if (!node?.ref) continue;
                 toggleEnableNodeAnimation(node.ref, false);
               }
             }
@@ -144,7 +144,7 @@ export default function useSearchAlgorithm(
     onSearchEnds(!!node, steps | 1, search, index);
     for (let i = 0; i < array.length; i++) {
       const node = array[i];
-      if (!node || !node.ref) continue;
+      if (!node?.ref) continue;
       toggleEnableNodeAnimation(node.ref, true);
     }
   };

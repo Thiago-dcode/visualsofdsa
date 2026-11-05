@@ -1,5 +1,4 @@
 import Link from "next/link";
-import React from "react";
 import { cn } from "@/lib/utils";
 import Title from "../../ui/Title";
 import { LinkItem } from "./type";
@@ -34,7 +33,7 @@ export default function LinksComponent({
                 className={cn(
                   "  bg-app-bauhaus-indigo-50  text-center  phone:h-16 h-14 border-4  border-app-bauhaus-indigo dark:text-app-off-white text-app-off-black dark:hover:border-app-bauhaus-yellow hover:border-app-bauhaus-yellow flex items-center justify-center phone:w-60 p-1 w-40 rounded-md  ",
                   {
-                    "cursor-pointer": entity.link != "#",
+                    "cursor-pointer": entity.link !== "#",
                     "opacity-50 hover:bg-transparent cursor-default pointer-events-none":
                       !entity.enable || entity.link === "#",
                   },

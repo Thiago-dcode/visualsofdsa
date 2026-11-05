@@ -1,5 +1,3 @@
-import React from "react";
-
 function Loader({ size = 40 }: { size?: number }) {
   return (
     <div

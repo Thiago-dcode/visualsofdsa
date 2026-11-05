@@ -1,4 +1,3 @@
-import React from "react";
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { Direction, VisualizationArrays } from "@/types";
 import BarVisualization from "./barVisualization";

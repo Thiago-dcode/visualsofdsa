@@ -1,7 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { listName, Primitive } from "@/types";
-import LinearDs from "../_classes/LinearDs";
+import { listName } from "@/types";
 
 function LinearDsContainer({
   children,
@@ -19,7 +18,7 @@ function LinearDsContainer({
   return (
     <div className={cn("w-full h-full flex items-center justify-center px-4", className)}>
       <div
-        className={` border-l-8 border-r-8 ${listName == "stack" ? "border-b-8 rounded-b-lg" : ""} px-2 dark:border-app-off-white border-app-off-black`}
+        className={` border-l-8 border-r-8 ${listName === "stack" ? "border-b-8 rounded-b-lg" : ""} px-2 dark:border-app-off-white border-app-off-black`}
       >
         <div
           style={{

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
 import { config as appConfig } from "@/config";
 import useResponsive from "@/hooks/useResponsive";
@@ -22,7 +22,7 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
     height: (linearDs.nodeHeight + linearDs.nodeHeightSpacing) * linearDs.maxSize,
     speed,
   });
-  const { width, height } = useResponsive((e, device, sizeChanged) => {
+  const { width, height } = useResponsive((_e, device, sizeChanged) => {
     if (sizeChanged.width)
       setConfig("width", device.width < MAX_WIDTH ? device.width - 50 : MAX_WIDTH / 1.5);
   });

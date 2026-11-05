@@ -57,7 +57,7 @@ export const useSortAlgorithms = (
             animateNode(nodeB.ref, type !== "selection" ? "search" : "select", speedAnimation),
           ]);
         }
-      } catch (error) {
+      } catch (_error) {
         console.error("ERROR ANIMATING BUBBLE SORT ALGORITHM");
       }
     };
@@ -115,8 +115,8 @@ export const useSortAlgorithms = (
       const animationPromises: Promise<void>[] = [];
       for (let i = start; i < end; i++) {
         const element = array[i];
-        if (!element || !element.ref) continue;
-        if (visualization == "memoryRam") element.ref.style.backgroundColor = "";
+        if (!element?.ref) continue;
+        if (visualization === "memoryRam") element.ref.style.backgroundColor = "";
         animationPromises.push(animateNode(element.ref, "search", getSpeed(speed)));
       }
       await Promise.all(animationPromises);

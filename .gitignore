@@ -37,3 +37,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 todo.txt
+
+# Claude Code harness
+.claude/settings.local.json
+# Link, not a directory: `.claude/skills` points at `.agents/skills`, which is the tracked copy.
+# Recreate on a fresh clone: ln -s ../.agents/skills .claude/skills
+.claude/skills
+# Per-task handoff files (plan, build report, review) written by the /orchestrate agents.
+.claude/work/

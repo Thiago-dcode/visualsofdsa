@@ -1,4 +1,3 @@
-import React from "react";
 import RamContainer from "@/components/container/RamContainer";
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import MemoryAdressContainer from "@/entities/data-structures/linear/_components/MemoryAdressContainer";
@@ -14,27 +13,23 @@ export default function MemoryRamVisualization({
 }) {
   return (
     <RamContainer>
-      {array &&
-        array.map((d, i) => {
-          return (
-            <MemoryAdressContainer
-              memory={d}
-              size={MemorySize.M}
-              index={i}
-              showIndex={false}
-              key={"MemoryAdressContainer-" + i + d?.data + d?.id}
-            >
-              {array && array[i] ? (
-                <StaticArrayNodeComponent
-                  setAnimationRunning={setAnimationRunning}
-                  node={array[i]}
-                />
-              ) : (
-                <p className="border border-white/50 w-full h-full"></p>
-              )}
-            </MemoryAdressContainer>
-          );
-        })}
+      {array?.map((d, i) => {
+        return (
+          <MemoryAdressContainer
+            memory={d}
+            size={MemorySize.M}
+            index={i}
+            showIndex={false}
+            key={"MemoryAdressContainer-" + i + d?.data + d?.id}
+          >
+            {array?.[i] ? (
+              <StaticArrayNodeComponent setAnimationRunning={setAnimationRunning} node={array[i]} />
+            ) : (
+              <p className="border border-white/50 w-full h-full"></p>
+            )}
+          </MemoryAdressContainer>
+        );
+      })}
     </RamContainer>
   );
 }

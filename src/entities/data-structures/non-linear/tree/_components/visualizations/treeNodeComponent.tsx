@@ -1,4 +1,3 @@
-import React from "react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { animate } from "@/lib/animations";
 import NodeShape from "@/lib/classes/NodeShape";
@@ -31,6 +30,7 @@ function TreeNodeComponent<K extends TreeNode<Primitive>>({
     <HoverCard openDelay={100}>
       <HoverCardTrigger>
         <button
+          type="button"
           onClick={async () => {
             await copyToClipboard(node.data?.toString() || "");
           }}

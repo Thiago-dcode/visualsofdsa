@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import InputWithButtonContainer from "@/components/container/InputWithButtonContainer";
 import OperationsContainer from "@/components/container/OperationsContainer";
 import { Input } from "@/components/ui/input";
@@ -62,7 +62,7 @@ function BinarySearchTreeView() {
       if (!input || isAnimationRunning) return;
       const num = parseFloat(input.value);
       if (
-        isNaN(num) ||
+        Number.isNaN(num) ||
         (action !== "createRandomTree" && (num < minInputValue || num > maxInputValue)) ||
         (action === "createRandomTree" && (num < 1 || num > maxTreeSize))
       ) {
@@ -414,7 +414,7 @@ function BinarySearchTreeView() {
                   min={25}
                   max={70}
                   value={nodeSize}
-                  onChange={(e) => setNodeSize(parseInt(e.target.value))}
+                  onChange={(e) => setNodeSize(parseInt(e.target.value, 10))}
                 />
               </div>
               <SpeedComponent title="Animation Speed" speed={speed} setSpeed={handleSetSpeed} />

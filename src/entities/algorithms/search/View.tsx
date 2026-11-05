@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ConfigComponent from "@/components/app/ConfigComponent";
 import Properties from "@/components/app/Properties";
 import SpeedComponent from "@/components/app/speedComponent";
@@ -68,9 +68,9 @@ export default function SearchView({ type }: { type?: AlgoSearchType }) {
   };
   const getValue = () => {
     if (!inputRef.current || isAnimationRunning) return null;
-    const value = parseInt(inputRef.current.value);
+    const value = parseInt(inputRef.current.value, 10);
 
-    if (!value || isNaN(value)) {
+    if (!value || Number.isNaN(value)) {
       toastWarning("You must select a value");
       return null;
     }
@@ -128,7 +128,7 @@ export default function SearchView({ type }: { type?: AlgoSearchType }) {
                   {" "}
                   <p>Direction?</p>
                   <Switch
-                    checked={direction === "ascending" ? false : true}
+                    checked={direction !== "ascending"}
                     onCheckedChange={() => {
                       toggleDirection();
                     }}
@@ -177,7 +177,7 @@ export default function SearchView({ type }: { type?: AlgoSearchType }) {
             </InputWithButtonContainer>
           </Section>
         )}{" "}
-        {array && array.length ? (
+        {array?.length ? (
           <ButtonAction
             title="delete"
             action="delete"
@@ -235,7 +235,7 @@ export default function SearchView({ type }: { type?: AlgoSearchType }) {
           handleOnPopUpButton={() => {
             reset();
           }}
-          open={error ? true : false}
+          open={!!error}
           showTrigger={false}
           description={error.description}
         />

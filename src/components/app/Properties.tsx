@@ -1,4 +1,4 @@
-import { Menu, RectangleEllipsis } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { config } from "@/config";
 import { animate } from "@/lib/animations";
@@ -32,8 +32,7 @@ function Properties({
     async (key: keyof PropertiesType, property: Property, ref: HTMLDivElement) => {
       const { value, render } = property;
       if (
-        !prevProperties.current ||
-        !prevProperties.current[key] ||
+        !prevProperties.current?.[key] ||
         (typeof render === "boolean" && prevProperties.current[key].render === render) ||
         prevProperties.current[key].value === value
       ) {

@@ -68,8 +68,8 @@ export default function StaticArray() {
     if (isAnimationRunning || !refWriteData.current || !refWrite.current) return;
 
     const data = refWriteData.current.value;
-    const index = Number.parseInt(refWrite.current.value);
-    if (!isNaN(index)) {
+    const index = Number.parseInt(refWrite.current.value, 10);
+    if (!Number.isNaN(index)) {
       onOperationStarts();
       await write(data === "" || data === undefined ? null : data, index);
       onOperationEnds([refWriteData.current, refWrite.current]);
@@ -78,8 +78,8 @@ export default function StaticArray() {
 
   const handleAccess = useCallback(async () => {
     if (isAnimationRunning || !refAccess.current) return;
-    const index = Number.parseInt(refAccess.current.value);
-    if (!isNaN(index)) {
+    const index = Number.parseInt(refAccess.current.value, 10);
+    if (!Number.isNaN(index)) {
       onOperationStarts();
       await access(index);
       onOperationEnds([refAccess.current]);
@@ -96,8 +96,8 @@ export default function StaticArray() {
 
   const handleCreate = useCallback(async () => {
     if (isAnimationRunning || !refSize.current) return;
-    const size = Number.parseInt(refSize.current.value);
-    if (!isNaN(size) && size > 0) {
+    const size = Number.parseInt(refSize.current.value, 10);
+    if (!Number.isNaN(size) && size > 0) {
       onOperationStarts();
       await create(size);
       onOperationEnds([refSize.current]);
@@ -129,7 +129,7 @@ export default function StaticArray() {
       refSearch.current,
     ]);
   }, []);
-  const makeResponsive = !array || !array.length ? false : device.twResponsive.tablet;
+  const makeResponsive = !array?.length ? false : device.twResponsive.tablet;
   return (
     <>
       {/* ABOVE TABLET OPERATIONS CONTAINER */}
@@ -141,7 +141,7 @@ export default function StaticArray() {
           }}
           open={open}
         >
-          {array && array.length ? (
+          {array?.length ? (
             <Section makeResponsive={makeResponsive}>
               {/* WRITE OPERATION */}
               <InputWithButtonContainer>
@@ -211,7 +211,7 @@ export default function StaticArray() {
             </Section>
           ) : null}
 
-          {(!array || !array.length) && (
+          {!array?.length && (
             <div className="flex  items-center gap-2 justify-center">
               <Input
                 ref={refSize}
@@ -243,7 +243,7 @@ export default function StaticArray() {
             </div>
           )}
 
-          {array && array.length ? (
+          {array?.length ? (
             <ButtonAction
               title="fill"
               action="fill"
@@ -255,7 +255,7 @@ export default function StaticArray() {
             />
           ) : null}
 
-          {array && array.length ? (
+          {array?.length ? (
             <ButtonAction
               title="delete"
               action="delete"
@@ -292,7 +292,7 @@ export default function StaticArray() {
             }}
             open={open}
           >
-            {array && array.length ? (
+            {array?.length ? (
               <Section makeResponsive={makeResponsive}>
                 {/* WRITE OPERATION */}
                 <InputWithButtonContainer makeResponsive={makeResponsive}>
@@ -363,7 +363,7 @@ export default function StaticArray() {
             ) : null}
             <div className="flex gap-2 items-center justify-between mt-4">
               {" "}
-              {array && array.length ? (
+              {array?.length ? (
                 <ButtonAction
                   title="fill"
                   action="fill"
@@ -374,7 +374,7 @@ export default function StaticArray() {
                   }}
                 />
               ) : null}
-              {array && array.length ? (
+              {array?.length ? (
                 <ButtonAction
                   title="delete"
                   action="delete"
@@ -386,7 +386,7 @@ export default function StaticArray() {
                 />
               ) : null}
             </div>
-            {(!array || !array.length) && (
+            {!array?.length && (
               <div className="flex  items-center gap-2 justify-center">
                 <Input
                   ref={refSize}
@@ -426,7 +426,7 @@ export default function StaticArray() {
             <Input
               defaultValue={maxSize}
               onChange={(e) => {
-                setMaxSize(Number.parseInt(e.target.value));
+                setMaxSize(Number.parseInt(e.target.value, 10));
                 flush();
               }}
               name="size"
@@ -440,16 +440,16 @@ export default function StaticArray() {
       </div>
 
       <RamContainer>
-        {[...Array(maxSize)].map((d, i) => {
+        {[...Array(maxSize)].map((_d, i) => {
           return (
             <MemoryAdressContainer
               memory={array && array[i] !== undefined ? array[i] : null}
               size={device.twResponsive.phone ? MemorySize.M : MemorySize.L}
               index={i}
-              showIndex={array && array[i] !== undefined ? true : false}
+              showIndex={!!(array && array[i] !== undefined)}
               key={"MemoryAdressContainer-" + i}
             >
-              {array && array[i] ? (
+              {array?.[i] ? (
                 <StaticArrayNodeComponent
                   setAnimationRunning={setAnimationRunning}
                   node={array[i]}
@@ -470,7 +470,7 @@ export default function StaticArray() {
           handleOnPopUpButton={() => {
             setSearchResult(null);
           }}
-          open={searchResult ? true : false}
+          open={!!searchResult}
           showTrigger={false}
           description={`${!searchResult.found ? `Data ${searchResult.data} not found.` : `Data ${searchResult.data} found on index: ${searchResult.steps - 1}.`} Steps taken: ${searchResult.steps}.`}
         />
@@ -484,7 +484,7 @@ export default function StaticArray() {
           handleOnPopUpButton={() => {
             cleanUp();
           }}
-          open={error ? true : false}
+          open={!!error}
           showTrigger={false}
           description={error.description}
         />

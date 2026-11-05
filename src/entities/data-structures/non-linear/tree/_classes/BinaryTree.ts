@@ -6,15 +6,15 @@ import Tree from "./Tree";
 
 export default class BinaryTree<T extends Primitive> extends Tree<T, BinaryTreeNode<T>> {
   async insert(
-    data: T,
-    onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null,
+    _data: T,
+    _onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null,
   ): Promise<BinaryTreeNode<T> | null> {
     throw new Error("Method not implemented.");
   }
-  remove(data: T, onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null): Promise<boolean> {
+  remove(_data: T, _onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
-  search(data: T): Promise<BinaryTreeNode<T> | null> {
+  search(_data: T): Promise<BinaryTreeNode<T> | null> {
     throw new Error("Method not implemented.");
   }
   async traverse(

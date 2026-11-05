@@ -28,8 +28,8 @@ export class Edge {
     nodeStart: Node<Primitive> | null,
     nodeEnd: Node<Primitive> | null,
     nodeShape: NodeShape,
-    extraHeight = 0,
-    extraWidth = 0,
+    _extraHeight = 0,
+    _extraWidth = 0,
   ) {
     if (!nodeStart || !nodeEnd) {
       return;

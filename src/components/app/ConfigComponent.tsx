@@ -13,30 +13,28 @@ const ConfigComponent = ({
   messageWhenNotAvailable?: string;
 }) => {
   return (
-    <>
-      <PopOverComponent
-        className="z-[101]"
-        available={available}
-        messageWhenNotAvailable={messageWhenNotAvailable}
-        content={
-          <div className="flex flex-col items-center justify-center gap-4 z-[101] cursor-pointer">
-            {children}
-          </div>
-        }
-        trigger={
-          <Button
-            variant={"no-style"}
-            size={"fit"}
-            className={cn(" hover:bg-transparent ", {
-              "cursor-wait opacity-50": !available,
-            })}
-            onClick={() => {}}
-          >
-            <Wrench />
-          </Button>
-        }
-      />
-    </>
+    <PopOverComponent
+      className="z-[101]"
+      available={available}
+      messageWhenNotAvailable={messageWhenNotAvailable}
+      content={
+        <div className="flex flex-col items-center justify-center gap-4 z-[101] cursor-pointer">
+          {children}
+        </div>
+      }
+      trigger={
+        <Button
+          variant={"no-style"}
+          size={"fit"}
+          className={cn(" hover:bg-transparent ", {
+            "cursor-wait opacity-50": !available,
+          })}
+          onClick={() => {}}
+        >
+          <Wrench />
+        </Button>
+      }
+    />
   );
 };
 export default ConfigComponent;

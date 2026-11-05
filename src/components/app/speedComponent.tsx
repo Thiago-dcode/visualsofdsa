@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { useAnimationRunning } from "@/context/animationRunningContext";
 import { cn } from "@/lib/utils";
 import { speed } from "@/types";
@@ -25,8 +24,8 @@ function SpeedComponent({ title = "Animation Speed", speed, setSpeed }: SpeedPro
         value={speed}
         onChange={(e) => {
           if (!isAnimationEnabled) return;
-          const speed = parseInt(e.target.value);
-          if (speed == 1 || speed == 2 || speed == 3 || speed == 4) {
+          const speed = parseInt(e.target.value, 10);
+          if (speed === 1 || speed === 2 || speed === 3 || speed === 4) {
             setSpeed(speed);
           }
         }}

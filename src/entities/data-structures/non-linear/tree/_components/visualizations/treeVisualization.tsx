@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 import { Edge } from "@/lib/classes/Edge";
 import { Primitive } from "@/types";
@@ -26,7 +26,7 @@ function TreeVisualization<T extends Primitive, K extends TreeNode<T>>({
   const [parentWidth, _setparentWidth] = useState<number | null>(null);
   const [treeObj, setTreeObj] = useState<TreeObj<K> | null>(null);
   const [treeWidth, setTreeWidth] = useState<number | null>(null);
-  const device = useResponsive((e, device, sizeChanged) => {
+  const device = useResponsive((_e, _device, sizeChanged) => {
     if (sizeChanged.width && containerRef.current) {
       _setparentWidth(containerRef.current.offsetWidth);
     }

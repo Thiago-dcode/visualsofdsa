@@ -22,7 +22,7 @@ export default function useDynamicArray() {
   const [size, setSize] = useState(0);
   const expand = useCallback(
     async (reset = false) => {
-      const newCapacity = reset ? 10 : (size > capacity ? size : capacity) * 2;
+      const newCapacity = reset ? 10 : Math.max(size, capacity) * 2;
       const newArray: (Node<Primitive> | null)[] = [];
       for (let i = 0; i < newCapacity; i++) {
         if (array && array[i] instanceof Node && size > 0 && !reset) {
@@ -82,7 +82,7 @@ export default function useDynamicArray() {
       try {
         await writeAnimation(array[index]);
         toastInfo(`Wrote ${data} at index: ${index}. Took one step`);
-      } catch (error) {}
+      } catch (_error) {}
     },
     [array, size],
   );
@@ -146,7 +146,7 @@ export default function useDynamicArray() {
         if (node instanceof DynamicArrayNode && i < size && !found) {
           try {
             await shiftAnimation(node, i, "right");
-          } catch (error) {}
+          } catch (_error) {}
           array[i + 1] =
             node !== null ? new DynamicArrayNode(node?.data, node.position, false) : null;
           if (i === index) {
@@ -170,13 +170,13 @@ export default function useDynamicArray() {
     async (index: number) => {
       if (size === 0 || !array) return;
       if (isOutOfTheOfTheBound(index, size - 1)) return;
-      if (index == size - 1) {
+      if (index === size - 1) {
         await pop();
         return;
       }
       try {
         await popAnimation(array[index]);
-      } catch (error) {}
+      } catch (_error) {}
 
       for (let i = index + 1; i < size; i++) {
         const node = array[i];
@@ -184,7 +184,7 @@ export default function useDynamicArray() {
           try {
             await shiftAnimation(node, i, "left");
             array[i - 1] = new DynamicArrayNode(node.data, node.position, false);
-          } catch (error) {}
+          } catch (_error) {}
         }
       }
       toastInfo(

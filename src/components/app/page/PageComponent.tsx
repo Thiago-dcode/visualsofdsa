@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { Entities, EntityType } from "@/types";
 import Title from "../../ui/Title";
 import { EntitiesListComponent } from "../EntitiesListComponent";

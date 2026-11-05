@@ -252,7 +252,7 @@ export default class LinkedList<T extends Primitive> extends List {
       let position = this._size - 1;
       node = this._tail;
       do {
-        if (position == index) {
+        if (position === index) {
           break;
         }
         if (node) {
@@ -284,7 +284,7 @@ export default class LinkedList<T extends Primitive> extends List {
       node = this._tail;
       do {
         if (callback) await callback(node, position, "backward", steps);
-        if (position == index) {
+        if (position === index) {
           break;
         }
         if (node) {

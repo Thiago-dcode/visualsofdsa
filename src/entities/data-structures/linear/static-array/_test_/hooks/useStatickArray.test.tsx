@@ -65,7 +65,7 @@ describe("Testin custom hook useStaticArray", async () => {
       expect(result.current.array).toBeTruthy();
       if (result.current.array?.length) {
         for (let index = 0; index < result.current.array.length; index++) {
-          const element = result.current.array[index];
+          const _element = result.current.array[index];
           await result.current.write(null, index);
         }
       }

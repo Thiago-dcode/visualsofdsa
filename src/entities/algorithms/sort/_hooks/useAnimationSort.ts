@@ -11,7 +11,7 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
     array: Node<number>[],
     maxBarSize: number,
     speed: number,
-    beforeAnimation = async (node: Node<number>) => {},
+    beforeAnimation = async (_node: Node<number>) => {},
   ) => {
     if (!animations.isAnimationEnabled) return;
     const onAnimationEnds = (node: Node<number>) => {
@@ -21,11 +21,11 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
         behavior: "smooth",
       });
     };
-    const promises = array.map((node, i) => {
+    const promises = array.map((node, _i) => {
       const ref = node.ref;
 
       if (!ref) return null;
-      if (visualization == "memoryRam") ref.style.backgroundColor = "";
+      if (visualization === "memoryRam") ref.style.backgroundColor = "";
       const properties: {
         [key: string]: string;
       } = {
@@ -51,7 +51,7 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
   const animationOnMerge = async (nodeA: Node<number>, nodeB: Node<number>, speed: number) => {
     if (!animations.isAnimationEnabled) return;
     if (nodeA.ref && nodeB.ref) {
-      const refA = nodeA.ref;
+      const _refA = nodeA.ref;
       const refB = nodeB.ref;
       nodeB.color = nodeA.color;
 
@@ -141,11 +141,11 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
       refB.style.setProperty("--color", `rgb(245 168 69 )`);
       await Promise.all([
         animate(refA, `move-node`, speed * 1.1),
-        visualization == "memoryRam"
+        visualization === "memoryRam"
           ? animate(nodeA.indexRef, `move-node`, speed * 1.1)
           : Promise.resolve(),
         animate(refB, `move-node`, speed * 1.1),
-        visualization == "memoryRam"
+        visualization === "memoryRam"
           ? animate(nodeB.indexRef, `move-node`, speed * 1.1)
           : Promise.resolve(),
       ]);

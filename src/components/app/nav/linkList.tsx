@@ -1,7 +1,7 @@
 "use client";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { useAnimationRunning } from "@/context/animationRunningContext";
 import { cn } from "@/lib/utils";
@@ -49,59 +49,51 @@ export default function LinkList({
           onNavigate={onNavigate}
         />
       ) : (
-        <>
-          {
-            <HoverCard
-              openDelay={100}
-              closeDelay={100}
-              onOpenChange={(e) => {
-                setIsOpen(e);
-              }}
-            >
-              <div className="text-nowrap flex items-center justify-between w-full  gap-2 tablet:gap-4">
-                <LinkItemComponent
-                  onNavigate={onNavigate}
-                  isLast={isLast}
-                  pathMatch={pathMatch}
-                  isFirstLvl={isFirstLvl}
-                  icon={icon}
-                  link={link}
-                />
-                <HoverCardTrigger href="#" className="cursor-pointer">
-                  {icon}
-                </HoverCardTrigger>
-              </div>
-              <HoverCardContent
-                className="dark:bg-black border dark:border-app-off-white border-app-bg-black "
-                align="start"
-                side={isFirstLvl ? "bottom" : "right"}
-              >
-                {children.map((child, i) => {
-                  const arr = child.link.split("/");
+        <HoverCard
+          openDelay={100}
+          closeDelay={100}
+          onOpenChange={(e) => {
+            setIsOpen(e);
+          }}
+        >
+          <div className="text-nowrap flex items-center justify-between w-full  gap-2 tablet:gap-4">
+            <LinkItemComponent
+              onNavigate={onNavigate}
+              isLast={isLast}
+              pathMatch={pathMatch}
+              isFirstLvl={isFirstLvl}
+              icon={icon}
+              link={link}
+            />
+            <HoverCardTrigger href="#" className="cursor-pointer">
+              {icon}
+            </HoverCardTrigger>
+          </div>
+          <HoverCardContent
+            className="dark:bg-black border dark:border-app-off-white border-app-bg-black "
+            align="start"
+            side={isFirstLvl ? "bottom" : "right"}
+          >
+            {children.map((child, i) => {
+              const arr = child.link.split("/");
 
-                  const lastLink = arr[arr.length - 1];
-                  const firtsLink = arr[1];
-                  return (
-                    <div
-                      key={`${child.link}-${i}`}
-                      className={cn("border-b dark:border-app-off-white border-app-off-black", {
-                        "dark:bg-app-off-white bg-app-off-black dark:text-black text-white":
-                          arrOfPaths.includes(lastLink) && firtsLink === arrOfPaths[1],
-                        "border-none": children.length - 1 === i,
-                      })}
-                    >
-                      <LinkList
-                        link={child}
-                        isFirstLvl={false}
-                        isLast={children.length - 1 === i}
-                      />
-                    </div>
-                  );
-                })}
-              </HoverCardContent>
-            </HoverCard>
-          }
-        </>
+              const lastLink = arr[arr.length - 1];
+              const firtsLink = arr[1];
+              return (
+                <div
+                  key={`${child.link}-${i}`}
+                  className={cn("border-b dark:border-app-off-white border-app-off-black", {
+                    "dark:bg-app-off-white bg-app-off-black dark:text-black text-white":
+                      arrOfPaths.includes(lastLink) && firtsLink === arrOfPaths[1],
+                    "border-none": children.length - 1 === i,
+                  })}
+                >
+                  <LinkList link={child} isFirstLvl={false} isLast={children.length - 1 === i} />
+                </div>
+              );
+            })}
+          </HoverCardContent>
+        </HoverCard>
       )}
     </>
   );

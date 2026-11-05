@@ -23,10 +23,10 @@ export default abstract class LinearDs<T extends Primitive> extends List {
     this._width = width;
   }
   get isEmpty() {
-    return this.size == 0;
+    return this.size === 0;
   }
   get isFull() {
-    return this.size == this.maxSize;
+    return this.size === this.maxSize;
   }
 
   get size() {

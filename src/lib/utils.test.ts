@@ -48,7 +48,7 @@ describe("testing generateKey", () => {
       expect(removePx("-133244px")).toBe(-133244);
       expect(removePx("0000000001px")).toBe(1);
       expect(removePx("342343242343254312984792837492834234234.34234234234px")).toBe(
-        342343242343254312984792837492834234234.34234234234,
+        Number("342343242343254312984792837492834234234.34234234234"),
       );
     });
   });
@@ -141,7 +141,7 @@ describe("Testing createRandomUniqueArrayOfNodes", () => {
     try {
       createRandomUniqueArrayOfNodes(size, range);
       expect(false).toBe(true);
-    } catch (error) {
+    } catch (_error) {
       expect(true).toBe(true);
     }
   });

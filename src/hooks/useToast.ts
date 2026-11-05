@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { ToastT, toast } from "sonner";
+import { toast } from "sonner";
 
 type ToastType = "info" | "warning" | "success" | "error" | "loading";
 export const useToast = () => {

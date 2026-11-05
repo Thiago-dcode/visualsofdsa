@@ -1,13 +1,13 @@
+// biome-ignore-all lint/complexity/useLiteralKeys: these tests call the private isTail helper on purpose
 import { describe, expect, it } from "vitest";
 import Position from "@/lib/classes/position/Position";
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
-import { delay } from "@/lib/utils";
 import { Primitive } from "@/types";
 import Node from "../../../_classes/Node";
 import LinkedList from "../../classes/LinkedList";
 import LinkedListNode from "../../classes/LinkedListNode";
 
-const callback = async (node: LinkedListNode<Primitive> | null, index: number) => {
+const callback = async (node: LinkedListNode<Primitive> | null, _index: number) => {
   expect(node).toBeInstanceOf(Node);
 };
 describe("Testing LinkedList add method", () => {
@@ -29,7 +29,7 @@ describe("Testing LinkedList add method", () => {
     expect(linkedList.tail?.data).toBe("hello");
   });
   it("Should add a element in the end", async () => {
-    const callback = async (node: LinkedListNode<Primitive> | null, index: number) => {
+    const callback = async (node: LinkedListNode<Primitive> | null, _index: number) => {
       expect(node).toBeInstanceOf(Node);
     };
     const linkedList = new LinkedList();
@@ -53,7 +53,7 @@ describe("Testing LinkedList add method", () => {
     expect(linkedList.size).toBe(4);
   });
   it("Should add a element at the beginner when a index == 0 is given", async () => {
-    const callback = async (node: LinkedListNode<Primitive> | null, index: number) => {
+    const callback = async (node: LinkedListNode<Primitive> | null, _index: number) => {
       expect(node).toBeInstanceOf(Node);
     };
     const linkedList = new LinkedList();
@@ -121,7 +121,7 @@ describe("Testing LinkedList add method", () => {
     }
     expect(linkedList.tail?.data).toBe(9);
     expect(linkedList.tail?.prev?.data).toBe(8);
-    await linkedList.add(100, 9, new Position(0, 0), async (node, index) => {
+    await linkedList.add(100, 9, new Position(0, 0), async (node, _index) => {
       expect(node).toBeInstanceOf(LinkedListNode);
     });
     expect(linkedList.tail?.prev?.data).toBe(100);
@@ -135,7 +135,7 @@ describe("Testing LinkedList add method", () => {
     await linkedList.add(103, 1, new Position(0, 0), callback);
     linkedList.add(103, 1);
     expect(linkedList.head?.next?.data).toBe(103);
-    await linkedList.add(104, 2, new Position(0, 0), async (node, index) => {
+    await linkedList.add(104, 2, new Position(0, 0), async (node, _index) => {
       expect(node).toBeInstanceOf(LinkedListNode);
     });
     expect(linkedList.head?.next?.next?.data).toBe(104);
@@ -247,7 +247,7 @@ describe("Testing delete method in linkedList", () => {
       linkedList.add(i);
     }
     expect(linkedList.size).toBe(10);
-    await linkedList.delete(0, async (node: LinkedListNode<Primitive> | null, index: number) => {
+    await linkedList.delete(0, async (node: LinkedListNode<Primitive> | null, _index: number) => {
       expect(node).toBeInstanceOf(Node);
     });
     expect(linkedList.getFirst()).toBe(1);
@@ -258,7 +258,7 @@ describe("Testing delete method in linkedList", () => {
     expect(linkedList.getLast()).toBe(9);
     await linkedList.delete(
       linkedList.size - 1,
-      async (node: LinkedListNode<Primitive> | null, index: number) => {
+      async (node: LinkedListNode<Primitive> | null, _index: number) => {
         expect(node).toBeInstanceOf(Node);
       },
     );

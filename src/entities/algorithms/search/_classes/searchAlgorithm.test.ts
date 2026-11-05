@@ -1,7 +1,6 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import Position from "@/lib/classes/position/Position";
-import { createArrayOfNodes, random } from "@/lib/utils";
-import { Primitive } from "@/types";
+import { createArrayOfNodes } from "@/lib/utils";
 import SearchAlgorithm from "./SearchAlgorithm";
 
 // const createUniqueSortedArrayOfNodes = (size: number) => {
@@ -178,7 +177,11 @@ describe("Test searchAlgortihm.binary", () => {
     for (let index = 0; index < array.length; index++) {
       const element = array[index].data;
 
-      const node = await SearchAlgorithm.binary(array, element, async (middle, start, end) => {});
+      const node = await SearchAlgorithm.binary(
+        array,
+        element,
+        async (_middle, _start, _end) => {},
+      );
 
       expect(node?.data).toBe(element);
     }
@@ -191,7 +194,7 @@ describe("Test searchAlgortihm.binary", () => {
       const node = await SearchAlgorithm.binary(
         array,
         element,
-        async (middle, start, end) => {},
+        async (_middle, _start, _end) => {},
         "descending",
       );
 

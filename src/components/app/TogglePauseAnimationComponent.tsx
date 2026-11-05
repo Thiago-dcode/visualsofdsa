@@ -1,5 +1,4 @@
 import { useAnimationRunning } from "@/context/animationRunningContext";
-import { useMuted } from "@/context/muteContext";
 import { Switch } from "../ui/switch";
 
 export default function TogglePauseAnimationComponent() {

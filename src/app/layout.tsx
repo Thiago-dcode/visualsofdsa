@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Check, CircleAlert, CircleX } from "lucide-react";
-import Link from "next/link";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
 import ConfigSection from "@/components/app/ConfigSection";
@@ -17,6 +16,9 @@ import { DarkModeProvider } from "@/context/darkModeContext";
 import { MuteProvider } from "@/context/muteContext";
 
 const inter = Inter({ subsets: ["latin"] });
+
+// Render per request: the nav reads from the database, which is not reachable during `next build`.
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "visualsofdsa",

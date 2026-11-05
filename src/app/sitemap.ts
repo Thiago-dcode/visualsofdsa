@@ -2,12 +2,16 @@ import type { MetadataRoute } from "next";
 import AlgorithmService from "@/entities/algorithms/__classes/AlgorithmService";
 import DataStructureService from "@/entities/data-structures/__classes/DataStructureService";
 import { buildLinkFromArgs } from "@/lib/utils";
+// Generate per request, never at build time: the database is not reachable during `next build`.
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
-  const [algorithms, dataStructures] = await Promise.all([
-    AlgorithmService.getAllTypes(),
-    DataStructureService.getAllTypes(),
-  ]);
+  // Only query the database in production; other environments get the static pages only.
+  const [algorithms, dataStructures] =
+    process.env.NODE_ENV === "production"
+      ? await Promise.all([AlgorithmService.getAllTypes(), DataStructureService.getAllTypes()])
+      : [[], []];
 
   const algorithmsSitemap: MetadataRoute.Sitemap = algorithms.flatMap((algorithm) =>
     algorithm.children.map((child) => ({
