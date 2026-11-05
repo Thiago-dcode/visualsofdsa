@@ -10,9 +10,8 @@
     "db:init": "prisma db init",
     "db:seed": "tsx prisma/seed/seed.ts",
     "start": "next start",
-    "lint": "next lint",
     "test": "vitest",
-    "biome": "biome check .",
+    "lint": "biome check",
     "biome:fix": "biome check --write ."
   },
   "dependencies": {
