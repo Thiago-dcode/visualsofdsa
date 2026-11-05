@@ -59,7 +59,7 @@ const StackQueueView = ({ linearDsName }: { linearDsName: "stack" | "queue" }) =
   }, [handleFillerAnimation, nodeArray, empty]);
 
   const handleAction = useCallback(
-    async (action: LinearDsActions, actionCallback: Promise<any>) => {
+    async (action: LinearDsActions, actionCallback: Promise<unknown>) => {
       if (isStackOverFlow || isAnimationRunning) return;
       setAnimationRunning(true);
       await actionCallback;

@@ -51,7 +51,7 @@ describe("UseDynamicArray HOOK", () => {
   });
   it("Should write all capacity and array should expand", async () => {
     const { result } = renderHook(useDynamicArray);
-    const { array, capacity, size, error, write } = result.current;
+    const { array, capacity, size, error } = result.current;
     expect(array?.length).toBe(capacity);
     expect(size).toBe(0);
     expect(capacity).toBe(10);

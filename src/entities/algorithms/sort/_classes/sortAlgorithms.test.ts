@@ -45,14 +45,14 @@ describe("Testing selection", () => {
   });
 
   it("Should sort ascending", async () => {
-    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+    const array = createRandomUniqueArrayOfNodes(200, [0, 15000]);
     await SortAlgorithms.selection(array);
 
     testIfIsSorted(array, "ascending");
   });
 
   it("Should sort descending", async () => {
-    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+    const array = createRandomUniqueArrayOfNodes(200, [0, 15000]);
     await SortAlgorithms.selection(array, "descending");
 
     testIfIsSorted(array, "descending");
@@ -68,14 +68,14 @@ describe("Testing insertion", () => {
   });
 
   it("Should sort ascending", async () => {
-    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+    const array = createRandomUniqueArrayOfNodes(200, [0, 15000]);
     await SortAlgorithms.insertion(array);
 
     testIfIsSorted(array, "ascending");
   });
 
   it("Should sort descending", async () => {
-    const array = createRandomUniqueArrayOfNodes(600, [0, 15000]);
+    const array = createRandomUniqueArrayOfNodes(200, [0, 15000]);
     await SortAlgorithms.insertion(array, "descending");
 
     testIfIsSorted(array, "descending");

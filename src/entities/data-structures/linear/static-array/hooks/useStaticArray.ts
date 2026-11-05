@@ -46,10 +46,11 @@ export default function useStaticArray(size: number = 50) {
   const createUnsorted = async (size: number) => {
     const _array = initArray(size);
     if (!_array) return;
-    const getAUniqueRandomNumber = (memo: { [key: number]: true } = {}) => {
+    const memo: { [key: number]: true } = {};
+    const getAUniqueRandomNumber = (): number => {
       const n = random(0, 60000);
       if (memo[n]) {
-        return getAUniqueRandomNumber(memo);
+        return getAUniqueRandomNumber();
       }
       memo[n] = true;
       return n;

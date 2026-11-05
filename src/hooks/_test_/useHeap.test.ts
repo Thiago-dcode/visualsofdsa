@@ -88,7 +88,7 @@ describe("Testing useHeap", () => {
       const node = arrOfNodes[i];
       expect(nextPosition).toBeTruthy();
       if (nextPosition) {
-        const { position, memoryAddress } = nextPosition;
+        const { position } = nextPosition;
         expect(position.x).toBe(node.position.x);
         expect(position.y).toBe(node.position.y);
       }

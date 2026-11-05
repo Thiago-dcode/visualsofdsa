@@ -11,7 +11,7 @@
     "db:seed": "tsx prisma/seed/seed.ts",
     "start": "next start",
     "test": "vitest",
-    "lint": "biome check",
+    "lint": "biome check --error-on-warnings",
     "biome:fix": "biome check --write ."
   },
   "dependencies": {

@@ -5,7 +5,7 @@ type props = HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
   makeResponsive?: boolean;
 };
-export default function Section({ children, makeResponsive = false, className, ...rest }: props) {
+export default function Section({ children, makeResponsive = false, className }: props) {
   return (
     <>
       {

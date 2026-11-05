@@ -6,10 +6,8 @@ import { LinkItem } from "./type";
 
 export default function LinkItemComponent({
   link,
-  icon,
   isFirstLvl,
   pathMatch,
-  isLast = false,
   onNavigate = () => {},
 }: {
   link: LinkItem;

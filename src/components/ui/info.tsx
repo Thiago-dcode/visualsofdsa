@@ -7,7 +7,6 @@ export default function Info({
   size = 30,
   text,
   html,
-  color,
   title,
   trigger = <InfoIcon size={size} />,
 }: {

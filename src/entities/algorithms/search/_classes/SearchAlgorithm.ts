@@ -11,8 +11,8 @@ type CallbackBinary<_T extends Primitive> = (
   start: number,
   end: number,
 ) => Promise<void>;
-export default class SearchAlgorithm {
-  static async linear<T extends Primitive>(
+const SearchAlgorithm = {
+  async linear<T extends Primitive>(
     array: Node<T>[],
     search: T,
     callback: CallbackLinear<T> | null = null,
@@ -53,8 +53,8 @@ export default class SearchAlgorithm {
     }
 
     return null;
-  }
-  static async binary<T extends Primitive>(
+  },
+  async binary<T extends Primitive>(
     array: Node<T>[],
     search: T,
     callback: CallbackBinary<T> | null = null,
@@ -88,5 +88,7 @@ export default class SearchAlgorithm {
     }
 
     return null;
-  }
-}
+  },
+};
+
+export default SearchAlgorithm;

@@ -37,7 +37,6 @@ function BinarySearchTreeView() {
     insert,
     search,
     insertAnimation,
-    mock,
     remove,
     traverse,
     animateEdge,

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import Properties, { PropertiesType } from "@/components/app/Properties";
 import List from "../_classes/List";
 
-export default function PropertiesList({ list, trigger }: { list: List; trigger: any[] }) {
+export default function PropertiesList({ list, trigger }: { list: List; trigger: unknown[] }) {
   const setProperties: PropertiesType = useMemo(() => {
     return {
       size: {

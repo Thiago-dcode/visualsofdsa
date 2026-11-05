@@ -8,12 +8,12 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-    run-ci:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-            - name: Run lint and tests
-              uses: Thiago-dcode/gh-actions/.github/actions/check-ci@v1
-              with:
-                  package-manager: pnpm
+  run-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Run lint and tests
+        uses: Thiago-dcode/gh-actions/.github/actions/check-ci@v1
+        with:
+          package-manager: pnpm

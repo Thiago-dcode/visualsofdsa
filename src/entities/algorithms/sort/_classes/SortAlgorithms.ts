@@ -3,16 +3,16 @@ import MaxStepsError from "@/lib/errors/MaxStepsError";
 import { random } from "@/lib/utils";
 import { Direction } from "@/types";
 import { ClosureCompare, ClosureSlice } from "../types";
-export class SortAlgorithms {
-  private static MAX_STEPS = 70000;
-  private static throwMaxStepsError = (steps: number) => {
-    if (steps > this.MAX_STEPS) {
+export const SortAlgorithms = {
+  MAX_STEPS: 70000,
+  throwMaxStepsError: (steps: number) => {
+    if (steps > SortAlgorithms.MAX_STEPS) {
       throw new MaxStepsError(
-        `We detected a very inefficient algorithm, Max steps exceeded: ${this.MAX_STEPS}`,
+        `We detected a very inefficient algorithm, Max steps exceeded: ${SortAlgorithms.MAX_STEPS}`,
       );
     }
-  };
-  public static async bubble(
+  },
+  async bubble(
     array: Node<number>[],
     direction: Direction = "ascending",
     onCompare?: ClosureCompare,
@@ -43,9 +43,9 @@ export class SortAlgorithms {
     }
 
     return steps;
-  }
+  },
 
-  public static async selection(
+  async selection(
     array: Node<number>[],
     direction: Direction = "ascending",
     onCompare?: ClosureCompare,
@@ -74,9 +74,9 @@ export class SortAlgorithms {
       }
     }
     return steps;
-  }
+  },
 
-  public static async insertion(
+  async insertion(
     array: Node<number>[],
     direction: Direction = "ascending",
     onCompare?: ClosureCompare,
@@ -102,9 +102,9 @@ export class SortAlgorithms {
     }
 
     return steps;
-  }
+  },
 
-  public static async merge(
+  async merge(
     array: Node<number>[],
     direction: Direction = "ascending",
     onSlice?: ClosureSlice,
@@ -167,8 +167,8 @@ export class SortAlgorithms {
     };
     await _merge(array, onSlice, onMerge);
     return steps;
-  }
-  public static async quick(
+  },
+  async quick(
     array: Node<number>[],
     direction: Direction = "ascending",
     onPivot?: (pivot: Node<number>) => Promise<void>,
@@ -212,8 +212,8 @@ export class SortAlgorithms {
 
     await quick(0, array.length - 1);
     return steps;
-  }
-  public static async bogo(
+  },
+  async bogo(
     array: Node<number>[],
     direction: Direction = "ascending",
     onShuffle?: ClosureCompare,
@@ -240,5 +240,5 @@ export class SortAlgorithms {
       await shuffle();
     }
     return steps;
-  }
-}
+  },
+};
