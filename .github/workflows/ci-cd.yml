@@ -1,10 +1,11 @@
-name: ci cd action for visualsofdsa
+name: CI / Prod
 
 on:
-    push:
-        branches: -main
+  push:
+    branches: [main]
+
 env:
-    REGISTRY: ghcr.io
+  REGISTRY: ghcr.io
 
 jobs:
     run-ci:
