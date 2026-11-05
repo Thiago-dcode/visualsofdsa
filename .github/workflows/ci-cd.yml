@@ -1,4 +1,4 @@
-name: ci cd action for visuals of dsa
+name: ci cd action for visualsofdsa
 
 on:
     push:
