@@ -1,16 +1,13 @@
-import SearchAlgorithm from "../_classes/SearchAlgorithm";
-import Node from "@/entities/data-structures/linear/_classes/Node";
-import { Direction, speed, VisualizationArrays } from "@/types";
-import { animate } from "@/lib/animations";
+import { ReactNode, useState } from "react";
 import { toast } from "sonner";
-import {
-  delay,
- 
-  getMinMaxFromArrayOfNodes,
-} from "@/lib/utils";
+import Node from "@/entities/data-structures/linear/_classes/Node";
+import { animate } from "@/lib/animations";
+import { delay, getMinMaxFromArrayOfNodes } from "@/lib/utils";
+import { Direction, speed, VisualizationArrays } from "@/types";
 import { useAnimation } from "../../_hooks/useAnimations";
 import { AlgoSearchType } from "../../types";
-import { useState, ReactNode } from "react";
+import SearchAlgorithm from "../_classes/SearchAlgorithm";
+
 const getSpeed = (type: AlgoSearchType, speed: number) => {
   switch (speed) {
     case 1:
@@ -30,9 +27,8 @@ export default function useSearchAlgorithm(
   sorted: boolean,
   direction: Direction,
   speed: speed = 1,
-  visualization: VisualizationArrays = "memoryRam"
+  visualization: VisualizationArrays = "memoryRam",
 ) {
-
   let minArrayValue = 0;
   let maxArrayValue = 0;
   if (array) {
@@ -41,11 +37,10 @@ export default function useSearchAlgorithm(
     maxArrayValue = minMax.max;
   }
   const [message, setMessage] = useState<{
-    title: string,
-    description: ReactNode,
-  } | null>(null)
-  const { animateNode, animateSound } =
-    useAnimation(visualization);
+    title: string;
+    description: ReactNode;
+  } | null>(null);
+  const { animateNode, animateSound } = useAnimation(visualization);
 
   const linear = async (search: number) => {
     if (!array) {
@@ -65,15 +60,19 @@ export default function useSearchAlgorithm(
           if (visualization === "bars")
             animateSound(node.data as number, minArrayValue, maxArrayValue);
 
-          await animateNode(node.ref, found ? 'find' : 'search', found ? 1.5 : getSpeed('linear', speed))
-          _index = index
+          await animateNode(
+            node.ref,
+            found ? "find" : "search",
+            found ? 1.5 : getSpeed("linear", speed),
+          );
+          _index = index;
         }
       },
       sorted,
-      direction
+      direction,
     );
 
-    onSearchEnds(!!node, steps | 1, search, _index)
+    onSearchEnds(!!node, steps | 1, search, _index);
   };
   const binary = async (search: number) => {
     if (!array) {
@@ -82,22 +81,19 @@ export default function useSearchAlgorithm(
       });
       return;
     }
-    const toggleEnableNodeAnimation = async (
-      ref: HTMLElement,
-      isEnable = false
-    ) => {
+    const toggleEnableNodeAnimation = async (ref: HTMLElement, isEnable = false) => {
       if (isEnable) {
         await animate(ref, "enable-node", 0.4, {
           onAnimationEnds: () => {
             ref.style.opacity = "1";
-          }
+          },
         });
         return;
       }
       await animate(ref, "disable-node", 0.4, {
         onAnimationEnds: () => {
           ref.style.opacity = "0.4";
-        }
+        },
       });
     };
     let steps = 0;
@@ -111,14 +107,13 @@ export default function useSearchAlgorithm(
 
         if (middleNode && middleNode.ref) {
           if (visualization === "bars")
-            animateSound(
-              middleNode.data as number,
-              minArrayValue,
-              maxArrayValue
-            );
-          const found = middleNode.data === search
-          await animateNode(middleNode.ref, found ? 'find' : 'search', found ? 2 : getSpeed('binary', speed))
-
+            animateSound(middleNode.data as number, minArrayValue, maxArrayValue);
+          const found = middleNode.data === search;
+          await animateNode(
+            middleNode.ref,
+            found ? "find" : "search",
+            found ? 2 : getSpeed("binary", speed),
+          );
 
           if (!found) {
             if (
@@ -126,7 +121,6 @@ export default function useSearchAlgorithm(
               (direction === "ascending" && middleNode.data > search) ||
               (direction === "descending" && middleNode.data < search)
             ) {
-
               for (let i = middle; i <= end; i++) {
                 const node = array[i];
                 if (!node || !node.ref) continue;
@@ -142,12 +136,12 @@ export default function useSearchAlgorithm(
             }
             await delay(500);
           }
-          index = middle
+          index = middle;
         }
       },
-      direction
+      direction,
     );
-    onSearchEnds(!!node, steps | 1, search, index)
+    onSearchEnds(!!node, steps | 1, search, index);
     for (let i = 0; i < array.length; i++) {
       const node = array[i];
       if (!node || !node.ref) continue;
@@ -156,13 +150,21 @@ export default function useSearchAlgorithm(
   };
   const onSearchEnds = (found: boolean, steps: number, value: number, index: number) => {
     setMessage({
-      title: 'STEPS TAKEN',
-      description: found ? <>Value <strong>{value}</strong> found at index <strong>{index}</strong>, steps taken: <strong>{steps}</strong></> : <>Value <strong>{value}</strong> not found, steps taken: <strong>{steps}</strong></>
-    })
-
-  }
+      title: "STEPS TAKEN",
+      description: found ? (
+        <>
+          Value <strong>{value}</strong> found at index <strong>{index}</strong>, steps taken:{" "}
+          <strong>{steps}</strong>
+        </>
+      ) : (
+        <>
+          Value <strong>{value}</strong> not found, steps taken: <strong>{steps}</strong>
+        </>
+      ),
+    });
+  };
   const clearMessage = () => {
     setMessage(null);
-  }
+  };
   return { linear, binary, minArrayValue, maxArrayValue, message, clearMessage };
 }

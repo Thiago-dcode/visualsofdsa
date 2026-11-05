@@ -1,7 +1,6 @@
-import { Primitive, Ref } from "@/types";
-
 import Memory from "@/lib/classes/Memory";
 import Position from "@/lib/classes/position/Position";
+import { Primitive, Ref } from "@/types";
 
 export default class Node<T extends Primitive> extends Memory {
   private _data: T;
@@ -53,7 +52,7 @@ export default class Node<T extends Primitive> extends Memory {
       this.data,
       new Position(this.position.x, this.position.y),
       withRef ? this.ref : null,
-      this._color
+      this._color,
     );
   }
 }

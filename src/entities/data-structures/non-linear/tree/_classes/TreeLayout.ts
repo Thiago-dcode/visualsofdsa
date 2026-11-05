@@ -11,10 +11,10 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
   private _maxDepth: number;
 
   constructor(
-    tree: Tree<T, K>, 
-    lvlHeight: number = 100,  
+    tree: Tree<T, K>,
+    lvlHeight: number = 100,
     paddingX: number = 10,
-    minSeparation: number = tree.nodeWidth
+    minSeparation: number = tree.nodeWidth,
   ) {
     this._tree = tree;
     this._lvlHeight = lvlHeight;
@@ -96,9 +96,7 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
     if (node.isLeaf) {
       if (!node.isLeftmost) {
         node.position.x = node.previousSibling
-          ? node.previousSibling.position.x +
-            this._tree.nodeWidth +
-            this._minSeparation
+          ? node.previousSibling.position.x + this._tree.nodeWidth + this._minSeparation
           : 0;
       } else {
         node.position.x = 0;
@@ -108,9 +106,7 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
         node.position.x = node.children[0].position.x;
       } else {
         node.position.x = node.previousSibling
-          ? node.previousSibling.position.x +
-            this._tree.nodeWidth +
-            this._minSeparation
+          ? node.previousSibling.position.x + this._tree.nodeWidth + this._minSeparation
           : 0;
       }
     } else {
@@ -124,9 +120,7 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
         node.position.x = mid;
       } else {
         node.position.x = node.previousSibling
-          ? node.previousSibling.position.x +
-            this._tree.nodeWidth +
-            this._minSeparation
+          ? node.previousSibling.position.x + this._tree.nodeWidth + this._minSeparation
           : 0;
         node.mod = node.position.x - mid;
       }
@@ -148,7 +142,7 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
       // Get max level from both contours
       const maxLevel = Math.min(
         Math.max(...Array.from(siblingContour.keys())),
-        Math.max(...Array.from(nodeContour.keys()))
+        Math.max(...Array.from(nodeContour.keys())),
       );
 
       // Start from node's level + 1
@@ -186,8 +180,7 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
     const numNodesBetween = rightIndex - leftIndex - 1;
 
     if (numNodesBetween > 0) {
-      const distanceBetweenNodes =
-        (node.position.x - sibling.position.x) / (numNodesBetween + 1);
+      const distanceBetweenNodes = (node.position.x - sibling.position.x) / (numNodesBetween + 1);
 
       let count = 1;
       for (let i = leftIndex + 1; i < rightIndex; i++) {
@@ -218,22 +211,18 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
     const maxWidth = rightMostX - leftMostX;
     this._treeWidth = maxWidth + this._tree.nodeWidth;
   }
- private resetStyles(ref:Ref){
-  if(ref){
-    ref.style.display = 'block';
-    ref.style.visibility = 'visible';
-    ref.style.opacity = '1';
-    ref.style.removeProperty('--left_from');
-    ref.style.removeProperty('--left_to');
-    ref.style.removeProperty('--top_from');
-    ref.style.removeProperty('--top_to');
+  private resetStyles(ref: Ref) {
+    if (ref) {
+      ref.style.display = "block";
+      ref.style.visibility = "visible";
+      ref.style.opacity = "1";
+      ref.style.removeProperty("--left_from");
+      ref.style.removeProperty("--left_to");
+      ref.style.removeProperty("--top_from");
+      ref.style.removeProperty("--top_to");
     }
   }
-  private getLeftContour(
-    node: TreeNode<T>,
-    modSum: number,
-    values: Map<number, number>
-  ): void {
+  private getLeftContour(node: TreeNode<T>, modSum: number, values: Map<number, number>): void {
     const value = values.get(node.position.y);
     if (!value) {
       values.set(node.position.y, node.position.x + modSum);
@@ -248,11 +237,7 @@ export default class TreeLayout<T extends Primitive, K extends TreeNode<T>> {
     }
   }
 
-  private getRightContour(
-    node: TreeNode<T>,
-    modSum: number,
-    values: Map<number, number>
-  ): void {
+  private getRightContour(node: TreeNode<T>, modSum: number, values: Map<number, number>): void {
     const value = values.get(node.position.y);
     if (!value) {
       values.set(node.position.y, node.position.x + modSum);

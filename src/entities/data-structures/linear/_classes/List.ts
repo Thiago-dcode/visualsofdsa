@@ -1,6 +1,6 @@
 import NodeShape from "@/lib/classes/NodeShape";
-import NotAllowedSizeError from "../../../../lib/errors/MaxSizeExceededError";
 import { listName } from "@/types";
+import NotAllowedSizeError from "../../../../lib/errors/MaxSizeExceededError";
 
 export default abstract class List extends NodeShape {
   private _maxSize;
@@ -30,9 +30,9 @@ export default abstract class List extends NodeShape {
     return this._beginner;
   }
   private setBeginner() {
-    if (this.name === 'stack') {
+    if (this.name === "stack") {
       this._beginner = this.maxSize * (this.nodeHeightSpacing + this.nodeHeight);
-    }else{
+    } else {
       this._beginner = 0;
     }
   }

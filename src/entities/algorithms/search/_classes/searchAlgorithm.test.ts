@@ -1,8 +1,8 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import Position from "@/lib/classes/position/Position";
 import { createArrayOfNodes, random } from "@/lib/utils";
-import SearchAlgorithm from "./SearchAlgorithm";
 import { Primitive } from "@/types";
+import SearchAlgorithm from "./SearchAlgorithm";
 
 // const createUniqueSortedArrayOfNodes = (size: number) => {
 //   const array: Node<number>[] = [];
@@ -22,7 +22,7 @@ import { Primitive } from "@/types";
 const createASortedArrayOfNodes = (
   size: number,
   direction: "ascending" | "descending" = "ascending",
-  add = 0
+  add = 0,
 ) => {
   const array: Node<number>[] = [];
   if (direction === "ascending") {
@@ -40,26 +40,20 @@ const createASortedArrayOfNodes = (
 describe("Test searchAlgorithm.linear", () => {
   it("Should find and a element in a unsorted array", async () => {
     const array = createArrayOfNodes([
-      345, 3, 22344, 78, 4, 5, 23, 53, 123, 435, 3452, 3999, 5344, 0, 14, 5553,
-      9999, 144345, 235325, 235235235, 23523624626, 25342351325215,
-      34263469879898,
+      345, 3, 22344, 78, 4, 5, 23, 53, 123, 435, 3452, 3999, 5344, 0, 14, 5553, 9999, 144345,
+      235325, 235235235, 23523624626, 25342351325215, 34263469879898,
     ]);
 
-    const node = await SearchAlgorithm.linear(
-      array,
-      3999,
-      async (node, index) => {
-        expect(node).toBe(array[index]);
-      }
-    );
+    const node = await SearchAlgorithm.linear(array, 3999, async (node, index) => {
+      expect(node).toBe(array[index]);
+    });
 
     expect(node instanceof Node && node.data === 3999).toBe(true);
   });
   it("Should traverse an array when is unsorted and element not found", async () => {
     const array = createArrayOfNodes([
-      345, 3, 22344, 78, 4, 5, 23, 53, 123, 435, 3452, 3999, 5344, 0, 14, 5553,
-      9999, 144345, 235325, 5235235, 2326, 25342351325215, 34264699898, 666,
-      555, 222, 1145,
+      345, 3, 22344, 78, 4, 5, 23, 53, 123, 435, 3452, 3999, 5344, 0, 14, 5553, 9999, 144345,
+      235325, 5235235, 2326, 25342351325215, 34264699898, 666, 555, 222, 1145,
     ]);
     let j = 0;
 
@@ -72,13 +66,9 @@ describe("Test searchAlgorithm.linear", () => {
   });
   it("Should find and a element in a sorted ascending array", async () => {
     const array = createASortedArrayOfNodes(200);
-    const node = await SearchAlgorithm.linear(
-      array,
-      100,
-      async (node, index) => {
-        expect(node).toBe(array[index]);
-      }
-    );
+    const node = await SearchAlgorithm.linear(array, 100, async (node, index) => {
+      expect(node).toBe(array[index]);
+    });
     expect(node instanceof Node && node.data === 100).toBe(true);
   });
   it("Should take one step when element is the last of the array ", async () => {
@@ -92,7 +82,7 @@ describe("Test searchAlgorithm.linear", () => {
         j++;
       },
       true,
-      "ascending"
+      "ascending",
     );
     expect(j).toBe(1);
     expect(node?.data).toBe(199);
@@ -108,7 +98,7 @@ describe("Test searchAlgorithm.linear", () => {
         j++;
       },
       true,
-      "descending"
+      "descending",
     );
     expect(j).toBe(1);
     expect(node?.data).toBe(0);
@@ -123,7 +113,7 @@ describe("Test searchAlgorithm.linear", () => {
         expect(node).toBe(array[index]);
         j++;
       },
-      true
+      true,
     );
     expect(j).toBeGreaterThan(20);
     expect(j).toBeLessThan(array.length);
@@ -140,7 +130,7 @@ describe("Test searchAlgorithm.linear", () => {
         j++;
       },
       true,
-      "descending"
+      "descending",
     );
     expect(j).toBeGreaterThan(20);
     expect(j).toBeLessThan(array.length);
@@ -157,7 +147,7 @@ describe("Test searchAlgorithm.linear", () => {
         j++;
       },
       true,
-      "ascending"
+      "ascending",
     );
 
     expect(j).toBe(0);
@@ -175,7 +165,7 @@ describe("Test searchAlgorithm.linear", () => {
         j++;
       },
       true,
-      "descending"
+      "descending",
     );
     expect(j).toBe(0);
     expect(node).toBe(null);
@@ -188,17 +178,13 @@ describe("Test searchAlgortihm.binary", () => {
     for (let index = 0; index < array.length; index++) {
       const element = array[index].data;
 
-      const node = await SearchAlgorithm.binary(
-        array,
-        element,
-        async (middle, start, end) => {}
-      );
+      const node = await SearchAlgorithm.binary(array, element, async (middle, start, end) => {});
 
       expect(node?.data).toBe(element);
     }
   });
   it("It should search descending", async () => {
-    const array = createASortedArrayOfNodes(200,'descending');
+    const array = createASortedArrayOfNodes(200, "descending");
     for (let index = 0; index < array.length; index++) {
       const element = array[index].data;
 
@@ -206,7 +192,7 @@ describe("Test searchAlgortihm.binary", () => {
         array,
         element,
         async (middle, start, end) => {},
-        'descending'
+        "descending",
       );
 
       expect(node?.data).toBe(element);

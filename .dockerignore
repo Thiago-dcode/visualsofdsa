@@ -25,3 +25,11 @@ compose*.yml
 # Logs and OS junk.
 *.log
 .DS_Store
+
+# Local-only tooling, notes and certificates.
+.vercel
+.claude
+todo.txt
+doc
+*.pem
+*.log*

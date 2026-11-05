@@ -1,18 +1,11 @@
-import Node from "@/entities/data-structures/linear/_classes/Node";
-import {
-  Direction,
-  Entities,
-  EntityWithType,
-  Position,
-  Primitive,
-  speed,
-} from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { v4 as uuid4 } from "uuid";
-import PositionClass from "./classes/position/Position";
 import { Link } from "@/components/app/nav/type";
+import Node from "@/entities/data-structures/linear/_classes/Node";
+import { Direction, Entities, EntityWithType, Position, Primitive, speed } from "@/types";
+import PositionClass from "./classes/position/Position";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -20,8 +13,7 @@ export function cn(...inputs: ClassValue[]) {
 export const buildLinkFromArgs = (...args: string[]): Link => {
   return args.reduce((prev, curr) => prev + `/${curr}`, "") as Link;
 };
-export const delay = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const getSpeed = (speed: speed) => {
   switch (speed) {
     case 1:
@@ -38,7 +30,7 @@ export const getSpeed = (speed: speed) => {
 export const getMinMaxFromArrayOfNodes = (
   array: Node<number>[],
   direction: Direction,
-  sorted: boolean
+  sorted: boolean,
 ) => {
   return {
     min: sorted
@@ -56,10 +48,7 @@ export const createArrayOfNodes = (array: Primitive[]) => {
   }
   return arrayNodes;
 };
-export const createRandomUniqueArrayOfNumbers = (
-  size: number,
-  range = [-5000, 5000]
-) => {
+export const createRandomUniqueArrayOfNumbers = (size: number, range = [-5000, 5000]) => {
   if (size > Math.abs(range[0]) + Math.abs(range[1])) {
     throw new Error("The size must be LESS or EQUAL to  sum of range");
   }
@@ -81,16 +70,14 @@ export const createRandomUniqueArrayOfNumbers = (
   }
   return array;
 };
-export const createRandomUniqueArrayOfNodes = (
-  size: number,
-  range = [-5000, 5000]
-) => createRandomUniqueArrayOfNumbers(size, range).map(num => new Node(num, new PositionClass(0, 0), null));
+export const createRandomUniqueArrayOfNodes = (size: number, range = [-5000, 5000]) =>
+  createRandomUniqueArrayOfNumbers(size, range).map(
+    (num) => new Node(num, new PositionClass(0, 0), null),
+  );
 export const createRandomArrayOfNodes = (size: number, range = [-500, 500]) => {
   const arrayNodes: Node<number>[] = [];
   for (let i = 0; i < size; i++) {
-    arrayNodes.push(
-      new Node(random(range[0], range[1]), new PositionClass(0, 0), null)
-    );
+    arrayNodes.push(new Node(random(range[0], range[1]), new PositionClass(0, 0), null));
   }
   return arrayNodes;
 };
@@ -104,9 +91,7 @@ export const prefix0 = (n: number): string => {
 };
 export function calculateRuleOfThree(a: number, b: number, x: number): number {
   if (a === 0) {
-    throw new Error(
-      "The first value 'a' cannot be zero to avoid division by zero."
-    );
+    throw new Error("The first value 'a' cannot be zero to avoid division by zero.");
   }
   return (b * x) / a;
 }
@@ -123,14 +108,11 @@ export function removePx(value: string): number {
   return isNaN(result) ? 0 : result;
 }
 export function getEuclideanDistance(position1: Position, position2: Position) {
-  return Math.sqrt(
-    Math.pow(position1.x - position2.x, 2) +
-    Math.pow(position1.y - position2.y, 2)
-  );
+  return Math.sqrt((position1.x - position2.x) ** 2 + (position1.y - position2.y) ** 2);
 }
 export const copyToClipboard = async (
   text: string,
-  showToast = true
+  showToast = true,
 ): Promise<{
   success: boolean;
   error?: string;
@@ -155,10 +137,7 @@ export const copyToClipboard = async (
       success: true,
     };
   } catch (err) {
-    let message =
-      err instanceof Error
-        ? "Failed to copy: " + err.message
-        : "Failed to copy";
+    const message = err instanceof Error ? "Failed to copy: " + err.message : "Failed to copy";
     console.error(message);
     return {
       success: false,
@@ -190,9 +169,9 @@ export const vLerp = (
   b: {
     [key: string]: number;
   },
-  t: number
+  t: number,
 ) => {
-  let c: typeof a = {};
+  const c: typeof a = {};
   for (const key in a) {
     c[key] = lerp(a[key], b[key], t);
   }
@@ -203,7 +182,7 @@ export const getValueNormalized = (
   x: number,
   minX: number,
   maxX: number,
-  range: [number, number] = [0, 1]
+  range: [number, number] = [0, 1],
 ) => {
   if (minX === maxX) {
     // If all values are the same, return the midpoint of the range
@@ -231,7 +210,7 @@ export const generateAudioFrequency = (
   audioCtx: AudioContext,
   frequency: number = 200,
   duration: number,
-  volumen = 0.1
+  volumen = 0.1,
 ) => {
   const osc = audioCtx.createOscillator();
   osc.frequency.value = frequency;
@@ -243,14 +222,13 @@ export const generateAudioFrequency = (
   node.connect(audioCtx.destination);
 };
 export const clearRefs = (...refs: (HTMLInputElement | null | undefined)[]) => {
-  refs.forEach(ref => {
+  refs.forEach((ref) => {
     if (ref) {
-      ref.value = '';
+      ref.value = "";
     }
   });
-}
+};
 
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
+};

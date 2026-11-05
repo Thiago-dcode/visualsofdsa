@@ -1,20 +1,22 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
-import { ClosureCompare, ClosureSlice } from "../types";
-import { Direction } from "@/types";
-import { random } from "@/lib/utils";
 import MaxStepsError from "@/lib/errors/MaxStepsError";
+import { random } from "@/lib/utils";
+import { Direction } from "@/types";
+import { ClosureCompare, ClosureSlice } from "../types";
 export class SortAlgorithms {
   private static MAX_STEPS = 70000;
   private static throwMaxStepsError = (steps: number) => {
     if (steps > this.MAX_STEPS) {
-      throw new MaxStepsError(`We detected a very inefficient algorithm, Max steps exceeded: ${this.MAX_STEPS}`);
+      throw new MaxStepsError(
+        `We detected a very inefficient algorithm, Max steps exceeded: ${this.MAX_STEPS}`,
+      );
     }
-  }
+  };
   public static async bubble(
     array: Node<number>[],
     direction: Direction = "ascending",
     onCompare?: ClosureCompare,
-    onSwap?: ClosureCompare
+    onSwap?: ClosureCompare,
   ) {
     if (array.length <= 1) return 1;
     let steps = 0;
@@ -47,7 +49,7 @@ export class SortAlgorithms {
     array: Node<number>[],
     direction: Direction = "ascending",
     onCompare?: ClosureCompare,
-    onSwap?: ClosureCompare
+    onSwap?: ClosureCompare,
   ) {
     if (array.length <= 1) return 1;
     let steps = 0;
@@ -58,10 +60,8 @@ export class SortAlgorithms {
         this.throwMaxStepsError(++steps);
         if (onCompare) await onCompare(array[j], array[indexToCompare]);
         if (
-          (direction === "ascending" &&
-            array[j].data < array[indexToCompare].data) ||
-          (direction === "descending" &&
-            array[j].data > array[indexToCompare].data)
+          (direction === "ascending" && array[j].data < array[indexToCompare].data) ||
+          (direction === "descending" && array[j].data > array[indexToCompare].data)
         ) {
           indexToCompare = j;
         }
@@ -80,7 +80,7 @@ export class SortAlgorithms {
     array: Node<number>[],
     direction: Direction = "ascending",
     onCompare?: ClosureCompare,
-    onShift?: ClosureCompare
+    onShift?: ClosureCompare,
   ) {
     if (array.length <= 1) return 1;
     let steps = 0;
@@ -108,20 +108,20 @@ export class SortAlgorithms {
     array: Node<number>[],
     direction: Direction = "ascending",
     onSlice?: ClosureSlice,
-    onMerge?: ClosureCompare
+    onMerge?: ClosureCompare,
   ) {
     let steps = 0;
     if (array.length <= 1) return 1;
     const _merge = async (
       array: Node<number>[],
       onSlice?: ClosureSlice,
-      onMerge?: ClosureCompare
+      onMerge?: ClosureCompare,
     ) => {
       if (array.length <= 1) return;
       const merge = async (
         leftArray: Node<number>[],
         rightArray: Node<number>[],
-        subArray: Node<number>[]
+        subArray: Node<number>[],
       ) => {
         let i = 0;
         let l = 0;
@@ -173,7 +173,7 @@ export class SortAlgorithms {
     direction: Direction = "ascending",
     onPivot?: (pivot: Node<number>) => Promise<void>,
     onSwap?: ClosureCompare,
-    onCompare?: (start: number, end: number) => Promise<void>
+    onCompare?: (start: number, end: number) => Promise<void>,
   ) {
     let steps = 0; // Tracks steps
     if (array.length <= 1) return 1;
@@ -216,9 +216,8 @@ export class SortAlgorithms {
   public static async bogo(
     array: Node<number>[],
     direction: Direction = "ascending",
-    onShuffle?: ClosureCompare
+    onShuffle?: ClosureCompare,
   ) {
-
     let steps = 0;
     const shuffle = async () => {
       for (let i = 0; i < array.length; i++) {
@@ -229,18 +228,17 @@ export class SortAlgorithms {
         array[i] = array[randomN];
         array[randomN] = temp;
       }
-    }
+    };
     const isSorted = () => {
       for (let i = 0; i < array.length - 1; i++) {
         if (direction === "ascending" && array[i].data > array[i + 1].data) return false;
         if (direction === "descending" && array[i].data < array[i + 1].data) return false;
       }
       return true;
-    }
+    };
     while (!isSorted()) {
       await shuffle();
     }
     return steps;
   }
-
 }

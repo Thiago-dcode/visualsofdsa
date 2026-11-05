@@ -1,20 +1,20 @@
+import { Edge } from "@/lib/classes/Edge";
 import Position from "@/lib/classes/position/Position";
-import BinaryTree from "../../tree/_classes/BinaryTree";
 import BinaryTreeNode from "../../../non-linear/tree/_classes/BinaryTreeNode";
 import {
   OnCompare,
-  OnTraversal,
-  OnRemove,
   OnFindSuccessor,
-  Sortable
+  OnRemove,
+  OnTraversal,
+  Sortable,
 } from "../../../non-linear/tree/types";
-import { Edge } from "@/lib/classes/Edge";
+import BinaryTree from "../../tree/_classes/BinaryTree";
 
-export class BinarySearchTree<T extends number> extends BinaryTree<T> implements Sortable<T,BinaryTreeNode<T>>{
-  async insert(
-    data: T,
-    onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
-  ) {
+export class BinarySearchTree<T extends number>
+  extends BinaryTree<T>
+  implements Sortable<T, BinaryTreeNode<T>>
+{
+  async insert(data: T, onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null) {
     const node = new BinaryTreeNode(data, new Position(0, 0), null);
 
     if (!this._root) {
@@ -30,7 +30,7 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
   }
   async insertNode(
     node: BinaryTreeNode<T>,
-    onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
+    onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null,
   ) {
     if (!this._root) {
       this._root = node;
@@ -44,30 +44,21 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
     return result;
   }
 
-  async search(
-    data: T,
-    onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null
-  ) {
+  async search(data: T, onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null) {
     return await this._search(this._root, null, data, onCompare);
   }
   async remove(
     data: T,
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null,
     OnFindSuccessor: OnTraversal<T, BinaryTreeNode<T>> | null = null,
-    OnRemove: OnRemove<T, BinaryTreeNode<T>> | null = null
+    OnRemove: OnRemove<T, BinaryTreeNode<T>> | null = null,
   ) {
     if (this._root && this._root.data === data) {
       const dummyParent = new BinaryTreeNode<T>(data);
       dummyParent.left = this._root;
       this._root.parent = dummyParent;
 
-      await this._remove(
-        dummyParent,
-        data,
-        onCompare,
-        OnFindSuccessor,
-        OnRemove
-      );
+      await this._remove(dummyParent, data, onCompare, OnFindSuccessor, OnRemove);
 
       if (dummyParent.left) {
         this._root = dummyParent.left;
@@ -79,13 +70,7 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
       this._size--;
       return true;
     }
-    const result = await this._remove(
-      this._root,
-      data,
-      onCompare,
-      OnFindSuccessor,
-      OnRemove
-    );
+    const result = await this._remove(this._root, data, onCompare, OnFindSuccessor, OnRemove);
     if (result) this._size--;
     return result;
   }
@@ -94,7 +79,7 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
     edge: Edge | null,
     nodeToInsert: BinaryTreeNode<T>,
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null,
-    oppositeNode: BinaryTreeNode<T> | null = null
+    oppositeNode: BinaryTreeNode<T> | null = null,
   ): Promise<BinaryTreeNode<T> | null> {
     node.isLastAdd = false;
     if (onCompare) await onCompare(node, edge, nodeToInsert.data, oppositeNode);
@@ -106,26 +91,14 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
           node.right.parent = node;
           return node.right;
         }
-        return await this._insert(
-          node.right,
-          node.rightEdge,
-          nodeToInsert,
-          onCompare,
-          node.left
-        );
+        return await this._insert(node.right, node.rightEdge, nodeToInsert, onCompare, node.left);
       } else {
         if (!node.left) {
           node.left = nodeToInsert;
           node.left.parent = node;
           return node.left;
         }
-        return await this._insert(
-          node.left,
-          node.leftEdge,
-          nodeToInsert,
-          onCompare,
-          node.right
-        );
+        return await this._insert(node.left, node.leftEdge, nodeToInsert, onCompare, node.right);
       }
     }
   }
@@ -135,26 +108,14 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
     edge: Edge | null,
     dataToSearch: T,
     onCompare: OnCompare<T, BinaryTreeNode<T>> | null = null,
-    oppoNode: BinaryTreeNode<T> | null = null
+    oppoNode: BinaryTreeNode<T> | null = null,
   ): Promise<BinaryTreeNode<T> | null> {
     if (onCompare && node) await onCompare(node, edge, dataToSearch, oppoNode);
     if (!node || node.data === dataToSearch) return node;
     if (dataToSearch > node.data) {
-      return await this._search(
-        node.right,
-        node.rightEdge,
-        dataToSearch,
-        onCompare,
-        node.left
-      );
+      return await this._search(node.right, node.rightEdge, dataToSearch, onCompare, node.left);
     } else {
-      return await this._search(
-        node.left,
-        node.leftEdge,
-        dataToSearch,
-        onCompare,
-        node.right
-      );
+      return await this._search(node.left, node.leftEdge, dataToSearch, onCompare, node.right);
     }
   }
   private async _remove(
@@ -165,14 +126,11 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
     OnRemove: OnRemove<T, BinaryTreeNode<T>> | null = null,
     edge: Edge | null = null,
     oppoNode: BinaryTreeNode<T> | null = null,
-    substituteNode: BinaryTreeNode<T> | null = null
+    substituteNode: BinaryTreeNode<T> | null = null,
   ): Promise<boolean> {
     if (!node) return false;
     if (onCompare) await onCompare(node, edge, data, oppoNode);
-    const replaceNode = async (
-      parent: BinaryTreeNode<T>,
-      side: "left" | "right"
-    ) => {
+    const replaceNode = async (parent: BinaryTreeNode<T>, side: "left" | "right") => {
       //Case 1, no children
       if (!parent[side]?.children.length) {
         if (parent[side]) {
@@ -203,11 +161,7 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
         if (OnRemove) await OnRemove(nodeToRemove);
 
         // Find successor and remove it from its current position
-        const successor = await this.findMinRightSubTree(
-          nodeToRemove,
-          OnFindSuccessor,
-          true
-        );
+        const successor = await this.findMinRightSubTree(nodeToRemove, OnFindSuccessor, true);
 
         if (OnRemove) await OnRemove(nodeToRemove, successor, true);
 
@@ -257,7 +211,7 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
           OnRemove,
           node.rightEdge,
           node.left,
-          substituteNode
+          substituteNode,
         );
       } else if (data < node.data) {
         return await this._remove(
@@ -268,7 +222,7 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
           OnRemove,
           node.leftEdge,
           node.right,
-          substituteNode
+          substituteNode,
         );
       }
     }
@@ -278,30 +232,21 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
   private async findMinRightSubTree(
     parent: BinaryTreeNode<T>,
     onFindSuccessor: OnFindSuccessor<T, BinaryTreeNode<T>> | null = null,
-    remove: boolean = false
+    remove: boolean = false,
   ): Promise<BinaryTreeNode<T>> {
     if (!parent.right) {
-      throw new Error(
-        "In order to use findMinRightSubTree, parent must have a right child"
-      );
+      throw new Error("In order to use findMinRightSubTree, parent must have a right child");
     }
     let pSuccessor = parent;
     let successor = parent.right;
 
     // Find the minimum value in the right subtree
     let isFirstCall = true;
-    let isPreviousSuccessor = false;
+    const isPreviousSuccessor = false;
     while (successor.left) {
-      if (onFindSuccessor)
-        await onFindSuccessor(
-          successor,
-          successor.leftEdge,
-          isFirstCall,
-          false
-        );
+      if (onFindSuccessor) await onFindSuccessor(successor, successor.leftEdge, isFirstCall, false);
       pSuccessor = successor;
       successor = successor.left;
-   
 
       isFirstCall = false;
     }
@@ -309,8 +254,7 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
     //This is done because the successor is no longer the left child of the parent
     pSuccessor.leftEdge = new Edge();
 
-    if (onFindSuccessor)
-      await onFindSuccessor(successor, successor.leftEdge, isFirstCall, true);
+    if (onFindSuccessor) await onFindSuccessor(successor, successor.leftEdge, isFirstCall, true);
 
     if (remove) {
       // Store successor's right child before clearing references
@@ -340,10 +284,10 @@ export class BinarySearchTree<T extends number> extends BinaryTree<T> implements
 
     return successor;
   }
-get min(){
-return this.leftMostNode()
-}
-get max(){
-  return this.rightMostNode()
-}
+  get min() {
+    return this.leftMostNode();
+  }
+  get max() {
+    return this.rightMostNode();
+  }
 }

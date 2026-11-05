@@ -1,10 +1,15 @@
-import { useAnimationRunning } from "@/context/animationRunningContext"
-import { Switch } from "../ui/switch"
+import { useAnimationRunning } from "@/context/animationRunningContext";
 import { useMuted } from "@/context/muteContext";
+import { Switch } from "../ui/switch";
 
 export default function TogglePauseAnimationComponent() {
-    const { isAnimationEnabled, setAnimationEnabled } = useAnimationRunning();
- 
-    return <Switch title="Enable/Disable animations" checked={isAnimationEnabled} onCheckedChange={setAnimationEnabled} />
-}
+  const { isAnimationEnabled, setAnimationEnabled } = useAnimationRunning();
 
+  return (
+    <Switch
+      title="Enable/Disable animations"
+      checked={isAnimationEnabled}
+      onCheckedChange={setAnimationEnabled}
+    />
+  );
+}

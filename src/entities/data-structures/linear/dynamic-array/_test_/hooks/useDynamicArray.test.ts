@@ -1,9 +1,9 @@
 import { waitFor } from "@testing-library/dom";
 import { renderHook } from "@testing-library/react";
 import { act } from "react";
-import useDynamicArray from "../../hooks/useDynamicArray";
 import Node from "../../../_classes/Node";
 import { DynamicArrayNode } from "../../class/DynamicArrayNode";
+import useDynamicArray from "../../hooks/useDynamicArray";
 
 describe("UseDynamicArray HOOK", () => {
   it("Should create an array of null in the first render", async () => {
@@ -186,9 +186,7 @@ describe("UseDynamicArray HOOK", () => {
     expect(result.current.error).toBeTruthy();
     if (result.current.error) {
       expect(result.current.error.name).toBe("IndexOutOfTheBoundException");
-      expect(result.current.error.description).toBe(
-        "Index 1 out of bounds for length 0"
-      );
+      expect(result.current.error.description).toBe("Index 1 out of bounds for length 0");
     }
     await act(async () => {
       await result.current.write("hello", 0);
@@ -208,7 +206,7 @@ describe("UseDynamicArray HOOK", () => {
       if (result.current.error) {
         expect(result.current.error.name).toBe("IndexOutOfTheBoundException");
         expect(result.current.error.description).toBe(
-          `Index ${i} out of bounds for length ${result.current.size}`
+          `Index ${i} out of bounds for length ${result.current.size}`,
         );
       }
     }
@@ -324,11 +322,7 @@ describe("UseDynamicArray HOOK", () => {
       for (let i = 0; i < result.current.capacity; i++) {
         const element = result.current.array[i];
 
-        if (
-          i < result.current.size &&
-          element &&
-          element instanceof DynamicArrayNode
-        ) {
+        if (i < result.current.size && element && element instanceof DynamicArrayNode) {
           expect(element).toBeInstanceOf(DynamicArrayNode);
           if (i < 10) {
             if (j === 9) {
@@ -366,9 +360,7 @@ describe("UseDynamicArray HOOK", () => {
     }
     expect(result.current.size).toBe(100);
     if (result.current.array) {
-      expect(result.current.array[result.current.size - 1]).toBeInstanceOf(
-        DynamicArrayNode
-      );
+      expect(result.current.array[result.current.size - 1]).toBeInstanceOf(DynamicArrayNode);
     }
     await act(async () => {
       await result.current.pop();
@@ -378,11 +370,9 @@ describe("UseDynamicArray HOOK", () => {
     }
     expect(result.current.size).toBe(99);
     if (result.current.array) {
-      expect(result.current.array[result.current.size - 1]).toBeInstanceOf(
-        DynamicArrayNode
-      );
+      expect(result.current.array[result.current.size - 1]).toBeInstanceOf(DynamicArrayNode);
     }
-    let size = result.current.size;
+    const size = result.current.size;
     for (let i = 0; i < size; i++) {
       await act(async () => {
         await result.current.pop();
@@ -397,31 +387,28 @@ describe("UseDynamicArray HOOK", () => {
     }
   });
 
-  it('Should push',async ()=>{
+  it("Should push", async () => {
     const { result } = renderHook(useDynamicArray);
     expect(result.current.array).toBeInstanceOf(Array);
     expect(result.current.array?.length).toBe(result.current.capacity);
-    expect(result.current.size).toBe(0); 
+    expect(result.current.size).toBe(0);
     for (let i = 0; i < 10; i++) {
-      act( () => {
+      act(() => {
         result.current.push("hello-" + i);
       });
     }
     expect(result.current.size).toBe(10);
 
-    if(result.current.array){
-
+    if (result.current.array) {
       for (let i = 0; i < result.current.array.length; i++) {
         const element = result.current.array[i];
 
-        if(i <result.current.size){
-
+        if (i < result.current.size) {
           expect(element).toBeInstanceOf(DynamicArrayNode);
         }
-        
       }
     }
-  })
+  });
   it("should delete", async () => {
     const { result } = renderHook(useDynamicArray);
     expect(result.current.array).toBeInstanceOf(Array);
@@ -429,7 +416,7 @@ describe("UseDynamicArray HOOK", () => {
     expect(result.current.size).toBe(0);
 
     for (let i = 0; i < 100; i++) {
-      act( () => {
+      act(() => {
         result.current.push("hello-" + i);
       });
     }
@@ -449,7 +436,7 @@ describe("UseDynamicArray HOOK", () => {
       }
     }
     for (let i = 0; i < 100; i++) {
-      act( () => {
+      act(() => {
         result.current.push("hello-" + i);
       });
     }

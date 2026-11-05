@@ -1,19 +1,20 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import LinearDs from "../_classes/LinearDs";
-import { Primitive, speed } from "@/types";
-import UseLinearDsAnimation from "./UseLinearDsAnimation";
 import { toast } from "sonner";
-import StackOverFlowError from "@/lib/errors/StackOverFlowError";
-import { useSpeed } from "@/hooks/useSpeed";
 import { config as appConfig } from "@/config";
-import { random } from "@/lib/utils";
-import LinkedListNode from "../linked-list/classes/LinkedListNode";
 import useResponsive from "@/hooks/useResponsive";
-const MAX_WIDTH = 600
+import { useSpeed } from "@/hooks/useSpeed";
+import StackOverFlowError from "@/lib/errors/StackOverFlowError";
+import { random } from "@/lib/utils";
+import { Primitive, speed } from "@/types";
+import LinearDs from "../_classes/LinearDs";
+import LinkedListNode from "../linked-list/classes/LinkedListNode";
+import UseLinearDsAnimation from "./UseLinearDsAnimation";
+
+const MAX_WIDTH = 600;
 function UseLinear(linearDs: LinearDs<Primitive>) {
   const { speed, handleSetSpeed } = useSpeed(
     linearDs.speed,
-    appConfig.localStorageKeys.speed.linearDs
+    appConfig.localStorageKeys.speed.linearDs,
   );
   const [config, _setConfig] = useState({
     maxSize: linearDs.maxSize,
@@ -22,9 +23,9 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
     speed,
   });
   const { width, height } = useResponsive((e, device, sizeChanged) => {
-    if (sizeChanged.width) setConfig('width', device.width < MAX_WIDTH ? device.width - 50 : MAX_WIDTH / 1.5)
-
-  })
+    if (sizeChanged.width)
+      setConfig("width", device.width < MAX_WIDTH ? device.width - 50 : MAX_WIDTH / 1.5);
+  });
   const {
     handlePeekAnimation,
     handleRemoveAnimation,
@@ -33,9 +34,7 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
     handleEmptyAnimation,
     handleMoveNodesAnimation,
   } = UseLinearDsAnimation(linearDs, config.speed, config.height > height);
-  const [nodeArray, _setNodeArray] = useState<
-    LinkedListNode<Primitive>[] | null
-  >(null);
+  const [nodeArray, _setNodeArray] = useState<LinkedListNode<Primitive>[] | null>(null);
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
   const toastFillerId = useRef<string | number | null>(null);
   const flush = () => {
@@ -50,18 +49,17 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
       if (key === "speed") handleSetSpeed(value as speed);
       if (key === "maxSize") {
         flush();
-        linearDs.maxSize = value
-        _config.height = (linearDs.nodeHeight + linearDs.nodeHeightSpacing) * linearDs.maxSize
-      };
+        linearDs.maxSize = value;
+        _config.height = (linearDs.nodeHeight + linearDs.nodeHeightSpacing) * linearDs.maxSize;
+      }
       _setConfig(_config);
     },
 
-    [config]
+    [config],
   );
   const setNodeArray = () => {
     _setNodeArray(linearDs.toNodeArray);
   };
-
 
   const add = async (data: Primitive) => {
     try {
@@ -124,8 +122,7 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
     if (!nodeArray) return;
     const toastId = toast.loading(`Emptying ${linearDs?.name}`, {
       position: "top-center",
-
-    },);
+    });
     await handleEmptyAnimation(nodeArray);
     linearDs.flush();
     setNodeArray();
@@ -148,7 +145,6 @@ function UseLinear(linearDs: LinearDs<Primitive>) {
     setConfig,
     dismissFillerToast,
     maxWidth: Math.min(width - 50, MAX_WIDTH),
-
   };
 }
 

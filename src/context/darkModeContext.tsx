@@ -1,59 +1,57 @@
-'use client'
+"use client";
 
-import { config } from "@/config";
 import { createContext, ReactElement, useContext, useEffect, useState } from "react";
+import { config } from "@/config";
 
 type DarkMode = {
-    isDark: boolean | null,
-    toggleDarkMode: () => void
-}
+  isDark: boolean | null;
+  toggleDarkMode: () => void;
+};
 const DarkModeContext = createContext<DarkMode>({
-    isDark: false,
-    toggleDarkMode: () => { }
-})
+  isDark: false,
+  toggleDarkMode: () => {},
+});
 export const useDarkMode = () => useContext(DarkModeContext);
-export function DarkModeProvider({ children }: {
-    children: ReactElement
-}) {
-    const [isDark, setIsDark] = useState<null | boolean>(null);
-    const toggleDarkMode = () => {
-        if (!document) return;
-        document.documentElement.classList.toggle('dark')
-        setIsDark(document.documentElement.classList.contains('dark'))
-
+export function DarkModeProvider({ children }: { children: ReactElement }) {
+  const [isDark, setIsDark] = useState<null | boolean>(null);
+  const toggleDarkMode = () => {
+    if (!document) return;
+    document.documentElement.classList.toggle("dark");
+    setIsDark(document.documentElement.classList.contains("dark"));
+  };
+  useEffect(() => {
+    if (document) {
+      const theme = localStorage.getItem(config.localStorageKeys.theme);
+      if (theme) {
+        setIsDark(theme === "dark");
+        return;
+      }
+      setIsDark(
+        document.documentElement.classList.contains("dark") &&
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches,
+      );
     }
-    useEffect(() => {
-        if (document) {
-            const theme = localStorage.getItem(config.localStorageKeys.theme);
-            if (theme) {
-                setIsDark(theme === 'dark');
-                return;
-            }
-            setIsDark(document.documentElement.classList.contains('dark') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
-        }
-    }, [])
-    useEffect(() => {
+  }, []);
+  useEffect(() => {
+    if (isDark === null) return;
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem(config.localStorageKeys.theme, "dark");
+    } else {
+      localStorage.setItem(config.localStorageKeys.theme, "light");
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDark]);
 
-        if (isDark === null) return;
-        if (isDark) {
-            document.documentElement.classList.add('dark')
-            localStorage.setItem(config.localStorageKeys.theme, 'dark')
-        } else {
-            localStorage.setItem(config.localStorageKeys.theme, 'light')
-            document.documentElement.classList.remove('dark')
-        }
-
-
-
-    }, [isDark])
-
-    return <DarkModeContext.Provider value={{
+  return (
+    <DarkModeContext.Provider
+      value={{
         isDark,
-        toggleDarkMode
-    }}>
-
-        {children}
-
+        toggleDarkMode,
+      }}
+    >
+      {children}
     </DarkModeContext.Provider>
+  );
 }
-

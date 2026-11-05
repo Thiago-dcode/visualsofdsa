@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import Stack from "../../classes/Stack";
+
 describe("Stack class test", () => {
   it("Should initialize with a empty stack", () => {
     const stack = new Stack();
@@ -18,7 +19,7 @@ describe("Stack class test", () => {
   it("Should add", async () => {
     const stack = new Stack<number>();
     stack.maxSize = 100;
-    for (let i = 0; i < stack.maxSize; i++) { 
+    for (let i = 0; i < stack.maxSize; i++) {
       await stack.add(i);
     }
     for (let i = 0; i < stack.toArray.length; i++) {
@@ -36,7 +37,7 @@ describe("Stack class test", () => {
     expect(stack.size).toBe(stack.maxSize);
 
     for (let i = stack.maxSize - 1; i >= 0; i--) {
-      const node = await stack.remove()
+      const node = await stack.remove();
       expect(node?.data).toBe(i);
     }
 

@@ -1,14 +1,15 @@
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { Direction, Primitive } from "@/types";
+
 type CallbackLinear<T extends Primitive> = (
   node: Node<T>,
   index: number,
-  found: boolean
+  found: boolean,
 ) => Promise<void>;
 type CallbackBinary<T extends Primitive> = (
   middle: number,
   start: number,
-  end: number
+  end: number,
 ) => Promise<void>;
 export default class SearchAlgorithm {
   static async linear<T extends Primitive>(
@@ -16,7 +17,7 @@ export default class SearchAlgorithm {
     search: T,
     callback: CallbackLinear<T> | null = null,
     isSorted = false,
-    direction: Direction = "ascending"
+    direction: Direction = "ascending",
   ): Promise<Node<T> | null> {
     if (!array.length || search === null) return null;
     const last = array[array.length - 1];
@@ -57,21 +58,21 @@ export default class SearchAlgorithm {
     array: Node<T>[],
     search: T,
     callback: CallbackBinary<T> | null = null,
-    direction: Direction = "ascending"  // "ascending" for ascending, "backward" for descending
+    direction: Direction = "ascending", // "ascending" for ascending, "backward" for descending
   ): Promise<Node<T> | null> {
     if (!array.length || search === null) return null;
-  
+
     let start = 0;
     let end = array.length - 1;
-  
+
     while (start <= end) {
-      let middle = Math.floor((start + end) / 2);
+      const middle = Math.floor((start + end) / 2);
       const middleNode = array[middle];
       if (callback) await callback(middle, start, end);
       if (!middleNode || middleNode.data === null) break;
-  
-      if (middleNode.data === search)  return middleNode; 
-      if (direction === "ascending") {    
+
+      if (middleNode.data === search) return middleNode;
+      if (direction === "ascending") {
         if (middleNode.data > search) {
           end = middle - 1;
         } else {
@@ -86,7 +87,6 @@ export default class SearchAlgorithm {
       }
     }
 
-    return null
+    return null;
   }
-  
 }

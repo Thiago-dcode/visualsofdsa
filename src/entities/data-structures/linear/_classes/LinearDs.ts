@@ -1,8 +1,7 @@
-import { listName, Primitive } from "@/types";
+import { listName, Primitive, speed } from "@/types";
 import LinkedList from "../linked-list/classes/LinkedList";
 import LinkedListNode from "../linked-list/classes/LinkedListNode";
 import List from "./List";
-import { speed } from "@/types";
 export default abstract class LinearDs<T extends Primitive> extends List {
   protected linkedList: LinkedList<T>;
   private _speed: speed;
@@ -57,5 +56,5 @@ export default abstract class LinearDs<T extends Primitive> extends List {
   abstract peekNode(): LinkedListNode<T> | null;
   abstract currentNode(): LinkedListNode<T> | null;
   abstract add(data: T): Promise<LinkedListNode<T>>;
-  abstract remove(): Promise<LinkedListNode<T>|null>;
+  abstract remove(): Promise<LinkedListNode<T> | null>;
 }

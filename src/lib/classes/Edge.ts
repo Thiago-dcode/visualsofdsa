@@ -1,7 +1,7 @@
-import { Primitive, Ref } from "@/types";
-import { getEuclideanDistance, getAngle } from "../utils";
-import NodeShape from "./NodeShape";
 import Node from "@/entities/data-structures/linear/_classes/Node";
+import { Primitive, Ref } from "@/types";
+import { getAngle, getEuclideanDistance } from "../utils";
+import NodeShape from "./NodeShape";
 
 export class Edge {
   constructor(
@@ -9,7 +9,7 @@ export class Edge {
     public x: number = 0,
     public y: number = 0,
     public length: number = 0,
-    public angle: number = 0
+    public angle: number = 0,
   ) {}
 
   public resetShape() {
@@ -18,10 +18,7 @@ export class Edge {
     this.length = 0;
     this.angle = 0;
   }
-  public setShapeByPosition(
-    start: { x: number; y: number },
-    end: { x: number; y: number }
-  ) {
+  public setShapeByPosition(start: { x: number; y: number }, end: { x: number; y: number }) {
     this.x = start.x;
     this.y = start.y;
     this.length = getEuclideanDistance(start, end);
@@ -32,7 +29,7 @@ export class Edge {
     nodeEnd: Node<Primitive> | null,
     nodeShape: NodeShape,
     extraHeight = 0,
-    extraWidth = 0
+    extraWidth = 0,
   ) {
     if (!nodeStart || !nodeEnd) {
       return;

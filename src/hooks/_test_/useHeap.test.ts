@@ -1,11 +1,11 @@
 import { renderHook } from "@testing-library/react";
-import useHeap from "../useHeap";
-import LinkedList from "@/entities/data-structures/linear/linked-list/classes/LinkedList";
-import NodeShape from "@/lib/classes/NodeShape";
 import { act } from "react";
-import Position from "@/lib/classes/position/Position";
+import LinkedList from "@/entities/data-structures/linear/linked-list/classes/LinkedList";
 import LinkedListNode from "@/entities/data-structures/linear/linked-list/classes/LinkedListNode";
+import NodeShape from "@/lib/classes/NodeShape";
+import Position from "@/lib/classes/position/Position";
 import { Primitive } from "@/types";
+import useHeap from "../useHeap";
 
 describe("Testing useHeap", () => {
   const initialProps = {
@@ -22,12 +22,10 @@ describe("Testing useHeap", () => {
     const { row, col } = result.current.table;
     expect(result.current.freePositions.size).toBe(50);
     expect(result.current.width).toBe(
-      col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -
-        nodeShape.nodeWidthSpacing
+      col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) - nodeShape.nodeWidthSpacing,
     );
     expect(result.current.height).toBe(
-      row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) -
-        nodeShape.nodeHeightSpacing
+      row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) - nodeShape.nodeHeightSpacing,
     );
   });
   it("Should get the next free position", () => {
@@ -52,10 +50,10 @@ describe("Testing useHeap", () => {
           expect(nextPosition.position.y).toBe(0);
         }
         expect(nextPosition.position.x).toBe(
-          currentCol * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing)
+          currentCol * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing),
         );
         expect(nextPosition.position.y).toBe(
-          currentRow * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)
+          currentRow * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing),
         );
       }
       currentCol++;
@@ -74,12 +72,10 @@ describe("Testing useHeap", () => {
       result.current.malloc(100);
     });
 
- 
     const arrOfNodes: LinkedListNode<Primitive>[] = [];
     for (let i = 0; i < 100; i++) {
       const nextPosition = result.current.getNextFreePosition();
-      if (nextPosition)
-        arrOfNodes.push(new LinkedListNode(i, nextPosition.position));
+      if (nextPosition) arrOfNodes.push(new LinkedListNode(i, nextPosition.position));
     }
     expect(arrOfNodes.length).toBe(100);
 
@@ -155,26 +151,19 @@ describe("Testing useHeap", () => {
       result.current.relloc(20);
     });
     expect(result.current.size).toBe(40);
-    expect(
-      result.current.table.col * result.current.table.row >= result.current.size
-    ).toBeTruthy();
+    expect(result.current.table.col * result.current.table.row >= result.current.size).toBeTruthy();
     expect(result.current.freePositions.size).toBe(40);
     act(() => {
       result.current.relloc(1);
     });
     expect(result.current.size).toBe(41);
-    expect(
-      result.current.table.col * result.current.table.row >= result.current.size
-    ).toBeTruthy();
+    expect(result.current.table.col * result.current.table.row >= result.current.size).toBeTruthy();
     expect(result.current.freePositions.size).toBe(41);
     act(() => {
       result.current.relloc(58);
     });
     expect(result.current.size).toBe(99);
     expect(result.current.freePositions.size).toBe(99);
-
-   
-
   });
   it("SHOULD REALLOC", () => {
     const { result } = renderHook(useHeap, {
@@ -221,7 +210,6 @@ describe("Testing useHeap", () => {
     });
     expect(result.current.size).toBe(99);
     expect(result.current.freePositions.size).toBe(99);
-
   });
 
   it("should RESET", () => {

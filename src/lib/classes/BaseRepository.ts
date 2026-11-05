@@ -1,11 +1,1 @@
-
-
-abstract class BaseRepository {
-
-
-
-
-    
-
-
-}
+abstract class BaseRepository {}

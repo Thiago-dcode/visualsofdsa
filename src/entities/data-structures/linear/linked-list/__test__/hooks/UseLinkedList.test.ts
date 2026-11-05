@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
-import UseLinkedList from "../../hooks/UseLinkedList";
 import LinkedList from "../../classes/LinkedList";
 import LinkedListNode from "../../classes/LinkedListNode";
+import UseLinkedList from "../../hooks/UseLinkedList";
 
 describe("Testing UseLinkedList", () => {
   it("Should add", async () => {
@@ -31,7 +31,6 @@ describe("Testing UseLinkedList", () => {
       const element = result.current.arrayLs[i];
       const _element = await result.current.get(i);
       expect(element).toBe(_element);
-      
     }
   });
   it("Should delete", async () => {
@@ -57,8 +56,8 @@ describe("Testing UseLinkedList", () => {
 
 describe("Testing UseLinkedList DOUBLY", () => {
   it("Should add", async () => {
-    const { result } = renderHook(UseLinkedList,{
-      initialProps:true
+    const { result } = renderHook(UseLinkedList, {
+      initialProps: true,
     });
     expect(result.current.arrayLs).toBeInstanceOf(Array);
     for (let i = 0; i < 1000; i++) {
@@ -74,9 +73,9 @@ describe("Testing UseLinkedList DOUBLY", () => {
     }
   });
   it("Should get", async () => {
-    const { result } = renderHook(UseLinkedList,{
-      initialProps:true
-    }); 
+    const { result } = renderHook(UseLinkedList, {
+      initialProps: true,
+    });
     expect(result.current.arrayLs).toBeInstanceOf(Array);
     for (let i = 0; i < 1000; i++) {
       await act(async () => {
@@ -87,12 +86,11 @@ describe("Testing UseLinkedList DOUBLY", () => {
       const element = result.current.arrayLs[i];
       const _element = await result.current.get(i);
       expect(element).toBe(_element);
-      
     }
   });
   it("Should delete", async () => {
-    const { result } = renderHook(UseLinkedList,{
-      initialProps:true
+    const { result } = renderHook(UseLinkedList, {
+      initialProps: true,
     });
     expect(result.current.arrayLs).toBeInstanceOf(Array);
     for (let i = 0; i < 1000; i++) {

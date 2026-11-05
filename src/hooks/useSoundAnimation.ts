@@ -12,16 +12,11 @@ export const useSoundAnimation = () => {
     if (!audioCtx.current) {
       audioCtx.current = new AudioContext();
     }
-    const normalizedFrequency = lerp(
-      200,
-      700,
-      getValueNormalized(x, minX, maxX)
-    );
+    const normalizedFrequency = lerp(200, 700, getValueNormalized(x, minX, maxX));
     if (isNaN(normalizedFrequency)) return;
     generateAudioFrequency(audioCtx.current!, normalizedFrequency, 0.3);
   };
   return {
-    animateSound
-  }
-}
-
+    animateSound,
+  };
+};

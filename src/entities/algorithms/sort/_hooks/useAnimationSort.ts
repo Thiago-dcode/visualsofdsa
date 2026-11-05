@@ -1,8 +1,8 @@
-import { VisualizationArrays } from "@/types";
-import { useAnimation } from "../../_hooks/useAnimations";
 import Node from "@/entities/data-structures/linear/_classes/Node";
 import { animate } from "@/lib/animations";
 import { removePx } from "@/lib/utils";
+import { VisualizationArrays } from "@/types";
+import { useAnimation } from "../../_hooks/useAnimations";
 
 export const useAnimationSort = (visualization: VisualizationArrays) => {
   const animations = useAnimation(visualization);
@@ -11,9 +11,9 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
     array: Node<number>[],
     maxBarSize: number,
     speed: number,
-    beforeAnimation = async (node: Node<number>) => {}
+    beforeAnimation = async (node: Node<number>) => {},
   ) => {
-    if(!animations.isAnimationEnabled) return;
+    if (!animations.isAnimationEnabled) return;
     const onAnimationEnds = (node: Node<number>) => {
       if (!node.ref) return;
       node.ref.style.bottom = node.position.y + "px";
@@ -25,35 +25,31 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
       const ref = node.ref;
 
       if (!ref) return null;
-    if(visualization == 'memoryRam') ref.style.backgroundColor = '';
-      const properties:{
-        [key:string]:string
+      if (visualization == "memoryRam") ref.style.backgroundColor = "";
+      const properties: {
+        [key: string]: string;
       } = {
-        color:'rgba(245 168 69)',
-        left_from:`${node.position.x}px`,
-        bottom_from:`${node.position.y}px`,
-        left_to:`${node.position.x}px`,   
-      }
+        color: "rgba(245 168 69)",
+        left_from: `${node.position.x}px`,
+        bottom_from: `${node.position.y}px`,
+        left_to: `${node.position.x}px`,
+      };
       node.position.y = node.position.y - (maxBarSize + 1);
       properties.bottom_to = `${node.position.y}px`;
-    
+
       beforeAnimation(node);
-        return animate(ref, `move-node`, speed, {
-          properties,
-          onAnimationEnds: () => {
-            onAnimationEnds(node);
-          }
-        });
+      return animate(ref, `move-node`, speed, {
+        properties,
+        onAnimationEnds: () => {
+          onAnimationEnds(node);
+        },
+      });
     });
 
     await Promise.all(promises);
   };
-  const animationOnMerge = async (
-    nodeA: Node<number>,
-    nodeB: Node<number>,
-    speed: number
-  ) => {
-    if(!animations.isAnimationEnabled) return;
+  const animationOnMerge = async (nodeA: Node<number>, nodeB: Node<number>, speed: number) => {
+    if (!animations.isAnimationEnabled) return;
     if (nodeA.ref && nodeB.ref) {
       const refA = nodeA.ref;
       const refB = nodeB.ref;
@@ -72,17 +68,13 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
       refB.style.backgroundColor = nodeB.color || refB.style.backgroundColor;
     }
   };
-  const animateOnSwap = async (
-    nodeA: Node<number>,
-    nodeB: Node<number>,
-    speed: number
-  ) => {
-    if(!animations.isAnimationEnabled) return;
+  const animateOnSwap = async (nodeA: Node<number>, nodeB: Node<number>, speed: number) => {
+    if (!animations.isAnimationEnabled) return;
     if (nodeA.ref && nodeB.ref) {
       const refA = nodeA.ref;
       const refB = nodeB.ref;
       //Before animation
-    
+
       switch (visualization) {
         case "bars":
           refA.style.setProperty("--left_from", `${nodeA.position.x}px`);
@@ -96,10 +88,10 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
 
           break;
 
-        case "memoryRam":
+        case "memoryRam": {
           const setUpMemoyRam = (refA: HTMLElement, refB: HTMLElement) => {
-            refA.style.backgroundColor = '';
-            refB.style.backgroundColor = '';
+            refA.style.backgroundColor = "";
+            refB.style.backgroundColor = "";
             refA.style.position = "relative";
             refB.style.position = "relative";
             refA.style.zIndex = "99px";
@@ -131,15 +123,16 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
           setUpMemoyRam(refA, refB);
           const indexA = nodeA.indexRef;
           const indexB = nodeB.indexRef;
-         if(indexA && indexB){
-          indexA.style.visibility = "visible";
-          indexB.style.visibility = "visible";
-          const temp = indexA.textContent;
-          indexA.textContent = indexB.textContent;
-          indexB.textContent = temp;
-          setUpMemoyRam(indexA, indexB);
-         }
+          if (indexA && indexB) {
+            indexA.style.visibility = "visible";
+            indexB.style.visibility = "visible";
+            const temp = indexA.textContent;
+            indexA.textContent = indexB.textContent;
+            indexB.textContent = temp;
+            setUpMemoyRam(indexA, indexB);
+          }
           break;
+        }
         default:
           break;
       }
@@ -149,26 +142,17 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
       await Promise.all([
         animate(refA, `move-node`, speed * 1.1),
         visualization == "memoryRam"
-          ? animate(
-              nodeA.indexRef,
-              `move-node`,
-              speed * 1.1,
-              
-            )
+          ? animate(nodeA.indexRef, `move-node`, speed * 1.1)
           : Promise.resolve(),
         animate(refB, `move-node`, speed * 1.1),
         visualization == "memoryRam"
-          ? animate(
-              nodeB.indexRef,
-              `move-node`,
-              speed * 1.1,
-            )
+          ? animate(nodeB.indexRef, `move-node`, speed * 1.1)
           : Promise.resolve(),
       ]);
 
       //After animation
       switch (visualization) {
-        case "bars":
+        case "bars": {
           const tempAColor = nodeA.color;
           const tempXAPosition = nodeA.position.x;
           const tempYAPosition = nodeA.position.y;
@@ -185,8 +169,9 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
           nodeB.position.x = tempXAPosition;
           nodeB.position.y = tempYAPosition;
           break;
+        }
 
-        case "memoryRam":
+        case "memoryRam": {
           const setUpMemoyRam = (refA: HTMLElement, refB: HTMLElement) => {
             refA.style.left = nodeA.position.x + "px";
             refB.style.left = nodeB.position.x + "px";
@@ -196,13 +181,14 @@ export const useAnimationSort = (visualization: VisualizationArrays) => {
           setUpMemoyRam(refA, refB);
           const indexA = nodeA.indexRef;
           const indexB = nodeB.indexRef;
-          if(indexA && indexB){
-          indexA.style.visibility = "hidden";
-          indexB.style.visibility = "hidden";
+          if (indexA && indexB) {
+            indexA.style.visibility = "hidden";
+            indexB.style.visibility = "hidden";
 
-          setUpMemoyRam(indexA, indexB);
+            setUpMemoyRam(indexA, indexB);
           }
           break;
+        }
 
         default:
           break;

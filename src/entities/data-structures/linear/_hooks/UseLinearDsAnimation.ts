@@ -1,13 +1,13 @@
-import { Primitive, speed } from "@/types";
-
-import LinearDs from "../_classes/LinearDs";
 import { animate } from "@/lib/animations";
+import { Primitive, speed } from "@/types";
+import LinearDs from "../_classes/LinearDs";
 import Node from "../_classes/Node";
 import "../animation.css";
-import LinkedListNode from "../linked-list/classes/LinkedListNode";
 import useAnimation from "@/hooks/useAnimation";
-const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed, isOverflow=false) => {
-  const { focus } = useAnimation()
+import LinkedListNode from "../linked-list/classes/LinkedListNode";
+
+const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed, isOverflow = false) => {
+  const { focus } = useAnimation();
   const getSpeed = () => {
     switch (speed) {
       case 1:
@@ -24,28 +24,23 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed, isOve
   };
   const handleAddAnimation = async (
     node: Node<Primitive>,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
+    onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
   ): Promise<boolean> => {
     const ref = node.ref;
     if (!ref) return false;
-    if(isOverflow)focus(ref)
-    return await animate(
-      ref,
-      `add-node-linear`,
-      getSpeed(),
-      {
-        properties: {
-          start: `${linearDs?.beginner}px`,
-          end: `${node.position.y}px`,
-        },
-        onAnimationEnds,
-        onlyOnce: true,
-      }
-    );
+    if (isOverflow) focus(ref);
+    return await animate(ref, `add-node-linear`, getSpeed(), {
+      properties: {
+        start: `${linearDs?.beginner}px`,
+        end: `${node.position.y}px`,
+      },
+      onAnimationEnds,
+      onlyOnce: true,
+    });
   };
   const handleRemoveAnimation = async (
     node: Node<Primitive>,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
+    onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
   ): Promise<boolean> => {
     const ref = node.ref;
     if (ref == null) {
@@ -53,69 +48,56 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed, isOve
     }
     const end =
       linearDs.name === "queue"
-        ? linearDs.maxSize *
-        (linearDs.nodeHeightSpacing + linearDs.nodeHeight) +
-        50
+        ? linearDs.maxSize * (linearDs.nodeHeightSpacing + linearDs.nodeHeight) + 50
         : linearDs.beginner;
-    if(isOverflow)focus(ref)
-    return await animate(
-      ref,
-      `remove-node-linear`,
-      getSpeed(),
-      {
-        properties: {
-          start: `${node.position.y}px`,
-          end: `${end}px`,
-        },
-        onAnimationEnds: (e) => {
-          if (onAnimationEnds) onAnimationEnds(e);
+    if (isOverflow) focus(ref);
+    return await animate(ref, `remove-node-linear`, getSpeed(), {
+      properties: {
+        start: `${node.position.y}px`,
+        end: `${end}px`,
+      },
+      onAnimationEnds: (e) => {
+        if (onAnimationEnds) onAnimationEnds(e);
 
-          ref.style.display = "none";
-        },
-        onlyOnce: true,
-      }
-    );
+        ref.style.display = "none";
+      },
+      onlyOnce: true,
+    });
   };
-  const handleMoveNodesAnimation = async (
-    nodeArray = linearDs.toNodeArray
-  ): Promise<void> => {
+  const handleMoveNodesAnimation = async (nodeArray = linearDs.toNodeArray): Promise<void> => {
     await Promise.all(
       nodeArray.map((node) => {
         const ref = node.ref;
         if (ref) {
-          const end =
-            node.position.y +
-            (linearDs.nodeHeight + linearDs.nodeHeightSpacing);
+          const end = node.position.y + (linearDs.nodeHeight + linearDs.nodeHeightSpacing);
           return animate(ref, `move-node-linear`, getSpeed() * 0.7, {
-            properties:{
+            properties: {
               start: `${node.position.y}px`,
               end: `${end}px`,
             },
             onAnimationEnds: (e) => {
-              
               ref.style.bottom = `${end}px`;
               node.position.y = end;
             },
-         
           });
         }
         return Promise.resolve();
-      })
+      }),
     );
   };
 
   const handlePeekAnimation = async (
     node: Node<Primitive>,
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
+    onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
   ): Promise<boolean> => {
-    if(isOverflow)focus(node.ref)
+    if (isOverflow) focus(node.ref);
     return await animate(node.ref, `peek-node-linear`, getSpeed() * 1.1, {
-      onAnimationEnds
+      onAnimationEnds,
     });
   };
   const handleFillerAnimation = async (
     nodeArrayOfFiller: Node<Primitive>[],
-    onAnimationEnds: ((e: AnimationEvent) => void) | null = null
+    onAnimationEnds: ((e: AnimationEvent) => void) | null = null,
   ): Promise<void> => {
     if (nodeArrayOfFiller.length === 0) return;
     for (let i = 0; i < nodeArrayOfFiller.length; i++) {
@@ -128,9 +110,7 @@ const UseLinearDsAnimation = (linearDs: LinearDs<Primitive>, speed: speed, isOve
       }
     }
   };
-  const handleEmptyAnimation = async (
-    nodeArray: LinkedListNode<Primitive>[]
-  ): Promise<void> => {
+  const handleEmptyAnimation = async (nodeArray: LinkedListNode<Primitive>[]): Promise<void> => {
     if (nodeArray.length === 0) return;
     switch (linearDs.name) {
       case "stack":

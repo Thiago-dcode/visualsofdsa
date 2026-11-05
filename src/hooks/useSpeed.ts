@@ -1,6 +1,5 @@
-import { speed } from "@/types";
-
 import { useCallback, useEffect, useState } from "react";
+import { speed } from "@/types";
 
 export const useSpeed = (defaultSpeed: speed, localStorageKey: string) => {
   const [speed, setSpeed] = useState<speed>(defaultSpeed);
@@ -10,7 +9,7 @@ export const useSpeed = (defaultSpeed: speed, localStorageKey: string) => {
       localStorage.setItem(localStorageKey, speed.toString());
       setSpeed(speed);
     },
-    [localStorageKey]
+    [localStorageKey],
   );
 
   useEffect(() => {

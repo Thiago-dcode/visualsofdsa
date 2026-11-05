@@ -4,7 +4,7 @@ export default abstract class NodeShape {
     private _nodeHeight = 50,
     private _nodeWidthSpacing = 5,
     private _nodeHeightSpacing = 5,
-  ) { }
+  ) {}
 
   get nodeWidth() {
     return this._nodeWidth;
@@ -30,5 +30,4 @@ export default abstract class NodeShape {
   set nodeWidthSpacing(spacing: number) {
     this._nodeWidthSpacing = spacing;
   }
-
 }

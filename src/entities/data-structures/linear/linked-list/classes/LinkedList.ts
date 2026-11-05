@@ -1,14 +1,15 @@
 import { Primitive } from "@/types";
-import LinkedListNode from "./LinkedListNode";
 import Position from "../../../../../lib/classes/position/Position";
 import IndexOutOfBoundsError from "../../../../../lib/errors/IndexOutOfTheBondError";
 import List from "../../_classes/List";
+import LinkedListNode from "./LinkedListNode";
+
 type callback =
   | ((
       node: LinkedListNode<Primitive> | null,
       index: number,
       direction?: "backward" | "forward",
-      steps?: number
+      steps?: number,
     ) => Promise<void>)
   | null;
 export default class LinkedList<T extends Primitive> extends List {
@@ -37,10 +38,7 @@ export default class LinkedList<T extends Primitive> extends List {
     const node = this.findNode(index);
     return node ? node.data : node;
   }
-  async getNode(
-    index: number,
-    callback: callback = null
-  ): Promise<LinkedListNode<T> | null> {
+  async getNode(index: number, callback: callback = null): Promise<LinkedListNode<T> | null> {
     if (index === 0) {
       if (callback) await callback(this._head, 0).catch();
       return this.head;
@@ -49,12 +47,9 @@ export default class LinkedList<T extends Primitive> extends List {
       if (callback) await callback(this.tail, this.size - 1).catch();
       return this.tail;
     }
-    const node = await this.findNodeAsync(
-      index,
-      async (node, position, direction,steps) => {
-        if (callback) await callback(node, position, direction,steps).catch();
-      }
-    );
+    const node = await this.findNodeAsync(index, async (node, position, direction, steps) => {
+      if (callback) await callback(node, position, direction, steps).catch();
+    });
     return node;
   }
   getFirst(): T | null {
@@ -70,13 +65,10 @@ export default class LinkedList<T extends Primitive> extends List {
     data: T | LinkedListNode<T>,
     index: number = this._size,
     position = new Position(0, 0),
-    callback: callback = null
+    callback: callback = null,
   ) {
     this.throwIfOutOfTheBounds(index);
-    const newNode =
-      data instanceof LinkedListNode
-        ? data
-        : new LinkedListNode(data, position);
+    const newNode = data instanceof LinkedListNode ? data : new LinkedListNode(data, position);
     if (!this._head) {
       if (callback) await callback(newNode, index).catch();
 
@@ -92,13 +84,9 @@ export default class LinkedList<T extends Primitive> extends List {
         if (callback) await callback(newNode, 0);
         this._addFirst(newNode);
       } else {
-        const node = await this.findNodeAsync(
-          index,
-          async (node, position, direction, steps) => {
-            if (callback)
-              await callback(node, position, direction, steps).catch();
-          }
-        );
+        const node = await this.findNodeAsync(index, async (node, position, direction, steps) => {
+          if (callback) await callback(node, position, direction, steps).catch();
+        });
         newNode.next = node;
         if (node?.prev) {
           newNode.prev = node.prev;
@@ -164,13 +152,9 @@ export default class LinkedList<T extends Primitive> extends List {
       if (callback) await callback(this.tail, index).catch();
       return this.deleteLast();
     } else {
-      const node = await this.findNodeAsync(
-        index,
-        async (node, position, direction, steps) => {
-          if (callback)
-            await callback(node, position, direction, steps).catch();
-        }
-      );
+      const node = await this.findNodeAsync(index, async (node, position, direction, steps) => {
+        if (callback) await callback(node, position, direction, steps).catch();
+      });
       if (node?.prev && node.next) {
         node.prev.nextEdge.resetShape();
         node.next.prevEdge.resetShape();
@@ -191,12 +175,9 @@ export default class LinkedList<T extends Primitive> extends List {
       if (callback) await callback(this.tail, index).catch();
       return this.deleteLastAndGetNode();
     } else {
-      const node = await this.findNodeAsync(
-        index,
-        async (node, position, steps) => {
-          if (callback) await callback(node, position, steps).catch();
-        }
-      );
+      const node = await this.findNodeAsync(index, async (node, position, steps) => {
+        if (callback) await callback(node, position, steps).catch();
+      });
       if (node?.prev && node.next) {
         node.prev.nextEdge.resetShape();
         node.next.prevEdge.resetShape();
@@ -260,7 +241,7 @@ export default class LinkedList<T extends Primitive> extends List {
     if (index < 0 || index > (includesSize ? this.size : this.size - 1)) {
       //throw error
       throw new IndexOutOfBoundsError(
-        `Index: ${index} doesn't exist on linkedList.size: ${this.size}`
+        `Index: ${index} doesn't exist on linkedList.size: ${this.size}`,
       );
     }
   }
@@ -332,10 +313,7 @@ export default class LinkedList<T extends Primitive> extends List {
   }
   async traverse(
     direction: "forward" | "backward" = "forward",
-    onTraverse: (
-      node: LinkedListNode<Primitive>,
-      index: number
-    ) => Promise<void> = async () => {}
+    onTraverse: (node: LinkedListNode<Primitive>, index: number) => Promise<void> = async () => {},
   ) {
     let node = direction === "forward" ? this.head : this.tail;
     let i = 0;
@@ -377,7 +355,7 @@ export default class LinkedList<T extends Primitive> extends List {
     return array;
   }
   private isTail(index: number) {
-    return index >= Math.round((this._size-1)/2);
+    return index >= Math.round((this._size - 1) / 2);
   }
   get head() {
     return this._head;

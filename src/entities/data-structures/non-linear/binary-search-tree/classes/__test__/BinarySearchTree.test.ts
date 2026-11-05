@@ -16,14 +16,14 @@ const buildATree = async (arr: number[], bst: BinarySearchTree<number>) => {
 type TreeObjMock = {
   node: number;
   depth: number;
-  parent:TreeObjMock|null;
+  parent: TreeObjMock | null;
   children: TreeObjMock[];
 };
 function generateExpectedTreeObj(
   node: BinaryTreeNode<number>,
-  parent: TreeObjMock|null,
+  parent: TreeObjMock | null,
   depth: number = 0,
-  onCall?: (depth: number) => void
+  onCall?: (depth: number) => void,
 ): TreeObjMock {
   const children: TreeObjMock[] = [];
   const treeObjMock = {
@@ -34,12 +34,12 @@ function generateExpectedTreeObj(
   };
   if (onCall) onCall(depth);
   if (node.left) {
-    children.push(generateExpectedTreeObj(node.left, treeObjMock,depth + 1, onCall));
+    children.push(generateExpectedTreeObj(node.left, treeObjMock, depth + 1, onCall));
   }
   if (node.right) {
-    children.push(generateExpectedTreeObj(node.right,treeObjMock, depth + 1, onCall));
+    children.push(generateExpectedTreeObj(node.right, treeObjMock, depth + 1, onCall));
   }
-  return treeObjMock
+  return treeObjMock;
 }
 describe("Testing insert method", () => {
   it("should insert when root is null", () => {
@@ -59,38 +59,38 @@ describe("Testing insert method", () => {
     // Insert values and verify BST property at each step
     for (const value of values) {
       await bst.insert(value);
-      
+
       // Verify BST property (left < node < right)
       const verifyBSTProperty = (node: BinaryTreeNode<number> | null): boolean => {
         if (!node) return true;
-        
+
         if (node.left && node.left.data >= node.data) return false;
         if (node.right && node.right.data <= node.data) return false;
-        
+
         return verifyBSTProperty(node.left) && verifyBSTProperty(node.right);
       };
-      
+
       expect(verifyBSTProperty(bst.root)).toBe(true);
     }
   });
 
   it("should maintain correct parent-child relationships during insertion", async () => {
     const bst = new BinarySearchTree();
-    
+
     await bst.insert(50);
     await bst.insert(30);
     await bst.insert(70);
-    
+
     // Check root relationships
     expect(bst.root?.data).toBe(50);
     expect(bst.root?.parent).toBeNull();
     expect(bst.root?.isRoot).toBe(true);
-    
+
     // Check left child relationships
     expect(bst.root?.left?.data).toBe(30);
     expect(bst.root?.left?.parent).toBe(bst.root);
     expect(bst.root?.left?.isRoot).toBe(false);
-    
+
     // Check right child relationships
     expect(bst.root?.right?.data).toBe(70);
     expect(bst.root?.right?.parent).toBe(bst.root);
@@ -99,26 +99,26 @@ describe("Testing insert method", () => {
 
   it("should handle duplicate values correctly", async () => {
     const bst = new BinarySearchTree();
-    
+
     // Insert original value
     await bst.insert(50);
     expect(bst.root?.data).toBe(50);
-    
+
     // Try inserting duplicate
     const duplicateNode = await bst.insert(50);
     expect(duplicateNode).toBeNull();
-    
+
     // Verify tree structure remains unchanged
     expect(bst.root?.data).toBe(50);
     expect(bst.root?.left).toBeNull();
     expect(bst.root?.right).toBeNull();
-    
+
     // Insert more values and try duplicates
     await bst.insert(30);
     await bst.insert(70);
     expect(await bst.insert(30)).toBeNull();
     expect(await bst.insert(70)).toBeNull();
-    
+
     // Verify structure remains correct
     expect(bst.root?.left?.data).toBe(30);
     expect(bst.root?.right?.data).toBe(70);
@@ -127,18 +127,18 @@ describe("Testing insert method", () => {
   it("should handle left-heavy insertions correctly", async () => {
     const bst = new BinarySearchTree();
     const values = [50, 40, 30, 20, 10];
-    
+
     for (const value of values) {
       await bst.insert(value);
     }
-    
+
     // Verify structure
     expect(bst.root?.data).toBe(50);
     expect(bst.root?.left?.data).toBe(40);
     expect(bst.root?.left?.left?.data).toBe(30);
     expect(bst.root?.left?.left?.left?.data).toBe(20);
     expect(bst.root?.left?.left?.left?.left?.data).toBe(10);
-    
+
     // Verify parent relationships
     expect(bst.root?.left?.parent).toBe(bst.root);
     expect(bst.root?.left?.left?.parent).toBe(bst.root?.left);
@@ -148,18 +148,18 @@ describe("Testing insert method", () => {
   it("should handle right-heavy insertions correctly", async () => {
     const bst = new BinarySearchTree();
     const values = [10, 20, 30, 40, 50];
-    
+
     for (const value of values) {
       await bst.insert(value);
     }
-    
+
     // Verify structure
     expect(bst.root?.data).toBe(10);
     expect(bst.root?.right?.data).toBe(20);
     expect(bst.root?.right?.right?.data).toBe(30);
     expect(bst.root?.right?.right?.right?.data).toBe(40);
     expect(bst.root?.right?.right?.right?.right?.data).toBe(50);
-    
+
     // Verify parent relationships
     expect(bst.root?.right?.parent).toBe(bst.root);
     expect(bst.root?.right?.right?.parent).toBe(bst.root?.right);
@@ -169,11 +169,11 @@ describe("Testing insert method", () => {
   it("should handle alternating insertions correctly", async () => {
     const bst = new BinarySearchTree();
     const values = [50, 25, 75, 12, 37, 62, 87];
-    
+
     for (const value of values) {
       await bst.insert(value);
     }
-    
+
     // Verify complete tree structure
     expect(bst.root?.data).toBe(50);
     expect(bst.root?.left?.data).toBe(25);
@@ -182,7 +182,7 @@ describe("Testing insert method", () => {
     expect(bst.root?.left?.right?.data).toBe(37);
     expect(bst.root?.right?.left?.data).toBe(62);
     expect(bst.root?.right?.right?.data).toBe(87);
-    
+
     // Verify all parent relationships
     expect(bst.root?.left?.parent).toBe(bst.root);
     expect(bst.root?.right?.parent).toBe(bst.root);
@@ -195,11 +195,11 @@ describe("Testing insert method", () => {
   it("should handle negative numbers correctly", async () => {
     const bst = new BinarySearchTree();
     const values = [0, -10, 10, -20, -5, 5, 20];
-    
+
     for (const value of values) {
       await bst.insert(value);
     }
-    
+
     // Verify structure with negative numbers
     expect(bst.root?.data).toBe(0);
     expect(bst.root?.left?.data).toBe(-10);
@@ -215,35 +215,35 @@ describe("Testing insert method", () => {
     await bst.insert(50);
     await bst.insert(25);
     await bst.insert(75);
-    
+
     // Test sibling relationships at root level
     expect(bst.root?.left?.nextSibling).toBe(bst.root?.right);
     expect(bst.root?.right?.previousSibling).toBe(bst.root?.left);
-    
+
     // Add more nodes and test deeper sibling relationships
     await bst.insert(12);
     await bst.insert(37);
-    
+
     expect(bst.root?.left?.left?.nextSibling).toBe(bst.root?.left?.right);
     expect(bst.root?.left?.right?.previousSibling).toBe(bst.root?.left?.left);
   });
 
   it("should handle edge case values correctly", async () => {
     const bst = new BinarySearchTree();
-    
+
     // Test with Number.MAX_SAFE_INTEGER and Number.MIN_SAFE_INTEGER
     await bst.insert(0);
     await bst.insert(Number.MAX_SAFE_INTEGER);
     await bst.insert(Number.MIN_SAFE_INTEGER);
-    
+
     expect(bst.root?.data).toBe(0);
     expect(bst.root?.right?.data).toBe(Number.MAX_SAFE_INTEGER);
     expect(bst.root?.left?.data).toBe(Number.MIN_SAFE_INTEGER);
-    
+
     // Test with decimal numbers
     await bst.insert(0.5);
     await bst.insert(-0.5);
-    
+
     expect(bst.root?.right?.left?.data).toBe(0.5);
     expect(bst.root?.left?.right?.data).toBe(-0.5);
   });
@@ -257,9 +257,8 @@ describe("Testing Search method", () => {
   it("Should search", async () => {
     const bst = new BinarySearchTree();
     const arr = [
-      100, 50, 200, 35, 75, 300, 150, 25, 90, 400, 125, 40, 65, 175, 250, 20,
-      500, 12, 434, 35, 343, 1, 53, 663, 3, -1, 23, 4, 55, 3424, 53, 35, 6, 78,
-      356, 230, 89, -23,
+      100, 50, 200, 35, 75, 300, 150, 25, 90, 400, 125, 40, 65, 175, 250, 20, 500, 12, 434, 35, 343,
+      1, 53, 663, 3, -1, 23, 4, 55, 3424, 53, 35, 6, 78, 356, 230, 89, -23,
     ];
     await buildATree(arr, bst);
 
@@ -278,7 +277,7 @@ describe("Testing Search method", () => {
 describe("Testing remove method", () => {
   it("Should handle all remove scenarios correctly", async () => {
     const bst = new BinarySearchTree();
-    
+
     // Test Case 1: Remove from empty tree
     expect(await bst.remove(1)).toBeFalsy();
     expect(bst.root).toBeNull();
@@ -334,7 +333,7 @@ describe("Testing remove method", () => {
     await bst.insert(12);
     await bst.insert(17);
     await bst.insert(25);
-    
+
     // Verify initial tree structure and relationships
     expect(bst.root?.isRoot).toBe(true);
     expect(bst.root?.data).toBe(15);
@@ -344,7 +343,7 @@ describe("Testing remove method", () => {
     expect(bst.root?.left?.right?.data).toBe(12);
     expect(bst.root?.right?.left?.data).toBe(17);
     expect(bst.root?.right?.right?.data).toBe(25);
-    
+
     // Verify parent-child relationships
     expect(bst.root?.left?.parent).toBe(bst.root);
     expect(bst.root?.right?.parent).toBe(bst.root);
@@ -355,7 +354,7 @@ describe("Testing remove method", () => {
 
     // Remove root
     expect(await bst.remove(15)).toBeTruthy();
-    
+
     // Verify new tree structure and relationships
     expect(bst.root?.isRoot).toBe(true);
     expect(bst.root?.data).toBe(17);
@@ -365,7 +364,7 @@ describe("Testing remove method", () => {
     expect(bst.root?.left?.right?.data).toBe(12);
     expect(bst.root?.right?.right?.data).toBe(25);
     expect(bst.root?.right?.left).toBeNull();
-    
+
     // Verify parent-child relationships after root removal
     expect(bst.root?.left?.parent).toBe(bst.root);
     expect(bst.root?.right?.parent).toBe(bst.root);
@@ -427,7 +426,7 @@ describe("Testing remove method", () => {
 
   it("Should remove correctly when node has two children with deep nested nodes", async () => {
     const bst = new BinarySearchTree();
-    
+
     // Build a complex tree with deep nested branches:
     //                   50
     //                  /  \
@@ -553,9 +552,8 @@ describe("Testing toTreeObj", () => {
   it("Should return a TreeObj", async () => {
     const bst = new BinarySearchTree();
     const nodes = [
-      100, 50, 200, 35, 75, 300, 150, 25, 90, 400, 125, 40, 65, 175, 250, 20,
-      500, 12, 434, 35, 343, 1, 53, 663, 3, -1, 23, 4, 55, 3424, 53, 35, 6, 78,
-      356, 230, 89, -23,
+      100, 50, 200, 35, 75, 300, 150, 25, 90, 400, 125, 40, 65, 175, 250, 20, 500, 12, 434, 35, 343,
+      1, 53, 663, 3, -1, 23, 4, 55, 3424, 53, 35, 6, 78, 356, 230, 89, -23,
     ];
     await buildATree(nodes, bst);
 
@@ -563,18 +561,14 @@ describe("Testing toTreeObj", () => {
     expect(result).toBeTruthy();
     if (!result) return;
 
-    const _expected = generateExpectedTreeObj(bst.root!, null,0);
+    const _expected = generateExpectedTreeObj(bst.root!, null, 0);
     // Test the tree object
-    const testTreeObj = (
-      treeObj: TreeObj<BinaryTreeNode<number>>,
-      expected: typeof _expected
-    ) => {
+    const testTreeObj = (treeObj: TreeObj<BinaryTreeNode<number>>, expected: typeof _expected) => {
       expect(treeObj.node.data).toEqual(expected.node);
       expect(treeObj.depth).toEqual(expected.depth);
       expect(treeObj.children.length).toEqual(expected.children.length);
-      if(treeObj.parent){
-
-        expect(treeObj.parent.node.data).toEqual(expected.parent?.node)
+      if (treeObj.parent) {
+        expect(treeObj.parent.node.data).toEqual(expected.parent?.node);
       }
       for (let i = 0; i < expected.children.length; i++) {
         testTreeObj(treeObj.children[i], expected.children[i]);
@@ -609,10 +603,10 @@ describe("Testing TreeNode relationships", () => {
     // Test siblings at different levels
     expect(bst.root?.left?.nextSibling).toBe(bst.root?.right);
     expect(bst.root?.right?.previousSibling).toBe(bst.root?.left);
-    
+
     expect(bst.root?.left?.left?.nextSibling).toBe(bst.root?.left?.right);
     expect(bst.root?.left?.right?.previousSibling).toBe(bst.root?.left?.left);
-    
+
     expect(bst.root?.right?.left?.nextSibling).toBe(bst.root?.right?.right);
     expect(bst.root?.right?.right?.previousSibling).toBe(bst.root?.right?.left);
 
@@ -700,7 +694,7 @@ describe("Testing TreeNode relationships", () => {
 
   it("should maintain correct parent-child relationships during complex operations", async () => {
     const bst = new BinarySearchTree();
-    
+
     // Build tree incrementally and verify relationships at each step
     await bst.insert(15);
     expect(bst.root?.parent).toBeNull();
@@ -727,7 +721,7 @@ describe("Testing TreeNode relationships", () => {
 
   it("should maintain correct sibling relationships in complex scenarios", async () => {
     const bst = new BinarySearchTree();
-    
+
     // Test siblings with sequential insertions
     await bst.insert(50);
     await bst.insert(30);
@@ -740,17 +734,17 @@ describe("Testing TreeNode relationships", () => {
     // Test all sibling relationships
     expect(bst.root?.left?.nextSibling).toBe(bst.root?.right);
     expect(bst.root?.right?.previousSibling).toBe(bst.root?.left);
-    
+
     expect(bst.root?.left?.left?.nextSibling).toBe(bst.root?.left?.right);
     expect(bst.root?.left?.right?.previousSibling).toBe(bst.root?.left?.left);
-    
+
     expect(bst.root?.right?.left?.nextSibling).toBe(bst.root?.right?.right);
     expect(bst.root?.right?.right?.previousSibling).toBe(bst.root?.right?.left);
 
     // Test sibling relationships after removal
     await bst.remove(40);
     expect(bst.root?.left?.left?.nextSibling).toBeNull();
-    
+
     await bst.remove(20);
     expect(bst.root?.left?.left).toBeNull();
     expect(bst.root?.left?.right).toBeNull();
@@ -758,7 +752,7 @@ describe("Testing TreeNode relationships", () => {
 
   it("should maintain correct leftmost/rightmost relationships in complex scenarios", async () => {
     const bst = new BinarySearchTree();
-    
+
     // Build an unbalanced tree
     await bst.insert(50);
     await bst.insert(30);
@@ -771,10 +765,10 @@ describe("Testing TreeNode relationships", () => {
     // Test leftmost/rightmost at each level
     expect(bst.root?.leftmostChild).toBe(bst.root?.left);
     expect(bst.root?.rightmostChild).toBe(bst.root?.right);
-    
+
     expect(bst.root?.left?.leftmostChild).toBe(bst.root?.left?.left);
     expect(bst.root?.left?.rightmostChild).toBe(bst.root?.left?.right);
-    
+
     expect(bst.root?.left?.right?.leftmostChild).toBe(bst.root?.left?.right?.left);
     expect(bst.root?.left?.right?.rightmostChild).toBe(bst.root?.left?.right?.right);
 
@@ -783,7 +777,7 @@ describe("Testing TreeNode relationships", () => {
     expect(bst.root?.left?.right?.left).toBeNull();
     expect(bst.root?.left?.right?.leftmostChild).toBe(bst.root?.left?.right?.right);
     expect(bst.root?.left?.right?.rightmostChild).toBe(bst.root?.left?.right?.right);
-    
+
     await bst.remove(45);
     expect(bst.root?.left?.right?.left).toBeNull();
     expect(bst.root?.left?.right?.right).toBeNull();
@@ -793,7 +787,7 @@ describe("Testing TreeNode relationships", () => {
 
   it("should maintain correct leftmost/rightmost sibling relationships during modifications", async () => {
     const bst = new BinarySearchTree();
-    
+
     // Build tree incrementally
     await bst.insert(50);
     await bst.insert(30);
@@ -824,7 +818,7 @@ describe("Testing TreeNode relationships", () => {
 
   it("should handle node relationship updates during rotations and restructuring", async () => {
     const bst = new BinarySearchTree();
-    
+
     // Create a complex tree structure
     await bst.insert(50);
     await bst.insert(30);
@@ -843,7 +837,7 @@ describe("Testing TreeNode relationships", () => {
 
     // Remove nodes that cause tree restructuring
     await bst.remove(30);
-    
+
     // Verify relationships after restructuring
     expect(bst.root?.left?.parent).toBe(bst.root);
     expect(bst.root?.left?.isRoot).toBe(false);
@@ -857,7 +851,7 @@ describe("Testing TreeNode relationships", () => {
 
   it("should maintain correct relationships during edge case operations", async () => {
     const bst = new BinarySearchTree();
-    
+
     // Test single node
     await bst.insert(50);
     expect(bst.root?.leftmostSibling).toBeNull();
@@ -1046,10 +1040,10 @@ describe("BinarySearchTree Remove Cases", () => {
 
     it("should maintain BST properties after multiple complex removals", async () => {
       // Remove multiple nodes that require complex restructuring
-      expect(await bst.remove(10)).toBeTruthy();  // Remove left subtree root
-      expect(await bst.remove(35)).toBeTruthy();  // Remove right subtree node
-      expect(await bst.remove(20)).toBeTruthy();  // Remove tree root
-      
+      expect(await bst.remove(10)).toBeTruthy(); // Remove left subtree root
+      expect(await bst.remove(35)).toBeTruthy(); // Remove right subtree node
+      expect(await bst.remove(20)).toBeTruthy(); // Remove tree root
+
       // Verify the tree structure remains valid
       const verifyBSTProperty = (node: BinaryTreeNode<number> | null): boolean => {
         if (!node) return true;
@@ -1057,9 +1051,9 @@ describe("BinarySearchTree Remove Cases", () => {
         if (node.right && node.right.data <= node.data) return false;
         return verifyBSTProperty(node.left) && verifyBSTProperty(node.right);
       };
-      
+
       expect(verifyBSTProperty(bst.root)).toBe(true);
-      
+
       // Verify specific node relationships after multiple removals
       expect(bst.root?.data).toBe(23);
       expect(bst.root?.left?.data).toBe(11);
@@ -1085,15 +1079,15 @@ describe("BinarySearchTree Remove Cases", () => {
       await bst.insert(41);
       await bst.insert(43);
       await bst.insert(44);
-      
+
       // Remove node with imbalanced subtrees
       expect(await bst.remove(35)).toBeTruthy();
-      
+
       // Verify structure of the imbalanced area
       expect(bst.root?.right?.right?.data).toBe(36);
       expect(bst.root?.right?.right?.right?.data).toBe(40);
       expect(bst.root?.right?.right?.right?.right?.data).toBe(42);
-      
+
       // Verify parent relationships in imbalanced area
       expect(bst.root?.right?.right?.parent?.data).toBe(30);
       expect(bst.root?.right?.right?.right?.parent?.data).toBe(36);
@@ -1195,7 +1189,7 @@ describe("Testing BST Size Property", () => {
     expect(bst.size).toBe(values.length);
 
     // Remove nodes in different scenarios
-    await bst.remove(3);  // leaf
+    await bst.remove(3); // leaf
     await bst.remove(10); // two children
     await bst.remove(35); // one child
     await bst.remove(20); // root

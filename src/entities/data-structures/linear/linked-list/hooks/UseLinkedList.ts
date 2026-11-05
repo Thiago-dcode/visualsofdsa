@@ -1,27 +1,26 @@
 import React, { useCallback, useEffect, useState } from "react";
-import LinkedList from "../classes/LinkedList";
-import { Primitive } from "@/types";
+import { toast } from "sonner";
 import Position from "@/lib/classes/position/Position";
 import IndexOutOfBoundsError from "@/lib/errors/IndexOutOfTheBondError";
-import { toast } from "sonner";
+import { Primitive } from "@/types";
+import LinkedList from "../classes/LinkedList";
 import "../animation.css";
-import LinkedListNode from "../classes/LinkedListNode";
-import { animate } from "@/lib/animations";
-import { useDarkMode } from "@/context/darkModeContext";
-import { useSpeed } from "@/hooks/useSpeed";
 import { config } from "@/config";
+import { useDarkMode } from "@/context/darkModeContext";
 import useAnimation from "@/hooks/useAnimation";
+import { useSpeed } from "@/hooks/useSpeed";
+import { animate } from "@/lib/animations";
+import LinkedListNode from "../classes/LinkedListNode";
 
 export default function UseLinkedList(isDoublyLinkedList = false) {
   const [linkedList] = useState(new LinkedList());
   const { isDark } = useDarkMode();
 
-  const { speed, handleSetSpeed } = useSpeed(2, config.localStorageKeys.speed.linkedList)
+  const { speed, handleSetSpeed } = useSpeed(2, config.localStorageKeys.speed.linkedList);
   const [error, setError] = useState<{
     name: string;
     description: string;
   } | null>(null);
-
 
   const getSpeed = useCallback(() => {
     switch (speed) {
@@ -36,20 +35,18 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       default:
         return 0.5;
     }
+  }, [speed]);
 
-  }, [speed])
-
-  const { focus } = useAnimation()
+  const { focus } = useAnimation();
   const [arrayLs, setArrayLs] = useState(linkedList.toNodeArray());
   const [isStackOverFlow, setIsStackOverFlow] = useState(false);
 
-  const animateEdge = (ref: HTMLElement | null) =>
-    animate(ref, `lit-node-edge`, 0.5);
+  const animateEdge = (ref: HTMLElement | null) => animate(ref, `lit-node-edge`, 0.5);
   const add = async (
     data: Primitive,
     index: number,
     position = new Position(0, 0),
-    memoryAddress: string = ""
+    memoryAddress: string = "",
   ) => {
     try {
       let steps = index + 1;
@@ -65,20 +62,14 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
           steps = _steps || 1;
           try {
             if (_node && _node.ref) {
-              focus(_node.ref)
-              await animate(
-                _node.ref,
-                `find-node-${isDark ? 'dark' : 'light'}`,
-                getSpeed()
-              );
+              focus(_node.ref);
+              await animate(_node.ref, `find-node-${isDark ? "dark" : "light"}`, getSpeed());
 
-              if (direction === "forward")
-                await animateEdge(_node.nextEdge.ref);
-              else if (direction === "backward")
-                await animateEdge(_node.prevEdge.ref);
+              if (direction === "forward") await animateEdge(_node.nextEdge.ref);
+              else if (direction === "backward") await animateEdge(_node.prevEdge.ref);
             }
-          } catch (error) { }
-        }
+          } catch (error) {}
+        },
       );
 
       node.memoryAddress = memoryAddress;
@@ -101,33 +92,26 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       let node: LinkedListNode<Primitive> | null = null;
       let steps = index + 1;
       if (!isDoublyLinkedList) await findNode(index, true, true);
-      node = await linkedList.deleteAndGetNode(
-        index,
-        async (_node, _index, direction, _steps) => {
-          if (!_node || !isDoublyLinkedList) return;
+      node = await linkedList.deleteAndGetNode(index, async (_node, _index, direction, _steps) => {
+        if (!_node || !isDoublyLinkedList) return;
 
-          steps = _steps || 1;
-          try {
-            if (_node && _node.ref) {
-              const found = index === _index;
-              focus(_node.ref)
-              await animate(
-                _node.ref,
-                `${found ? "del-node" : `find-node-${isDark ? 'dark' : 'light'}`}`,
-                found ? getSpeed() * 0.8 : getSpeed()
-              );
-              if (!found) {
-                if (direction === "forward")
-                  await animateEdge(_node.nextEdge.ref);
-                else if (direction === "backward")
-                  await animateEdge(_node.prevEdge.ref);
-              }
+        steps = _steps || 1;
+        try {
+          if (_node && _node.ref) {
+            const found = index === _index;
+            focus(_node.ref);
+            await animate(
+              _node.ref,
+              `${found ? "del-node" : `find-node-${isDark ? "dark" : "light"}`}`,
+              found ? getSpeed() * 0.8 : getSpeed(),
+            );
+            if (!found) {
+              if (direction === "forward") await animateEdge(_node.nextEdge.ref);
+              else if (direction === "backward") await animateEdge(_node.prevEdge.ref);
             }
-          } catch (error) {
-
           }
-        }
-      );
+        } catch (error) {}
+      });
 
       setArrayLs(linkedList.toNodeArray());
       toast.info(` Took ${steps} steps to delete a node`, {
@@ -158,31 +142,24 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
       if (!isDoublyLinkedList) {
         node = await findNode(index);
       } else {
-        node = await linkedList.getNode(
-          index,
-          async (_node, _index, direction, _steps) => {
-            steps = _steps || 1;
-            if (_node && _node.ref) {
-              try {
-                const found = index === _index;
-                focus(_node.ref)
-                await animate(
-                  _node.ref,
-                  found
-                    ? `get-node`
-                    : `find-node-${isDark ? 'dark' : 'light'}`,
-                  found ? getSpeed() * 0.8 : getSpeed()
-                );
-                if (!found) {
-                  if (direction === "forward")
-                    await animateEdge(_node.nextEdge.ref);
-                  else if (direction === "backward")
-                    await animateEdge(_node.prevEdge.ref);
-                }
-              } catch (error) { }
-            }
+        node = await linkedList.getNode(index, async (_node, _index, direction, _steps) => {
+          steps = _steps || 1;
+          if (_node && _node.ref) {
+            try {
+              const found = index === _index;
+              focus(_node.ref);
+              await animate(
+                _node.ref,
+                found ? `get-node` : `find-node-${isDark ? "dark" : "light"}`,
+                found ? getSpeed() * 0.8 : getSpeed(),
+              );
+              if (!found) {
+                if (direction === "forward") await animateEdge(_node.nextEdge.ref);
+                else if (direction === "backward") await animateEdge(_node.prevEdge.ref);
+              }
+            } catch (error) {}
           }
-        );
+        });
       }
       if (node) {
         toast.info(`Node data: "${node.data}", took ${steps} steps`, {
@@ -206,9 +183,9 @@ export default function UseLinkedList(isDoublyLinkedList = false) {
         await animate(
           node.ref,
           !(index === j && animateLast)
-            ? `find-node-${isDark ? 'dark' : 'light'}`
+            ? `find-node-${isDark ? "dark" : "light"}`
             : `${isDel ? "del" : "get"}-node`,
-          !(index === j && animateLast) ? getSpeed() : getSpeed() * 1.2
+          !(index === j && animateLast) ? getSpeed() : getSpeed() * 1.2,
         );
 
       if (index === j) {

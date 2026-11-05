@@ -1,13 +1,13 @@
+import { useRef, useState } from "react";
 import LinkedListNode from "@/entities/data-structures/linear/linked-list/classes/LinkedListNode";
 import Queue from "@/entities/data-structures/linear/queue/classes/Queue";
 import NodeShape from "@/lib/classes/NodeShape";
 import Position from "@/lib/classes/position/Position";
 import { getMemoryAddress } from "@/lib/utils";
 import { Primitive } from "@/types";
-import { useRef, useState } from "react";
 import useResponsive from "./useResponsive";
-const MAX_SIZE = 100;
 
+const MAX_SIZE = 100;
 
 export default function useHeap({
   nodeShape,
@@ -42,11 +42,9 @@ export default function useHeap({
       const node = new LinkedListNode(
         `${currentRow.current + 1},${currentCol.current + 1}`,
         new Position(
-          currentCol.current *
-          (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing),
-          currentRow.current *
-          (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing)
-        )
+          currentCol.current * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing),
+          currentRow.current * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing),
+        ),
       );
       node.memoryAddress = getMemoryAddress(i);
       freePositions.current.add(node);
@@ -91,9 +89,9 @@ export default function useHeap({
 
     return node
       ? {
-        position: node.position,
-        memoryAddress: node.memoryAddress,
-      }
+          position: node.position,
+          memoryAddress: node.memoryAddress,
+        }
       : null;
   };
   const setNextFreePosition = (node: LinkedListNode<Primitive>) => {
@@ -121,16 +119,12 @@ export default function useHeap({
       return false;
     }
     const { max_col } = getMaxCol();
-    let col = Math.min(heapSize, Math.min(10, max_col));
-    let row = Math.ceil(heapSize / col);
+    const col = Math.min(heapSize, Math.min(10, max_col));
+    const row = Math.ceil(heapSize / col);
     setHeapSize(heapSize);
-    setWidth(
-      col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) -
-      nodeShape.nodeWidthSpacing
-    );
+    setWidth(col * (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing) - nodeShape.nodeWidthSpacing);
     setHeight(
-      row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) -
-      nodeShape.nodeHeightSpacing
+      row * (nodeShape.nodeHeight + nodeShape.nodeHeightSpacing) - nodeShape.nodeHeightSpacing,
     );
     table.current = {
       row,
@@ -140,10 +134,8 @@ export default function useHeap({
   };
   const getMaxCol = () => {
     return {
-      max_col: Math.floor(
-        device.width / (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing)
-      )
-    }
+      max_col: Math.floor(device.width / (nodeShape.nodeWidth + nodeShape.nodeWidthSpacing)),
+    };
   };
   const malloc = (heapSize: number) => {
     reset();

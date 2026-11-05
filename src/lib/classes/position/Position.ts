@@ -30,4 +30,3 @@ export default class Position {
     this._y = y;
   }
 }
-

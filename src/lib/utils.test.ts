@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import Node from "@/entities/data-structures/linear/_classes/Node";
+import Position from "./classes/position/Position";
 import {
   createArrayOfNodes,
   createRandomArrayOfNodes,
@@ -11,8 +13,6 @@ import {
   prefix0,
   removePx,
 } from "./utils";
-import Node from "@/entities/data-structures/linear/_classes/Node";
-import Position from "./classes/position/Position";
 
 describe("testing getSpeed", () => {
   it("should return the proper number", () => {
@@ -47,9 +47,9 @@ describe("testing generateKey", () => {
       expect(removePx("asdadfdsfsdf")).toBe(0);
       expect(removePx("-133244px")).toBe(-133244);
       expect(removePx("0000000001px")).toBe(1);
-      expect(
-        removePx("342343242343254312984792837492834234234.34234234234px")
-      ).toBe(342343242343254312984792837492834234234.34234234234);
+      expect(removePx("342343242343254312984792837492834234234.34234234234px")).toBe(
+        342343242343254312984792837492834234234.34234234234,
+      );
     });
   });
 });
@@ -57,8 +57,8 @@ describe("testing generateKey", () => {
 describe("Testing getMinInAnArrayOfNodes", () => {
   it("Should return the min value", () => {
     const arr = [
-      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544,
-      -0.3, 235345, 123123, 1111111111, 455, 3, 23324, 1125565,
+      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544, -0.3, 235345,
+      123123, 1111111111, 455, 3, 23324, 1125565,
     ];
     const arrOfNodes = arr.map((n) => new Node(n, new Position(0, 0)));
     expect(getMinInAnArrayOfNodes(arrOfNodes)).toBe(Math.min(...arr));
@@ -67,8 +67,8 @@ describe("Testing getMinInAnArrayOfNodes", () => {
 describe("Testing getMaxInAnArrayOfNodes", () => {
   it("Should return the min value", () => {
     const arr = [
-      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544,
-      -0.3, 235345, 123123, 1111111111, 455, 3, 23324, 1125565,
+      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544, -0.3, 235345,
+      123123, 1111111111, 455, 3, 23324, 1125565,
     ];
     const arrOfNodes = arr.map((n) => new Node(n, new Position(0, 0)));
     expect(getMaxInAnArrayOfNodes(arrOfNodes)).toBe(Math.max(...arr));
@@ -78,8 +78,8 @@ describe("Testing getMaxInAnArrayOfNodes", () => {
 describe("Testing getValueNormalized", () => {
   it("Should return a normalize value in a range of [0,1]", () => {
     const arr = [
-      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544,
-      -0.3, 235345, 123123, -5, 1111111111, 455, 3, 23324, 1125565,
+      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544, -0.3, 235345,
+      123123, -5, 1111111111, 455, 3, 23324, 1125565,
     ];
     const min = Math.min(...arr);
     const max = Math.max(...arr);
@@ -92,13 +92,13 @@ describe("Testing getValueNormalized", () => {
   });
   it("Should return a normalize value in a range of [-1,1]", () => {
     const arr = [
-      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544,
-      -0.3, 235345, 123123, -5, 1111111111, 455, 3, 23324, 1125565,
+      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544, -0.3, 235345,
+      123123, -5, 1111111111, 455, 3, 23324, 1125565,
     ];
     const min = Math.min(...arr);
     const max = Math.max(...arr);
-    const range:[number,number] = [-1,1];
-    const arrNormalized = arr.map((n) => getValueNormalized(n, min, max,range));
+    const range: [number, number] = [-1, 1];
+    const arrNormalized = arr.map((n) => getValueNormalized(n, min, max, range));
     for (let i = 0; i < arrNormalized.length; i++) {
       if (arr[i] === min) expect(arrNormalized[i]).toBe(range[0]);
       else if (arr[i] === max) expect(arrNormalized[i]).toBe(range[1]);
@@ -106,75 +106,57 @@ describe("Testing getValueNormalized", () => {
     }
   });
 });
-describe("Testing createArrayOfNodes",()=>{
-
-  it('Should create an array of nodes by a given array',()=>{
-
+describe("Testing createArrayOfNodes", () => {
+  it("Should create an array of nodes by a given array", () => {
     const arr = [
-      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544,
-      -0.3, 235345, 123123, -5, 1111111111, 455, 3, 23324, 1125565,
+      0, -1, 2, 4, 6, 4, 7, 44543, -1, 3423, 9, 14, 3, 1111111111, 34324, 0.544, -0.3, 235345,
+      123123, -5, 1111111111, 455, 3, 23324, 1125565,
     ];
     const arrayOfNodes = createArrayOfNodes(arr);
     expect(arrayOfNodes.length).toBe(arr.length);
     for (let i = 0; i < arrayOfNodes.length; i++) {
       const node = arrayOfNodes[i];
-     expect(arr[i]).toBe(node.data);
-      
+      expect(arr[i]).toBe(node.data);
     }
-
-  })
-})
-describe("Testing createRandomArrayOfNodes",()=>{
-
-  it('Should create a random array of nodes by a given size',()=>{
-
+  });
+});
+describe("Testing createRandomArrayOfNodes", () => {
+  it("Should create a random array of nodes by a given size", () => {
     const size = 500;
-    const range = [1,10];
-    const arrayOfNodes = createRandomArrayOfNodes(size,range);
+    const range = [1, 10];
+    const arrayOfNodes = createRandomArrayOfNodes(size, range);
     expect(arrayOfNodes.length).toBe(size);
     for (let i = 0; i < arrayOfNodes.length; i++) {
       const node = arrayOfNodes[i];
-      expect(node.data).toBeGreaterThanOrEqual(range[0])
-      expect(node.data).toBeLessThanOrEqual(range[1])
-      
+      expect(node.data).toBeGreaterThanOrEqual(range[0]);
+      expect(node.data).toBeLessThanOrEqual(range[1]);
     }
-
-  })
-})
-describe("Testing createRandomUniqueArrayOfNodes",()=>{
-
-  it('Should throw error when create a random UNIQUE array of nodes by a given size',()=>{
-
+  });
+});
+describe("Testing createRandomUniqueArrayOfNodes", () => {
+  it("Should throw error when create a random UNIQUE array of nodes by a given size", () => {
     const size = 500;
-    const range = [1,10];
- 
-     try {
-      createRandomUniqueArrayOfNodes(size,range);
+    const range = [1, 10];
+
+    try {
+      createRandomUniqueArrayOfNodes(size, range);
       expect(false).toBe(true);
-  
-     } catch (error) {
+    } catch (error) {
       expect(true).toBe(true);
-     }
-   
-
-  })
-  it('Should create a random array of nodes by a given size',()=>{
-
+    }
+  });
+  it("Should create a random array of nodes by a given size", () => {
     const size = 500;
-    const range = [-1000,1000];
-    const arrayOfNodes = createRandomUniqueArrayOfNodes(size,range);
+    const range = [-1000, 1000];
+    const arrayOfNodes = createRandomUniqueArrayOfNodes(size, range);
     expect(arrayOfNodes.length).toBe(size);
-    const memo:{
-      [key:number]:true;
-    } = {}
+    const memo: {
+      [key: number]: true;
+    } = {};
     for (let i = 0; i < arrayOfNodes.length; i++) {
       const node = arrayOfNodes[i];
       expect(memo[node.data]).toBeUndefined();
       memo[node.data];
-     
-      
-      
     }
-
-  })
-})
+  });
+});

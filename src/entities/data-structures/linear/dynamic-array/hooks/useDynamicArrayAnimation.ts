@@ -1,13 +1,13 @@
+import { animate } from "@/lib/animations";
 import { Primitive, speed } from "@/types";
 import Node from "../../_classes/Node";
 import { DynamicArrayNode } from "../class/DynamicArrayNode";
-import { animate } from "@/lib/animations";
 import "./../animation.css";
+import { useCallback, useEffect, useRef } from "react";
 import useAnimation from "@/hooks/useAnimation";
-import { useEffect, useRef } from "react";
-import { useCallback } from "react";
-const useDynamicArrayAnimation = (speed:speed) => {
-  const {focus} = useAnimation()
+
+const useDynamicArrayAnimation = (speed: speed) => {
+  const { focus } = useAnimation();
   const speedRef = useRef<speed | null>(null);
   const getSpeed = useCallback(() => {
     if (!speedRef.current) return 0.5;
@@ -24,24 +24,23 @@ const useDynamicArrayAnimation = (speed:speed) => {
         return 0.5;
     }
   }, []);
-  
+
   useEffect(() => {
     speedRef.current = speed || speedRef.current;
   }, [speed]);
   const shiftAnimation = async (
     node: DynamicArrayNode<Primitive> | null,
     index: number,
-    direction: "left" | "right"
+    direction: "left" | "right",
   ): Promise<void> => {
     if (!node?.ref) {
       return;
     }
     const nodeRef = node.ref;
     const indexRef = node.indexRef;
-    const endRef = nodeRef.parentElement?.parentElement?.parentElement
-      ?.children[direction === "right" ? index + 1 : index - 1].children[1] as
-      | HTMLElement
-      | undefined;
+    const endRef = nodeRef.parentElement?.parentElement?.parentElement?.children[
+      direction === "right" ? index + 1 : index - 1
+    ].children[1] as HTMLElement | undefined;
     if (!endRef) return;
     const bondsRef = nodeRef.getBoundingClientRect();
     const bondsSibling = endRef.getBoundingClientRect();
@@ -53,14 +52,12 @@ const useDynamicArrayAnimation = (speed:speed) => {
     };
     if (indexRef) {
       indexRef.textContent = indexRef.textContent
-        ? parseInt(indexRef.textContent) +(direction === "right" ? 1 : -1) + ""
+        ? parseInt(indexRef.textContent) + (direction === "right" ? 1 : -1) + ""
         : indexRef.textContent;
     }
-    const animation = `${
-      direction === "right" ? "insert" : "delete"
-    }-node-dynamic-array`;
+    const animation = `${direction === "right" ? "insert" : "delete"}-node-dynamic-array`;
     focus(direction === "right" ? nodeRef : endRef);
- await Promise.all([
+    await Promise.all([
       animate(nodeRef, animation, getSpeed() * 0.8, {
         properties,
       }),
@@ -75,19 +72,17 @@ const useDynamicArrayAnimation = (speed:speed) => {
     afterAnimation(nodeRef);
     if (indexRef) afterAnimation(indexRef);
   };
-  const popAnimation = async (
-    node: Node<Primitive> | null,
-  ): Promise<void> => {
+  const popAnimation = async (node: Node<Primitive> | null): Promise<void> => {
     if (!node || !node.ref) {
       return;
-    } 
+    }
     focus(node.ref);
     await Promise.all([
-        animate(node.ref,`pop-node`,getSpeed()),
-        animate(node.indexRef,`pop-node`,getSpeed())
-       ])
-        node.ref.style.opacity = "0";
-        if(node.indexRef) node.indexRef.style.opacity = "0";    
+      animate(node.ref, `pop-node`, getSpeed()),
+      animate(node.indexRef, `pop-node`, getSpeed()),
+    ]);
+    node.ref.style.opacity = "0";
+    if (node.indexRef) node.indexRef.style.opacity = "0";
   };
   return {
     shiftAnimation,

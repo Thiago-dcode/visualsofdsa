@@ -45,7 +45,7 @@ describe("Testing Queue class", () => {
 
     expect(queue.size).toBe(98);
   });
-    it("Should remove all ", async () => {
+  it("Should remove all ", async () => {
     const queue = new Queue<number>();
     queue.maxSize = 100;
 
@@ -53,7 +53,7 @@ describe("Testing Queue class", () => {
       await queue.add(i);
     }
     for (let i = 0; i < queue.maxSize; i++) {
-      const node = await queue.remove()
+      const node = await queue.remove();
       expect(node?.data).toBe(i);
     }
     expect(queue.size).toBe(0);

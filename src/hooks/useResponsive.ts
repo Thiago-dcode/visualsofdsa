@@ -1,6 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
+function debounce<T extends (...args: any[]) => void>(
+  func: T,
+  wait: number,
+): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout>;
   return function executedFunction(...args: Parameters<T>) {
     const later = () => {
@@ -12,7 +15,7 @@ function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (.
   };
 }
 
- type Device = {
+type Device = {
   isPhone: boolean;
   isTablet: boolean;
   isLaptop: boolean;
@@ -26,20 +29,26 @@ function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (.
     laptop: boolean;
     desktop: boolean;
     tv: boolean;
-  },
+  };
 };
 
-function useResponsive(onResize = (e: UIEvent, device: Device, sizeChanged: {
-  width: boolean,
-  height: boolean
-}) => { }) {
+function useResponsive(
+  onResize = (
+    e: UIEvent,
+    device: Device,
+    sizeChanged: {
+      width: boolean;
+      height: boolean;
+    },
+  ) => {},
+) {
   const prevSize = useRef<{
-    width: number,
-    height: number
+    width: number;
+    height: number;
   }>({
     width: 0,
-    height: 0
-  })
+    height: 0,
+  });
   const _setDevice: (width: number, height: number) => Device = useCallback(
     (width: number, height: number) => ({
       isPhone: width <= 480,
@@ -57,7 +66,7 @@ function useResponsive(onResize = (e: UIEvent, device: Device, sizeChanged: {
       width,
       height,
     }),
-    []
+    [],
   );
   const [device, setDevice] = useState<Device>({
     isPhone: false,
@@ -73,7 +82,7 @@ function useResponsive(onResize = (e: UIEvent, device: Device, sizeChanged: {
       laptop: false,
       desktop: false,
       tv: false,
-    }
+    },
   });
 
   const handleResize = useCallback(
@@ -81,15 +90,15 @@ function useResponsive(onResize = (e: UIEvent, device: Device, sizeChanged: {
       const device = _setDevice(window.innerWidth, window.innerHeight);
       onResize(e, device, {
         width: prevSize.current.width !== device.width,
-        height: prevSize.current.height !== device.height
+        height: prevSize.current.height !== device.height,
       });
       prevSize.current = {
         width: device.width,
-        height: device.height
-      }
+        height: device.height,
+      };
       setDevice(device);
     }, 100),
-    []
+    [],
   );
 
   useEffect(() => {
