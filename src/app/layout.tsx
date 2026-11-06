@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { Toaster } from "sonner";
 import ConfigSection from "@/components/app/ConfigSection";
 import Footer from "@/components/app/Footer";
+import JsonLd from "@/components/app/JsonLd";
 import LogoComponent from "@/components/app/logoComponent";
 import Nav from "@/components/app/nav";
 import Main from "@/components/container/Main";
@@ -14,6 +15,7 @@ import { config } from "@/config";
 import { AnimationRunningProvider } from "@/context/animationRunningContext";
 import { DarkModeProvider } from "@/context/darkModeContext";
 import { MuteProvider } from "@/context/muteContext";
+import { siteUrl } from "@/lib/site";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,11 +23,35 @@ const inter = Inter({ subsets: ["latin"] });
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "visualsofdsa",
-  description: "Visuals of data structure and algorithms",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Visualsofdsa | Data structures and algorithms visualizer",
+    template: "%s | Visualsofdsa",
+  },
+  description:
+    "Interactive animations of data structures and sorting and search algorithms. Step through each operation and see how it works.",
+  applicationName: "Visualsofdsa",
   icons: {
     icon: "/favicon.png",
   },
+  openGraph: {
+    siteName: "Visualsofdsa",
+    type: "website",
+    locale: "en_US",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Visualsofdsa",
+  alternateName: "Visuals of DSA",
+  url: siteUrl,
+  inLanguage: "en",
 };
 
 export default function RootLayout({
@@ -37,6 +63,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <JsonLd data={websiteJsonLd} />
       </head>
       <body className={`${inter.className}${config.darkModeTailwind}`}>
         <AnimationRunningProvider>

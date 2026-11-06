@@ -3,8 +3,10 @@ import AlgorithmService from "@/entities/algorithms/__classes/AlgorithmService";
 import { appMetadata } from "@/lib/metadata";
 
 export const metadata = appMetadata({
-  title: "What is an algorithm in computer science?",
-  description: "Learn about algorithms and their implementations.",
+  title: "What is an algorithm?",
+  description:
+    "What an algorithm is, and the search and sort algorithms you can step through as interactive visualizations.",
+  path: "/algorithms",
 });
 
 export default async function AlgorithmPage() {

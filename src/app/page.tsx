@@ -5,7 +5,10 @@ import { LINKS } from "@/lib/links";
 import { appMetadata } from "@/lib/metadata";
 
 export const metadata = appMetadata({
-  title: "Learn data structures and algorithms with interactive visualizations",
+  title: "Data structures and algorithms visualizer",
+  description:
+    "Learn data structures and algorithms with interactive animations. Watch stacks, linked lists, trees, bubble sort and binary search run step by step.",
+  path: "/",
 });
 
 const ARTICLES = [

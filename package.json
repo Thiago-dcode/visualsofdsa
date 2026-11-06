@@ -12,7 +12,8 @@
     "start": "next start",
     "test": "vitest",
     "lint": "biome check --error-on-warnings",
-    "biome:fix": "biome check --write ."
+    "biome:fix": "biome check --write .",
+    "deploy:check": "pnpm lint && vitest run"
   },
   "dependencies": {
     "@prisma/orm-postgres": "8.0.0-rc.22",

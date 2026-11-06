@@ -32,7 +32,7 @@ export default function PageComponent({
           {description}
         </div>
 
-        <ImageComponent image={image} />
+        <ImageComponent image={image} alt={`${title} illustration`} />
         <div className="self-start flex flex-col items-start justify-start gap-2 w-full">
           <div className=" flex items-center justify-center laptop:justify-start">
             <Title xls={3} h={3} uppercase={false} title={`${entityListTitle}`} />

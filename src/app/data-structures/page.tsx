@@ -4,8 +4,10 @@ import { appMetadata } from "@/lib/metadata";
 import { EntityType } from "@/types";
 
 export const metadata = appMetadata({
-  title: "What is a data structure in computer science?",
-  description: "Learn about data structures and their implementations.",
+  title: "What is a data structure?",
+  description:
+    "What a data structure is, and the linear and non-linear structures you can watch operate as interactive visualizations.",
+  path: "/data-structures",
 });
 
 export default async function DataStructurePage() {
