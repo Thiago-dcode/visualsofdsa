@@ -46,3 +46,45 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE }}:main
             ${{ env.REGISTRY }}/${{ env.IMAGE }}:sha-${{ github.sha }}
+
+      # One-off migrate/seed image (Dockerfile `tools` stage). Shares the builder layers
+      # with the build above through the local Docker layer cache, so it is cheap.
+      - name: Build and push tools (migrate / seed)
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          file: Dockerfile
+          target: tools
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE }}-tools:main
+            ${{ env.REGISTRY }}/${{ env.IMAGE }}-tools:sha-${{ github.sha }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: prod
+    # Never cancelled: killing scripts/deploy.sh halfway (migrations, container recreation)
+    # would leave prod half-applied. A newer run queues behind it instead.
+    concurrency:
+      group: prod-deploy
+      cancel-in-progress: false
+    # `packages: read` lets the run's own GITHUB_TOKEN pull the images this workflow just
+    # pushed, so no long-lived GHCR PAT is stored on the server.
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      # Custom composite action from Thiago-dcode/gh-actions: runs the deploy script on the
+      # VPS over SSH, with the run's GITHUB_TOKEN for the GHCR pull and the immutable
+      # `sha-<commit>` image tag. Pinned to a commit SHA, not a moving ref.
+      - name: SSH deploy
+        uses: Thiago-dcode/gh-actions/.github/actions/ssh-deploy@aeefa072cc9c649cf2ee116f21b1051668833187
+        with:
+          deploy-script: ${{ secrets.SSH_DEPLOY_DIR }}/scripts/deploy.sh
+          ssh-host: ${{ secrets.SSH_HOST }}
+          ssh-user: ${{ secrets.SSH_USER }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
+          ghcr-user: ${{ github.actor }}

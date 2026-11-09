@@ -52,17 +52,44 @@ const algorithmsTypes: AlgorithmTypeInput[] = [
       "Sorting algorithms arrange elements to improve data organization and search efficiency.",
   },
 ];
-(async () => {
-  await db.orm.public.DataStructureType.where((r) => r.id.isNotNull()).deleteAll();
-  await db.orm.public.DataStructure.where((r) => r.id.isNotNull()).deleteAll();
 
+// The seed is idempotent: every row is upserted on its unique `name`, so re-running it updates
+// existing rows in place (keeping ids, and with them user favorites) instead of wiping tables.
+type DataStructureInput = Parameters<typeof db.orm.public.DataStructure.createAll>[0][number];
+type AlgorithmInput = Parameters<typeof db.orm.public.Algorithm.createAll>[0][number];
+
+const upsertDataStructures = async (items: readonly DataStructureInput[]) => {
+  for (const item of items) {
+    await db.orm.public.DataStructure.upsert({
+      create: item,
+      update: item,
+      conflictOn: { name: item.name },
+    });
+  }
+};
+
+const upsertAlgorithms = async (items: readonly AlgorithmInput[]) => {
+  for (const item of items) {
+    await db.orm.public.Algorithm.upsert({
+      create: item,
+      update: item,
+      conflictOn: { name: item.name },
+    });
+  }
+};
+
+(async () => {
   const _dataStrusture = "data-structures";
   for (const type of dataStructureTypes) {
-    const result = await db.orm.public.DataStructureType.create(type);
+    const result = await db.orm.public.DataStructureType.upsert({
+      create: type,
+      update: type,
+      conflictOn: { name: type.name },
+    });
 
     switch (result.name) {
       case "linear":
-        await db.orm.public.DataStructure.createAll([
+        await upsertDataStructures([
           {
             order: 0,
             name: "stack",
@@ -384,7 +411,7 @@ const algorithmsTypes: AlgorithmTypeInput[] = [
         ]);
         break;
       case "non linear":
-        await db.orm.public.DataStructure.createAll([
+        await upsertDataStructures([
           {
             order: 0,
             name: "binary search tree",
@@ -487,14 +514,16 @@ const algorithmsTypes: AlgorithmTypeInput[] = [
         break;
     }
   }
-  await db.orm.public.AlgorithmType.where((r) => r.id.isNotNull()).deleteAll();
-  await db.orm.public.Algorithm.where((r) => r.id.isNotNull()).deleteAll();
   for (const type of algorithmsTypes) {
-    const result = await db.orm.public.AlgorithmType.create(type);
+    const result = await db.orm.public.AlgorithmType.upsert({
+      create: type,
+      update: type,
+      conflictOn: { name: type.name },
+    });
 
     switch (result.name) {
       case "search":
-        await db.orm.public.Algorithm.createAll([
+        await upsertAlgorithms([
           {
             order: 0,
             name: "linear",
@@ -564,7 +593,7 @@ const algorithmsTypes: AlgorithmTypeInput[] = [
         ]);
         break;
       case "sort":
-        await db.orm.public.Algorithm.createAll([
+        await upsertAlgorithms([
           {
             order: 0,
             name: "bubble",

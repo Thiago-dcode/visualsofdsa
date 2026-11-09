@@ -30,6 +30,14 @@ RUN pnpm exec prisma contract emit
 RUN pnpm exec next build
 
 
+# ─── Stage 1b: tools (one-off migrate / seed image) ──────────────────────────
+# Reuses the builder (full node_modules incl. the Prisma CLI and tsx, prisma.config.ts,
+# migrations/, prisma/seed, emitted contract). CI pushes it as `<image>-tools`; compose
+# runs it with a per-service command (`migrate`, `seed`). Never deployed as the app.
+# Placed before `runner` so a plain `docker build` still produces the app image.
+FROM builder AS tools
+
+
 # ─── Stage 2: runner ─────────────────────────────────────────────────────────
 FROM node:24-bookworm-slim AS runner
 
