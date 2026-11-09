@@ -59,8 +59,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-visualsofdsa}
-    ports:
-      - "5432:5432"
+    # No `ports:` on purpose. Only containers on visualsofdsa-internal reach the database,
+    # as `db:5432` through Docker's DNS. For admin access use `docker compose exec db psql`.
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
