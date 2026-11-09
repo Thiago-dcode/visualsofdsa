@@ -90,6 +90,24 @@ esac
 echo "==> Starting web"
 "${COMPOSE[@]}" up -d web
 
+# Publish the vhost into the shared edge nginx (/opt/edge, repo: server-edge). The full vhost
+# references the Let's Encrypt cert, so until `certbot certonly` has issued it we install the
+# HTTP-only bootstrap vhost, which is enough for the ACME challenge. See docs/edge.md.
+EDGE_INSTALL_VHOST="${EDGE_INSTALL_VHOST:-/opt/edge/bin/install-vhost}"
+CERT_DIR="${VISUALSOFDSA_CERT_DIR:-/etc/letsencrypt/live/visualsofdsa.dev}"
+if [[ -x "$EDGE_INSTALL_VHOST" ]]; then
+  if [[ -f "$CERT_DIR/fullchain.pem" ]]; then
+    echo "==> Installing edge vhost"
+    "$EDGE_INSTALL_VHOST" visualsofdsa "$PWD/nginx/visualsofdsa.conf"
+  else
+    echo "==> No certificate at $CERT_DIR yet: installing the HTTP-only bootstrap vhost"
+    "$EDGE_INSTALL_VHOST" visualsofdsa "$PWD/nginx/visualsofdsa.bootstrap.conf"
+    echo "    Issue the cert (docs/edge.md), then deploy again to switch to HTTPS."
+  fi
+else
+  echo "==> $EDGE_INSTALL_VHOST not found: skipping the edge vhost" >&2
+fi
+
 echo "==> Done"
 "${COMPOSE[@]}" ps
 

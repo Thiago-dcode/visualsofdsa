@@ -4,7 +4,8 @@ services:
   web:
     # Built in GitHub Actions and pulled from GHCR (see .github/workflows/ci-cd.yml).
     image: ${DOCKER_REGISTRY:-ghcr.io}/${DOCKER_IMAGE_OWNER:?Set DOCKER_IMAGE_OWNER in .env}/visualsofdsa:${DOCKER_IMAGE_TAG:-main}
-    restart: "no"
+    container_name: visualsofdsa-web
+    restart: unless-stopped
     security_opt:
       - no-new-privileges:true
     env_file: ${VISUALSOFDSA_ENVFILE:-.env}
@@ -15,11 +16,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    ports:
-      - "127.0.0.1:${WEB_HOST_PORT:-3000}:3000"
+    # No host `ports:`. The shared edge nginx (/opt/edge) reaches this container over the
+    # `edge` network. The alias is project-prefixed on purpose: a bare `web` would collide
+    # with every other repo on that network. The vhost is nginx/visualsofdsa.conf.
     networks:
-      - edge
-      - visualsofdsa-internal
+      visualsofdsa-internal:
+      edge:
+        aliases: [visualsofdsa-web]
 
   # One-off migration runner (not started by `up`; use scripts/deploy.sh). Manual usage:
   #   docker compose -f compose.prod.yml run --rm migrate
