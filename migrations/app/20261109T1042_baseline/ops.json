@@ -1,0 +1,1938 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.Algorithm",
+    "label": "Create table \"Algorithm\"",
+    "summary": "Creates table \"Algorithm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Algorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Algorithm\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Algorithm\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Algorithm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Algorithm\"",
+        "sql": "CREATE TABLE \"public\".\"Algorithm\" (\n  \"algorithmImplementationId\" int4,\n  \"algorithmTypeId\" int4 NOT NULL,\n  \"description\" text,\n  \"enable\" bool DEFAULT false NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"link\" text NOT NULL,\n  \"metaDescription\" text,\n  \"name\" text NOT NULL,\n  \"order\" int4 DEFAULT 0,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Algorithm\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Algorithm\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Algorithm\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.AlgorithmImplementation",
+    "label": "Create table \"AlgorithmImplementation\"",
+    "summary": "Creates table \"AlgorithmImplementation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "AlgorithmImplementation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"AlgorithmImplementation\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AlgorithmImplementation\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"AlgorithmImplementation\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"AlgorithmImplementation\"",
+        "sql": "CREATE TABLE \"public\".\"AlgorithmImplementation\" (\n  \"id\" SERIAL NOT NULL,\n  \"java\" text,\n  \"javaScript\" text,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"AlgorithmImplementation\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"AlgorithmImplementation\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"AlgorithmImplementation\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.AlgorithmType",
+    "label": "Create table \"AlgorithmType\"",
+    "summary": "Creates table \"AlgorithmType\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "AlgorithmType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"AlgorithmType\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AlgorithmType\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"AlgorithmType\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"AlgorithmType\"",
+        "sql": "CREATE TABLE \"public\".\"AlgorithmType\" (\n  \"description\" text NOT NULL,\n  \"enable\" bool DEFAULT false NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"link\" text NOT NULL,\n  \"metaDescription\" text,\n  \"name\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"AlgorithmType\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"AlgorithmType\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"AlgorithmType\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.DataStructure",
+    "label": "Create table \"DataStructure\"",
+    "summary": "Creates table \"DataStructure\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "DataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"DataStructure\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"DataStructure\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"DataStructure\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"DataStructure\"",
+        "sql": "CREATE TABLE \"public\".\"DataStructure\" (\n  \"dataStructureImplementationId\" int4,\n  \"dataStructureTypeId\" int4 NOT NULL,\n  \"description\" text,\n  \"enable\" bool DEFAULT false NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"link\" text NOT NULL,\n  \"metaDescription\" text,\n  \"name\" text NOT NULL,\n  \"order\" int4 DEFAULT 0,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"DataStructure\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"DataStructure\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"DataStructure\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.DataStructureImplementation",
+    "label": "Create table \"DataStructureImplementation\"",
+    "summary": "Creates table \"DataStructureImplementation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "DataStructureImplementation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"DataStructureImplementation\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"DataStructureImplementation\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"DataStructureImplementation\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"DataStructureImplementation\"",
+        "sql": "CREATE TABLE \"public\".\"DataStructureImplementation\" (\n  \"id\" SERIAL NOT NULL,\n  \"java\" text,\n  \"javaScript\" text,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"DataStructureImplementation\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"DataStructureImplementation\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"DataStructureImplementation\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.DataStructureType",
+    "label": "Create table \"DataStructureType\"",
+    "summary": "Creates table \"DataStructureType\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "DataStructureType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"DataStructureType\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"DataStructureType\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"DataStructureType\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"DataStructureType\"",
+        "sql": "CREATE TABLE \"public\".\"DataStructureType\" (\n  \"description\" text NOT NULL,\n  \"enable\" bool DEFAULT false NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"link\" text NOT NULL,\n  \"metaDescription\" text,\n  \"name\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"DataStructureType\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"DataStructureType\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"DataStructureType\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.Newsletter",
+    "label": "Create table \"Newsletter\"",
+    "summary": "Creates table \"Newsletter\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Newsletter"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Newsletter\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Newsletter\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Newsletter\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Newsletter\"",
+        "sql": "CREATE TABLE \"public\".\"Newsletter\" (\n  \"active\" bool DEFAULT true NOT NULL,\n  \"createdAt\" timestamptz(3) DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"updatedAt\" timestamptz(3) DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Newsletter\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Newsletter\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Newsletter\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.User",
+    "label": "Create table \"User\"",
+    "summary": "Creates table \"User\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "User"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"User\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"User\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"User\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"User\"",
+        "sql": "CREATE TABLE \"public\".\"User\" (\n  \"avatar\" text,\n  \"createdAt\" timestamptz(3) DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"name\" text,\n  \"password\" text,\n  \"settingsId\" int4,\n  \"updatedAt\" timestamptz(3) DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"User\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"User\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"User\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.UserFavoriteAlgorithm",
+    "label": "Create table \"UserFavoriteAlgorithm\"",
+    "summary": "Creates table \"UserFavoriteAlgorithm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "UserFavoriteAlgorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"UserFavoriteAlgorithm\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteAlgorithm\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"UserFavoriteAlgorithm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"UserFavoriteAlgorithm\"",
+        "sql": "CREATE TABLE \"public\".\"UserFavoriteAlgorithm\" (\n  \"algorithmId\" int4 NOT NULL,\n  \"createdAt\" timestamptz(3) DEFAULT (now()) NOT NULL,\n  \"userId\" int4 NOT NULL,\n  PRIMARY KEY (\"userId\", \"algorithmId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"UserFavoriteAlgorithm\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteAlgorithm\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"UserFavoriteAlgorithm\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.UserFavoriteDataStructure",
+    "label": "Create table \"UserFavoriteDataStructure\"",
+    "summary": "Creates table \"UserFavoriteDataStructure\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "UserFavoriteDataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"UserFavoriteDataStructure\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteDataStructure\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"UserFavoriteDataStructure\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"UserFavoriteDataStructure\"",
+        "sql": "CREATE TABLE \"public\".\"UserFavoriteDataStructure\" (\n  \"createdAt\" timestamptz(3) DEFAULT (now()) NOT NULL,\n  \"dataStructureId\" int4 NOT NULL,\n  \"userId\" int4 NOT NULL,\n  PRIMARY KEY (\"userId\", \"dataStructureId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"UserFavoriteDataStructure\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteDataStructure\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"UserFavoriteDataStructure\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.UserSetting",
+    "label": "Create table \"UserSetting\"",
+    "summary": "Creates table \"UserSetting\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "UserSetting"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"UserSetting\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserSetting\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"UserSetting\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"UserSetting\"",
+        "sql": "CREATE TABLE \"public\".\"UserSetting\" (\n  \"allowNotifications\" bool DEFAULT false NOT NULL,\n  \"createdAt\" timestamptz(3) DEFAULT (now()) NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"updatedAt\" timestamptz(3) DEFAULT (now()) NOT NULL,\n  \"userId\" int4 NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"UserSetting\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"UserSetting\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"UserSetting\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "unique.Algorithm.Algorithm_name_key",
+    "label": "Add unique constraint on \"Algorithm\" (name)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Algorithm_name_key",
+        "table": "Algorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Algorithm_name_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Algorithm_name_key",
+          "public",
+          "\"public\".\"Algorithm\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"Algorithm_name_key\" on \"Algorithm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Algorithm_name_key\"",
+        "sql": "ALTER TABLE \"public\".\"Algorithm\" ADD CONSTRAINT \"Algorithm_name_key\" UNIQUE (\"name\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"Algorithm_name_key\" exists on (name)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "Algorithm_name_key",
+          "public",
+          "\"public\".\"Algorithm\"",
+          "u",
+          "[\"name\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Algorithm.Algorithm_link_key",
+    "label": "Add unique constraint on \"Algorithm\" (link)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Algorithm_link_key",
+        "table": "Algorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Algorithm_link_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Algorithm_link_key",
+          "public",
+          "\"public\".\"Algorithm\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"Algorithm_link_key\" on \"Algorithm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Algorithm_link_key\"",
+        "sql": "ALTER TABLE \"public\".\"Algorithm\" ADD CONSTRAINT \"Algorithm_link_key\" UNIQUE (\"link\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"Algorithm_link_key\" exists on (link)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "Algorithm_link_key",
+          "public",
+          "\"public\".\"Algorithm\"",
+          "u",
+          "[\"link\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.AlgorithmType.AlgorithmType_name_key",
+    "label": "Add unique constraint on \"AlgorithmType\" (name)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "AlgorithmType_name_key",
+        "table": "AlgorithmType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"AlgorithmType_name_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AlgorithmType_name_key",
+          "public",
+          "\"public\".\"AlgorithmType\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"AlgorithmType_name_key\" on \"AlgorithmType\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"AlgorithmType_name_key\"",
+        "sql": "ALTER TABLE \"public\".\"AlgorithmType\" ADD CONSTRAINT \"AlgorithmType_name_key\" UNIQUE (\"name\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"AlgorithmType_name_key\" exists on (name)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "AlgorithmType_name_key",
+          "public",
+          "\"public\".\"AlgorithmType\"",
+          "u",
+          "[\"name\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.AlgorithmType.AlgorithmType_link_key",
+    "label": "Add unique constraint on \"AlgorithmType\" (link)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "AlgorithmType_link_key",
+        "table": "AlgorithmType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"AlgorithmType_link_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AlgorithmType_link_key",
+          "public",
+          "\"public\".\"AlgorithmType\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"AlgorithmType_link_key\" on \"AlgorithmType\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"AlgorithmType_link_key\"",
+        "sql": "ALTER TABLE \"public\".\"AlgorithmType\" ADD CONSTRAINT \"AlgorithmType_link_key\" UNIQUE (\"link\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"AlgorithmType_link_key\" exists on (link)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "AlgorithmType_link_key",
+          "public",
+          "\"public\".\"AlgorithmType\"",
+          "u",
+          "[\"link\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.DataStructure.DataStructure_name_key",
+    "label": "Add unique constraint on \"DataStructure\" (name)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "DataStructure_name_key",
+        "table": "DataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"DataStructure_name_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "DataStructure_name_key",
+          "public",
+          "\"public\".\"DataStructure\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"DataStructure_name_key\" on \"DataStructure\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"DataStructure_name_key\"",
+        "sql": "ALTER TABLE \"public\".\"DataStructure\" ADD CONSTRAINT \"DataStructure_name_key\" UNIQUE (\"name\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"DataStructure_name_key\" exists on (name)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "DataStructure_name_key",
+          "public",
+          "\"public\".\"DataStructure\"",
+          "u",
+          "[\"name\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.DataStructure.DataStructure_link_key",
+    "label": "Add unique constraint on \"DataStructure\" (link)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "DataStructure_link_key",
+        "table": "DataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"DataStructure_link_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "DataStructure_link_key",
+          "public",
+          "\"public\".\"DataStructure\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"DataStructure_link_key\" on \"DataStructure\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"DataStructure_link_key\"",
+        "sql": "ALTER TABLE \"public\".\"DataStructure\" ADD CONSTRAINT \"DataStructure_link_key\" UNIQUE (\"link\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"DataStructure_link_key\" exists on (link)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "DataStructure_link_key",
+          "public",
+          "\"public\".\"DataStructure\"",
+          "u",
+          "[\"link\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.DataStructureType.DataStructureType_name_key",
+    "label": "Add unique constraint on \"DataStructureType\" (name)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "DataStructureType_name_key",
+        "table": "DataStructureType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"DataStructureType_name_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "DataStructureType_name_key",
+          "public",
+          "\"public\".\"DataStructureType\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"DataStructureType_name_key\" on \"DataStructureType\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"DataStructureType_name_key\"",
+        "sql": "ALTER TABLE \"public\".\"DataStructureType\" ADD CONSTRAINT \"DataStructureType_name_key\" UNIQUE (\"name\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"DataStructureType_name_key\" exists on (name)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "DataStructureType_name_key",
+          "public",
+          "\"public\".\"DataStructureType\"",
+          "u",
+          "[\"name\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.DataStructureType.DataStructureType_link_key",
+    "label": "Add unique constraint on \"DataStructureType\" (link)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "DataStructureType_link_key",
+        "table": "DataStructureType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"DataStructureType_link_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "DataStructureType_link_key",
+          "public",
+          "\"public\".\"DataStructureType\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"DataStructureType_link_key\" on \"DataStructureType\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"DataStructureType_link_key\"",
+        "sql": "ALTER TABLE \"public\".\"DataStructureType\" ADD CONSTRAINT \"DataStructureType_link_key\" UNIQUE (\"link\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"DataStructureType_link_key\" exists on (link)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "DataStructureType_link_key",
+          "public",
+          "\"public\".\"DataStructureType\"",
+          "u",
+          "[\"link\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Newsletter.Newsletter_email_key",
+    "label": "Add unique constraint on \"Newsletter\" (email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Newsletter_email_key",
+        "table": "Newsletter"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Newsletter_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Newsletter_email_key",
+          "public",
+          "\"public\".\"Newsletter\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"Newsletter_email_key\" on \"Newsletter\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Newsletter_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"Newsletter\" ADD CONSTRAINT \"Newsletter_email_key\" UNIQUE (\"email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"Newsletter_email_key\" exists on (email)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "Newsletter_email_key",
+          "public",
+          "\"public\".\"Newsletter\"",
+          "u",
+          "[\"email\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.User.User_email_key",
+    "label": "Add unique constraint on \"User\" (email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "User_email_key",
+        "table": "User"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"User_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "User_email_key",
+          "public",
+          "\"public\".\"User\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint \"User_email_key\" on \"User\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"User_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"User\" ADD CONSTRAINT \"User_email_key\" UNIQUE (\"email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify unique constraint \"User_email_key\" exists on (email)",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb)) AS \"result\"",
+        "params": [
+          "User_email_key",
+          "public",
+          "\"public\".\"User\"",
+          "u",
+          "[\"email\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Algorithm.Algorithm_algorithmImplementationId_idx_4f9f4551",
+    "label": "Create index \"Algorithm_algorithmImplementationId_idx_4f9f4551\" on \"Algorithm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Algorithm_algorithmImplementationId_idx_4f9f4551",
+        "table": "Algorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Algorithm_algorithmImplementationId_idx_4f9f4551\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Algorithm_algorithmImplementationId_idx_4f9f4551\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Algorithm_algorithmImplementationId_idx_4f9f4551\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Algorithm_algorithmImplementationId_idx_4f9f4551\"",
+        "sql": "CREATE INDEX \"Algorithm_algorithmImplementationId_idx_4f9f4551\" ON \"public\".\"Algorithm\" (\"algorithmImplementationId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Algorithm_algorithmImplementationId_idx_4f9f4551\" exists on \"Algorithm\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Algorithm_algorithmImplementationId_idx_4f9f4551\"",
+          "i",
+          "I",
+          "\"public\".\"Algorithm\"",
+          "btree",
+          "[\"algorithmImplementationId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Algorithm.Algorithm_algorithmTypeId_idx_c6bff3f0",
+    "label": "Create index \"Algorithm_algorithmTypeId_idx_c6bff3f0\" on \"Algorithm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Algorithm_algorithmTypeId_idx_c6bff3f0",
+        "table": "Algorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Algorithm_algorithmTypeId_idx_c6bff3f0\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Algorithm_algorithmTypeId_idx_c6bff3f0\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Algorithm_algorithmTypeId_idx_c6bff3f0\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Algorithm_algorithmTypeId_idx_c6bff3f0\"",
+        "sql": "CREATE INDEX \"Algorithm_algorithmTypeId_idx_c6bff3f0\" ON \"public\".\"Algorithm\" (\"algorithmTypeId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Algorithm_algorithmTypeId_idx_c6bff3f0\" exists on \"Algorithm\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Algorithm_algorithmTypeId_idx_c6bff3f0\"",
+          "i",
+          "I",
+          "\"public\".\"Algorithm\"",
+          "btree",
+          "[\"algorithmTypeId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.DataStructure.DataStructure_dataStructureImplementationId_idx_71b5379a",
+    "label": "Create index \"DataStructure_dataStructureImplementationId_idx_71b5379a\" on \"DataStructure\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "DataStructure_dataStructureImplementationId_idx_71b5379a",
+        "table": "DataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"DataStructure_dataStructureImplementationId_idx_71b5379a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"DataStructure_dataStructureImplementationId_idx_71b5379a\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"DataStructure_dataStructureImplementationId_idx_71b5379a\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"DataStructure_dataStructureImplementationId_idx_71b5379a\"",
+        "sql": "CREATE INDEX \"DataStructure_dataStructureImplementationId_idx_71b5379a\" ON \"public\".\"DataStructure\" (\"dataStructureImplementationId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"DataStructure_dataStructureImplementationId_idx_71b5379a\" exists on \"DataStructure\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"DataStructure_dataStructureImplementationId_idx_71b5379a\"",
+          "i",
+          "I",
+          "\"public\".\"DataStructure\"",
+          "btree",
+          "[\"dataStructureImplementationId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.DataStructure.DataStructure_dataStructureTypeId_idx_f0f25c07",
+    "label": "Create index \"DataStructure_dataStructureTypeId_idx_f0f25c07\" on \"DataStructure\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "DataStructure_dataStructureTypeId_idx_f0f25c07",
+        "table": "DataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"DataStructure_dataStructureTypeId_idx_f0f25c07\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"DataStructure_dataStructureTypeId_idx_f0f25c07\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"DataStructure_dataStructureTypeId_idx_f0f25c07\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"DataStructure_dataStructureTypeId_idx_f0f25c07\"",
+        "sql": "CREATE INDEX \"DataStructure_dataStructureTypeId_idx_f0f25c07\" ON \"public\".\"DataStructure\" (\"dataStructureTypeId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"DataStructure_dataStructureTypeId_idx_f0f25c07\" exists on \"DataStructure\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"DataStructure_dataStructureTypeId_idx_f0f25c07\"",
+          "i",
+          "I",
+          "\"public\".\"DataStructure\"",
+          "btree",
+          "[\"dataStructureTypeId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.User.User_settingsId_idx_6654474f",
+    "label": "Create index \"User_settingsId_idx_6654474f\" on \"User\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "User_settingsId_idx_6654474f",
+        "table": "User"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"User_settingsId_idx_6654474f\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"User_settingsId_idx_6654474f\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"User_settingsId_idx_6654474f\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"User_settingsId_idx_6654474f\"",
+        "sql": "CREATE INDEX \"User_settingsId_idx_6654474f\" ON \"public\".\"User\" (\"settingsId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"User_settingsId_idx_6654474f\" exists on \"User\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"User_settingsId_idx_6654474f\"",
+          "i",
+          "I",
+          "\"public\".\"User\"",
+          "btree",
+          "[\"settingsId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.UserFavoriteAlgorithm.UserFavoriteAlgorithm_algorithmId_idx_bb4a2d7e",
+    "label": "Create index \"UserFavoriteAlgorithm_algorithmId_idx_bb4a2d7e\" on \"UserFavoriteAlgorithm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "UserFavoriteAlgorithm_algorithmId_idx_bb4a2d7e",
+        "table": "UserFavoriteAlgorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"UserFavoriteAlgorithm_algorithmId_idx_bb4a2d7e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteAlgorithm_algorithmId_idx_bb4a2d7e\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"UserFavoriteAlgorithm_algorithmId_idx_bb4a2d7e\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"UserFavoriteAlgorithm_algorithmId_idx_bb4a2d7e\"",
+        "sql": "CREATE INDEX \"UserFavoriteAlgorithm_algorithmId_idx_bb4a2d7e\" ON \"public\".\"UserFavoriteAlgorithm\" (\"algorithmId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"UserFavoriteAlgorithm_algorithmId_idx_bb4a2d7e\" exists on \"UserFavoriteAlgorithm\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteAlgorithm_algorithmId_idx_bb4a2d7e\"",
+          "i",
+          "I",
+          "\"public\".\"UserFavoriteAlgorithm\"",
+          "btree",
+          "[\"algorithmId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.UserFavoriteAlgorithm.UserFavoriteAlgorithm_userId_idx_a489d58a",
+    "label": "Create index \"UserFavoriteAlgorithm_userId_idx_a489d58a\" on \"UserFavoriteAlgorithm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "UserFavoriteAlgorithm_userId_idx_a489d58a",
+        "table": "UserFavoriteAlgorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"UserFavoriteAlgorithm_userId_idx_a489d58a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteAlgorithm_userId_idx_a489d58a\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"UserFavoriteAlgorithm_userId_idx_a489d58a\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"UserFavoriteAlgorithm_userId_idx_a489d58a\"",
+        "sql": "CREATE INDEX \"UserFavoriteAlgorithm_userId_idx_a489d58a\" ON \"public\".\"UserFavoriteAlgorithm\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"UserFavoriteAlgorithm_userId_idx_a489d58a\" exists on \"UserFavoriteAlgorithm\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteAlgorithm_userId_idx_a489d58a\"",
+          "i",
+          "I",
+          "\"public\".\"UserFavoriteAlgorithm\"",
+          "btree",
+          "[\"userId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.UserFavoriteDataStructure.UserFavoriteDataStructure_dataStructureId_idx_690b5a07",
+    "label": "Create index \"UserFavoriteDataStructure_dataStructureId_idx_690b5a07\" on \"UserFavoriteDataStructure\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "UserFavoriteDataStructure_dataStructureId_idx_690b5a07",
+        "table": "UserFavoriteDataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"UserFavoriteDataStructure_dataStructureId_idx_690b5a07\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteDataStructure_dataStructureId_idx_690b5a07\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"UserFavoriteDataStructure_dataStructureId_idx_690b5a07\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"UserFavoriteDataStructure_dataStructureId_idx_690b5a07\"",
+        "sql": "CREATE INDEX \"UserFavoriteDataStructure_dataStructureId_idx_690b5a07\" ON \"public\".\"UserFavoriteDataStructure\" (\"dataStructureId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"UserFavoriteDataStructure_dataStructureId_idx_690b5a07\" exists on \"UserFavoriteDataStructure\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteDataStructure_dataStructureId_idx_690b5a07\"",
+          "i",
+          "I",
+          "\"public\".\"UserFavoriteDataStructure\"",
+          "btree",
+          "[\"dataStructureId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.UserFavoriteDataStructure.UserFavoriteDataStructure_userId_idx_a489d58a",
+    "label": "Create index \"UserFavoriteDataStructure_userId_idx_a489d58a\" on \"UserFavoriteDataStructure\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "UserFavoriteDataStructure_userId_idx_a489d58a",
+        "table": "UserFavoriteDataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"UserFavoriteDataStructure_userId_idx_a489d58a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteDataStructure_userId_idx_a489d58a\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"UserFavoriteDataStructure_userId_idx_a489d58a\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"UserFavoriteDataStructure_userId_idx_a489d58a\"",
+        "sql": "CREATE INDEX \"UserFavoriteDataStructure_userId_idx_a489d58a\" ON \"public\".\"UserFavoriteDataStructure\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"UserFavoriteDataStructure_userId_idx_a489d58a\" exists on \"UserFavoriteDataStructure\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"UserFavoriteDataStructure_userId_idx_a489d58a\"",
+          "i",
+          "I",
+          "\"public\".\"UserFavoriteDataStructure\"",
+          "btree",
+          "[\"userId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Algorithm.Algorithm_algorithmImplementationId_fkey",
+    "label": "Add foreign key \"Algorithm_algorithmImplementationId_fkey\" on \"Algorithm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Algorithm_algorithmImplementationId_fkey",
+        "table": "Algorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Algorithm_algorithmImplementationId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Algorithm_algorithmImplementationId_fkey",
+          "public",
+          "\"public\".\"Algorithm\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Algorithm_algorithmImplementationId_fkey\" on \"Algorithm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Algorithm_algorithmImplementationId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Algorithm\"\nADD CONSTRAINT \"Algorithm_algorithmImplementationId_fkey\"\nFOREIGN KEY (\"algorithmImplementationId\")\nREFERENCES \"public\".\"AlgorithmImplementation\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Algorithm_algorithmImplementationId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Algorithm_algorithmImplementationId_fkey",
+          "public",
+          "\"public\".\"Algorithm\"",
+          "f",
+          "[\"algorithmImplementationId\"]",
+          "\"public\".\"AlgorithmImplementation\"",
+          "[\"id\"]",
+          "c",
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Algorithm.Algorithm_algorithmTypeId_fkey",
+    "label": "Add foreign key \"Algorithm_algorithmTypeId_fkey\" on \"Algorithm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Algorithm_algorithmTypeId_fkey",
+        "table": "Algorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Algorithm_algorithmTypeId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Algorithm_algorithmTypeId_fkey",
+          "public",
+          "\"public\".\"Algorithm\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Algorithm_algorithmTypeId_fkey\" on \"Algorithm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Algorithm_algorithmTypeId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Algorithm\"\nADD CONSTRAINT \"Algorithm_algorithmTypeId_fkey\"\nFOREIGN KEY (\"algorithmTypeId\")\nREFERENCES \"public\".\"AlgorithmType\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Algorithm_algorithmTypeId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Algorithm_algorithmTypeId_fkey",
+          "public",
+          "\"public\".\"Algorithm\"",
+          "f",
+          "[\"algorithmTypeId\"]",
+          "\"public\".\"AlgorithmType\"",
+          "[\"id\"]",
+          "c",
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.DataStructure.DataStructure_dataStructureImplementationId_fkey",
+    "label": "Add foreign key \"DataStructure_dataStructureImplementationId_fkey\" on \"DataStructure\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "DataStructure_dataStructureImplementationId_fkey",
+        "table": "DataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"DataStructure_dataStructureImplementationId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "DataStructure_dataStructureImplementationId_fkey",
+          "public",
+          "\"public\".\"DataStructure\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"DataStructure_dataStructureImplementationId_fkey\" on \"DataStructure\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"DataStructure_dataStructureImplementationId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"DataStructure\"\nADD CONSTRAINT \"DataStructure_dataStructureImplementationId_fkey\"\nFOREIGN KEY (\"dataStructureImplementationId\")\nREFERENCES \"public\".\"DataStructureImplementation\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"DataStructure_dataStructureImplementationId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "DataStructure_dataStructureImplementationId_fkey",
+          "public",
+          "\"public\".\"DataStructure\"",
+          "f",
+          "[\"dataStructureImplementationId\"]",
+          "\"public\".\"DataStructureImplementation\"",
+          "[\"id\"]",
+          "c",
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.DataStructure.DataStructure_dataStructureTypeId_fkey",
+    "label": "Add foreign key \"DataStructure_dataStructureTypeId_fkey\" on \"DataStructure\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "DataStructure_dataStructureTypeId_fkey",
+        "table": "DataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"DataStructure_dataStructureTypeId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "DataStructure_dataStructureTypeId_fkey",
+          "public",
+          "\"public\".\"DataStructure\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"DataStructure_dataStructureTypeId_fkey\" on \"DataStructure\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"DataStructure_dataStructureTypeId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"DataStructure\"\nADD CONSTRAINT \"DataStructure_dataStructureTypeId_fkey\"\nFOREIGN KEY (\"dataStructureTypeId\")\nREFERENCES \"public\".\"DataStructureType\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"DataStructure_dataStructureTypeId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "DataStructure_dataStructureTypeId_fkey",
+          "public",
+          "\"public\".\"DataStructure\"",
+          "f",
+          "[\"dataStructureTypeId\"]",
+          "\"public\".\"DataStructureType\"",
+          "[\"id\"]",
+          "c",
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.User.User_settingsId_fkey",
+    "label": "Add foreign key \"User_settingsId_fkey\" on \"User\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "User_settingsId_fkey",
+        "table": "User"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"User_settingsId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "User_settingsId_fkey",
+          "public",
+          "\"public\".\"User\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"User_settingsId_fkey\" on \"User\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"User_settingsId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"User\"\nADD CONSTRAINT \"User_settingsId_fkey\"\nFOREIGN KEY (\"settingsId\")\nREFERENCES \"public\".\"UserSetting\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"User_settingsId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "User_settingsId_fkey",
+          "public",
+          "\"public\".\"User\"",
+          "f",
+          "[\"settingsId\"]",
+          "\"public\".\"UserSetting\"",
+          "[\"id\"]",
+          "c",
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.UserFavoriteAlgorithm.UserFavoriteAlgorithm_userId_fkey",
+    "label": "Add foreign key \"UserFavoriteAlgorithm_userId_fkey\" on \"UserFavoriteAlgorithm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "UserFavoriteAlgorithm_userId_fkey",
+        "table": "UserFavoriteAlgorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"UserFavoriteAlgorithm_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "UserFavoriteAlgorithm_userId_fkey",
+          "public",
+          "\"public\".\"UserFavoriteAlgorithm\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"UserFavoriteAlgorithm_userId_fkey\" on \"UserFavoriteAlgorithm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"UserFavoriteAlgorithm_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"UserFavoriteAlgorithm\"\nADD CONSTRAINT \"UserFavoriteAlgorithm_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"User\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"UserFavoriteAlgorithm_userId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "UserFavoriteAlgorithm_userId_fkey",
+          "public",
+          "\"public\".\"UserFavoriteAlgorithm\"",
+          "f",
+          "[\"userId\"]",
+          "\"public\".\"User\"",
+          "[\"id\"]",
+          "c",
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.UserFavoriteAlgorithm.UserFavoriteAlgorithm_algorithmId_fkey",
+    "label": "Add foreign key \"UserFavoriteAlgorithm_algorithmId_fkey\" on \"UserFavoriteAlgorithm\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "UserFavoriteAlgorithm_algorithmId_fkey",
+        "table": "UserFavoriteAlgorithm"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"UserFavoriteAlgorithm_algorithmId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "UserFavoriteAlgorithm_algorithmId_fkey",
+          "public",
+          "\"public\".\"UserFavoriteAlgorithm\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"UserFavoriteAlgorithm_algorithmId_fkey\" on \"UserFavoriteAlgorithm\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"UserFavoriteAlgorithm_algorithmId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"UserFavoriteAlgorithm\"\nADD CONSTRAINT \"UserFavoriteAlgorithm_algorithmId_fkey\"\nFOREIGN KEY (\"algorithmId\")\nREFERENCES \"public\".\"Algorithm\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"UserFavoriteAlgorithm_algorithmId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "UserFavoriteAlgorithm_algorithmId_fkey",
+          "public",
+          "\"public\".\"UserFavoriteAlgorithm\"",
+          "f",
+          "[\"algorithmId\"]",
+          "\"public\".\"Algorithm\"",
+          "[\"id\"]",
+          "c",
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.UserFavoriteDataStructure.UserFavoriteDataStructure_userId_fkey",
+    "label": "Add foreign key \"UserFavoriteDataStructure_userId_fkey\" on \"UserFavoriteDataStructure\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "UserFavoriteDataStructure_userId_fkey",
+        "table": "UserFavoriteDataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"UserFavoriteDataStructure_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "UserFavoriteDataStructure_userId_fkey",
+          "public",
+          "\"public\".\"UserFavoriteDataStructure\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"UserFavoriteDataStructure_userId_fkey\" on \"UserFavoriteDataStructure\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"UserFavoriteDataStructure_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"UserFavoriteDataStructure\"\nADD CONSTRAINT \"UserFavoriteDataStructure_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"User\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"UserFavoriteDataStructure_userId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "UserFavoriteDataStructure_userId_fkey",
+          "public",
+          "\"public\".\"UserFavoriteDataStructure\"",
+          "f",
+          "[\"userId\"]",
+          "\"public\".\"User\"",
+          "[\"id\"]",
+          "c",
+          "a"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.UserFavoriteDataStructure.UserFavoriteDataStructure_dataStructureId_fkey",
+    "label": "Add foreign key \"UserFavoriteDataStructure_dataStructureId_fkey\" on \"UserFavoriteDataStructure\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "UserFavoriteDataStructure_dataStructureId_fkey",
+        "table": "UserFavoriteDataStructure"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"UserFavoriteDataStructure_dataStructureId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "UserFavoriteDataStructure_dataStructureId_fkey",
+          "public",
+          "\"public\".\"UserFavoriteDataStructure\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"UserFavoriteDataStructure_dataStructureId_fkey\" on \"UserFavoriteDataStructure\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"UserFavoriteDataStructure_dataStructureId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"UserFavoriteDataStructure\"\nADD CONSTRAINT \"UserFavoriteDataStructure_dataStructureId_fkey\"\nFOREIGN KEY (\"dataStructureId\")\nREFERENCES \"public\".\"DataStructure\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"UserFavoriteDataStructure_dataStructureId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "UserFavoriteDataStructure_dataStructureId_fkey",
+          "public",
+          "\"public\".\"UserFavoriteDataStructure\"",
+          "f",
+          "[\"dataStructureId\"]",
+          "\"public\".\"DataStructure\"",
+          "[\"id\"]",
+          "c",
+          "a"
+        ]
+      }
+    ]
+  }
+]
