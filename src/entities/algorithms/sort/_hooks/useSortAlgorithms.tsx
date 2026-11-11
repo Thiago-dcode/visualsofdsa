@@ -6,6 +6,9 @@ import { AlgoSortType } from "../../types";
 import { SortAlgorithms } from "../_classes/SortAlgorithms";
 import { ClosureCompare, ClosureSlice } from "../types";
 import { useAnimationSort } from "./useAnimationSort";
+import { useBucketSort } from "./useBucketSort";
+import { useCountingSort } from "./useCountingSort";
+import { useRadixSort } from "./useRadixSort";
 
 const getSpeed = (speed: number) => {
   switch (speed) {
@@ -25,6 +28,7 @@ export const useSortAlgorithms = (
   speed: speed = 1,
   direction: Direction,
   visualization: VisualizationArrays = "memoryRam",
+  maxBarSize?: number,
 ) => {
   let minArrayValue = 0;
   let maxArrayValue = 0;
@@ -32,8 +36,33 @@ export const useSortAlgorithms = (
     minArrayValue = getMinInAnArrayOfNodes(array);
     maxArrayValue = getMaxInAnArrayOfNodes(array);
   }
+  const animations = useAnimationSort(visualization);
   const { animateNode, animateSound, animateOnSwap, animationOnSlice, animationOnMerge } =
-    useAnimationSort(visualization);
+    animations;
+  const countingSort = useCountingSort({
+    array,
+    speed,
+    direction,
+    visualization,
+    animations,
+    maxBarSize,
+  });
+  const radixSort = useRadixSort({
+    array,
+    speed,
+    direction,
+    visualization,
+    animations,
+    maxBarSize,
+  });
+  const bucketSort = useBucketSort({
+    array,
+    speed,
+    direction,
+    visualization,
+    animations,
+    maxBarSize,
+  });
   const [isSorted, setIsSorted] = useState(false);
   const [message, setMessage] = useState<{
     title: string;
@@ -134,6 +163,32 @@ export const useSortAlgorithms = (
   const bogo = async () => {
     await comparisionBased("bogo");
   };
+  // Resolves false when the run was aborted (page left / array reset): nothing to report then.
+  const counting = async () => {
+    const steps = await countingSort.run();
+    if (steps === 0) return false;
+    onSortEnds(steps);
+    return true;
+  };
+  // Resolves false when the run was aborted (page left / array reset): nothing to report then.
+  const radix = async () => {
+    const steps = await radixSort.run();
+    if (steps === 0) return false;
+    onSortEnds(steps);
+    return true;
+  };
+  // Resolves false when the run was aborted (page left / array reset): nothing to report then.
+  const bucket = async () => {
+    const steps = await bucketSort.run();
+    if (steps === 0) return false;
+    onSortEnds(steps);
+    return true;
+  };
+  const resetAux = () => {
+    countingSort.reset();
+    radixSort.reset();
+    bucketSort.reset();
+  };
   const onSortEnds = (steps: number) => {
     setMessage({
       title: "STEPS TAKEN",
@@ -159,6 +214,18 @@ export const useSortAlgorithms = (
     quick,
     bogo,
     insertion,
+    counting,
+    radix,
+    bucket,
+    countingAux: countingSort.aux,
+    radixAux: radixSort.aux,
+    bucketAux: bucketSort.aux,
+    announcement: {
+      counting: countingSort.announcement,
+      radix: radixSort.announcement,
+      bucket: bucketSort.announcement,
+    },
+    resetAux,
     message,
     isSorted,
     clearMessage,

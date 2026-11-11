@@ -4,10 +4,9 @@ import useAnimation from "@/hooks/useAnimation";
 import { useSoundAnimation } from "@/hooks/useSoundAnimation";
 import { animate } from "@/lib/animations";
 import { Primitive, speed } from "@/types";
-import { BinarySearchTree } from "../../binary-search-tree/classes/BinarySearchTree";
 import Tree from "../_classes/Tree";
 import TreeNode from "../_classes/TreeNode";
-import { OnCompare, OnFindSuccessor, OnRemove, OnTraversal } from "../types";
+import { isSortable, OnCompare, OnFindSuccessor, OnRemove, OnTraversal } from "../types";
 
 type TreeAction = "traverse" | "compare" | "insert" | "remove" | "move" | "successor";
 
@@ -25,7 +24,7 @@ const useTreeAnimaton = <T extends Primitive, K extends TreeNode<T>>(
 ) => {
   const { animateSound } = useSoundAnimation();
   const getMinMax = (tree: Tree<T, K>) => {
-    if (tree instanceof BinarySearchTree) {
+    if (isSortable(tree)) {
       const min = tree.min?.data;
       const max = tree.max?.data;
       if (typeof min === "number" && typeof max === "number") {

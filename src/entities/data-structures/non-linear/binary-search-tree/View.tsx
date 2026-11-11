@@ -432,7 +432,7 @@ function BinarySearchTreeView() {
             }}
             solution={{
               message: "Possible solution:",
-              solutions: ["Use AVL Trees (coming soon on visualsofdsa)"],
+              solutions: ["Use AVL Trees (self-balancing, see the AVL Tree visualizer)"],
             }}
           />
         </div>

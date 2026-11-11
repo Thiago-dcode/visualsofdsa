@@ -1,0 +1,21 @@
+@keyframes bucket-aux-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bucket-aux-active {
+  animation: bucket-aux-pulse 0.4s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bucket-aux-active {
+    animation-duration: 0.01ms !important;
+  }
+}

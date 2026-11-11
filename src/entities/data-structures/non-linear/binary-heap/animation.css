@@ -1,0 +1,26 @@
+@keyframes swap-node {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+    background: var(--app-bauhaus-orange);
+    border-color: var(--app-bauhaus-orange);
+    outline: 3px solid var(--app-bauhaus-orange);
+    outline-offset: 2px;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* animate() waits for animationend, so keep the animation but make it instant. */
+@media (prefers-reduced-motion: reduce) {
+  .heap-view [style*="swap-node"],
+  .heap-view [style*="compare-node"],
+  .heap-view [style*="find-node"],
+  .heap-view [style*="insert-node"],
+  .heap-view [style*="lit-node-edge"] {
+    animation-duration: 0.01ms !important;
+  }
+}

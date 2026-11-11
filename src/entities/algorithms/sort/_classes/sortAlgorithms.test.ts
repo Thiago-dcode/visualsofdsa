@@ -105,6 +105,81 @@ describe("Testing merge", () => {
   });
 });
 
+describe("Testing counting", () => {
+  it("Should return an empty array", async () => {
+    const array: Node<number>[] = [];
+    await SortAlgorithms.counting(array);
+
+    expect(array?.length).toBe(0);
+  });
+
+  it("AC-INT-1: Should sort ascending", async () => {
+    const array = createRandomUniqueArrayOfNodes(200, [0, 5000]);
+    await SortAlgorithms.counting(array);
+
+    expect(array).toHaveLength(200);
+    testIfIsSorted(array, "ascending");
+  });
+
+  it("AC-INT-1: Should sort descending", async () => {
+    const array = createRandomUniqueArrayOfNodes(200, [0, 5000]);
+    await SortAlgorithms.counting(array, "descending");
+
+    expect(array).toHaveLength(200);
+    testIfIsSorted(array, "descending");
+  });
+});
+
+describe("Testing radix", () => {
+  it("Should return an empty array", async () => {
+    const array: Node<number>[] = [];
+    await SortAlgorithms.radix(array);
+
+    expect(array?.length).toBe(0);
+  });
+
+  it("AC-INT-1: Should sort ascending", async () => {
+    const array = createRandomUniqueArrayOfNodes(200, [0, 15000]);
+    await SortAlgorithms.radix(array);
+
+    expect(array).toHaveLength(200);
+    testIfIsSorted(array, "ascending");
+  });
+
+  it("AC-INT-1: Should sort descending", async () => {
+    const array = createRandomUniqueArrayOfNodes(200, [0, 15000]);
+    await SortAlgorithms.radix(array, "descending");
+
+    expect(array).toHaveLength(200);
+    testIfIsSorted(array, "descending");
+  });
+});
+
+describe("Testing bucket", () => {
+  it("Should return an empty array", async () => {
+    const array: Node<number>[] = [];
+    await SortAlgorithms.bucket(array);
+
+    expect(array?.length).toBe(0);
+  });
+
+  it("AC-INT-1: Should sort ascending", async () => {
+    const array = createRandomUniqueArrayOfNodes(200, [0, 15000]);
+    await SortAlgorithms.bucket(array);
+
+    expect(array).toHaveLength(200);
+    testIfIsSorted(array, "ascending");
+  });
+
+  it("AC-INT-1: Should sort descending", async () => {
+    const array = createRandomUniqueArrayOfNodes(200, [0, 15000]);
+    await SortAlgorithms.bucket(array, "descending");
+
+    expect(array).toHaveLength(200);
+    testIfIsSorted(array, "descending");
+  });
+});
+
 describe("Testing quick", () => {
   it("Should return an empty array", async () => {
     const array: Node<number>[] = [];

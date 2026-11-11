@@ -171,6 +171,47 @@ describe("Testin custom hook useStaticArray", async () => {
     expect(isSorted).toBeFalsy();
   });
 
+  it("AC-SH-5: createUnsorted with range and unique:false allows duplicates inside the range", async () => {
+    const { result } = renderHook(useStaticArray);
+    await act(async () => {
+      await result.current.createUnsorted(5, { range: [0, 3], unique: false });
+    });
+    const array = result.current.array;
+    expect(array?.length).toBe(5);
+    for (const node of array ?? []) {
+      expect(node).toBeInstanceOf(Node);
+      const v = node?.data as number;
+      expect(Number.isInteger(v)).toBe(true);
+      expect(v).toBeGreaterThanOrEqual(0);
+      expect(v).toBeLessThanOrEqual(3);
+    }
+    // 5 values drawn from 4 possible ones: pigeonhole guarantees a duplicate
+    expect(new Set(array?.map((n) => n?.data)).size).toBeLessThan(5);
+  });
+
+  it("AC-SH-5: createUnsorted(5) keeps unique values within 0..60000", async () => {
+    const { result } = renderHook(useStaticArray);
+    await act(async () => {
+      await result.current.createUnsorted(5);
+    });
+    const values = (result.current.array ?? []).map((n) => n?.data as number);
+    expect(values).toHaveLength(5);
+    expect(new Set(values).size).toBe(5);
+    for (const v of values) {
+      expect(v).toBeGreaterThanOrEqual(0);
+      expect(v).toBeLessThanOrEqual(60000);
+    }
+  });
+
+  it("AC-SH-5: unique with a narrow range still yields unique values", async () => {
+    const { result } = renderHook(useStaticArray);
+    await act(async () => {
+      await result.current.createUnsorted(4, { range: [10, 13] });
+    });
+    const values = (result.current.array ?? []).map((n) => n?.data as number).sort();
+    expect(values).toEqual([10, 11, 12, 13]);
+  });
+
   it("Should create a sorted unique FORWARD array of nodes", async () => {
     const { result } = renderHook(useStaticArray);
     expect(result.current.array).toBe(null);

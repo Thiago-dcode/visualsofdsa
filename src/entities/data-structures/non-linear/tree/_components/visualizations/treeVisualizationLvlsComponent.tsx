@@ -1,4 +1,5 @@
 "use client";
+import type { ReactNode } from "react";
 import Arrow from "@/components/ui/arrow";
 import { Edge } from "@/lib/classes/Edge";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,7 @@ function TreeVisualizationLvlsComponent<T extends Primitive, K extends TreeNode<
   height,
   onInsertAnimation,
   onCreateEdgeAnimation,
+  renderBadge,
 }: {
   treeObj: TreeObj<K> | null;
   maxDepth: number;
@@ -25,6 +27,7 @@ function TreeVisualizationLvlsComponent<T extends Primitive, K extends TreeNode<
 
   onInsertAnimation?: (node: K) => Promise<void>;
   onCreateEdgeAnimation?: (edge: Edge) => Promise<void>;
+  renderBadge?: (node: K) => ReactNode;
 }) {
   if (!treeObj) return null;
   const { node, edge, parent, depth, children } = treeObj;
@@ -64,7 +67,12 @@ function TreeVisualizationLvlsComponent<T extends Primitive, K extends TreeNode<
           })}
         ></div>
       ) : null}
-      <TreeNodeComponent onInsertAnimation={onInsertAnimation} node={node} nodeShape={tree} />
+      <TreeNodeComponent
+        onInsertAnimation={onInsertAnimation}
+        node={node}
+        nodeShape={tree}
+        renderBadge={renderBadge}
+      />
       {edge ? (
         <Arrow
           onCreateEdgeAnimation={onCreateEdgeAnimation}
@@ -84,6 +92,7 @@ function TreeVisualizationLvlsComponent<T extends Primitive, K extends TreeNode<
               height={height}
               onInsertAnimation={onInsertAnimation}
               onCreateEdgeAnimation={onCreateEdgeAnimation}
+              renderBadge={renderBadge}
             />
           ))
         : null}

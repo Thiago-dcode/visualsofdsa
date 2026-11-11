@@ -8,6 +8,8 @@ export type BigOType =
   | "2^n"
   | "n!"
   | "n*n!"
+  | "n + k"
+  | "d(n + k)"
   | "∞";
 
 export const getComplexity = (bigO: BigOType) => {
@@ -30,6 +32,10 @@ export const getComplexity = (bigO: BigOType) => {
       return "Factorial time operation";
     case "n*n!":
       return "n * factorial time operation";
+    case "n + k":
+      return "Linear in the input size plus the value range";
+    case "d(n + k)":
+      return "d passes, each linear in the input size plus the digit range";
     case "∞":
       return "Infinite time operation";
     default:

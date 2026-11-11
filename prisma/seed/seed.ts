@@ -488,25 +488,128 @@ const upsertAlgorithms = async (items: readonly AlgorithmInput[]) => {
             order: 1,
             name: "AVL Tree",
             link: "avl-tree",
-            metaDescription:
-              "An AVL Tree is a self-balancing binary search tree where the difference between heights of left and right subtrees cannot be more than one for all nodes.",
+            dataStructureTypeId: result.id,
             description: buildDescription({
               description:
-                "An <b>AVL Tree</b> is a self-balancing binary search tree where the difference between heights of left and right subtrees cannot be more than one for all nodes.",
+                "An <b>AVL Tree</b> is a <b>self-balancing binary search tree</b> where the heights of the left and right subtrees of every node differ by at most one. After each insertion or deletion the tree rebalances itself with rotations, so its height always stays proportional to log n.",
+              coreCharacteristics: [
+                "Follows the binary search tree order: smaller values on the left, larger on the right",
+                "Every node has a balance factor of -1, 0 or +1",
+                "Height is always O(log n), so lookups never degrade into a linked list",
+                "Rebalances with four rotation cases: left-left, right-right, left-right and right-left",
+              ],
+              keyOperations: [
+                {
+                  operation: "Insert",
+                  color: "green",
+                  description:
+                    "<b>adds a new node</b> like a binary search tree, then walks back up updating heights and applying rotations wherever the balance factor leaves the range -1 to +1",
+                  averageCase: "log n",
+                  worstCase: "log n",
+                },
+                {
+                  operation: "Delete",
+                  color: "red",
+                  description:
+                    "<b>removes a node</b> (leaf, one child, or two children using the in-order successor) and then rebalances every ancestor whose balance factor is out of range",
+                  averageCase: "log n",
+                  worstCase: "log n",
+                },
+                {
+                  operation: "Search",
+                  color: "blue",
+                  description:
+                    "<b>finds a node with a specific value</b> by comparing it with the current node and moving left or right. The balanced shape guarantees a logarithmic number of steps",
+                  averageCase: "log n",
+                  worstCase: "log n",
+                },
+                {
+                  operation: "Rotate",
+                  color: "orange",
+                  description:
+                    "<b>restructures a small part of the tree</b> in constant time to restore balance. It covers the left-left, right-right, left-right and right-left cases while keeping the search order intact",
+                  averageCase: "1",
+                  worstCase: "1",
+                },
+                {
+                  operation: "Depth-First and Breadth-First Traversal",
+                  color: "orange",
+                  description:
+                    "<b>visits every node</b>, either going deep first (in-order, pre-order, post-order) or level by level. In-order traversal returns the values in ascending order",
+                  averageCase: "n",
+                  worstCase: "n",
+                },
+              ],
+              commonApplications: [
+                "In-memory indexes that need fast, predictable lookups",
+                "Ordered maps and sets with guaranteed worst-case performance",
+                "Read-heavy databases where searches far outnumber updates",
+                "Routing and lookup tables that must stay fast as they grow",
+              ],
             }),
-            enable: false,
-            dataStructureTypeId: result.id,
+            enable: true,
+            metaDescription:
+              "Watch an AVL Tree rebalance itself with rotations after every insert and delete, and see how balance factors keep search time logarithmic.",
           },
           {
             order: 2,
             name: "Binary Heap",
             link: "binary-heap",
+            dataStructureTypeId: result.id,
             description: buildDescription({
               description:
-                "A <b>Binary Heap</b> is a specialized tree-based data structure that satisfies the heap property: for any given node i, the parent node is greater than or equal to its children nodes (in a max heap) or less than or equal to its children nodes (in a min heap).",
+                "A <b>Binary Heap</b> is a <b>complete binary tree stored in an array</b> that satisfies the heap property: in a min heap every parent is less than or equal to its children, and in a max heap every parent is greater than or equal to them.",
+              coreCharacteristics: [
+                "Complete binary tree: every level is full except possibly the last, filled left to right",
+                "Stored in a plain array: the parent of index i is (i - 1) / 2 and its children are 2i + 1 and 2i + 2",
+                "Min heap or max heap property between a parent and its children",
+                "No ordering between siblings, only between parent and child",
+              ],
+              keyOperations: [
+                {
+                  operation: "Insert",
+                  color: "green",
+                  description:
+                    "<b>adds a value at the end of the array</b> and sifts it up, swapping with its parent while the heap property is violated",
+                  averageCase: "1",
+                  worstCase: "log n",
+                },
+                {
+                  operation: "Extract",
+                  color: "red",
+                  description:
+                    "<b>removes the root</b> (the minimum or maximum), moves the last element to the root and sifts it down, swapping with the better child until the heap property is restored",
+                  averageCase: "log n",
+                  worstCase: "log n",
+                },
+                {
+                  operation: "Peek",
+                  color: "blue",
+                  description:
+                    "<b>reads the root</b> without removing it. It is always the minimum in a min heap and the maximum in a max heap",
+                  averageCase: "1",
+                  worstCase: "1",
+                },
+                {
+                  operation: "Build Heap",
+                  color: "yellow",
+                  description:
+                    "<b>turns an unordered array into a heap</b> with Floyd's method, sifting down every non-leaf node from the last one back to the root",
+                  averageCase: "n",
+                  worstCase: "n",
+                },
+              ],
+              commonApplications: [
+                "Priority queues",
+                "Heap sort",
+                "Shortest-path and spanning tree algorithms such as Dijkstra and Prim",
+                "Task schedulers and event simulation",
+                "Finding the top k largest or smallest items in a stream",
+              ],
             }),
-            enable: false,
-            dataStructureTypeId: result.id,
+            enable: true,
+            metaDescription:
+              "Watch a Binary Heap sift values up and down as you insert and extract, in both min and max mode, with the array view shown next to the tree.",
           },
         ]);
         break;
@@ -797,33 +900,105 @@ const upsertAlgorithms = async (items: readonly AlgorithmInput[]) => {
             name: "Counting",
             link: "counting",
             algorithmTypeId: result.id,
-            enable: false,
             description: buildDescription({
               description:
-                "Counting Sort is a <b>non-comparison-based sorting algorithm</b> that works by counting the number of occurrences of each element in the input array and then using this information to determine the positions of the elements in the sorted array.",
+                "Counting Sort is a <b>non-comparison-based sorting algorithm</b> for integers in a known range. It counts how many times each value occurs, accumulates those counts into positions, and then places every element directly into its place in the sorted array.",
+              coreCharacteristics: [
+                "Does not compare elements, so it can beat the n log n comparison limit",
+                "Works on integers within a known range k (negative values are handled by offsetting with the minimum)",
+                "Stable: equal values keep their original relative order",
+                "Needs extra O(k) memory for the counts",
+              ],
+              keyOperations: [
+                {
+                  operation: "Sort",
+                  color: "yellow",
+                  description:
+                    "<b>counts the occurrences</b> of each value, turns the counts into running totals that mark the final position of each value, and then places the elements into the output walking the input from last to first",
+                  averageCase: "n + k",
+                  worstCase: "n + k",
+                },
+              ],
+              commonApplications: [
+                "Sorting integer keys from a small range, such as ages or grades",
+                "Used as the stable subroutine inside radix sort",
+                "Building histograms and frequency tables",
+                "Sorting data with many duplicate values",
+              ],
             }),
+            enable: true,
+            metaDescription:
+              "Watch Counting Sort tally each value, accumulate the counts and place every element in its final position, step by step, for small ranges of integers.",
           },
           {
             order: 7,
             name: "Radix",
             link: "radix",
             algorithmTypeId: result.id,
-            enable: false,
             description: buildDescription({
               description:
-                "Radix Sort is a <b>non-comparison-based sorting algorithm</b> that works by sorting the input array based on the digits of the elements. It uses a stable sorting algorithm to sort the elements based on each digit, starting from the least significant digit to the most significant digit.",
+                "Radix Sort is a <b>non-comparison-based sorting algorithm</b> that sorts integers digit by digit. It runs a stable pass for each digit, from the least significant to the most significant, distributing the numbers into ten buckets and collecting them back in order.",
+              coreCharacteristics: [
+                "Least-significant-digit (LSD) version in base 10",
+                "Each pass is stable, which is what makes the final order correct",
+                "Number of passes d equals the number of digits of the largest value",
+                "Works on non-negative integers and needs extra memory for the buckets",
+              ],
+              keyOperations: [
+                {
+                  operation: "Sort",
+                  color: "yellow",
+                  description:
+                    "<b>distributes the numbers into buckets 0 to 9</b> by the current digit and collects them back in bucket order. This repeats for the ones, tens, hundreds digit and so on until the largest number runs out of digits",
+                  averageCase: "d(n + k)",
+                  worstCase: "d(n + k)",
+                },
+              ],
+              commonApplications: [
+                "Sorting fixed-length keys such as IDs and phone numbers",
+                "Sorting large sets of integers faster than comparison sorts",
+                "Building suffix arrays",
+                "Mechanical card sorters, the historical origin of the method",
+              ],
             }),
+            enable: true,
+            metaDescription:
+              "Watch Radix Sort distribute numbers into digit buckets pass by pass, from the ones digit up, and see how stable passes produce a fully sorted array.",
           },
           {
             order: 8,
             name: "Bucket",
             link: "bucket",
             algorithmTypeId: result.id,
-            enable: false,
             description: buildDescription({
               description:
-                "Bucket Sort is a <b>non-comparison-based sorting algorithm</b> that works by dividing the input array into a number of buckets, sorting each bucket individually, and then concatenating the sorted buckets.",
+                "Bucket Sort is a <b>non-comparison-based sorting algorithm</b> that scatters the elements into a number of buckets by value range, sorts each bucket on its own, and then gathers the buckets back together in order.",
+              coreCharacteristics: [
+                "Uses about the square root of n buckets, each covering an equal slice of the value range",
+                "Works best when the data is uniformly distributed",
+                "Each bucket is sorted separately, here with a stable insertion sort",
+                "Degrades to a single crowded bucket when the data is heavily skewed",
+              ],
+              keyOperations: [
+                {
+                  operation: "Sort",
+                  color: "yellow",
+                  description:
+                    "<b>scatters each element into a bucket</b> based on its value, sorts every bucket individually, and then gathers the buckets in order to produce the sorted array",
+                  averageCase: "n + k",
+                  worstCase: "n^2",
+                },
+              ],
+              commonApplications: [
+                "Sorting uniformly distributed floating point numbers",
+                "External sorting of data split into ranges",
+                "Sorting data that falls within a known interval",
+                "Graphics and depth sorting",
+              ],
             }),
+            enable: true,
+            metaDescription:
+              "Watch Bucket Sort scatter values into buckets, sort each bucket and gather them back in order, and see why evenly spread data sorts fastest.",
           },
         ]);
         break;

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { animate } from "@/lib/animations";
 import NodeShape from "@/lib/classes/NodeShape";
@@ -11,11 +12,13 @@ type Props<T extends TreeNode<Primitive>> = {
   node: T;
   nodeShape: NodeShape;
   onInsertAnimation?: (node: T) => Promise<void>;
+  renderBadge?: (node: T) => ReactNode;
 };
 function TreeNodeComponent<K extends TreeNode<Primitive>>({
   node,
   nodeShape,
   onInsertAnimation,
+  renderBadge,
 }: Props<K>) {
   const { focus } = useAnimation();
   const setRef = async (element: Ref) => {
@@ -61,6 +64,19 @@ function TreeNodeComponent<K extends TreeNode<Primitive>>({
           <p>{node.data}</p>
         </button>
       </HoverCardTrigger>
+      {renderBadge ? (
+        <span
+          style={{
+            width: nodeShape.nodeWidth * 2 + "px",
+            left: node.position.x - nodeShape.nodeWidth / 2 + "px",
+            top: node.position.y + nodeShape.nodeHeight + "px",
+            zIndex: 94,
+          }}
+          className="absolute pointer-events-none flex justify-center text-[10px] leading-tight font-medium dark:text-app-off-white text-app-off-black"
+        >
+          {renderBadge(node)}
+        </span>
+      ) : null}
       <HoverCardContent
         style={{
           position: "absolute",

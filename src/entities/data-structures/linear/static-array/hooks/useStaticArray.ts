@@ -43,16 +43,22 @@ export default function useStaticArray(size: number = 50) {
     await delay(100);
     setArray(_array);
   };
-  const createUnsorted = async (size: number) => {
+  const createUnsorted = async (
+    size: number,
+    opts: { range?: [number, number]; unique?: boolean } = {},
+  ) => {
+    const { range = [0, 60000], unique = true } = opts;
     const _array = initArray(size);
     if (!_array) return;
     const memo: { [key: number]: true } = {};
     const getAUniqueRandomNumber = (): number => {
-      const n = random(0, 60000);
-      if (memo[n]) {
-        return getAUniqueRandomNumber();
+      const n = random(range[0], range[1]);
+      if (unique) {
+        if (memo[n]) {
+          return getAUniqueRandomNumber();
+        }
+        memo[n] = true;
       }
-      memo[n] = true;
       return n;
     };
 

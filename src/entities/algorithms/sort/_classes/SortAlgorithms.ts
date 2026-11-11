@@ -3,7 +3,13 @@ import MaxStepsError from "@/lib/errors/MaxStepsError";
 import { random } from "@/lib/utils";
 import { Direction } from "@/types";
 import { ClosureCompare, ClosureSlice } from "../types";
+import { bucketSort } from "./bucketSort";
+import { countingSort } from "./countingSort";
+import { radixSort } from "./radixSort";
 export const SortAlgorithms = {
+  counting: countingSort,
+  radix: radixSort,
+  bucket: bucketSort,
   MAX_STEPS: 70000,
   throwMaxStepsError: (steps: number) => {
     if (steps > SortAlgorithms.MAX_STEPS) {

@@ -2,6 +2,7 @@
 import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import ConfigComponent from "@/components/app/ConfigComponent";
+import OperationAnnouncer from "@/components/app/OperationAnnouncer";
 import Properties from "@/components/app/Properties";
 import SpeedComponent from "@/components/app/speedComponent";
 import WarningComponent from "@/components/app/WarningComponent";
@@ -25,10 +26,20 @@ import { Direction } from "@/types";
 import RenderVisualization from "../_components/visualization/renderVisualization";
 import VisualizationTypes from "../_components/visualization/visualizationTypes";
 import { AlgoSortType } from "../types";
+import BucketAuxPanel from "./_components/BucketAuxPanel";
+import CountingAuxPanel from "./_components/CountingAuxPanel";
+import RadixAuxPanel from "./_components/RadixAuxPanel";
 import { useSortAlgorithms } from "./_hooks/useSortAlgorithms";
+
+const isNonComparison = (type: AlgoSortType) =>
+  type === "counting" || type === "radix" || type === "bucket";
+const getInitialSize = (type: AlgoSortType) => {
+  if (type === "bogo") return 10;
+  return isNonComparison(type) ? 50 : 500;
+};
 export default function SortView({ type }: { type: AlgoSortType }) {
   const { array, maxSize, createUnsorted, flush, error, setError } = useStaticArray(
-    type === "bogo" ? 10 : 500,
+    getInitialSize(type),
   );
   const { isAnimationRunning, setAnimationRunning } = useAnimationRunning();
   const [direction, setDirection] = useState<Direction>("ascending");
@@ -40,22 +51,6 @@ export default function SortView({ type }: { type: AlgoSortType }) {
       await handleResetAction(false, type === "merge");
     },
   );
-  const {
-    bubble,
-    selection,
-    insertion,
-    merge,
-    quick,
-    bogo,
-    message,
-    clearMessage,
-    isSorted,
-    setUnsorted,
-  } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode);
-  const tempValue = useRef<number>(undefined);
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const { toastInfo } = useToast();
-
   const device = useResponsive((_e, _device, _sizeChanged) => {
     // //Every time the screen size is updated, will reset the array
     // if(sizeChanged.width){
@@ -66,6 +61,38 @@ export default function SortView({ type }: { type: AlgoSortType }) {
     return device.twResponsive.phone ? 400 : 650;
   }, [device]);
 
+  const {
+    bubble,
+    selection,
+    insertion,
+    merge,
+    quick,
+    bogo,
+    counting,
+    radix,
+    bucket,
+    countingAux,
+    radixAux,
+    bucketAux,
+    announcement,
+    resetAux,
+    message,
+    clearMessage,
+    isSorted,
+    setUnsorted,
+  } = useSortAlgorithms(array as Node<number>[], speed, direction, visualizationMode, maxBarSize);
+  const tempValue = useRef<number>(undefined);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const { toastInfo } = useToast();
+
+  // Counting and bucket sort show small ranges with duplicates; radix needs non-negative integers.
+  const createArray = async (size: number) => {
+    if (!isNonComparison(type)) return createUnsorted(size);
+    const range: [number, number] = type === "radix" ? [0, 999] : [0, 99];
+    const created = await createUnsorted(size, { range, unique: false });
+    resetAux();
+    return created;
+  };
   const handleResetAction = async (showToast: boolean = true, skip: boolean = false) => {
     if (!skip && !isSorted) {
       if (showToast) toastInfo("Array does not need to be reset, sort it first");
@@ -73,7 +100,7 @@ export default function SortView({ type }: { type: AlgoSortType }) {
     }
     if (tempValue.current) {
       setAnimationRunning(true);
-      await createUnsorted(tempValue.current);
+      await createArray(tempValue.current);
       setUnsorted();
       setAnimationRunning(false);
     }
@@ -82,6 +109,7 @@ export default function SortView({ type }: { type: AlgoSortType }) {
     if (isAnimationRunning) return;
     setOpen(false);
     setAnimationRunning(true);
+    let completed = true;
     if (isSorted) {
       toast.info("Array is already sorted");
     } else {
@@ -105,6 +133,15 @@ export default function SortView({ type }: { type: AlgoSortType }) {
           case "bogo":
             await bogo();
             break;
+          case "counting":
+            completed = await counting();
+            break;
+          case "radix":
+            completed = await radix();
+            break;
+          case "bucket":
+            completed = await bucket();
+            break;
         }
       } catch (error) {
         if (error instanceof MaxStepsError) {
@@ -115,6 +152,8 @@ export default function SortView({ type }: { type: AlgoSortType }) {
         }
       }
     }
+    // An aborted run (page left / array reset) must not clear a newer operation's running flag.
+    if (!completed) return;
     setAnimationRunning(false);
   };
   const getValue = () => {
@@ -137,7 +176,7 @@ export default function SortView({ type }: { type: AlgoSortType }) {
   const handleCreateAction = async () => {
     const arraySize = getValue();
     setAnimationRunning(true);
-    if (arraySize !== null) createUnsorted(arraySize);
+    if (arraySize !== null) await createArray(arraySize);
     setAnimationRunning(false);
     resetValue();
   };
@@ -151,10 +190,12 @@ export default function SortView({ type }: { type: AlgoSortType }) {
     resetValue();
     setAnimationRunning(false);
     clearMessage();
+    resetAux();
   };
 
   return (
     <>
+      <OperationAnnouncer message={isNonComparison(type) ? announcement[type] : ""} />
       <OperationsContainer open={open} setOpen={setOpen}>
         {!array ? (
           <Section>
@@ -176,6 +217,12 @@ export default function SortView({ type }: { type: AlgoSortType }) {
                 }}
               />
             </InputWithButtonContainer>
+            {isNonComparison(type) && (
+              <p className="text-sm text-muted-foreground text-center max-w-xs">
+                Why only 50 numbers? The extra counting, digit and bucket panels have to stay
+                readable, so these sorts use a small array of small numbers.
+              </p>
+            )}
           </Section>
         ) : (
           <Section className="gap-2 w-full">
@@ -274,15 +321,30 @@ export default function SortView({ type }: { type: AlgoSortType }) {
           )}
         </div>
       </div>
-      {array ? (
-        <RenderVisualization
-          direction={direction}
-          maxBarSize={maxBarSize}
-          sorted={false}
-          visualizationMode={visualizationMode}
-          array={array as Node<number>[]}
-          setAnimationRunning={setAnimationRunning}
+      {type === "counting" && (
+        <CountingAuxPanel aux={countingAux} visible={!!array && array.length > 0} />
+      )}
+      {type === "radix" && <RadixAuxPanel aux={radixAux} visible={!!array && array.length > 0} />}
+      {type === "bucket" && (
+        <BucketAuxPanel
+          aux={bucketAux}
+          visible={!!array && array.length > 0}
+          size={array?.length ?? 0}
         />
+      )}
+      {array ? (
+        // Like merge, the lowered row overflows below the bars only while sorting. Nothing sits
+        // below the bars (the aux panel is above), so no space is reserved while idle.
+        <div className={isNonComparison(type) ? "w-full max-w-full overflow-x-clip" : "w-full"}>
+          <RenderVisualization
+            direction={direction}
+            maxBarSize={maxBarSize}
+            sorted={false}
+            visualizationMode={visualizationMode}
+            array={array as Node<number>[]}
+            setAnimationRunning={setAnimationRunning}
+          />
+        </div>
       ) : null}
       {error && (
         <PopUp

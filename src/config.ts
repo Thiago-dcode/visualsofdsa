@@ -22,6 +22,8 @@ export const config = {
       staticArray: "vod_static_array_speed",
       dynamicArray: "vod_dynamic_array_speed",
       linkedList: "vod_linked_list_speed",
+      avlTree: "vod_avl_tree_speed",
+      binaryHeap: "vod_binary_heap_speed",
     },
     theme: "vod_theme",
     muted: "vod_muted",

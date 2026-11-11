@@ -1,0 +1,21 @@
+@keyframes radix-bucket-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.radix-bucket-active {
+  animation: radix-bucket-pulse 0.4s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radix-bucket-active {
+    animation-duration: 0.01ms !important;
+  }
+}

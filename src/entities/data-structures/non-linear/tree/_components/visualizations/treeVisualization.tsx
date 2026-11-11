@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 import { Edge } from "@/lib/classes/Edge";
 import { Primitive } from "@/types";
@@ -13,6 +13,7 @@ type Props<T extends Primitive, K extends TreeNode<T>> = {
   onCreateEdgeAnimation?: (edge: Edge) => Promise<void>;
   treeLayout: TreeLayout<T, K>;
   nodeSize?: number;
+  renderBadge?: (node: K) => ReactNode;
 };
 const HEIGHT = 80;
 const PADDING_X = 30;
@@ -21,6 +22,7 @@ function TreeVisualization<T extends Primitive, K extends TreeNode<T>>({
   onInsertAnimation,
   onCreateEdgeAnimation,
   nodeSize = 35,
+  renderBadge,
 }: Props<T, K>) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [parentWidth, _setparentWidth] = useState<number | null>(null);
@@ -91,6 +93,7 @@ function TreeVisualization<T extends Primitive, K extends TreeNode<T>>({
             height={HEIGHT}
             onInsertAnimation={onInsertAnimation}
             onCreateEdgeAnimation={onCreateEdgeAnimation}
+            renderBadge={renderBadge}
           />
         </div>
       ) : null}
