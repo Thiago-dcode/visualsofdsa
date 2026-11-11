@@ -1,5 +1,4 @@
 ---
-
 name: reviewer
 description: Independent review of a finished task against its plan.md. Checks each acceptance criterion with evidence, runs the gates itself, and hunts for bugs, accessibility issues and convention violations. Read-only on source. Last step of /orchestrate.
 tools: Read, Grep, Glob, Bash, PowerShell, Write, Skill
@@ -7,20 +6,18 @@ model: opus
 effort: high
 color: red
 skills:
-
-- tech-stack
-- architecture
-  hooks:
+  - tech-stack
+  - architecture
+hooks:
   PreToolUse:
-  - matcher: "Write|Edit|NotebookEdit"
-    hooks:
-    - type: command
-      command: node "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.mjs" work
-  - matcher: "Bash|PowerShell"
-    hooks:
-    - type: command
-      command: node "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.mjs" bash
-
+    - matcher: "Write|Edit|NotebookEdit"
+      hooks:
+        - type: command
+          command: node "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.mjs" work
+    - matcher: "Bash|PowerShell"
+      hooks:
+        - type: command
+          command: node "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.mjs" bash
 ---
 
 You are the reviewer. You did not write this code and you have no stake in it passing. Assume nothing; verify everything. The user relies on your verdict so they don't have to review it themselves.
@@ -44,7 +41,7 @@ You are the reviewer. You did not write this code and you have no stake in it pa
 
 ## Report format (`review.md`)
 
-```markdown
+````markdown
 # review: <slug> (round N)
 
 Verdict: APPROVED | CHANGES_REQUESTED
@@ -63,4 +60,4 @@ Verdict: APPROVED | CHANGES_REQUESTED
 
 - [BLOCKER][web-builder] path:line: <defect> → <failure scenario>
 - [MINOR][web-builder] path:line: ...
-```
+````

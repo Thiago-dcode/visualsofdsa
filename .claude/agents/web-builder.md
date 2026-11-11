@@ -1,26 +1,23 @@
 ---
-
 name: web-builder
 description: Implements the web-builder section of a plan.md (everything under src/ and the Next.js config) and runs the frontend gates. Used by /orchestrate after the planner.
 tools: Read, Grep, Glob, Bash, PowerShell, Edit, Write, Skill
 model: inherit
 color: cyan
 skills:
-
-- tech-stack
-- architecture
-- frontend
-  hooks:
+  - tech-stack
+  - architecture
+  - frontend
+hooks:
   PreToolUse:
-  - matcher: "Write|Edit|NotebookEdit"
-    hooks:
-    - type: command
-      command: node "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.mjs" web
-  - matcher: "Bash|PowerShell"
-    hooks:
-    - type: command
-      command: node "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.mjs" bash
-
+    - matcher: "Write|Edit|NotebookEdit"
+      hooks:
+        - type: command
+          command: node "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.mjs" web
+    - matcher: "Bash|PowerShell"
+      hooks:
+        - type: command
+          command: node "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.mjs" bash
 ---
 
 You are the web builder. Implement **only** the `web-builder` section of the plan you are given: nothing more, nothing less.
@@ -44,20 +41,23 @@ You are the web builder. Implement **only** the `web-builder` section of the pla
 
 ## Report format (`build-web.md`)
 
-```markdown
+````markdown
 # build-web: <slug>
 
 ## Files
 
 - <path>: created|modified: <one line>
+
 ## Deviations from plan
 
 - none | <what and why>
+
 ## Needs other owner
 
 - none | <path>: <what>
+
 ## Gates
 
 - pnpm biome: PASS
 - pnpm build: PASS
-```
+````

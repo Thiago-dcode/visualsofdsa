@@ -19,7 +19,8 @@
       "!**/next-env.d.ts",
       "!**/pnpm-lock.yaml",
       "!**/migrations",
-      "!**/*.css"
+      "!**/*.css",
+      "!**/.claude/agents"
     ]
   },
   "formatter": {
